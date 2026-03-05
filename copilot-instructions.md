@@ -1,0 +1,1 @@
+/Users/santhoshraja/Santhosh/Web Application/kschinnadurai/AGENTS.md

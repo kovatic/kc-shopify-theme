@@ -1,0 +1,244 @@
+<div class="category-section" style="--bg-color: {{ section.settings.background_color }}; --padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="category-section__header">
+    <div class="category-section__divider" aria-hidden="true">
+      <span class="category-section__divider-line"></span>
+      <span class="category-section__divider-diamond">&#9670;</span>
+      <span class="category-section__divider-line"></span>
+    </div>
+
+    {%- if section.settings.title != blank -%}
+      <h2>{{ section.settings.title | escape }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.subtitle != blank -%}
+      <p  color={{ settings.secondary_text_color }}>{{ section.settings.subtitle | escape }}</p>
+    {%- endif -%}
+  </div>
+
+  <div class="category-section__scroll-wrapper">
+    <div class="category-section__grid">
+      {%- for collection in section.settings.collections -%}
+        <div class="category-item">
+          <a class="category-item__link" href="{{ collection.url }}">
+            <div class="category-item__frame">
+              <svg class="category-item__ornament" viewBox="0 0 138 138" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="69" cy="69" r="65" fill="none" stroke="#2e1f1f" stroke-width="1" stroke-dasharray="4 3" opacity="0.6"/>
+                <circle cx="69" cy="69" r="60" fill="none" stroke="#2e1f1f" stroke-width="0.5" opacity="0.3"/>
+              </svg>
+              <div class="category-item__image-wrapper">
+                {%- if collection.featured_image != blank -%}
+                  {{ collection.featured_image | image_url: width: 300, height: 300, crop: 'center' | image_tag: class: 'category-item__image', loading: 'lazy', alt: collection.title | escape }}
+                {%- else -%}
+                  {{ 'collection-1' | placeholder_svg_tag: 'category-item__image category-item__image--placeholder' }}
+                {%- endif -%}
+              </div>
+            </div>
+            <span class="category-item__label">{{ collection.title | escape }}</span>
+          </a>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .category-section {
+    background-color: var(--bg-color);
+    padding-top: var(--padding-top);
+    padding-bottom: var(--padding-bottom);
+    overflow: hidden;
+  }
+
+  .category-section__header {
+    text-align: center;
+    padding: 0 1.6rem;
+    margin-bottom: 4rem;
+  }
+
+  .category-section__divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .category-section__divider-line {
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background-color: #c9a96e;
+  }
+
+  .category-section__divider-diamond {
+    color: #c9a96e;
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+
+
+  .category-section__scroll-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 2rem 1rem;
+  }
+
+  .category-section__scroll-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-section__grid {
+    display: flex;
+    gap: 2rem;
+    width: max-content;
+    padding: 0 2rem;
+    margin: 0 auto;
+  }
+
+  .category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 13.8rem;
+  }
+
+  .category-item__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .category-item__link:hover .category-item__frame {
+    transform: scale(1.05);
+  }
+
+  .category-item__frame {
+    position: relative;
+    width: 13.8rem;
+    height: 13.8rem;
+    transition: transform 0.3s ease;
+  }
+
+  .category-item__ornament {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .category-item__image-wrapper {
+    position: absolute;
+    inset: 11px;
+    border-radius: 50%;
+    overflow: hidden;
+    opacity: 0.85;
+  }
+
+  .category-item__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+  }
+
+  .category-item__image--placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: block;
+    background-color: #e8e0d5;
+  }
+
+  .category-item__label {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: #212121;
+    text-align: center;
+    line-height: 1.71;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+  }
+
+  @media screen and (min-width: 768px) {
+    .category-section__scroll-wrapper {
+      overflow-x: visible;
+      padding: 0;
+    }
+
+    .category-section__grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      gap: 2.4rem;
+      padding: 0 4rem;
+    }
+
+    .category-section__divider-line {
+      width: 12rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.shop_by_category",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:labels.title",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle",
+      "default": "Explore our collections tailored for every style."
+    },
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "t:labels.collections"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:labels.background_color",
+      "default": "#f1eee9"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.shop_by_category"
+    }
+  ]
+}
+{% endschema %}

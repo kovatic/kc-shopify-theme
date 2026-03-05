@@ -1,0 +1,290 @@
+{% comment %} Row 1: Top bar {% endcomment %}
+<div class="header-topbar full-width">
+  <div class="header-topbar__inner">
+    <nav class="header-topbar__nav" aria-label="{{ 'header.top_nav_label' | t }}">
+      {% for link in section.settings.top_menu.links %}
+        <a href="{{ link.url }}" class="header-topbar__link">{{ link.title }}</a>
+      {% endfor %}
+    </nav>
+    <p class="header-topbar__contact">
+      {{ 'header.whatsapp_text' | t }}
+      <a href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: '-' | remove: ' ' }}" class="header-topbar__phone">{{ section.settings.whatsapp_number }}</a>
+    </p>
+  </div>
+</div>
+
+{% comment %} Row 2: Logo + Icons {% endcomment %}
+<div class="header-main full-width">
+  <div class="header-main__inner">
+    <div class="header-main__logo">
+      {% if section.settings.logo %}
+        <a href="{{ routes.root_url }}">
+          {{- section.settings.logo | image_url: width: 220 | image_tag: alt: shop.name -}}
+        </a>
+      {% else %}
+        <a href="{{ routes.root_url }}" class="header-main__shop-name">{{ shop.name }}</a>
+      {% endif %}
+    </div>
+
+    <div class="header-main__icons">
+      <button class="header-icon-btn" aria-label="{{ 'header.search_label' | t }}">
+        {{ 'icon-search.svg' | inline_asset_content }}
+      </button>
+
+      {% if shop.customer_accounts_enabled %}
+        <a href="{{ routes.account_url }}" class="header-icon-btn" aria-label="{{ 'header.account_label' | t }}">
+          {{ 'icon-account.svg' | inline_asset_content }}
+        </a>
+      {% endif %}
+
+      <a href="{{ routes.search_url }}?type=product&q=wishlist" class="header-icon-btn" aria-label="{{ 'header.wishlist_label' | t }}">
+        {{ 'icon-wishlist.svg' | inline_asset_content }}
+      </a>
+
+      <a href="{{ routes.cart_url }}" class="header-icon-btn header-icon-btn--cart" aria-label="{{ 'header.cart_label' | t }}">
+        {{ 'icon-cart.svg' | inline_asset_content }}
+        {% if cart.item_count > 0 %}
+          <span class="header-cart-count">{{ cart.item_count }}</span>
+        {% endif %}
+      </a>
+    </div>
+  </div>
+</div>
+
+{% comment %} Row 3: Category nav {% endcomment %}
+<nav class="header-nav full-width" aria-label="{{ 'header.main_nav_label' | t }}">
+  <ul class="header-nav__list">
+    {% for link in section.settings.menu.links %}
+      <li class="header-nav__item{% if link.links.size > 0 %} header-nav__item--has-dropdown{% endif %}">
+        <a href="{{ link.url }}" class="header-nav__link">
+          {{- link.title -}}
+          {% if link.links.size > 0 %}
+            <span class="header-nav__chevron" aria-hidden="true">&#9662;</span>
+          {% endif %}
+        </a>
+        {% if link.links.size > 0 %}
+          <ul class="header-nav__dropdown">
+            {% for child_link in link.links %}
+              <li>
+                <a href="{{ child_link.url }}" class="header-nav__dropdown-link">{{ child_link.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</nav>
+
+{% stylesheet %}
+  /* ── Top bar ── */
+  .header-topbar {
+    background-color: #D8006B;
+    color: #fff;
+  }
+  .header-topbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem var(--page-margin);
+    max-width: var(--page-width);
+    margin: 0 auto;
+    width: 100%;
+  }
+  .header-topbar__nav {
+    display: flex;
+    gap: 1.75rem;
+  }
+  .header-topbar__link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .header-topbar__link:hover {
+    opacity: 0.85;
+  }
+  .header-topbar__contact {
+    font-size: 0.8rem;
+    color: #fff;
+  }
+  .header-topbar__phone {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .header-topbar__phone:hover {
+    text-decoration: underline;
+  }
+
+  /* ── Main row ── */
+  .header-main {
+    background-color: #faf9f9;
+    border-bottom: 1px solid #ececec;
+  }
+  .header-main__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem var(--page-margin);
+    max-width: var(--page-width);
+    margin: 0 auto;
+    width: 100%;
+    min-height: 5.5rem;
+  }
+  .header-main__logo {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  .header-main__logo img {
+    max-height: 4.5rem;
+    width: auto;
+    height: auto;
+  }
+  .header-main__shop-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #D8006B;
+    text-decoration: none;
+  }
+  .header-main__icons {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .header-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #444;
+    padding: 0;
+    position: relative;
+    text-decoration: none;
+  }
+  .header-icon-btn:hover {
+    color: #D8006B;
+  }
+  .header-icon-btn svg {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+  .header-cart-count {
+    position: absolute;
+    top: -0.45rem;
+    right: -0.55rem;
+    background-color: #D8006B;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    min-width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  /* ── Category nav ── */
+  .header-nav {
+    background-color: #fff;
+    border-bottom: 1px solid #ececec;
+  }
+  .header-nav__list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: var(--page-width);
+    gap: 0.25rem;
+  }
+  .header-nav__item {
+    position: relative;
+  }
+  .header-nav__link {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.85rem 1rem;
+    text-decoration: none;
+    color: #333;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+  .header-nav__link:hover {
+    color: #D8006B;
+  }
+  .header-nav__chevron {
+    font-size: 0.65rem;
+    margin-top: 0.1rem;
+    color: #888;
+  }
+
+  /* Dropdown */
+  .header-nav__dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    border: 1px solid #ececec;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+    min-width: 13rem;
+    z-index: 100;
+  }
+  .header-nav__item--has-dropdown:hover .header-nav__dropdown {
+    display: block;
+  }
+  .header-nav__dropdown-link {
+    display: block;
+    padding: 0.55rem 1.25rem;
+    color: #333;
+    text-decoration: none;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+  .header-nav__dropdown-link:hover {
+    background-color: #fdf0f6;
+    color: #D8006B;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:labels.logo"
+    },
+    {
+      "type": "link_list",
+      "id": "top_menu",
+      "label": "t:labels.top_menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:labels.menu"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "t:labels.whatsapp_number",
+      "default": "+91-9488202320"
+    }
+  ]
+}
+{% endschema %}
