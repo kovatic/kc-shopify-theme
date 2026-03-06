@@ -63,6 +63,7 @@
     "subtitle": "Subtitle",
     "text_style": "Text style",
     "text": "Text",
+    "collections": "Collections",
     "title": "Title",
     "url": "Link URL"
   },
@@ -98,6 +99,6 @@
       "title": "Title",
       "subtitle": "Subtitle",
       "normal": "Normal text"
-    },
+    }
   }
 }
