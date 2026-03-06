@@ -19,7 +19,15 @@
       "settings": {
         "title": "Shop by Category",
         "subtitle": "Explore our collections tailored for every style.",
-        "collections": [],
+        "collections": [
+          "nine-yard-collection",
+          "kanchipuram-checks",
+          "pop",
+          "budget-silks",
+          "hydrogen",
+          "frontpage",
+          "automated-collection"
+        ],
         "background_color": "#f1eee9",
         "padding_top": 60,
         "padding_bottom": 60
