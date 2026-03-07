@@ -112,7 +112,7 @@
         "layout_type_desktop": "wrap",
         "layout_type_mobile": "wrap",
         "products_count": 8,
-        "view_all_url": "",
+        "view_all_url": "shopify://collections/automated-collection",
         "padding_top": 32,
         "padding_bottom": 32
       }
