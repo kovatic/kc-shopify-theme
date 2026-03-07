@@ -14,7 +14,10 @@
     "body_font": "montserrat_n4",
     "max_page_width": "110rem",
     "primary_color": "#ce0570",
-    "background_color": "#ffffff",
+    "background_color": "#f1eee9",
+    "foreground_color": "#2e1f1f",
+    "secondary_text_color": "#7e6767",
+    "primary_text_color": "#2e1f1f",
     "content_for_index": []
   }
 }
