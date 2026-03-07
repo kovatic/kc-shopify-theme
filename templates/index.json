@@ -243,42 +243,45 @@
             "map_url": ""
           }
         },
-        "store_KH3CRn": {
+        "store_dpm8Kk": {
           "type": "store",
           "settings": {
+            "image": "shopify://shop_images/image_37.png",
             "store_type": "Flagship Store",
-            "store_name": "Store Name",
-            "address": "Store address",
-            "phone": "",
+            "store_name": "Tiruchendur",
+            "address": "Main Road, Eral, Thoothukudi District",
+            "phone": "9876543210",
             "map_url": ""
           }
         },
-        "store_9LJAiC": {
+        "store_CRtjn9": {
           "type": "store",
           "settings": {
+            "image": "shopify://shop_images/image_37.png",
             "store_type": "Flagship Store",
-            "store_name": "Store Name",
-            "address": "Store address",
-            "phone": "",
+            "store_name": "Thoothukudi",
+            "address": "Main Road, Eral, Thoothukudi District",
+            "phone": "9876543210",
             "map_url": ""
           }
         },
-        "store_WbMt6h": {
+        "store_VPNbQQ": {
           "type": "store",
           "settings": {
+            "image": "shopify://shop_images/image_37.png",
             "store_type": "Flagship Store",
-            "store_name": "Store Name",
-            "address": "Store address",
-            "phone": "",
+            "store_name": "Chennai",
+            "address": "Main Road, Eral, Thoothukudi District",
+            "phone": "9876543210",
             "map_url": ""
           }
         }
       },
       "block_order": [
         "store_EbaiC9",
-        "store_KH3CRn",
-        "store_9LJAiC",
-        "store_WbMt6h"
+        "store_dpm8Kk",
+        "store_CRtjn9",
+        "store_VPNbQQ"
       ],
       "name": "t:sections.stores.name",
       "settings": {
