@@ -8,5 +8,11 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "current": {
+    "type_primary_font": "playfair_display_n4",
+    "headings_font": "playfair_display_n4",
+    "body_font": "montserrat_n4",
+    "background_color": "#f1eee9",
+    "content_for_index": []
+  }
 }
