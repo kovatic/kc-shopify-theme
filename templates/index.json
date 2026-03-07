@@ -152,6 +152,29 @@
         "padding_top": 80,
         "padding_bottom": 80
       }
+    },
+    "product_carousel_zpTxYK": {
+      "type": "product-carousel",
+      "name": "t:sections.product_carousel.name",
+      "settings": {
+        "title": "Celebrities' Favorites",
+        "subtitle": "Discover what's new this season.",
+        "data_source": "multiple_collections",
+        "single_collection": "",
+        "products_count": 7,
+        "collections": [
+          "meena",
+          "meena-copy-copy-copy-copy-copy",
+          "nine-yard-collection",
+          "meena-copy-copy-copy",
+          "meena-copy-copy",
+          "reena",
+          "meena-copy-copy-copy-copy",
+          "meena-copy"
+        ],
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
     }
   },
   "order": [
@@ -161,6 +184,7 @@
     "reel_7a3Lp6",
     "product_list_8L8wf6",
     "promo_RGMMyX",
-    "brand_marquee_aQFqpK"
+    "brand_marquee_aQFqpK",
+    "product_carousel_zpTxYK"
   ]
 }
