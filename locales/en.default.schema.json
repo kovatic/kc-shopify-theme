@@ -112,6 +112,17 @@
       "name": "Brand marquee",
       "brands": "Brands"
     },
+    "about": {
+      "name": "About",
+      "founder_image": "Founder image",
+      "founder_name": "Founder name",
+      "brand_label": "Brand label",
+      "blocks": {
+        "brand_logo": {
+          "name": "Brand logo"
+        }
+      }
+    },
     "product_carousel": {
       "name": "Product carousel",
       "data_source": "Data source",

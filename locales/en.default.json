@@ -99,6 +99,9 @@
     "brand_marquee": {
       "name": "Brand marquee"
     },
+    "about": {
+      "name": "About"
+    },
     "product_carousel": {
       "name": "Product carousel",
       "shop_now": "Shop Now",

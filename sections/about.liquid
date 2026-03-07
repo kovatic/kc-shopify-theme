@@ -1,0 +1,346 @@
+<div
+  class="about"
+  style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="about__card">
+
+    {%- comment -%} Founder photo — centered above the card {%- endcomment -%}
+    {%- if section.settings.founder_image != blank -%}
+      <div class="about__founder">
+        <div class="about__founder-ring" aria-hidden="true"></div>
+        {{ section.settings.founder_image | image_url: width: 220 | image_tag:
+          class: 'about__founder-photo',
+          loading: 'lazy',
+          alt: section.settings.founder_name | escape
+        }}
+      </div>
+    {%- endif -%}
+
+    <div class="about__body">
+
+      {%- comment -%} Heading {%- endcomment -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="about__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- comment -%} Description {%- endcomment -%}
+      {%- if section.settings.description != blank -%}
+        <div class="about__description">{{ section.settings.description }}</div>
+      {%- endif -%}
+
+      {%- comment -%} Divider {%- endcomment -%}
+      <div class="about__divider" aria-hidden="true">
+        <span class="about__divider-line"></span>
+        <span class="about__divider-diamond">✦</span>
+        <span class="about__divider-line"></span>
+      </div>
+
+      {%- comment -%} Our Brand label {%- endcomment -%}
+      {%- if section.settings.brand_label != blank -%}
+        <p class="about__brand-label">{{ section.settings.brand_label | upcase | escape }}</p>
+      {%- endif -%}
+
+      {%- comment -%} Brand logos {%- endcomment -%}
+      {%- if section.blocks.size > 0 -%}
+        <div class="about__logos">
+          {%- for block in section.blocks -%}
+            {%- if block.settings.logo != blank -%}
+              {%- if block.settings.url != blank -%}
+                <a class="about__logo-link" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>
+                  {{ block.settings.logo | image_url: width: 560 | image_tag:
+                    class: 'about__logo',
+                    loading: 'lazy',
+                    alt: block.settings.name | escape
+                  }}
+                </a>
+              {%- else -%}
+                <div class="about__logo-link" {{ block.shopify_attributes }}>
+                  {{ block.settings.logo | image_url: width: 560 | image_tag:
+                    class: 'about__logo',
+                    loading: 'lazy',
+                    alt: block.settings.name | escape
+                  }}
+                </div>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .about {
+    background-color: #f9f8f6;
+    width: 100%;
+    padding-top: var(--padding-top, 10px);
+    padding-bottom: var(--padding-bottom, 80px);
+    padding-left: 52px;
+    padding-right: 52px;
+  }
+
+  /* Inner warm card */
+  .about__card {
+    position: relative;
+    background-color: #fbf4ed;
+    max-width: 1336px;
+    margin: 0 auto;
+    margin-top: 87px;
+    padding: 0 48px 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Founder photo */
+  .about__founder {
+    position: relative;
+    width: 146px;
+    height: 146px;
+    margin-top: -73px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .about__founder-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, #f5c842 0%, #e8a800 60%, transparent 70%);
+    opacity: 0.85;
+  }
+
+  .about__founder-photo {
+    position: relative;
+    width: 106px;
+    height: 106px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    z-index: 1;
+  }
+
+  /* Body */
+  .about__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 19px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .about__heading {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 40px;
+    font-weight: 700;
+    color: #2e1f1f;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .about__description {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 20px;
+    font-weight: 400;
+    color: #494949;
+    line-height: 1.625;
+    max-width: 900px;
+  }
+
+  .about__description strong,
+  .about__description b {
+    font-weight: 700;
+    color: #494949;
+  }
+
+  /* Divider */
+  .about__divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .about__divider-line {
+    display: block;
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(198, 146, 57, 0) 0%, #c69239 50%, rgba(198, 146, 57, 0) 100%);
+  }
+
+  .about__divider-diamond {
+    color: #c69239;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  /* Our Brand label */
+  .about__brand-label {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 20px;
+    font-weight: 700;
+    color: #2e1f1f;
+    letter-spacing: 0.08em;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* Logos row */
+  .about__logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 43px;
+  }
+
+  .about__logo-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .about__logo {
+    height: 72px;
+    width: auto;
+    max-width: 280px;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* Mobile */
+  @media screen and (max-width: 768px) {
+    .about {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .about__card {
+      margin-top: 60px;
+      padding: 0 20px 36px;
+    }
+
+    .about__founder {
+      margin-top: -60px;
+    }
+
+    .about__heading {
+      font-size: 26px;
+    }
+
+    .about__description {
+      font-size: 16px;
+    }
+
+    .about__logos {
+      gap: 24px;
+    }
+
+    .about__logo {
+      height: 48px;
+    }
+
+    .about__divider-line {
+      width: 60px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.about.name",
+  "blocks": [
+    {
+      "type": "brand_logo",
+      "name": "t:sections.about.blocks.brand_logo.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "t:labels.image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "t:labels.title",
+          "default": "Brand name"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "t:labels.url"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "founder_image",
+      "label": "t:sections.about.founder_image"
+    },
+    {
+      "type": "text",
+      "id": "founder_name",
+      "label": "t:sections.about.founder_name",
+      "default": "Mr. K. Chinnadurai"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.title",
+      "default": "56 Years of Timeless Excellence, Where Every Saree Is Truly Unique"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:labels.text",
+      "default": "<p>Mr. K. Chinnadurai, a visionary who believed that simple work philosophies could create great ventures, founded K. Chinnadurai &amp; Co. in <strong>1970</strong> during his teenage years in Tuticorin District. Starting with a small showroom and direct customer sales, the business quickly gained a reputation for outstanding service and high-quality garments.</p>"
+    },
+    {
+      "type": "text",
+      "id": "brand_label",
+      "label": "t:sections.about.brand_label",
+      "default": "Our Brand"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.about.name",
+      "blocks": [
+        { "type": "brand_logo" },
+        { "type": "brand_logo" },
+        { "type": "brand_logo" },
+        { "type": "brand_logo" }
+      ]
+    }
+  ]
+}
+{% endschema %}
