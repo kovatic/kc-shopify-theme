@@ -15,8 +15,8 @@
       "type": "header",
       "settings": {
         "logo": "shopify://shop_images/KC_Logo_1_fc729608-ffe0-4100-986e-48624fe4f316.png",
-        "top_menu": "",
-        "menu": "",
+        "top_menu": "top-menu",
+        "menu": "main-menu",
         "whatsapp_number": "+91-9488202320"
       }
     }
