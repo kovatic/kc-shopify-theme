@@ -45,14 +45,13 @@
             "col2_menu": "main-menu-copy",
             "col3_heading": "Shop Samudra Silk",
             "col3_menu": "top-menu",
-            "card1_image": "shopify://shop_images/image_112_06600aab-0ac2-4689-86f7-86307692376c.png",
+            "card1_image": "shopify://shop_images/image_110.png",
             "card1_label": "Samudrika Pattu",
             "card1_url": "",
-            "card2_image": "shopify://shop_images/image_106_efd5a2c3-105f-4073-badd-7c6e2e34c54f.png",
+            "card2_image": "shopify://shop_images/image_109.png",
             "card2_label": "Vastrakala Pattu",
             "card2_url": "",
-            "card3_image": "shopify://shop_images/image_111.png",
-            "card3_label": "Parampara Pattu",
+            "card3_label": "",
             "card3_url": ""
           }
         },
