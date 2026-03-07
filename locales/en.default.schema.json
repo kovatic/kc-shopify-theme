@@ -27,6 +27,7 @@
     "footer": "Footer",
     "group": "Group",
     "header": "Header",
+    "mega_menu": "Mega menu",
     "headings": "Headings",
     "body": "Body",
     "layout": "Layout",
@@ -65,6 +66,13 @@
     "top_menu": "Top bar menu",
     "whatsapp_number": "WhatsApp number",
     "promo_text": "Promo bar text (mobile)",
+    "nav_link_title": "Nav link title (must match exactly)",
+    "col1_heading": "Column 1 heading",
+    "col2_heading": "Column 2 heading",
+    "card1": "Card 1",
+    "card2": "Card 2",
+    "card3": "Card 3",
+    "label": "Label",
     "padding": "Padding",
     "padding_bottom": "Bottom padding",
     "padding_top": "Top padding",
@@ -184,5 +192,8 @@
       "subtitle": "Subtitle",
       "normal": "Normal text"
     }
+  },
+  "info": {
+    "nav_link_title": "Enter the exact nav link title to attach this mega menu to that item"
   }
 }

@@ -110,7 +110,17 @@
 <nav class="header-nav" aria-label="{{ 'header.main_nav_label' | t }}">
   <ul class="header-nav__list">
     {% for link in section.settings.menu.links %}
-      <li class="header-nav__item{% if link.links.size > 0 %} header-nav__item--has-dropdown{% endif %}">
+      {%- assign link_index = forloop.index0 -%}
+      {%- assign mega_blocks = section.blocks | where: 'type', 'mega_menu' -%}
+      {%- assign has_mega = false -%}
+      {%- for mb in mega_blocks -%}
+        {%- if mb.settings.nav_link_title == link.title -%}
+          {%- assign has_mega = true -%}
+          {%- assign mega_block = mb -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      <li class="header-nav__item{% if link.links.size > 0 %} header-nav__item--has-dropdown{% if has_mega %} header-nav__item--mega{% endif %}{% endif %}">
         <a href="{{ link.url }}" class="header-nav__link">
           {{- link.title -}}
           {% if link.links.size > 0 %}
@@ -119,14 +129,93 @@
             </svg>
           {% endif %}
         </a>
+
         {% if link.links.size > 0 %}
-          <ul class="header-nav__dropdown">
-            {% for child_link in link.links %}
-              <li>
-                <a href="{{ child_link.url }}" class="header-nav__dropdown-link">{{ child_link.title }}</a>
-              </li>
-            {% endfor %}
-          </ul>
+          {% if has_mega %}
+            {% comment %} Mega menu panel {% endcomment %}
+            <div class="mega-menu">
+              <div class="mega-menu__inner">
+
+                {% comment %} Column 1: first half of child links {% endcomment %}
+                {%- assign half = link.links.size | divided_by: 2 -%}
+                <div class="mega-menu__col">
+                  <p class="mega-menu__col-heading">{{ mega_block.settings.col1_heading | default: link.title }}</p>
+                  <ul class="mega-menu__links">
+                    {% for child_link in link.links %}
+                      {% if forloop.index0 < half %}
+                        <li>
+                          <a href="{{ child_link.url }}" class="mega-menu__link{% if child_link.title contains '₹' %} mega-menu__link--promo{% endif %}">
+                            {{ child_link.title }}
+                          </a>
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                </div>
+
+                {% comment %} Column 2: second half of child links {% endcomment %}
+                {% if mega_block.settings.col2_heading != blank %}
+                  <div class="mega-menu__col">
+                    <p class="mega-menu__col-heading">{{ mega_block.settings.col2_heading }}</p>
+                    <ul class="mega-menu__links">
+                      {% for child_link in link.links %}
+                        {% if forloop.index0 >= half %}
+                          <li>
+                            <a href="{{ child_link.url }}" class="mega-menu__link{% if child_link.title contains '₹' %} mega-menu__link--promo{% endif %}">
+                              {{ child_link.title }}
+                            </a>
+                          </li>
+                        {% endif %}
+                      {% endfor %}
+                    </ul>
+                  </div>
+                {% endif %}
+
+                {% comment %} Image cards {% endcomment %}
+                {% if mega_block.settings.card1_image or mega_block.settings.card2_image or mega_block.settings.card3_image %}
+                  <div class="mega-menu__cards">
+                    {% if mega_block.settings.card1_image %}
+                      <a href="{{ mega_block.settings.card1_url | default: '#' }}" class="mega-menu__card">
+                        {{ mega_block.settings.card1_image | image_url: width: 500 | image_tag: class: 'mega-menu__card-img', alt: mega_block.settings.card1_label | escape }}
+                        <div class="mega-menu__card-gradient"></div>
+                        {% if mega_block.settings.card1_label != blank %}
+                          <span class="mega-menu__card-label">{{ mega_block.settings.card1_label }}</span>
+                        {% endif %}
+                      </a>
+                    {% endif %}
+                    {% if mega_block.settings.card2_image %}
+                      <a href="{{ mega_block.settings.card2_url | default: '#' }}" class="mega-menu__card">
+                        {{ mega_block.settings.card2_image | image_url: width: 500 | image_tag: class: 'mega-menu__card-img', alt: mega_block.settings.card2_label | escape }}
+                        <div class="mega-menu__card-gradient"></div>
+                        {% if mega_block.settings.card2_label != blank %}
+                          <span class="mega-menu__card-label">{{ mega_block.settings.card2_label }}</span>
+                        {% endif %}
+                      </a>
+                    {% endif %}
+                    {% if mega_block.settings.card3_image %}
+                      <a href="{{ mega_block.settings.card3_url | default: '#' }}" class="mega-menu__card">
+                        {{ mega_block.settings.card3_image | image_url: width: 500 | image_tag: class: 'mega-menu__card-img', alt: mega_block.settings.card3_label | escape }}
+                        <div class="mega-menu__card-gradient"></div>
+                        {% if mega_block.settings.card3_label != blank %}
+                          <span class="mega-menu__card-label">{{ mega_block.settings.card3_label }}</span>
+                        {% endif %}
+                      </a>
+                    {% endif %}
+                  </div>
+                {% endif %}
+
+              </div>
+            </div>
+          {% else %}
+            {% comment %} Simple dropdown {% endcomment %}
+            <ul class="header-nav__dropdown">
+              {% for child_link in link.links %}
+                <li>
+                  <a href="{{ child_link.url }}" class="header-nav__dropdown-link">{{ child_link.title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
         {% endif %}
       </li>
     {% endfor %}
@@ -317,7 +406,7 @@
     transform: rotate(180deg);
   }
 
-  /* Dropdown */
+  /* ── Simple dropdown ── */
   .header-nav__dropdown {
     display: none;
     position: absolute;
@@ -349,6 +438,121 @@
   .header-nav__dropdown-link:hover {
     background-color: #f5f4f0;
     color: var(--color-primary);
+  }
+
+  /* ── Mega menu ── */
+  .mega-menu {
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    background-color: #efeee9;
+    z-index: 99;
+    border-top: 1px solid #e0dfd9;
+  }
+  .header-nav__item--mega:hover .mega-menu {
+    display: block;
+  }
+  .mega-menu__inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 72px;
+    padding: 48px 80px 56px;
+    max-width: var(--page-width, 1400px);
+    margin: 0 auto;
+  }
+
+  /* Link columns */
+  .mega-menu__col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex-shrink: 0;
+    min-width: 160px;
+  }
+  .mega-menu__col-heading {
+    font-family: var(--font-body--family, 'Montserrat', sans-serif);
+    font-size: 1rem;
+    font-weight: 500;
+    color: #42464b;
+    margin: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .mega-menu__links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .mega-menu__link {
+    font-family: var(--font-body--family, 'Montserrat', sans-serif);
+    font-size: 1rem;
+    font-weight: 400;
+    color: #42464b;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s ease;
+  }
+  .mega-menu__link:hover {
+    color: var(--color-primary);
+  }
+  .mega-menu__link--promo {
+    color: #ce0570;
+  }
+  .mega-menu__link--promo:hover {
+    color: #a8045c;
+  }
+
+  /* Image cards */
+  .mega-menu__cards {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-left: auto;
+  }
+  .mega-menu__card {
+    position: relative;
+    display: block;
+    width: 290px;
+    height: 390px;
+    overflow: hidden;
+    flex-shrink: 0;
+    text-decoration: none;
+  }
+  .mega-menu__card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+  .mega-menu__card:hover .mega-menu__card-img {
+    transform: scale(1.04);
+  }
+  .mega-menu__card-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(44,36,33,0.80) 0%,
+      rgba(44,36,33,0.10) 40%,
+      rgba(44,36,33,0) 65%
+    );
+    pointer-events: none;
+  }
+  .mega-menu__card-label {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    font-family: var(--font-heading--family, 'Playfair Display', serif);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.3;
   }
 
   /* ── Promo bar (mobile only) ── */
@@ -581,6 +785,87 @@
 {% schema %}
 {
   "name": "t:general.header",
+  "blocks": [
+    {
+      "type": "mega_menu",
+      "name": "t:general.mega_menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "nav_link_title",
+          "label": "t:labels.nav_link_title",
+          "info": "t:info.nav_link_title"
+        },
+        {
+          "type": "text",
+          "id": "col1_heading",
+          "label": "t:labels.col1_heading"
+        },
+        {
+          "type": "text",
+          "id": "col2_heading",
+          "label": "t:labels.col2_heading"
+        },
+        {
+          "type": "header",
+          "content": "t:labels.card1"
+        },
+        {
+          "type": "image_picker",
+          "id": "card1_image",
+          "label": "t:labels.image"
+        },
+        {
+          "type": "text",
+          "id": "card1_label",
+          "label": "t:labels.label"
+        },
+        {
+          "type": "url",
+          "id": "card1_url",
+          "label": "t:labels.url"
+        },
+        {
+          "type": "header",
+          "content": "t:labels.card2"
+        },
+        {
+          "type": "image_picker",
+          "id": "card2_image",
+          "label": "t:labels.image"
+        },
+        {
+          "type": "text",
+          "id": "card2_label",
+          "label": "t:labels.label"
+        },
+        {
+          "type": "url",
+          "id": "card2_url",
+          "label": "t:labels.url"
+        },
+        {
+          "type": "header",
+          "content": "t:labels.card3"
+        },
+        {
+          "type": "image_picker",
+          "id": "card3_image",
+          "label": "t:labels.image"
+        },
+        {
+          "type": "text",
+          "id": "card3_label",
+          "label": "t:labels.label"
+        },
+        {
+          "type": "url",
+          "id": "card3_url",
+          "label": "t:labels.url"
+        }
+      ]
+    }
+  ],
   "settings": [
     {
       "type": "image_picker",
