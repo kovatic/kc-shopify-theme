@@ -15,7 +15,9 @@
     "search_label": "Search",
     "account_label": "Account",
     "wishlist_label": "Wishlist",
-    "cart_label": "Cart"
+    "cart_label": "Cart",
+    "menu_label": "Menu",
+    "close_menu_label": "Close menu"
   },
   "404": {
     "title": "404",

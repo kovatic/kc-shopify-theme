@@ -13,11 +13,23 @@
   </div>
 </div>
 
+{% comment %} Mobile promo bar {% endcomment %}
+<div class="header-promo-bar">
+  <p class="header-promo-bar__text">{{ section.settings.promo_text }}</p>
+</div>
+
 {% comment %} Row 2: Logo + Icons {% endcomment %}
 <div class="header-main">
   <div class="header-main__inner">
 
-    {% comment %} Spacer left — mirrors icon group width so logo is truly centered {% endcomment %}
+    {% comment %} Hamburger — mobile only {% endcomment %}
+    <button class="header-hamburger" aria-label="{{ 'header.menu_label' | t }}" aria-expanded="false" aria-controls="mobile-nav-drawer">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M2.5 5H17.5M2.5 10H17.5M2.5 15H17.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    {% comment %} Spacer left — mirrors icon group width so logo is truly centered (desktop only) {% endcomment %}
     <div class="header-main__spacer" aria-hidden="true"></div>
 
     <div class="header-main__logo">
@@ -36,13 +48,16 @@
       </button>
 
       {% if shop.customer_accounts_enabled %}
-        <a href="{{ routes.account_url }}" class="header-icon-btn" aria-label="{{ 'header.account_label' | t }}">
+        <a href="{{ routes.account_url }}" class="header-icon-btn header-icon-btn--account-desktop" aria-label="{{ 'header.account_label' | t }}">
           {{ 'icon-account.svg' | inline_asset_content }}
         </a>
       {% endif %}
 
-      <a href="{{ routes.search_url }}?type=product&q=wishlist" class="header-icon-btn" aria-label="{{ 'header.wishlist_label' | t }}">
+      <a href="{{ routes.search_url }}?type=product&q=wishlist" class="header-icon-btn header-icon-btn--wishlist" aria-label="{{ 'header.wishlist_label' | t }}">
         {{ 'icon-wishlist.svg' | inline_asset_content }}
+        {% if cart.item_count > 0 %}
+          <span class="header-wishlist-count">0</span>
+        {% endif %}
       </a>
 
       <a href="{{ routes.cart_url }}" class="header-icon-btn header-icon-btn--cart" aria-label="{{ 'header.cart_label' | t }}">
@@ -53,6 +68,41 @@
       </a>
     </div>
 
+  </div>
+</div>
+
+{% comment %} Mobile nav drawer {% endcomment %}
+<div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true">
+  <div class="mobile-nav-drawer__overlay"></div>
+  <div class="mobile-nav-drawer__panel">
+    <button class="mobile-nav-drawer__close" aria-label="{{ 'header.close_menu_label' | t }}">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <nav aria-label="{{ 'header.main_nav_label' | t }}">
+      <ul class="mobile-nav-drawer__list">
+        {% for link in section.settings.menu.links %}
+          <li class="mobile-nav-drawer__item{% if link.links.size > 0 %} mobile-nav-drawer__item--has-children{% endif %}">
+            {% if link.links.size > 0 %}
+              <button class="mobile-nav-drawer__link mobile-nav-drawer__toggle" aria-expanded="false">
+                {{- link.title -}}
+                <svg class="mobile-nav-drawer__chevron" width="12" height="12" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                  <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <ul class="mobile-nav-drawer__sub">
+                {% for child_link in link.links %}
+                  <li><a href="{{ child_link.url }}" class="mobile-nav-drawer__sub-link">{{ child_link.title }}</a></li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <a href="{{ link.url }}" class="mobile-nav-drawer__link">{{- link.title -}}</a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
   </div>
 </div>
 
@@ -301,38 +351,232 @@
     color: var(--color-primary);
   }
 
+  /* ── Promo bar (mobile only) ── */
+  .header-promo-bar {
+    display: none;
+    background-color: #ce0570;
+    padding: 7px 16px;
+    text-align: center;
+  }
+  .header-promo-bar__text {
+    color: #fff;
+    font-family: var(--font-body--family, 'Poppins', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* ── Hamburger (mobile only) ── */
+  .header-hamburger {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #42464b;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  /* ── Mobile nav drawer ── */
+  .mobile-nav-drawer {
+    display: none;
+  }
+  .mobile-nav-drawer.is-open {
+    display: block;
+  }
+  .mobile-nav-drawer__overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 200;
+  }
+  .mobile-nav-drawer__panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    background: #fff;
+    z-index: 201;
+    overflow-y: auto;
+    padding: 16px 0 32px;
+    transform: translateX(0);
+  }
+  .mobile-nav-drawer__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #42464b;
+    margin: 0 0 8px 16px;
+    padding: 0;
+  }
+  .mobile-nav-drawer__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .mobile-nav-drawer__item {
+    border-bottom: 1px solid #f0efe9;
+  }
+  .mobile-nav-drawer__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 14px 20px;
+    font-family: var(--font-body--family, 'Montserrat', sans-serif);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #42464b;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+  .mobile-nav-drawer__link:hover {
+    color: var(--color-primary);
+  }
+  .mobile-nav-drawer__chevron {
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+  .mobile-nav-drawer__toggle[aria-expanded="true"] .mobile-nav-drawer__chevron {
+    transform: rotate(180deg);
+  }
+  .mobile-nav-drawer__sub {
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0 0 8px;
+    background: #f8f7f3;
+  }
+  .mobile-nav-drawer__toggle[aria-expanded="true"] + .mobile-nav-drawer__sub {
+    display: block;
+  }
+  .mobile-nav-drawer__sub-link {
+    display: block;
+    padding: 11px 20px 11px 32px;
+    font-family: var(--font-body--family, 'Montserrat', sans-serif);
+    font-size: 0.875rem;
+    color: #42464b;
+    text-decoration: none;
+  }
+  .mobile-nav-drawer__sub-link:hover {
+    color: var(--color-primary);
+  }
+
+  /* ── Wishlist count badge ── */
+  .header-icon-btn--wishlist {
+    position: relative;
+  }
+  .header-wishlist-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #a42829;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    min-width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
   /* ── Mobile ── */
   @media screen and (max-width: 768px) {
-    .header-topbar__nav {
-      gap: 16px;
+    .header-topbar {
+      display: none;
     }
-    .header-topbar__link {
-      font-size: 0.7rem;
+    .header-promo-bar {
+      display: block;
     }
-    .header-topbar__contact {
-      font-size: 0.72rem;
+    .header-hamburger {
+      display: flex;
     }
     .header-main__inner {
-      height: 64px;
+      height: 70px;
+      justify-content: space-between;
     }
     .header-main__spacer {
       display: none;
     }
     .header-main__logo {
-      justify-content: flex-start;
+      flex: 1;
+      justify-content: center;
     }
     .header-main__logo-img {
-      max-height: 40px;
+      max-height: 44px;
     }
     .header-icon-btn {
       width: 36px;
       height: 36px;
+      background: none;
+    }
+    .header-icon-btn:hover {
+      background: none;
+      color: var(--color-primary);
+    }
+    .header-icon-btn--account-desktop {
+      display: none;
+    }
+    .header-main__icons {
+      gap: 4px;
     }
     .header-nav {
       display: none;
     }
   }
 {% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    var hamburger = document.querySelector('.header-hamburger');
+    var drawer = document.getElementById('mobile-nav-drawer');
+    var closeBtn = document.querySelector('.mobile-nav-drawer__close');
+    var overlay = document.querySelector('.mobile-nav-drawer__overlay');
+
+    function openDrawer() {
+      drawer.classList.add('is-open');
+      drawer.setAttribute('aria-hidden', 'false');
+      hamburger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    if (hamburger) hamburger.addEventListener('click', openDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (overlay) overlay.addEventListener('click', closeDrawer);
+
+    document.querySelectorAll('.mobile-nav-drawer__toggle').forEach(function(toggle) {
+      toggle.addEventListener('click', function() {
+        var expanded = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      });
+    });
+  })();
+{% endjavascript %}
 
 {% schema %}
 {
@@ -358,6 +602,12 @@
       "id": "whatsapp_number",
       "label": "t:labels.whatsapp_number",
       "default": "+91-9488202320"
+    },
+    {
+      "type": "text",
+      "id": "promo_text",
+      "label": "t:labels.promo_text",
+      "default": "Free Shipping on Orders Above ₹2,999 | Use Code: SILK20"
     }
   ]
 }
