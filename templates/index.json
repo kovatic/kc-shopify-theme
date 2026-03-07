@@ -175,6 +175,118 @@
         "padding_top": 60,
         "padding_bottom": 60
       }
+    },
+    "about_ANVEQm": {
+      "type": "about",
+      "blocks": {
+        "brand_logo_7iQD8t": {
+          "type": "brand_logo",
+          "settings": {
+            "logo": "shopify://shop_images/KC_Logo_1_fc729608-ffe0-4100-986e-48624fe4f316.png",
+            "name": "Brand name",
+            "url": ""
+          }
+        },
+        "brand_logo_HEKGBE": {
+          "type": "brand_logo",
+          "settings": {
+            "logo": "shopify://shop_images/image_52.png",
+            "name": "Brand name",
+            "url": ""
+          }
+        },
+        "brand_logo_9ycq9P": {
+          "type": "brand_logo",
+          "settings": {
+            "logo": "shopify://shop_images/image_53.png",
+            "name": "Brand name",
+            "url": ""
+          }
+        },
+        "brand_logo_MXrGiT": {
+          "type": "brand_logo",
+          "settings": {
+            "logo": "shopify://shop_images/image_54.png",
+            "name": "Brand name",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "brand_logo_7iQD8t",
+        "brand_logo_HEKGBE",
+        "brand_logo_9ycq9P",
+        "brand_logo_MXrGiT"
+      ],
+      "name": "t:sections.about.name",
+      "settings": {
+        "founder_image": "shopify://shop_images/image_50.png",
+        "founder_name": "Mr. K. Chinnadurai",
+        "heading": "56 Years of Timeless Excellence, Where Every Saree Is Truly Unique",
+        "description": "<p>Mr. K. Chinnadurai, a visionary who believed that simple work philosophies could create great ventures, founded K. Chinnadurai & Co. in<strong> 1970</strong> during his teenage years in Tuticorin District. Starting with a small showroom and direct customer sales, the business quickly gained a reputation for outstanding service and high-quality garments.</p>",
+        "brand_label": "Our Brand",
+        "padding_top": 8,
+        "padding_bottom": 80
+      }
+    },
+    "stores_NYzLxX": {
+      "type": "stores",
+      "blocks": {
+        "store_EbaiC9": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/image_37.png",
+            "store_type": "Flagship Store",
+            "store_name": "Eval",
+            "address": "Main Road, Eral, Thoothukudi District",
+            "phone": "9876543210",
+            "map_url": ""
+          }
+        },
+        "store_KH3CRn": {
+          "type": "store",
+          "settings": {
+            "store_type": "Flagship Store",
+            "store_name": "Store Name",
+            "address": "Store address",
+            "phone": "",
+            "map_url": ""
+          }
+        },
+        "store_9LJAiC": {
+          "type": "store",
+          "settings": {
+            "store_type": "Flagship Store",
+            "store_name": "Store Name",
+            "address": "Store address",
+            "phone": "",
+            "map_url": ""
+          }
+        },
+        "store_WbMt6h": {
+          "type": "store",
+          "settings": {
+            "store_type": "Flagship Store",
+            "store_name": "Store Name",
+            "address": "Store address",
+            "phone": "",
+            "map_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "store_EbaiC9",
+        "store_KH3CRn",
+        "store_9LJAiC",
+        "store_WbMt6h"
+      ],
+      "name": "t:sections.stores.name",
+      "settings": {
+        "title": "Visit Our Stores",
+        "subtitle": "4 locations across Tamil Nadu & Chennai",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
     }
   },
   "order": [
@@ -185,6 +297,8 @@
     "product_list_8L8wf6",
     "promo_RGMMyX",
     "brand_marquee_aQFqpK",
-    "product_carousel_zpTxYK"
+    "product_carousel_zpTxYK",
+    "about_ANVEQm",
+    "stores_NYzLxX"
   ]
 }
