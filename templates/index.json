@@ -29,10 +29,11 @@
         "slide_aPXt94": {
           "type": "slide",
           "settings": {
-            "subheading": "New Collection",
-            "heading": "Elegance in Every Thread",
-            "text": "Discover our curated collection of handcrafted sarees.",
-            "button_label": "Shop Now",
+            "image": "shopify://shop_images/Free-Shipping-Banner-Final_jpg.webp",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
             "button_url": "",
             "text_position": "middle-left",
             "show_overlay": true,
