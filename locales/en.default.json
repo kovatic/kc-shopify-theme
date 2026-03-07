@@ -82,6 +82,22 @@
       "add_to_wishlist": "Add {{ title }} to wishlist",
       "add_to_wishlist_generic": "Add to wishlist",
       "product_placeholder": "Product name"
+    },
+    "promo": {
+      "name": "Promo",
+      "button_label": "Button label"
+    },
+    "brand_marquee": {
+      "name": "Brand marquee"
+    },
+    "product_carousel": {
+      "name": "Product carousel",
+      "shop_now": "Shop Now",
+      "navigation": "Carousel navigation",
+      "prev": "Previous slide",
+      "next": "Next slide",
+      "product_placeholder": "Product name",
+      "collection_placeholder": "Collection name"
     }
   },
   "blocks": {

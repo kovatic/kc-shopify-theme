@@ -1,0 +1,253 @@
+{%- assign brands_list = section.settings.brands -%}
+{%- assign total = brands_list.count -%}
+{%- assign half = total | divided_by: 2 -%}
+
+<div
+  class="brand-marquee"
+  style="
+    --padding-top: {{ section.settings.padding_top }}px;
+    --padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="brand-marquee__container">
+
+    {%- if section.settings.heading != blank -%}
+      <h2 class="brand-marquee__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    {%- if total > 0 -%}
+      <div class="brand-marquee__rows">
+
+        {%- comment -%} Row 1: first half {%- endcomment -%}
+        <div class="brand-marquee__track brand-marquee__track--1">
+          <div class="brand-marquee__inner">
+            {%- for brand in brands_list limit: half -%}
+              {%- render 'brand-marquee-card', brand: brand -%}
+            {%- endfor -%}
+            {%- comment -%} Duplicate for seamless infinite scroll {%- endcomment -%}
+            {%- for brand in brands_list limit: half -%}
+              {%- render 'brand-marquee-card', brand: brand, aria_hidden: true -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+        {%- comment -%} Row 2: second half {%- endcomment -%}
+        <div class="brand-marquee__track brand-marquee__track--2">
+          <div class="brand-marquee__inner">
+            {%- for brand in brands_list offset: half -%}
+              {%- render 'brand-marquee-card', brand: brand -%}
+            {%- endfor -%}
+            {%- comment -%} Duplicate for seamless infinite scroll {%- endcomment -%}
+            {%- for brand in brands_list offset: half -%}
+              {%- render 'brand-marquee-card', brand: brand, aria_hidden: true -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .brand-marquee {
+    position: relative;
+    background-color: #fef3df;
+    width: 100%;
+    padding-top: var(--padding-top, 80px);
+    padding-bottom: var(--padding-bottom, 80px);
+    overflow: hidden;
+  }
+
+  /* Decorative background pattern */
+  .brand-marquee::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='30' fill='none' stroke='%23c4a96b' stroke-width='0.5' opacity='0.3'/%3E%3Ccircle cx='40' cy='40' r='20' fill='none' stroke='%23c4a96b' stroke-width='0.5' opacity='0.2'/%3E%3C/svg%3E");
+    background-size: 80px 80px;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .brand-marquee__container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    z-index: 1;
+  }
+
+  .brand-marquee__heading {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 32px;
+    font-weight: 700;
+    color: #2e1f1f;
+    text-align: center;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Rows wrapper */
+  .brand-marquee__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /* Each scrolling track */
+  .brand-marquee__track {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .brand-marquee__inner {
+    display: flex;
+    gap: 22px;
+    width: max-content;
+  }
+
+  /* Row 1: scrolls left */
+  .brand-marquee__track--1 .brand-marquee__inner {
+    animation: brand-scroll-left 30s linear infinite;
+  }
+
+  /* Row 2: scrolls right */
+  .brand-marquee__track--2 .brand-marquee__inner {
+    animation: brand-scroll-right 30s linear infinite;
+  }
+
+  /* Pause on hover */
+  .brand-marquee__track:hover .brand-marquee__inner {
+    animation-play-state: paused;
+  }
+
+  @keyframes brand-scroll-left {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes brand-scroll-right {
+    0%   { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+
+  /* Brand card */
+  .brand-marquee__card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 170px;
+    height: 106px;
+    background-color: #f3e4cd;
+    border: 1.6px solid #eadac2;
+    border-radius: 6px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .brand-marquee__card:hover {
+    box-shadow: 0 4px 16px rgba(46, 31, 31, 0.12);
+    transform: translateY(-2px);
+  }
+
+  .brand-marquee__card[aria-hidden="true"] {
+    pointer-events: none;
+  }
+
+  .brand-marquee__logo {
+    max-width: 80%;
+    max-height: 65%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  .brand-marquee__logo--placeholder {
+    width: 80%;
+    height: 60%;
+    display: block;
+    color: #c4a96b;
+  }
+
+  /* Reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    .brand-marquee__track--1 .brand-marquee__inner,
+    .brand-marquee__track--2 .brand-marquee__inner {
+      animation: none;
+    }
+  }
+
+  /* Mobile */
+  @media screen and (max-width: 768px) {
+    .brand-marquee__heading {
+      font-size: 24px;
+      padding: 0 20px;
+    }
+
+    .brand-marquee__card {
+      width: 130px;
+      height: 82px;
+    }
+
+    .brand-marquee__rows {
+      gap: 16px;
+    }
+
+    .brand-marquee__inner {
+      gap: 16px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.brand_marquee.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.title",
+      "default": "Other Popular Brands Available"
+    },
+    {
+      "type": "metaobject_list",
+      "id": "brands",
+      "label": "t:sections.brand_marquee.brands",
+      "metaobject_type": "brand"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.brand_marquee.name"
+    }
+  ]
+}
+{% endschema %}

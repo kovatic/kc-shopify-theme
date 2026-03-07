@@ -1,0 +1,41 @@
+{% doc %}
+  Renders a single brand logo card used inside the brand-marquee section.
+  Reads logo, name and url from a metaobject entry.
+
+  Expected metaobject fields:
+  - logo  (file_reference / image)
+  - name  (single_line_text)
+  - url   (url)
+
+  @param {metaobject} brand - The metaobject entry
+  @param {boolean} [aria_hidden] - Set true for duplicated cards used in the scroll loop
+
+  @example
+  {% render 'brand-marquee-card', brand: brand %}
+  {% render 'brand-marquee-card', brand: brand, aria_hidden: true %}
+{% enddoc %}
+
+{%- liquid
+  assign brand_logo = brand.logo.value
+  assign brand_name = brand.name.value | default: brand.system.handle
+  assign brand_url  = brand.url.value | default: '#'
+-%}
+
+<a
+  class="brand-marquee__card"
+  href="{{ brand_url }}"
+  {% if aria_hidden %}
+    aria-hidden="true"
+    tabindex="-1"
+  {% endif %}
+>
+  {%- if brand_logo != blank -%}
+    {{ brand_logo | image_url: width: 340 | image_tag:
+      class: 'brand-marquee__logo',
+      loading: 'lazy',
+      alt: brand_name | escape
+    }}
+  {%- else -%}
+    {{ 'image' | placeholder_svg_tag: 'brand-marquee__logo--placeholder' }}
+  {%- endif -%}
+</a>

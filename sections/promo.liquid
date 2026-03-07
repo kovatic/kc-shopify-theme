@@ -1,0 +1,253 @@
+<a
+  class="promo"
+  href="{{ section.settings.button_url }}"
+  style="
+    --padding-top: {{ section.settings.padding_top }}px;
+    --padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+  {% if section.settings.button_url == blank %}aria-disabled="true"{% endif %}
+>
+  <div class="promo__container">
+
+    {%- comment -%} Left: text content {%- endcomment -%}
+    <div class="promo__content">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="promo__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.description != blank -%}
+        <p class="promo__description">{{ section.settings.description | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <span class="promo__btn" aria-hidden="true">
+          {{ section.settings.button_label | escape }}
+        </span>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Right: image {%- endcomment -%}
+    <div class="promo__media">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1300 | image_tag: class: 'promo__image', loading: 'lazy', alt: section.settings.heading | escape }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'promo__image promo__image--placeholder' }}
+      {%- endif -%}
+    </div>
+
+  </div>
+</a>
+
+{% stylesheet %}
+  .promo {
+    display: block;
+    text-decoration: none;
+    background-color: #f1eee9;
+    width: 100%;
+    padding-top: var(--padding-top, 80px);
+    padding-bottom: var(--padding-bottom, 80px);
+    overflow: hidden;
+  }
+
+  .promo[aria-disabled="true"] {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .promo__container {
+    display: flex;
+    align-items: center;
+    gap: 64px;
+    max-width: var(--page-width, 1400px);
+    margin: 0 auto;
+    padding: 0 52px;
+  }
+
+  /* Left: content */
+  .promo__content {
+    flex: 1 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .promo__heading {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 48px;
+    font-weight: 700;
+    color: #2e1f1f;
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  .promo__description {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 18px;
+    font-weight: 400;
+    color: #7e6767;
+    margin: 0 0 12px;
+    line-height: 1.625;
+    max-width: 436px;
+  }
+
+  .promo__btn {
+    display: inline-block;
+    padding: 16px 32px;
+    font-family: var(--font-body-family, 'Lato', sans-serif);
+    font-size: 14px;
+    font-weight: 700;
+    color: #f9f8f6;
+    background: linear-gradient(122.86deg, #721d2e 0%, #4e0e1b 100%);
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    border-radius: 2px;
+    transition: opacity 0.2s ease;
+    line-height: 1.43;
+  }
+
+  .promo:hover .promo__btn {
+    opacity: 0.88;
+  }
+
+  /* Right: image */
+  .promo__media {
+    flex: 0 0 auto;
+    width: 644px;
+    height: 429px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .promo__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 4px;
+  }
+
+  .promo__image--placeholder {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Tablet */
+  @media screen and (max-width: 1024px) {
+    .promo__container {
+      gap: 40px;
+      padding: 0 32px;
+    }
+
+    .promo__media {
+      width: 480px;
+      height: 320px;
+    }
+
+    .promo__heading {
+      font-size: 36px;
+    }
+
+    .promo__description {
+      font-size: 16px;
+    }
+  }
+
+  /* Mobile */
+  @media screen and (max-width: 768px) {
+    .promo {
+      padding-top: var(--padding-top, 48px);
+      padding-bottom: var(--padding-bottom, 48px);
+    }
+
+    .promo__container {
+      flex-direction: column-reverse;
+      gap: 32px;
+      padding: 0 20px;
+    }
+
+    .promo__media {
+      width: 100%;
+      height: 260px;
+    }
+
+    .promo__content {
+      width: 100%;
+    }
+
+    .promo__heading {
+      font-size: 32px;
+    }
+
+    .promo__description {
+      font-size: 15px;
+      max-width: 100%;
+    }
+
+    .promo__btn {
+      padding: 14px 28px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.promo.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.title",
+      "default": "Gift Voucher"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "t:labels.text",
+      "default": "This voucher is redeemable only at authorized K Chinnadurai and Co retail stores in India."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:sections.promo.button_label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "t:labels.url"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.promo.name"
+    }
+  ]
+}
+{% endschema %}

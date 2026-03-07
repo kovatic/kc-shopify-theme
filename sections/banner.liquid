@@ -335,6 +335,17 @@
         });
       });
 
+      var touchStartX = 0;
+      track.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].clientX;
+      }, { passive: true });
+      track.addEventListener('touchend', function(e) {
+        var diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) < 40) return;
+        if (diff > 0) { goTo(current + 1); } else { goTo(current - 1); }
+        resetAutoplay();
+      }, { passive: true });
+
       startAutoplay();
     }
 

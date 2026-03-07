@@ -1,0 +1,568 @@
+{%- liquid
+  assign data_source = section.settings.data_source
+
+  if data_source == 'single_collection'
+    assign source_collection = section.settings.single_collection
+    assign items = source_collection.products
+    assign items_count = section.settings.products_count
+  else
+    assign items = section.settings.collections
+    assign items_count = items.count
+  endif
+-%}
+
+<div
+  class="product-carousel"
+  id="product-carousel-{{ section.id }}"
+  style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="product-carousel__container">
+
+    <div class="product-carousel__header">
+      <div class="product-carousel__divider" aria-hidden="true">
+        <span class="product-carousel__divider-line"></span>
+        <span class="product-carousel__divider-diamond">✦</span>
+        <span class="product-carousel__divider-line"></span>
+      </div>
+      {%- if section.settings.title != blank -%}
+        <h2 class="product-carousel__title">{{ section.settings.title | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subtitle != blank -%}
+        <p class="product-carousel__subtitle">{{ section.settings.subtitle | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="product-carousel__stage" aria-label="{{ section.settings.title | escape }}">
+      {%- if data_source == 'single_collection' -%}
+        {%- if section.settings.single_collection != blank and items.size > 0 -%}
+          {%- for product in items limit: items_count -%}
+            <a
+              class="product-carousel__card"
+              href="{{ product.url }}"
+              data-index="{{ forloop.index0 }}"
+            >
+              <div class="product-carousel__card-media">
+                {%- if product.featured_image != blank -%}
+                  {{ product.featured_image | image_url: width: 680 | image_tag:
+                    class: 'product-carousel__card-image',
+                    loading: 'lazy',
+                    alt: product.title | escape
+                  }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'product-carousel__card-image product-carousel__card-image--placeholder' }}
+                {%- endif -%}
+              </div>
+              <div class="product-carousel__card-gradient" aria-hidden="true"></div>
+              <div class="product-carousel__card-info">
+                <span class="product-carousel__card-name">{{ product.title | escape }}</span>
+                <span class="product-carousel__card-cta">{{ 'sections.product_carousel.shop_now' | t }} →</span>
+              </div>
+            </a>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..7) -%}
+            <div class="product-carousel__card product-carousel__card--placeholder" data-index="{{ forloop.index0 }}">
+              {{ 'product-1' | placeholder_svg_tag: 'product-carousel__card-image product-carousel__card-image--placeholder' }}
+              <div class="product-carousel__card-gradient" aria-hidden="true"></div>
+              <div class="product-carousel__card-info">
+                <span class="product-carousel__card-name">{{ 'sections.product_carousel.product_placeholder' | t }}</span>
+                <span class="product-carousel__card-cta">{{ 'sections.product_carousel.shop_now' | t }} →</span>
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+
+      {%- else -%}
+        {%- if items.count > 0 -%}
+          {%- for collection in items -%}
+            <a
+              class="product-carousel__card"
+              href="{{ collection.url }}"
+              data-index="{{ forloop.index0 }}"
+            >
+              <div class="product-carousel__card-media">
+                {%- if collection.featured_image != blank -%}
+                  {{ collection.featured_image | image_url: width: 680 | image_tag:
+                    class: 'product-carousel__card-image',
+                    loading: 'lazy',
+                    alt: collection.title | escape
+                  }}
+                {%- else -%}
+                  {{ 'collection-1' | placeholder_svg_tag: 'product-carousel__card-image product-carousel__card-image--placeholder' }}
+                {%- endif -%}
+              </div>
+              <div class="product-carousel__card-gradient" aria-hidden="true"></div>
+              <div class="product-carousel__card-info">
+                <span class="product-carousel__card-name">{{ collection.title | escape }}</span>
+                <span class="product-carousel__card-cta">{{ 'sections.product_carousel.shop_now' | t }} →</span>
+              </div>
+            </a>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..7) -%}
+            <div class="product-carousel__card product-carousel__card--placeholder" data-index="{{ forloop.index0 }}">
+              {{ 'collection-1' | placeholder_svg_tag: 'product-carousel__card-image product-carousel__card-image--placeholder' }}
+              <div class="product-carousel__card-gradient" aria-hidden="true"></div>
+              <div class="product-carousel__card-info">
+                <span class="product-carousel__card-name">{{ 'sections.product_carousel.collection_placeholder' | t }}</span>
+                <span class="product-carousel__card-cta">{{ 'sections.product_carousel.shop_now' | t }} →</span>
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+
+      {%- endif -%}
+    </div>
+
+    <div class="product-carousel__nav" aria-label="{{ 'sections.product_carousel.navigation' | t }}">
+      <button class="product-carousel__btn product-carousel__btn--prev" id="pc-prev-{{ section.id }}" aria-label="{{ 'sections.product_carousel.prev' | t }}" type="button">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button class="product-carousel__btn product-carousel__btn--next" id="pc-next-{{ section.id }}" aria-label="{{ 'sections.product_carousel.next' | t }}" type="button">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .product-carousel {
+    background-color: #f1eee9;
+    width: 100%;
+    padding-top: var(--padding-top, 60px);
+    padding-bottom: var(--padding-bottom, 60px);
+    overflow: hidden;
+  }
+
+  .product-carousel__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 50px;
+  }
+
+  /* Header */
+  .product-carousel__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .product-carousel__divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 4px;
+  }
+
+  .product-carousel__divider-line {
+    display: block;
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(198, 146, 57, 0) 0%, #c69239 50%, rgba(198, 146, 57, 0) 100%);
+  }
+
+  .product-carousel__divider-diamond {
+    color: #c69239;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .product-carousel__title {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 48px;
+    font-weight: 700;
+    color: #2e1f1f;
+    text-align: center;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .product-carousel__subtitle {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 18px;
+    font-weight: 400;
+    color: #7e6767;
+    text-align: center;
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* Stage — fan layout */
+  .product-carousel__stage {
+    position: relative;
+    width: 100%;
+    height: 460px;
+  }
+
+  /* Card base */
+  .product-carousel__card {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: block;
+    overflow: hidden;
+    border-radius: 4px;
+    background-color: #5b3722;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.45s ease;
+  }
+
+  .product-carousel__card-media {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .product-carousel__card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .product-carousel__card-image--placeholder {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .product-carousel__card-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(44, 36, 33, 0.8) 0%,
+      rgba(44, 36, 33, 0.1) 38%,
+      rgba(44, 36, 33, 0) 62%
+    );
+    pointer-events: none;
+  }
+
+  .product-carousel__card-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .product-carousel__card-name {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.4;
+    display: block;
+  }
+
+  .product-carousel__card-cta {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+    display: block;
+    white-space: nowrap;
+  }
+
+  /* Nav buttons */
+  .product-carousel__nav {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .product-carousel__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid #2e1f1f;
+    border-radius: 50%;
+    background: transparent;
+    color: #2e1f1f;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .product-carousel__btn:hover {
+    background: #2e1f1f;
+    color: #f1eee9;
+  }
+
+  /* Mobile */
+  @media screen and (max-width: 768px) {
+    .product-carousel__container {
+      padding: 0 20px;
+      gap: 24px;
+    }
+
+    .product-carousel__title {
+      font-size: 28px;
+    }
+
+    .product-carousel__subtitle {
+      font-size: 15px;
+    }
+
+    .product-carousel__stage {
+      height: 320px;
+    }
+
+    .product-carousel__divider-line {
+      width: 60px;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    function initCarousel(sectionId) {
+      var stage = document.querySelector('#product-carousel-' + sectionId + ' .product-carousel__stage');
+      if (!stage) return;
+
+      var cards = Array.from(stage.querySelectorAll('.product-carousel__card'));
+      var total = cards.length;
+      if (total === 0) return;
+
+      /*
+       * virtualIndex always increments (never decrements for autoplay/next).
+       * Each card's visual slot = ((cardIndex - virtualIndex) % total + total) % total
+       * mapped to: 0 = center, 1 = right-1, 2 = right-2, total-1 = left-1, total-2 = left-2 …
+       * This means advancing virtualIndex always shifts every card one step LEFT,
+       * which looks like continuous forward motion — no backward jump on wrap.
+       */
+      var virtualIndex = 0;
+
+      function getSizes(stageWidth) {
+        var isMobile = stageWidth < 768;
+        /*
+         * sizes[0] = center card, sizes[1] = adjacent, sizes[2] = outer, …
+         * Cards are placed flush — no gap — each one's left/right edge
+         * touches the next card.
+         */
+        return isMobile
+          ? [
+              { w: 180, h: 280, opacity: 1,    z: 10 },
+              { w: 130, h: 220, opacity: 0.9,  z: 8  },
+              { w: 100, h: 175, opacity: 0.7,  z: 6  },
+              { w: 80,  h: 145, opacity: 0.5,  z: 4  }
+            ]
+          : [
+              { w: 338, h: 423, opacity: 1,    z: 10 },
+              { w: 269, h: 368, opacity: 0.95, z: 8  },
+              { w: 206, h: 323, opacity: 0.85, z: 6  },
+              { w: 100, h: 287, opacity: 0.6,  z: 4  }
+            ];
+      }
+
+      function render() {
+        var stageWidth = stage.offsetWidth;
+        var centerX = stageWidth / 2;
+        var sizes = getSizes(stageWidth);
+        var half = Math.floor(total / 2);
+
+        /*
+         * Build a position map keyed by offset (-half … +half).
+         * Start from center (offset 0) and accumulate left/right edges flush.
+         */
+        var posMap = {};
+        var centerSize = sizes[0];
+        posMap[0] = { left: centerX - centerSize.w / 2, size: centerSize };
+
+        // Build right side: each card's left = previous card's right edge
+        var rightEdge = centerX + centerSize.w / 2;
+        for (var r = 1; r <= half; r++) {
+          var s = sizes[Math.min(r, sizes.length - 1)];
+          posMap[r] = { left: rightEdge, size: s };
+          rightEdge += s.w;
+        }
+
+        // Build left side: each card's right = previous card's left edge
+        var leftEdge = centerX - centerSize.w / 2;
+        for (var l = 1; l <= half; l++) {
+          var sl = sizes[Math.min(l, sizes.length - 1)];
+          posMap[-l] = { left: leftEdge - sl.w, size: sl };
+          leftEdge -= sl.w;
+        }
+
+        cards.forEach(function (card, i) {
+          var slot = ((i - virtualIndex) % total + total) % total;
+          var offset = slot <= half ? slot : slot - total;
+          var entry = posMap[offset];
+
+          card.style.width     = entry.size.w + 'px';
+          card.style.height    = entry.size.h + 'px';
+          card.style.transform = 'translateX(' + entry.left + 'px) translateY(-50%)';
+          card.style.opacity   = entry.size.opacity;
+          card.style.zIndex    = entry.size.z;
+          card.setAttribute('aria-current', slot === 0 ? 'true' : 'false');
+        });
+      }
+
+      /* Always move forward — virtualIndex only ever increases */
+      function next() {
+        virtualIndex = (virtualIndex + 1) % total;
+        render();
+      }
+
+      function prev() {
+        virtualIndex = (virtualIndex - 1 + total) % total;
+        render();
+      }
+
+      /* Click a non-active card: advance forward the shortest number of steps */
+      cards.forEach(function (card, i) {
+        card.addEventListener('click', function (e) {
+          var slot = ((i - virtualIndex) % total + total) % total;
+          if (slot === 0) return;
+          e.preventDefault();
+          /* always step forward to reach the clicked card */
+          var steps = slot <= Math.floor(total / 2) ? slot : total - slot;
+          var direction = slot <= Math.floor(total / 2) ? 1 : -1;
+          /* for continuous forward feel, always go forward */
+          virtualIndex = (virtualIndex + slot) % total;
+          render();
+          resetAutoplay();
+        });
+      });
+
+      var prevBtn = document.getElementById('pc-prev-' + sectionId);
+      var nextBtn = document.getElementById('pc-next-' + sectionId);
+      var autoplayTimer = null;
+
+      function startAutoplay() {
+        autoplayTimer = setInterval(next, 3000);
+      }
+
+      function resetAutoplay() {
+        clearInterval(autoplayTimer);
+        startAutoplay();
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', function () { prev(); resetAutoplay(); });
+      if (nextBtn) nextBtn.addEventListener('click', function () { next(); resetAutoplay(); });
+
+      stage.addEventListener('mouseenter', function () { clearInterval(autoplayTimer); });
+      stage.addEventListener('mouseleave', startAutoplay);
+
+      var touchStartX = 0;
+      stage.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].clientX;
+      }, { passive: true });
+      stage.addEventListener('touchend', function(e) {
+        var diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) < 40) return;
+        if (diff > 0) { next(); } else { prev(); }
+        resetAutoplay();
+      }, { passive: true });
+
+      render();
+      startAutoplay();
+      window.addEventListener('resize', render);
+    }
+
+    document.querySelectorAll('[id^="product-carousel-"]').forEach(function (el) {
+      var id = el.id.replace('product-carousel-', '');
+      initCarousel(id);
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.product_carousel.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:labels.title",
+      "default": "Celebrities' Favorites"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle",
+      "default": "Discover what's new this season."
+    },
+    {
+      "type": "select",
+      "id": "data_source",
+      "label": "t:sections.product_carousel.data_source",
+      "options": [
+        { "value": "single_collection", "label": "t:sections.product_carousel.data_source_single" },
+        { "value": "multiple_collections", "label": "t:sections.product_carousel.data_source_multiple" }
+      ],
+      "default": "single_collection"
+    },
+    {
+      "type": "collection",
+      "id": "single_collection",
+      "label": "t:labels.collection"
+    },
+    {
+      "type": "range",
+      "id": "products_count",
+      "label": "t:sections.product_carousel.products_count",
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "default": 7,
+      "visible_if": "{{ section.settings.data_source == 'single_collection' }}"
+    },
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "t:labels.collections"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.product_carousel.name",
+      "settings": {
+        "data_source": "single_collection"
+      }
+    }
+  ]
+}
+{% endschema %}
