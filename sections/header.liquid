@@ -1,5 +1,5 @@
 {% comment %} Row 1: Top bar {% endcomment %}
-<div class="header-topbar full-width">
+<div class="header-topbar">
   <div class="header-topbar__inner">
     <nav class="header-topbar__nav" aria-label="{{ 'header.top_nav_label' | t }}">
       {% for link in section.settings.top_menu.links %}
@@ -14,12 +14,16 @@
 </div>
 
 {% comment %} Row 2: Logo + Icons {% endcomment %}
-<div class="header-main full-width">
+<div class="header-main">
   <div class="header-main__inner">
+
+    {% comment %} Spacer left — mirrors icon group width so logo is truly centered {% endcomment %}
+    <div class="header-main__spacer" aria-hidden="true"></div>
+
     <div class="header-main__logo">
       {% if section.settings.logo %}
         <a href="{{ routes.root_url }}">
-          {{- section.settings.logo | image_url: width: 220 | image_tag: alt: shop.name -}}
+          {{- section.settings.logo | image_url: width: 220 | image_tag: alt: shop.name, class: 'header-main__logo-img' -}}
         </a>
       {% else %}
         <a href="{{ routes.root_url }}" class="header-main__shop-name">{{ shop.name }}</a>
@@ -48,18 +52,21 @@
         {% endif %}
       </a>
     </div>
+
   </div>
 </div>
 
 {% comment %} Row 3: Category nav {% endcomment %}
-<nav class="header-nav full-width" aria-label="{{ 'header.main_nav_label' | t }}">
+<nav class="header-nav" aria-label="{{ 'header.main_nav_label' | t }}">
   <ul class="header-nav__list">
     {% for link in section.settings.menu.links %}
       <li class="header-nav__item{% if link.links.size > 0 %} header-nav__item--has-dropdown{% endif %}">
         <a href="{{ link.url }}" class="header-nav__link">
           {{- link.title -}}
           {% if link.links.size > 0 %}
-            <span class="header-nav__chevron" aria-hidden="true">&#9662;</span>
+            <svg class="header-nav__chevron" aria-hidden="true" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           {% endif %}
         </a>
         {% if link.links.size > 0 %}
@@ -79,27 +86,29 @@
 {% stylesheet %}
   /* ── Top bar ── */
   .header-topbar {
-    background-color: #D8006B;
+    background-color: var(--color-primary);
     color: #fff;
+    padding: 0 1.5rem;
+    width: 100%;
   }
   .header-topbar__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5rem var(--page-margin);
-    max-width: var(--page-width);
+    padding: 8px var(--page-margin, 24px);
+    max-width: var(--page-width, 1400px);
     margin: 0 auto;
-    width: 100%;
   }
   .header-topbar__nav {
     display: flex;
-    gap: 1.75rem;
+    gap: 28px;
   }
   .header-topbar__link {
     color: #fff;
     text-decoration: none;
+    font-family: var(--font-body--family, 'Montserrat', sans-serif);
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
@@ -107,12 +116,15 @@
     opacity: 0.85;
   }
   .header-topbar__contact {
-    font-size: 0.8rem;
+    font-family: var(--font-body--family, 'Montserrat', sans-serif);
+    font-size: 0.8rem !important;
     color: #fff;
+    margin: 0;
   }
   .header-topbar__phone {
     color: #fff;
     font-weight: 700;
+    font-size: 0.8rem !important
     text-decoration: none;
   }
   .header-topbar__phone:hover {
@@ -121,80 +133,99 @@
 
   /* ── Main row ── */
   .header-main {
-    background-color: #faf9f9;
-    border-bottom: 1px solid #ececec;
+    background-color: #efeee9;
+    padding: 0 1.5rem;
+    width: 100%;
   }
   .header-main__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem var(--page-margin);
-    max-width: var(--page-width);
+    padding: 0 var(--page-margin, 24px);
+    max-width: var(--page-width, 1400px);
     margin: 0 auto;
-    width: 100%;
-    min-height: 5.5rem;
+    height: 80px;
+  }
+  .header-main__spacer {
+    /* mirrors .header-main__icons width so logo stays centered */
+    flex: 0 0 auto;
+    width: 188px;
   }
   .header-main__logo {
     flex: 1;
     display: flex;
     justify-content: center;
+    align-items: center;
   }
-  .header-main__logo img {
-    max-height: 4.5rem;
+  .header-main__logo-img {
+    max-height: 56px;
     width: auto;
     height: auto;
+    display: block;
   }
   .header-main__shop-name {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #D8006B;
+    color: var(--color-primary);
     text-decoration: none;
   }
   .header-main__icons {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: 8px;
+    flex: 0 0 auto;
   }
   .header-icon-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: none;
+    width: 40px;
+    height: 40px;
+    background-color: #dddcd6;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
-    color: #444;
+    color: #42464b;
     padding: 0;
     position: relative;
     text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
   .header-icon-btn:hover {
-    color: #D8006B;
+    background-color: var(--color-primary);
+    color: #fff;
   }
   .header-icon-btn svg {
-    width: 1.4rem;
-    height: 1.4rem;
+    width: 20px;
+    height: 20px;
   }
   .header-cart-count {
     position: absolute;
-    top: -0.45rem;
-    right: -0.55rem;
-    background-color: #D8006B;
+    top: -5px;
+    right: -5px;
+    background-color: var(--color-primary);
     color: #fff;
     font-size: 0.6rem;
     font-weight: 700;
-    min-width: 1rem;
-    height: 1rem;
+    min-width: 16px;
+    height: 16px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     line-height: 1;
   }
+  .header-icon-btn:hover .header-cart-count {
+    background-color: #fff;
+    color: var(--color-primary);
+  }
 
   /* ── Category nav ── */
   .header-nav {
-    background-color: #fff;
-    border-bottom: 1px solid #ececec;
+    background-color: #efeee9;
+    border-top: 1px solid #e0dfd9;
+    padding: 0.5rem 1rem;
+    width: 100%;
   }
   .header-nav__list {
     display: flex;
@@ -203,8 +234,8 @@
     list-style: none;
     padding: 0;
     margin: 0 auto;
-    max-width: var(--page-width);
-    gap: 0.25rem;
+    max-width: var(--page-width, 1400px);
+    gap: 4px;
   }
   .header-nav__item {
     position: relative;
@@ -212,20 +243,28 @@
   .header-nav__link {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
-    padding: 0.85rem 1rem;
+    gap: 4px;
+    padding: 10px 16px;
     text-decoration: none;
-    color: #333;
-    font-size: 0.9rem;
+    color: #42464b;
+    font-family: var(--font-body--family, 'Montserrat', sans-serif);
+    font-size: 1rem;
+    font-weight: 400;
     white-space: nowrap;
+    transition: color 0.2s ease;
   }
   .header-nav__link:hover {
-    color: #D8006B;
+    color: var(--color-primary);
   }
   .header-nav__chevron {
-    font-size: 0.65rem;
-    margin-top: 0.1rem;
+    width: 10px;
+    height: 10px;
     color: #888;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  .header-nav__item--has-dropdown:hover .header-nav__chevron {
+    transform: rotate(180deg);
   }
 
   /* Dropdown */
@@ -235,12 +274,12 @@
     top: 100%;
     left: 0;
     background: #fff;
-    border: 1px solid #ececec;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid #e0dfd9;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
     list-style: none;
-    padding: 0.5rem 0;
+    padding: 8px 0;
     margin: 0;
-    min-width: 13rem;
+    min-width: 200px;
     z-index: 100;
   }
   .header-nav__item--has-dropdown:hover .header-nav__dropdown {
@@ -248,15 +287,50 @@
   }
   .header-nav__dropdown-link {
     display: block;
-    padding: 0.55rem 1.25rem;
-    color: #333;
+    padding: 9px 20px;
+    color: #42464b;
     text-decoration: none;
+    font-family: var(--font-primary--family, 'Montserrat', sans-serif);
     font-size: 0.875rem;
+    font-weight: 400;
     white-space: nowrap;
+    transition: color 0.2s ease, background-color 0.2s ease;
   }
   .header-nav__dropdown-link:hover {
-    background-color: #fdf0f6;
-    color: #D8006B;
+    background-color: #f5f4f0;
+    color: var(--color-primary);
+  }
+
+  /* ── Mobile ── */
+  @media screen and (max-width: 768px) {
+    .header-topbar__nav {
+      gap: 16px;
+    }
+    .header-topbar__link {
+      font-size: 0.7rem;
+    }
+    .header-topbar__contact {
+      font-size: 0.72rem;
+    }
+    .header-main__inner {
+      height: 64px;
+    }
+    .header-main__spacer {
+      display: none;
+    }
+    .header-main__logo {
+      justify-content: flex-start;
+    }
+    .header-main__logo-img {
+      max-height: 40px;
+    }
+    .header-icon-btn {
+      width: 36px;
+      height: 36px;
+    }
+    .header-nav {
+      display: none;
+    }
   }
 {% endstylesheet %}
 

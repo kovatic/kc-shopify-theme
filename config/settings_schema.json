@@ -70,6 +70,12 @@
     "settings": [
       {
         "type": "color",
+        "id": "primary_color",
+        "default": "#c3134e",
+        "label": "t:labels.primary_color"
+      },
+      {
+        "type": "color",
         "id": "background_color",
         "default": "#FFFFFF",
         "label": "t:labels.background"

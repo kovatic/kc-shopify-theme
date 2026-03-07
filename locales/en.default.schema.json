@@ -48,6 +48,7 @@
   },
   "labels": {
     "alignment": "Alignment",
+    "primary_color": "Primary color",
     "background": "Background",
     "background_color": "Background color",
     "secondary_text_color": "Secondary Text Color",
@@ -111,6 +112,18 @@
     "brand_marquee": {
       "name": "Brand marquee",
       "brands": "Brands"
+    },
+    "stores": {
+      "name": "Stores",
+      "store_type": "Store type",
+      "address": "Address",
+      "phone": "Phone number",
+      "map_url": "Map link URL",
+      "blocks": {
+        "store": {
+          "name": "Store"
+        }
+      }
     },
     "about": {
       "name": "About",

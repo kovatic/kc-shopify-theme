@@ -102,6 +102,11 @@
     "about": {
       "name": "About"
     },
+    "stores": {
+      "name": "Stores",
+      "call": "Call",
+      "map": "Map"
+    },
     "product_carousel": {
       "name": "Product carousel",
       "shop_now": "Shop Now",
