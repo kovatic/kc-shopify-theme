@@ -59,8 +59,20 @@
     "results_for_html": "{{ count }} results found for {{ terms }}"
   },
   "sections": {
+    "banner": {
+      "name": "Banner",
+      "slide_indicators": "Slide indicators",
+      "go_to_slide": "Go to slide {{ index }}",
+      "previous_slide": "Previous slide",
+      "next_slide": "Next slide"
+    },
     "category": {
       "name": "Shop by category"
+    },
+    "reel": {
+      "name": "Reel",
+      "shop_now": "Shop Now",
+      "collection_placeholder": "Collection name"
     },
     "product_list": {
       "name": "Product list",

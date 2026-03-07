@@ -1,0 +1,320 @@
+<div class="reel-section" style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="reel-section__container">
+
+    <div class="reel-section__header">
+      <div class="reel-section__divider" aria-hidden="true">
+        <span class="reel-section__divider-line"></span>
+        <span class="reel-section__divider-diamond">✦</span>
+        <span class="reel-section__divider-line"></span>
+      </div>
+
+      {%- if section.settings.title != blank -%}
+        <h2 class="reel-section__title">{{ section.settings.title | escape }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="reel-section__subtitle">{{ section.settings.subtitle | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="reel-section__scroll-wrapper">
+      <div class="reel-section__grid">
+        {%- for collection in section.settings.collections -%}
+          <a class="reel-section__card" href="{{ collection.url }}">
+            <div class="reel-section__image-wrapper">
+              {%- assign reel_video = collection.metafields.custom.reels.value -%}
+              {%- if reel_video != blank -%}
+                {{ reel_video | video_tag: autoplay: true, muted: true, loop: true, playsinline: true, class: 'reel-section__image' }}
+              {%- elsif collection.featured_image != blank -%}
+                {{ collection.featured_image | image_url: width: 700, height: 600, crop: 'center' | image_tag: class: 'reel-section__image', loading: 'lazy', alt: collection.title | escape }}
+              {%- else -%}
+                {{ 'collection-1' | placeholder_svg_tag: 'reel-section__image reel-section__image--placeholder' }}
+              {%- endif -%}
+            </div>
+            <div class="reel-section__gradient" aria-hidden="true"></div>
+            <div class="reel-section__info">
+              <span class="reel-section__name">{{ collection.title | escape }}</span>
+              <span class="reel-section__cta">{{ 'sections.reel.shop_now' | t }} →</span>
+            </div>
+          </a>
+        {%- else -%}
+          {%- for i in (1..4) -%}
+            <a class="reel-section__card" href="#">
+              <div class="reel-section__image-wrapper">
+                {{ 'collection-' | append: i | placeholder_svg_tag: 'reel-section__image reel-section__image--placeholder' }}
+              </div>
+              <div class="reel-section__gradient" aria-hidden="true"></div>
+              <div class="reel-section__info">
+                <span class="reel-section__name">{{ 'sections.reel.collection_placeholder' | t }}</span>
+                <span class="reel-section__cta">{{ 'sections.reel.shop_now' | t }} →</span>
+              </div>
+            </a>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .reel-section {
+    background-color: #fef3df;
+    padding-top: var(--padding-top);
+    padding-bottom: var(--padding-bottom);
+  }
+
+  .reel-section__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* Header */
+  .reel-section__header {
+    text-align: center;
+    width: 100%;
+  }
+
+  .reel-section__divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .reel-section__divider-line {
+    display: block;
+    width: 7.5rem;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #c69239 50%, transparent);
+  }
+
+  .reel-section__divider-diamond {
+    color: #c69239;
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  .reel-section__title {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 3rem;
+    font-weight: 700;
+    color: #2e1f1f;
+    margin: 0 0 0.5rem;
+    line-height: 1;
+  }
+
+  .reel-section__subtitle {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: #7e6767;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* Grid */
+  .reel-section__scroll-wrapper {
+    width: 100%;
+  }
+
+  .reel-section__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* Card */
+  .reel-section__card {
+    position: relative;
+    display: block;
+    border-radius: 4px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .reel-section__image-wrapper {
+    aspect-ratio: 326 / 540;
+    overflow: hidden;
+    background-color: #2e1f1f;
+  }
+
+  .reel-section__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .reel-section__image-wrapper video.reel-section__image {
+    transition: none;
+  }
+
+  .reel-section__image--placeholder {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .reel-section__card:hover .reel-section__image {
+    transform: scale(1.04);
+  }
+
+  /* Gradient overlay */
+  .reel-section__gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(44, 36, 33, 0.8) 0%,
+      rgba(44, 36, 33, 0.1) 27%,
+      rgba(44, 36, 33, 0) 38%
+    );
+    pointer-events: none;
+  }
+
+  /* Info */
+  .reel-section__info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .reel-section__name {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.4;
+  }
+
+  .reel-section__cta {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+  }
+
+  /* Mobile */
+  @media screen and (max-width: 768px) {
+    .reel-section__container {
+      padding: 0 0 0 1rem;
+      gap: 1.25rem;
+    }
+
+    .reel-section__header {
+      padding-right: 1rem;
+    }
+
+    .reel-section__divider-line {
+      width: 2rem;
+    }
+
+    .reel-section__divider-diamond {
+      font-size: 0.7rem;
+    }
+
+    .reel-section__title {
+      font-size: 1.875rem;
+      font-weight: 600;
+    }
+
+    .reel-section__subtitle {
+      font-size: 0.875rem;
+    }
+
+    .reel-section__scroll-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .reel-section__scroll-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+
+    .reel-section__grid {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 0.5rem;
+      width: max-content;
+      padding-right: 1rem;
+    }
+
+    .reel-section__card {
+      width: calc((100vw - 2rem) / 1.5);
+      flex-shrink: 0;
+    }
+
+    .reel-section__name {
+      font-size: 1rem;
+    }
+
+    .reel-section__info {
+      padding: 1rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.reel.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:labels.title",
+      "default": "Trending Collections"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle",
+      "default": "Explore our curated collections of the finest ethnic wear"
+    },
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "t:labels.collections"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.reel.name"
+    }
+  ]
+}
+{% endschema %}

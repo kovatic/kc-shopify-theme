@@ -1,0 +1,464 @@
+{%- assign slide_count = section.blocks.size -%}
+
+<div class="banner" id="banner-{{ section.id }}" style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px; --banner-height: {{ section.settings.banner_height }}px;">
+
+  <div class="banner__track" id="banner-track-{{ section.id }}">
+    {%- for block in section.blocks -%}
+      {%- if block.settings.button_url != blank -%}
+        <a class="banner__slide{% if forloop.first %} is-active{% endif %}" id="banner-slide-{{ section.id }}-{{ forloop.index0 }}" href="{{ block.settings.button_url }}" {{ block.shopify_attributes }}>
+      {%- else -%}
+        <div class="banner__slide{% if forloop.first %} is-active{% endif %}" id="banner-slide-{{ section.id }}-{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+      {%- endif -%}
+
+        <div class="banner__media">
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 2000 | image_tag: class: 'banner__image', loading: forloop.first | default: 'lazy', alt: block.settings.heading | escape }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'banner__image banner__image--placeholder' }}
+          {%- endif -%}
+        </div>
+
+        {%- if block.settings.show_overlay -%}
+          <div class="banner__overlay" style="--overlay-opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+        {%- endif -%}
+
+        <div class="banner__content banner__content--{{ block.settings.text_position }}">
+          {%- if block.settings.subheading != blank -%}
+            <p class="banner__subheading">{{ block.settings.subheading | escape }}</p>
+          {%- endif -%}
+          {%- if block.settings.heading != blank -%}
+            <h1 class="banner__heading">{{ block.settings.heading | escape }}</h1>
+          {%- endif -%}
+          {%- if block.settings.text != blank -%}
+            <p class="banner__text">{{ block.settings.text | escape }}</p>
+          {%- endif -%}
+          {%- if block.settings.button_label != blank -%}
+            <a class="banner__btn" href="{{ block.settings.button_url }}">
+              {{ block.settings.button_label | escape }}
+            </a>
+          {%- endif -%}
+        </div>
+
+      {%- if block.settings.button_url != blank -%}
+        </a>
+      {%- else -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  {%- if slide_count > 1 -%}
+    <div class="banner__indicators" id="banner-indicators-{{ section.id }}" aria-label="{{ 'sections.banner.slide_indicators' | t }}">
+      {%- for block in section.blocks -%}
+        <button
+          class="banner__dot{% if forloop.first %} is-active{% endif %}"
+          aria-label="{{ 'sections.banner.go_to_slide' | t: index: forloop.index }}"
+          data-index="{{ forloop.index0 }}"
+          type="button"
+        ></button>
+      {%- endfor -%}
+    </div>
+
+    <button class="banner__arrow banner__arrow--prev" id="banner-prev-{{ section.id }}" aria-label="{{ 'sections.banner.previous_slide' | t }}" type="button">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <button class="banner__arrow banner__arrow--next" id="banner-next-{{ section.id }}" aria-label="{{ 'sections.banner.next_slide' | t }}" type="button">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  {%- endif -%}
+
+</div>
+
+{% stylesheet %}
+  .banner {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: var(--banner-height, 600px);
+    padding-top: var(--padding-top);
+    padding-bottom: var(--padding-bottom);
+    background-color: #2e1f1f;
+  }
+
+  /* Track */
+  .banner__track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Slide */
+  .banner__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .banner__slide.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  /* Media */
+  .banner__media {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .banner__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .banner__image--placeholder {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Overlay */
+  .banner__overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, var(--overlay-opacity, 0.3));
+    pointer-events: none;
+  }
+
+  /* Content */
+  .banner__content {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 3rem;
+    max-width: 640px;
+  }
+
+  .banner__content--middle-left {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+
+  .banner__content--middle-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    align-items: center;
+  }
+
+  .banner__content--middle-right {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .banner__content--bottom-left {
+    bottom: 0;
+    left: 0;
+  }
+
+  .banner__content--bottom-center {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    align-items: center;
+  }
+
+  .banner__subheading {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #c69239;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+  }
+
+  .banner__heading {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .banner__text {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .banner__btn {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.75rem 2rem;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #2e1f1f;
+    background: #c69239;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .banner__btn:hover {
+    background: #fff;
+    color: #2e1f1f;
+  }
+
+  /* Indicators */
+  .banner__indicators {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0;
+    z-index: 2;
+  }
+
+  .banner__dot {
+    width: 2.5rem;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s ease;
+  }
+
+  .banner__dot.is-active {
+    background: #c3134e;
+  }
+
+  .banner__dot:hover {
+    background: rgba(255, 255, 255, 0.7);
+  }
+
+  .banner__dot.is-active:hover {
+    background: #c3134e;
+  }
+
+  /* Arrows */
+  .banner__arrow {
+    display: none;
+  }
+
+  /* Mobile */
+  @media screen and (max-width: 768px) {
+    .banner {
+      height: calc(var(--banner-height, 600px) * 0.7);
+    }
+
+    .banner__heading {
+      font-size: 2rem;
+    }
+
+    .banner__content {
+      padding: 1.5rem;
+      gap: 0.75rem;
+      max-width: 100%;
+    }
+
+    .banner__dot {
+      width: 2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    function initBanner(sectionId) {
+      var track = document.getElementById('banner-track-' + sectionId);
+      if (!track) return;
+
+      var slides = track.querySelectorAll('.banner__slide');
+      var indicators = document.getElementById('banner-indicators-' + sectionId);
+      var dots = indicators ? indicators.querySelectorAll('.banner__dot') : [];
+      var prevBtn = document.getElementById('banner-prev-' + sectionId);
+      var nextBtn = document.getElementById('banner-next-' + sectionId);
+
+      if (slides.length <= 1) return;
+
+      var current = 0;
+      var autoplayInterval = null;
+
+      function goTo(index) {
+        slides[current].classList.remove('is-active');
+        if (dots[current]) dots[current].classList.remove('is-active');
+        current = (index + slides.length) % slides.length;
+        slides[current].classList.add('is-active');
+        if (dots[current]) dots[current].classList.add('is-active');
+      }
+
+      function startAutoplay() {
+        autoplayInterval = setInterval(function() { goTo(current + 1); }, 5000);
+      }
+
+      function resetAutoplay() {
+        clearInterval(autoplayInterval);
+        startAutoplay();
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', function() { goTo(current - 1); resetAutoplay(); });
+      if (nextBtn) nextBtn.addEventListener('click', function() { goTo(current + 1); resetAutoplay(); });
+
+      dots.forEach(function(dot) {
+        dot.addEventListener('click', function() {
+          goTo(parseInt(dot.dataset.index));
+          resetAutoplay();
+        });
+      });
+
+      startAutoplay();
+    }
+
+    document.querySelectorAll('.banner').forEach(function(el) {
+      var id = el.id.replace('banner-', '');
+      initBanner(id);
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.banner.name",
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "t:sections.banner.blocks.slide.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:labels.image"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "t:labels.subtitle",
+          "default": "New Collection"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:labels.title",
+          "default": "Elegance in Every Thread"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:labels.text",
+          "default": "Discover our curated collection of handcrafted sarees."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "t:sections.banner.blocks.slide.button_label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "t:labels.url"
+        },
+        {
+          "type": "select",
+          "id": "text_position",
+          "label": "t:sections.banner.blocks.slide.text_position",
+          "options": [
+            { "value": "middle-left", "label": "t:options.position.middle_left" },
+            { "value": "middle-center", "label": "t:options.position.middle_center" },
+            { "value": "middle-right", "label": "t:options.position.middle_right" },
+            { "value": "bottom-left", "label": "t:options.position.bottom_left" },
+            { "value": "bottom-center", "label": "t:options.position.bottom_center" }
+          ],
+          "default": "middle-left"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_overlay",
+          "label": "t:sections.banner.blocks.slide.show_overlay",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "t:sections.banner.blocks.slide.overlay_opacity",
+          "min": 0,
+          "max": 80,
+          "step": 5,
+          "unit": "%",
+          "default": 30
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "banner_height",
+      "label": "t:sections.banner.banner_height",
+      "min": 300,
+      "max": 900,
+      "step": 50,
+      "unit": "px",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.banner.name",
+      "blocks": [
+        { "type": "slide" },
+        { "type": "slide" }
+      ]
+    }
+  ]
+}
+{% endschema %}

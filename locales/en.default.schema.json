@@ -69,8 +69,24 @@
     "url": "Link URL"
   },
   "sections": {
+    "banner": {
+      "name": "Banner",
+      "banner_height": "Banner height",
+      "blocks": {
+        "slide": {
+          "name": "Slide",
+          "button_label": "Button label",
+          "text_position": "Text position",
+          "show_overlay": "Show overlay",
+          "overlay_opacity": "Overlay opacity"
+        }
+      }
+    },
     "category": {
       "name": "Shop by category"
+    },
+    "reel": {
+      "name": "Reel"
     },
     "product_list": {
       "name": "Product list",
@@ -89,6 +105,13 @@
     "layout_type": {
       "scroll": "Horizontal scroll",
       "wrap": "Wrap grid"
+    },
+    "position": {
+      "middle_left": "Middle left",
+      "middle_center": "Middle center",
+      "middle_right": "Middle right",
+      "bottom_left": "Bottom left",
+      "bottom_center": "Bottom center"
     },
     "alignment": {
       "left": "Left",
