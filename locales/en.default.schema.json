@@ -66,9 +66,11 @@
     "top_menu": "Top bar menu",
     "whatsapp_number": "WhatsApp number",
     "promo_text": "Promo bar text (mobile)",
-    "nav_link_title": "Nav link title (must match exactly)",
-    "col1_heading": "Column 1 heading",
-    "col2_heading": "Column 2 heading",
+    "nav_link": "Nav item",
+    "col1": "Column 1",
+    "col2": "Column 2",
+    "col3": "Column 3",
+    "heading": "Heading",
     "card1": "Card 1",
     "card2": "Card 2",
     "card3": "Card 3",
@@ -194,6 +196,6 @@
     }
   },
   "info": {
-    "nav_link_title": "Enter the exact nav link title to attach this mega menu to that item"
+    "nav_link": "Type the nav item title exactly as it appears in your menu (e.g. Pure Silk)"
   }
 }
