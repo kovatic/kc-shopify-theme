@@ -116,6 +116,42 @@
         "padding_top": 60,
         "padding_bottom": 60
       }
+    },
+    "promo_RGMMyX": {
+      "type": "promo",
+      "name": "t:sections.promo.name",
+      "settings": {
+        "heading": "Gift Voucher",
+        "description": "This voucher is redeemable only at authorized K Chinnadurai and Co retail stores in India.",
+        "button_label": "Shop Now",
+        "button_url": "",
+        "image": "shopify://shop_images/image_87.png",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "brand_marquee_aQFqpK": {
+      "type": "brand-marquee",
+      "name": "t:sections.brand_marquee.name",
+      "settings": {
+        "heading": "Other Popular Brands Available",
+        "brands": [
+          "brand-llujyxsj",
+          "brand-qqtptoii",
+          "brand-mi5mbprr",
+          "brand-iwdc0k1j",
+          "brand-4ea2evha",
+          "brand-wgs0p9ag",
+          "brand-ug5bltqh",
+          "brand-kl7cedxc",
+          "brand-vcgji6lq",
+          "brand-2cfgsd8d",
+          "brand-64i8vubd",
+          "brand-hzbqitsw"
+        ],
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
     }
   },
   "order": [
@@ -123,6 +159,8 @@
     "category_aE6ijQ",
     "product_list_hdgdex",
     "reel_7a3Lp6",
-    "product_list_8L8wf6"
+    "product_list_8L8wf6",
+    "promo_RGMMyX",
+    "brand_marquee_aQFqpK"
   ]
 }
