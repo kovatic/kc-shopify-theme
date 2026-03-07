@@ -63,6 +63,7 @@
     "subtitle": "Subtitle",
     "text_style": "Text style",
     "text": "Text",
+    "collection": "Collection",
     "collections": "Collections",
     "title": "Title",
     "url": "Link URL"
@@ -70,6 +71,13 @@
   "sections": {
     "category": {
       "name": "Shop by category"
+    },
+    "product_list": {
+      "name": "Product list",
+      "products_count": "Number of products",
+      "view_all_url": "\"View all\" link",
+      "layout_type_desktop": "Desktop layout",
+      "layout_type_mobile": "Mobile layout"
     }
   },
   "blocks": {
@@ -78,6 +86,10 @@
     }
   },
   "options": {
+    "layout_type": {
+      "scroll": "Horizontal scroll",
+      "wrap": "Wrap grid"
+    },
     "alignment": {
       "left": "Left",
       "center": "Center",

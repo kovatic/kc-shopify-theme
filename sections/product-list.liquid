@@ -1,0 +1,524 @@
+<div class="product-list product-list-desktop--{{ section.settings.layout_type_desktop }} product-list-mobile--{{ section.settings.layout_type_mobile }}" style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="product-list__container">
+
+    <div class="product-list__header">
+      <div class="product-list__divider" aria-hidden="true">
+        <span class="product-list__divider-line"></span>
+        <span class="product-list__divider-diamond">✦</span>
+        <span class="product-list__divider-line"></span>
+      </div>
+
+      {%- if section.settings.title != blank -%}
+        <h2 class="product-list__title">{{ section.settings.title | escape }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="product-list__subtitle">{{ section.settings.subtitle | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="product-list__scroll-wrapper">
+      <div class="product-list__grid" id="product-list-grid-{{ section.id }}">
+        {%- for product in section.settings.collection.products limit: section.settings.products_count -%}
+          <div class="product-list__item">
+            <a class="product-list__item-link" href="{{ product.url }}">
+              <div class="product-list__image-wrapper">
+                {%- if product.featured_image != blank -%}
+                  {{ product.featured_image | image_url: width: 600, height: 700, crop: 'center' | image_tag: class: 'product-list__image', loading: 'lazy', alt: product.title | escape }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'product-list__image product-list__image--placeholder' }}
+                {%- endif -%}
+
+                <button
+                  class="product-list__wishlist-btn"
+                  aria-label="{{ 'sections.product_list.add_to_wishlist' | t: title: product.title | escape }}"
+                  type="button"
+                >
+                  <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M8 15.5C8 15.5 1 11 1 6C1 3.79 2.79 2 5 2C6.3 2 7.45 2.64 8 3.67C8.55 2.64 9.7 2 11 2C13.21 2 15 3.79 15 6C15 11 8 15.5 8 15.5Z" stroke="#2e1f1f" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="product-list__info">
+                <span class="product-list__name">{{ product.title | escape }}</span>
+                <span class="product-list__price">{{ product.price | money }}</span>
+              </div>
+            </a>
+          </div>
+        {%- else -%}
+          {%- for i in (1..section.settings.products_count) -%}
+            <div class="product-list__item">
+              <a class="product-list__item-link" href="#">
+                <div class="product-list__image-wrapper">
+                  {{ 'product-' | append: i | placeholder_svg_tag: 'product-list__image product-list__image--placeholder' }}
+                  <button class="product-list__wishlist-btn" aria-label="{{ 'sections.product_list.add_to_wishlist_generic' | t }}" type="button">
+                    <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M8 15.5C8 15.5 1 11 1 6C1 3.79 2.79 2 5 2C6.3 2 7.45 2.64 8 3.67C8.55 2.64 9.7 2 11 2C13.21 2 15 3.79 15 6C15 11 8 15.5 8 15.5Z" stroke="#2e1f1f" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+                <div class="product-list__info">
+                  <span class="product-list__name">{{ 'sections.product_list.product_placeholder' | t }}</span>
+                  <span class="product-list__price">—</span>
+                </div>
+              </a>
+            </div>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="product-list__scroll-indicator" id="product-list-indicator-{{ section.id }}" aria-hidden="true">
+      {%- assign product_count = section.settings.collection.products.count | default: section.settings.products_count -%}
+      {%- if product_count > section.settings.products_count -%}
+        {%- assign product_count = section.settings.products_count -%}
+      {%- endif -%}
+      {%- for i in (1..product_count) -%}
+        <span class="product-list__scroll-bar{% if forloop.first %} is-active{% endif %}"></span>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.view_all_url != blank -%}
+      <div class="product-list__footer">
+        <a class="product-list__view-all" href="{{ section.settings.view_all_url }}">
+          {{- 'sections.product_list.view_all' | t -}}
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .product-list {
+    background-color: var(--bg-color, #f1eee9);
+    padding-top: var(--padding-top);
+    padding-bottom: var(--padding-bottom);
+  }
+
+  .product-list__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  /* Header */
+  .product-list__header {
+    text-align: center;
+    width: 100%;
+  }
+
+  .product-list__divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .product-list__divider-line {
+    display: block;
+    width: 7.5rem;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #c69239 50%, transparent);
+  }
+
+  .product-list__divider-diamond {
+    color: #c69239;
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  .product-list__title {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 3rem;
+    font-weight: 700;
+    color: #2e1f1f;
+    margin-bottom: 1rem;
+    line-height: 1;
+  }
+
+  .product-list__subtitle {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: #7e6767;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* Grid */
+  .product-list__scroll-wrapper {
+    width: 100%;
+  }
+
+  /* Wrap layout — desktop */
+  .product-list-desktop--wrap .product-list__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  /* Scroll layout — desktop */
+  .product-list-desktop--scroll .product-list__scroll-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .product-list-desktop--scroll .product-list__scroll-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product-list-desktop--scroll .product-list__grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.75rem;
+    width: max-content;
+    padding: 0 3rem;
+  }
+
+  .product-list-desktop--scroll .product-list__item {
+    width: 20rem;
+    flex-shrink: 0;
+  }
+
+  .product-list__item-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .product-list__image-wrapper {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    background-color: #e8e0d5;
+  }
+
+  .product-list__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .product-list__image--placeholder {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .product-list__item-link:hover .product-list__image {
+    transform: scale(1.04);
+  }
+
+  /* Wishlist button */
+  .product-list__wishlist-btn {
+    position: absolute;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    z-index: 1;
+  }
+
+  .product-list__wishlist-btn:hover {
+    background: #fff;
+  }
+
+  /* Product info */
+  .product-list__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.75rem 0 0;
+  }
+
+  .product-list__name {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: var(--color-foreground, #262626);
+    line-height: 1.4;
+  }
+
+  .product-list__price {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--color-foreground, #262626);
+    line-height: 1.2;
+  }
+
+  /* View all link */
+  .product-list__footer {
+    display: flex;
+    justify-content: center;
+  }
+
+  .product-list__view-all {
+    font-family: var(--font-body-family, 'Poppins', sans-serif);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #c3134e;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    border-bottom: 1px solid #c3134e;
+    padding-bottom: 0.1rem;
+    transition: opacity 0.2s ease;
+  }
+
+  .product-list__view-all:hover {
+    opacity: 0.75;
+  }
+
+  /* Scroll indicator — hidden by default */
+  .product-list__scroll-indicator {
+    display: none;
+  }
+
+  .product-list-desktop--scroll .product-list__scroll-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0 3rem;
+    width: 100%;
+  }
+
+  .product-list__scroll-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(184, 168, 168, 0.2);
+    transition: background 0.2s ease;
+  }
+
+  .product-list__scroll-bar.is-active {
+    background: #c3134e;
+  }
+
+  /* Mobile & Tablet */
+  @media screen and (max-width: 768px) {
+    .product-list__container {
+      gap: 1.25rem;
+    }
+
+    .product-list__title {
+      font-size: 1.875rem;
+      font-weight: 600;
+    }
+
+    .product-list__subtitle {
+      font-size: 0.875rem;
+    }
+
+    .product-list__divider-line {
+      width: 2rem;
+    }
+
+    .product-list__divider-diamond {
+      font-size: 0.7rem;
+    }
+
+    .product-list__name {
+      font-size: 0.875rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .product-list__price {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--color-foreground, #262626);
+    }
+
+    .product-list__info {
+      gap: 0.25rem;
+      padding-top: 0.5rem;
+    }
+
+    .product-list__wishlist-btn {
+      width: 2rem;
+      height: 2rem;
+      bottom: 0.75rem;
+      right: 0.5rem;
+    }
+
+    /* Horizontal scroll layout — mobile */
+    .product-list-mobile--scroll .product-list__scroll-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .product-list-mobile--scroll .product-list__scroll-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+
+    .product-list-mobile--scroll .product-list__grid {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 0.5rem;
+      width: max-content;
+      padding: 0 1rem;
+    }
+
+    .product-list-mobile--scroll .product-list__item {
+      width: calc((100vw - 2.5rem) / 1.5);
+      flex-shrink: 0;
+    }
+
+
+    .product-list-mobile--scroll .product-list__scroll-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 0 1rem;
+      width: 100%;
+    }
+
+    /* Wrap layout — mobile */
+    .product-list-mobile--wrap .product-list__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      width: 100%;
+      padding: 0 1rem;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    function initScrollIndicator(sectionId) {
+      var grid = document.getElementById('product-list-grid-' + sectionId);
+      var indicator = document.getElementById('product-list-indicator-' + sectionId);
+      if (!grid || !indicator) return;
+
+      var bars = indicator.querySelectorAll('.product-list__scroll-bar');
+      if (!bars.length) return;
+
+      function updateIndicator() {
+        var scrollLeft = grid.parentElement.scrollLeft;
+        var scrollWidth = grid.parentElement.scrollWidth - grid.parentElement.clientWidth;
+        var progress = scrollWidth > 0 ? scrollLeft / scrollWidth : 0;
+        var activeIndex = Math.round(progress * (bars.length - 1));
+
+        bars.forEach(function(bar, i) {
+          bar.classList.toggle('is-active', i === activeIndex);
+        });
+      }
+
+      grid.parentElement.addEventListener('scroll', updateIndicator, { passive: true });
+      updateIndicator();
+    }
+
+    document.querySelectorAll('.product-list').forEach(function(section) {
+      var id = section.querySelector('[id^="product-list-grid-"]');
+      if (!id) return;
+      var sectionId = id.id.replace('product-list-grid-', '');
+      initScrollIndicator(sectionId);
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.product_list.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:labels.title",
+      "default": "New Arrivals"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle",
+      "default": "Discover what's new this season."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:labels.collection"
+    },
+    {
+      "type": "select",
+      "id": "layout_type_desktop",
+      "label": "t:sections.product_list.layout_type_desktop",
+      "options": [
+        { "value": "scroll", "label": "t:options.layout_type.scroll" },
+        { "value": "wrap", "label": "t:options.layout_type.wrap" }
+      ],
+      "default": "wrap"
+    },
+    {
+      "type": "select",
+      "id": "layout_type_mobile",
+      "label": "t:sections.product_list.layout_type_mobile",
+      "options": [
+        { "value": "scroll", "label": "t:options.layout_type.scroll" },
+        { "value": "wrap", "label": "t:options.layout_type.wrap" }
+      ],
+      "default": "scroll"
+    },
+    {
+      "type": "range",
+      "id": "products_count",
+      "label": "t:sections.product_list.products_count",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "url",
+      "id": "view_all_url",
+      "label": "t:sections.product_list.view_all_url"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.product_list.name"
+    }
+  ]
+}
+{% endschema %}
