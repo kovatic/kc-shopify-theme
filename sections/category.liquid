@@ -1,4 +1,4 @@
-<div class="category-section" style="--bg-color: {{ section.settings.background_color }}; --padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;">
+<div class="category-section" style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="category-section__header">
     <div class="category-section__divider" aria-hidden="true">
       <span class="category-section__divider-line"></span>
@@ -52,7 +52,15 @@
   .category-section__header {
     text-align: center;
     padding: 0 1.6rem;
-    margin-bottom: 4rem;
+    margin-bottom: 2.4rem;
+  }
+
+  .category-section__header h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .category-section__header p {
+    margin-bottom: 1.5rem;
   }
 
   .category-section__divider {
@@ -60,28 +68,36 @@
     align-items: center;
     justify-content: center;
     gap: 1.2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.2rem;
   }
 
   .category-section__divider-line {
     display: block;
-    width: 4rem;
+    width: 2rem;
     height: 1px;
     background: linear-gradient(to right, transparent, #c69239 50%, transparent);
   }
 
   .category-section__divider-diamond {
     color: #c9a96e;
-    font-size: 1.2rem;
+    font-size: 0.7rem;
     line-height: 1;
   }
 
+  @media screen and (min-width: 768px) {
+    .category-section__divider-line {
+      width: 4rem;
+    }
+    .category-section__divider-diamond {
+      font-size: 1.2rem;
+    }
+  }
 
   .category-section__scroll-wrapper {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 0 2rem 1rem;
+    padding: 0 1rem 0.5rem;
   }
 
   .category-section__scroll-wrapper::-webkit-scrollbar {
@@ -90,10 +106,9 @@
 
   .category-section__grid {
     display: flex;
-    gap: 2rem;
+    gap: 0.75rem;
     width: max-content;
-    padding: 0 1rem;
-    margin: 0 auto;
+    padding: 0 0.5rem;
   }
 
   .category-item {
@@ -101,16 +116,17 @@
     flex-direction: column;
     align-items: center;
     flex-shrink: 0;
-    width: 9rem;
+    width: calc((100vw - 3.5rem) / 4);
   }
 
   .category-item__link {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.4rem;
     text-decoration: none;
     color: inherit;
+    width: 100%;
   }
 
   .category-item__link:hover .category-item__frame {
@@ -119,8 +135,8 @@
 
   .category-item__frame {
     position: relative;
-    width: 9rem;
-    height: 9rem;
+    width: 100%;
+    aspect-ratio: 1;
     transition: transform 0.3s ease;
   }
 
@@ -135,7 +151,7 @@
 
   .category-item__image-wrapper {
     position: absolute;
-    inset: 6px;
+    inset: 5px;
     border-radius: 50%;
     overflow: hidden;
     opacity: 0.85;
@@ -158,7 +174,7 @@
   }
 
   .category-item__label {
-    font-size: 0.875rem;
+    font-size: 0.65rem;
     font-weight: 500;
     color: #212121;
     text-align: center;
@@ -166,23 +182,48 @@
     font-family: var(--font-body-family, 'Montserrat', sans-serif);
   }
 
+  @media screen and (min-width: 480px) {
+    .category-item {
+      width: calc((100vw - 4rem) / 4);
+    }
+    .category-item__label {
+      font-size: 0.75rem;
+    }
+  }
+
   @media screen and (min-width: 768px) {
     .category-section__scroll-wrapper {
-      overflow-x: visible;
-      padding: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0 2rem 1rem;
+    }
+
+    .category-section__scroll-wrapper::-webkit-scrollbar {
+      display: none;
     }
 
     .category-section__grid {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      width: 100%;
-      gap: 2.4rem;
-      padding: 0 4rem;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      width: max-content;
+      gap: 1.5rem;
+      padding: 0 1rem;
+      margin: 0 auto;
     }
 
-    .category-section__divider-line {
-      width: 6rem;
+    .category-item {
+      width: 7rem;
+      aspect-ratio: unset;
+    }
+    .category-item__frame {
+      width: 7rem;
+      height: 7rem;
+      aspect-ratio: unset;
+    }
+    .category-item__label {
+      font-size: 0.8rem;
     }
   }
 {% endstylesheet %}
