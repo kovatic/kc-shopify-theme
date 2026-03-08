@@ -291,6 +291,60 @@
         "padding_top": 32,
         "padding_bottom": 32
       }
+    },
+    "tab_product_list_PynKp9": {
+      "type": "tab-product-list",
+      "blocks": {
+        "tab_nBQFfe": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Festive",
+            "collection": "budget-silks"
+          }
+        },
+        "tab_BGtcPL": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Wedding",
+            "collection": "kanchipuram-checks"
+          }
+        },
+        "tab_r7nxTJ": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Traditional",
+            "collection": "nine-yard-collection"
+          }
+        },
+        "tab_4h4VfU": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Party Wear",
+            "collection": "meena-copy-copy"
+          }
+        },
+        "tab_Pa8TWy": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Casual",
+            "collection": "meena-copy-copy-copy-copy"
+          }
+        }
+      },
+      "block_order": [
+        "tab_nBQFfe",
+        "tab_BGtcPL",
+        "tab_r7nxTJ",
+        "tab_4h4VfU",
+        "tab_Pa8TWy"
+      ],
+      "name": "t:sections.tab_product_list.name",
+      "settings": {
+        "title": "Shop by Occasion",
+        "products_per_tab": 4,
+        "padding_top": 60,
+        "padding_bottom": 80
+      }
     }
   },
   "order": [
@@ -299,6 +353,7 @@
     "product_list_hdgdex",
     "reel_7a3Lp6",
     "product_list_8L8wf6",
+    "tab_product_list_PynKp9",
     "promo_RGMMyX",
     "brand_marquee_aQFqpK",
     "product_carousel_zpTxYK",
