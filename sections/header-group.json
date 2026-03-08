@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "header",
   "name": "t:general.header",
@@ -5,35 +14,103 @@
     "header": {
       "type": "header",
       "blocks": {
-        "mega_menu_FnkMTN": {
+        "mega_menu_UxxNjG": {
           "type": "mega_menu",
           "settings": {
-            "nav_link_title": "Pure Silk",
-            "col1_heading": "Shop Kanchipuram Silks",
-            "col2_heading": "Shop By Brand",
-            "card1_image": "shopify://shop_images/image_109.png",
-            "card1_label": "",
+            "nav_link": "Pure Silk",
+            "col1_heading": "Shop By Brand",
+            "col1_menu": "shop-by-brand",
+            "col2_heading": "Shop Kanchipuram Silk",
+            "col2_menu": "main-menu-copy",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_image": "shopify://shop_images/image_112_06600aab-0ac2-4689-86f7-86307692376c.png",
+            "card1_label": "Samudrika Pattu",
             "card1_url": "",
             "card2_image": "shopify://shop_images/image_106_efd5a2c3-105f-4073-badd-7c6e2e34c54f.png",
-            "card2_label": "",
+            "card2_label": "Vastrakala Pattu",
             "card2_url": "",
-            "card3_image": "shopify://shop_images/image_112_06600aab-0ac2-4689-86f7-86307692376c.png",
+            "card3_image": "shopify://shop_images/image_111.png",
+            "card3_label": "Parampara Pattu",
+            "card3_url": ""
+          }
+        },
+        "mega_menu_y3kzKW": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_link": "Cotton Saree",
+            "col1_heading": "Shop By Brand",
+            "col1_menu": "shop-by-brand",
+            "col2_heading": "Shop Kanchipuram Silk",
+            "col2_menu": "main-menu-copy",
+            "col3_heading": "Shop Samudra Silk",
+            "col3_menu": "top-menu",
+            "card1_image": "shopify://shop_images/image_110.png",
+            "card1_label": "Samudrika Pattu",
+            "card1_url": "",
+            "card2_image": "shopify://shop_images/image_109.png",
+            "card2_label": "Vastrakala Pattu",
+            "card2_url": "",
             "card3_label": "",
+            "card3_url": ""
+          }
+        },
+        "mega_menu_wR4abG": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_link": "Half Saree",
+            "col1_heading": "Shop By Brand",
+            "col1_menu": "shop-by-brand",
+            "col2_heading": "Shop Kanchipuram Silk",
+            "col2_menu": "main-menu-copy",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_image": "shopify://shop_images/image_112_06600aab-0ac2-4689-86f7-86307692376c.png",
+            "card1_label": "Samudrika Pattu",
+            "card1_url": "",
+            "card2_image": "shopify://shop_images/image_106_efd5a2c3-105f-4073-badd-7c6e2e34c54f.png",
+            "card2_label": "Vastrakala Pattu",
+            "card2_url": "",
+            "card3_image": "shopify://shop_images/image_111.png",
+            "card3_label": "Parampara Pattu",
+            "card3_url": ""
+          }
+        },
+        "mega_menu_haVNRP": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_link": "Anarkalis",
+            "col1_heading": "Shop By Brand",
+            "col1_menu": "shop-by-brand",
+            "col2_heading": "Shop Kanchipuram Silk",
+            "col2_menu": "main-menu-copy",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_image": "shopify://shop_images/image_112_06600aab-0ac2-4689-86f7-86307692376c.png",
+            "card1_label": "Samudrika Pattu",
+            "card1_url": "",
+            "card2_image": "shopify://shop_images/image_106_efd5a2c3-105f-4073-badd-7c6e2e34c54f.png",
+            "card2_label": "Vastrakala Pattu",
+            "card2_url": "",
+            "card3_image": "shopify://shop_images/image_111.png",
+            "card3_label": "Parampara Pattu",
             "card3_url": ""
           }
         }
       },
       "block_order": [
-        "mega_menu_FnkMTN"
+        "mega_menu_UxxNjG",
+        "mega_menu_y3kzKW",
+        "mega_menu_wR4abG",
+        "mega_menu_haVNRP"
       ],
       "settings": {
         "logo": "shopify://shop_images/KC_Logo_1_fc729608-ffe0-4100-986e-48624fe4f316.png",
         "top_menu": "top-menu",
         "menu": "main-menu",
-        "whatsapp_number": "+91-9488202320"
-      },
-      "blocks": {},
-      "blocks_order": []
+        "whatsapp_number": "+91-9488202320",
+        "promo_text": "Free Shipping on Orders Above ₹2,999 | Use Code: SILK20"
+      }
     }
   },
   "order": [
