@@ -70,6 +70,16 @@
     "results_for_html": "{{ count }} results found for {{ terms }}"
   },
   "sections": {
+    "tab_product_list": {
+      "name": "Tab product list",
+      "wishlist_label": "Add to wishlist",
+      "no_products": "No products found.",
+      "blocks": {
+        "tab": {
+          "name": "Tab"
+        }
+      }
+    },
     "banner": {
       "name": "Banner",
       "slide_indicators": "Slide indicators",

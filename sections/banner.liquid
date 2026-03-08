@@ -11,10 +11,20 @@
       {%- endif -%}
 
         <div class="banner__media">
+          {%- assign img_alt = block.settings.heading | escape -%}
+          {%- assign img_loading = 'lazy' -%}
+          {%- if forloop.first -%}{%- assign img_loading = 'eager' -%}{%- endif -%}
           {%- if block.settings.image != blank -%}
-            {{ block.settings.image | image_url: width: 2000 | image_tag: class: 'banner__image', loading: forloop.first | default: 'lazy', alt: block.settings.heading | escape }}
+            {{ block.settings.image | image_url: width: 2000 | image_tag: class: 'banner__image banner__image--desktop', loading: img_loading, alt: img_alt }}
           {%- else -%}
-            {{ 'lifestyle-1' | placeholder_svg_tag: 'banner__image banner__image--placeholder' }}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'banner__image banner__image--desktop banner__image--placeholder' }}
+          {%- endif -%}
+          {%- if block.settings.mobile_image != blank -%}
+            {{ block.settings.mobile_image | image_url: width: 800 | image_tag: class: 'banner__image banner__image--mobile', loading: img_loading, alt: img_alt }}
+          {%- elsif block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 800 | image_tag: class: 'banner__image banner__image--mobile', loading: img_loading, alt: img_alt }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'banner__image banner__image--mobile banner__image--placeholder' }}
           {%- endif -%}
         </div>
 
@@ -78,7 +88,7 @@
     position: relative;
     overflow: hidden;
     width: 100%;
-    height: var(--banner-height, 600px);
+    height: 700px;
     padding-top: var(--padding-top);
     padding-bottom: var(--padding-bottom);
   }
@@ -126,6 +136,10 @@
     width: 100%;
     height: 100%;
     display: block;
+  }
+
+  .banner__image--mobile {
+    display: none;
   }
 
   /* Overlay */
@@ -271,7 +285,15 @@
   /* Mobile */
   @media screen and (max-width: 768px) {
     .banner {
-      height: calc(var(--banner-height, 600px) * 0.7);
+      height: calc(var(--banner-height, 600px) * 0.6);
+    }
+
+    .banner__image--desktop {
+      display: none;
+    }
+
+    .banner__image--mobile {
+      display: block;
     }
 
     .banner__heading {
@@ -369,6 +391,11 @@
           "label": "t:labels.image"
         },
         {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "t:labels.mobile_image"
+        },
+        {
           "type": "text",
           "id": "subheading",
           "label": "t:labels.subtitle",
@@ -435,10 +462,10 @@
       "id": "banner_height",
       "label": "t:sections.banner.banner_height",
       "min": 300,
-      "max": 900,
+      "max": 1200,
       "step": 50,
       "unit": "px",
-      "default": 600
+      "default": 800
     },
     {
       "type": "range",

@@ -58,6 +58,7 @@
     "grid_gap": "Grid spacing",
     "grid_item_width": "Grid item width",
     "image": "Image",
+    "mobile_image": "Mobile image",
     "input_corner_radius": "Input corner radius",
     "label": "Label",
     "layout_direction": "Layout direction",
@@ -67,10 +68,13 @@
     "whatsapp_number": "WhatsApp number",
     "promo_text": "Promo bar text (mobile)",
     "nav_link": "Nav item",
+    "tab_label_info": "Overrides the collection title if set.",
     "col1": "Column 1",
     "col2": "Column 2",
     "col3": "Column 3",
     "heading": "Heading",
+    "tab_label": "Tab label",
+    "products_per_tab": "Products per tab",
     "card1": "Card 1",
     "card2": "Card 2",
     "card3": "Card 3",
@@ -90,6 +94,14 @@
     "url": "Link URL"
   },
   "sections": {
+    "tab_product_list": {
+      "name": "Tab product list",
+      "blocks": {
+        "tab": {
+          "name": "Tab"
+        }
+      }
+    },
     "banner": {
       "name": "Banner",
       "banner_height": "Banner height",

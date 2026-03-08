@@ -41,7 +41,7 @@
     </div>
 
     <div class="header-main__icons">
-      <button class="header-icon-btn" aria-label="{{ 'header.search_label' | t }}">
+      <button class="header-icon-btn header-icon-btn--search" aria-label="{{ 'header.search_label' | t }}">
         {{ 'icon-search.svg' | inline_asset_content }}
       </button>
 
@@ -303,7 +303,7 @@
     align-items: center;
   }
   .header-main__logo-img {
-    max-height: 56px;
+    max-height: 72px;
     width: auto;
     height: auto;
     display: block;
@@ -675,10 +675,12 @@
     .header-main__inner { height: 70px; justify-content: space-between; }
     .header-main__spacer { display: none; }
     .header-main__logo { flex: 1; justify-content: center; }
-    .header-main__logo-img { max-height: 44px; }
+    .header-main__logo-img { max-height: 56px; }
     .header-icon-btn { width: 36px; height: 36px; background: none; }
     .header-icon-btn:hover { background: none; color: var(--color-primary); }
     .header-icon-btn--account-desktop { display: none; }
+    .header-icon-btn--wishlist { display: none; }
+    .header-icon-btn--search { display: none; }
     .header-main__icons { gap: 4px; }
     .header-nav { display: none; }
   }
