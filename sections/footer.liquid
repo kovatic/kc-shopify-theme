@@ -1,50 +1,590 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
+<footer class="footer">
+  <div class="footer__inner">
+
+    {%- comment -%} Column 1: Logo + Address {%- endcomment -%}
+    <div class="footer__col footer__col--brand">
+      <div class="footer__logo">
+        {%- if section.settings.logo -%}
+          {{- section.settings.logo | image_url: width: 544 | image_tag:
+              alt: shop.name,
+              class: 'footer__logo-img',
+              loading: 'lazy',
+              widths: '272, 544, 816',
+              sizes: '272px'
+          -}}
+        {%- else -%}
+          <span class="footer__shop-name">{{ shop.name }}</span>
+        {%- endif -%}
+      </div>
+      <div class="footer__address">
+        <p class="footer__brand-name">{{ section.settings.brand_name }}</p>
+        {%- if section.settings.address != blank -%}
+          <p class="footer__address-text">{{ section.settings.address }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} Column 2: Quick Links {%- endcomment -%}
+    <div class="footer__col footer__col--nav" data-accordion>
+      <button class="footer__nav-heading footer__accordion-toggle" aria-expanded="false" aria-controls="footer-quick-links">
+        {{ 'footer.quick_links' | t }}
+        <span class="footer__chevron" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 7.5L10 12.5L15 7.5" stroke="#2e1f1f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+      <ul class="footer__nav-list" id="footer-quick-links">
+        {%- for link in section.settings.quick_links_menu.links -%}
+          <li class="footer__nav-item">
+            <a class="footer__nav-link" href="{{ link.url }}">{{ link.title }}</a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+
+    {%- comment -%} Column 3: Policies & Guidelines {%- endcomment -%}
+    <div class="footer__col footer__col--nav" data-accordion>
+      <button class="footer__nav-heading footer__accordion-toggle" aria-expanded="false" aria-controls="footer-policies">
+        {{ 'footer.policies_guidelines' | t }}
+        <span class="footer__chevron" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 7.5L10 12.5L15 7.5" stroke="#2e1f1f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+      <ul class="footer__nav-list" id="footer-policies">
+        {%- for link in section.settings.policies_menu.links -%}
+          <li class="footer__nav-item">
+            <a class="footer__nav-link" href="{{ link.url }}">{{ link.title }}</a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+
+    {%- comment -%} Column 4: Social Media + Store Location {%- endcomment -%}
+    <div class="footer__col footer__col--social">
+      <div class="footer__social">
+        <p class="footer__section-heading">{{ 'footer.social_media' | t }}</p>
+        <div class="footer__social-icons">
+          {%- if section.settings.facebook_url != blank -%}
+            <a class="footer__social-link" href="{{ section.settings.facebook_url }}" target="_blank" rel="noopener" aria-label="{{ 'footer.social_facebook' | t }}">
+              <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M8.5 0C3.806 0 0 3.806 0 8.5s3.806 8.5 8.5 8.5 8.5-3.806 8.5-8.5S13.194 0 8.5 0zm2.125 5.667H9.349c-.27 0-.474.124-.474.398v.935h1.75l-.233 1.75H8.875V13H7.083V8.75H5.667V7h1.416v-1.05C7.083 4.71 7.835 4 9.119 4c.587 0 1.506.045 1.506.045v1.622z" fill="#494949"/>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.youtube_url != blank -%}
+            <a class="footer__social-link" href="{{ section.settings.youtube_url }}" target="_blank" rel="noopener" aria-label="{{ 'footer.social_youtube' | t }}">
+              <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M8.5 0C3.806 0 0 3.806 0 8.5s3.806 8.5 8.5 8.5 8.5-3.806 8.5-8.5S13.194 0 8.5 0zm3.854 10.478a1.063 1.063 0 01-.748.748C10.75 11.5 8.5 11.5 8.5 11.5s-2.25 0-3.106-.274a1.063 1.063 0 01-.748-.748C4.375 9.622 4.375 8.5 4.375 8.5s0-1.122.271-1.978a1.063 1.063 0 01.748-.748C6.25 5.5 8.5 5.5 8.5 5.5s2.25 0 3.106.274a1.063 1.063 0 01.748.748C12.625 7.378 12.625 8.5 12.625 8.5s0 1.122-.271 1.978zM7.583 9.708V7.292L9.917 8.5l-2.334 1.208z" fill="#494949"/>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.instagram_url != blank -%}
+            <a class="footer__social-link" href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener" aria-label="{{ 'footer.social_instagram' | t }}">
+              <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M8.5 0C3.806 0 0 3.806 0 8.5s3.806 8.5 8.5 8.5 8.5-3.806 8.5-8.5S13.194 0 8.5 0zm0 5.667a2.833 2.833 0 110 5.666A2.833 2.833 0 018.5 5.667zm0 4.666a1.833 1.833 0 100-3.666 1.833 1.833 0 000 3.666zm3.542-5.458a.708.708 0 110 1.416.708.708 0 010-1.416zm1.333-3.292H3.625A.958.958 0 002.667 2.54v10.92c0 .528.43.957.958.957h9.75a.958.958 0 00.958-.958V2.54a.958.958 0 00-.958-.958z" fill="#494949"/>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.whatsapp_url != blank -%}
+            <a class="footer__social-link" href="{{ section.settings.whatsapp_url }}" target="_blank" rel="noopener" aria-label="{{ 'footer.social_whatsapp' | t }}">
+              <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M8.5 0C3.806 0 0 3.806 0 8.5c0 1.5.39 2.91 1.073 4.135L0 17l4.484-1.057A8.46 8.46 0 008.5 17C13.194 17 17 13.194 17 8.5S13.194 0 8.5 0zm4.18 12.017c-.174.49-1.017.937-1.4.994-.356.052-.807.074-1.302-.082a11.9 11.9 0 01-1.178-.436c-2.072-.895-3.428-2.98-3.531-3.12-.103-.138-.84-1.117-.84-2.13 0-1.012.532-1.51.72-1.714.189-.204.413-.255.55-.255l.396.007c.127.006.298-.048.466.356.174.416.59 1.44.641 1.544.052.103.086.224.017.362-.07.137-.103.223-.207.343-.103.12-.217.268-.31.36-.103.104-.21.216-.09.424.12.207.532.877 1.143 1.42.786.7 1.449.916 1.654.994.207.077.327.064.448-.039.12-.103.517-.604.655-.812.138-.207.276-.172.465-.103.19.07 1.208.57 1.415.673.207.103.345.155.396.24.051.087.051.502-.122.992z" fill="#494949"/>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.pinterest_url != blank -%}
+            <a class="footer__social-link" href="{{ section.settings.pinterest_url }}" target="_blank" rel="noopener" aria-label="{{ 'footer.social_pinterest' | t }}">
+              <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M8.5 0C3.806 0 0 3.806 0 8.5c0 3.6 2.19 6.693 5.332 8.016-.073-.663-.14-1.68.03-2.402.153-.655 1.026-4.344 1.026-4.344s-.262-.524-.262-1.3c0-1.218.707-2.128 1.585-2.128.748 0 1.11.562 1.11 1.236 0 .753-.48 1.881-.729 2.927-.208.874.439 1.586 1.299 1.586 1.558 0 2.758-1.642 2.758-4.013 0-2.097-1.507-3.564-3.659-3.564-2.492 0-3.953 1.869-3.953 3.8 0 .752.29 1.558.651 1.997a.26.26 0 01.06.25c-.066.276-.213.874-.243.996-.039.16-.13.194-.3.117-1.12-.522-1.82-2.163-1.82-3.482 0-2.832 2.058-5.434 5.934-5.434 3.116 0 5.538 2.22 5.538 5.186 0 3.094-1.95 5.584-4.656 5.584-.909 0-1.764-.473-2.057-.03l-.558 2.082c-.202.777-.748 1.75-1.114 2.343A8.5 8.5 0 108.5 0z" fill="#494949"/>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.twitter_url != blank -%}
+            <a class="footer__social-link" href="{{ section.settings.twitter_url }}" target="_blank" rel="noopener" aria-label="{{ 'footer.social_twitter' | t }}">
+              <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect width="17" height="17" rx="2" fill="#494949"/>
+                <path d="M9.385 7.772L13.07 3.5h-.888L9 7.19 6.627 3.5H3.5l3.864 5.626L3.5 13.5h.887l3.379-3.929 2.7 3.929H13.5L9.385 7.772zm-1.197 1.391l-.391-.56L4.7 4.155h1.34l2.512 3.594.391.56 3.267 4.672H10.87L8.188 9.163z" fill="white"/>
+              </svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="footer__store-locations">
+        <p class="footer__section-heading">{{ 'footer.store_location' | t }}</p>
+        <div class="footer__locations-list">
+          {%- if section.settings.location_1_label != blank -%}
+            <a class="footer__location-link" href="{{ section.settings.location_1_url | default: '#' }}" {% if section.settings.location_1_url != blank %}target="_blank" rel="noopener"{% endif %}>
+              <svg class="footer__location-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M7.5 0C4.743 0 2.5 2.243 2.5 5c0 3.75 5 10 5 10s5-6.25 5-10c0-2.757-2.243-5-5-5zm0 6.875a1.875 1.875 0 110-3.75 1.875 1.875 0 010 3.75z" fill="#494949"/>
+              </svg>
+              <span>{{ section.settings.location_1_label }}</span>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.location_2_label != blank -%}
+            <a class="footer__location-link" href="{{ section.settings.location_2_url | default: '#' }}" {% if section.settings.location_2_url != blank %}target="_blank" rel="noopener"{% endif %}>
+              <svg class="footer__location-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M7.5 0C4.743 0 2.5 2.243 2.5 5c0 3.75 5 10 5 10s5-6.25 5-10c0-2.757-2.243-5-5-5zm0 6.875a1.875 1.875 0 110-3.75 1.875 1.875 0 010 3.75z" fill="#494949"/>
+              </svg>
+              <span>{{ section.settings.location_2_label }}</span>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
+  {%- comment -%} Mobile description (shown only on mobile below logo) {%- endcomment -%}
+  {%- if section.settings.mobile_description != blank -%}
+    <div class="footer__mobile-description">
+      {{ section.settings.mobile_description }}
+    </div>
+  {%- endif -%}
 
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
-    {% endif %}
-  </div>
 </footer>
 
 {% stylesheet %}
-  footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
+  .footer {
+    background-color: #e50e7e;
+    padding: 12px;
   }
-  footer a {
+
+  .footer__inner {
+    background-color: #f0e7db;
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0;
+    padding: 20px;
+    align-items: end;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .footer__col {
+    padding: 20px;
+  }
+
+  .footer__col--brand {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-top: 20px;
+  }
+
+  .footer__logo-img {
+    max-width: 272px;
+    height: auto;
+    display: block;
+  }
+
+  .footer__shop-name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: #2e1f1f;
+  }
+
+  .footer__address {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 20px;
+  }
+
+  .footer__brand-name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: #2e1f1f;
+    margin: 0 0 4px;
+  }
+
+  .footer__address-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #494949;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .footer__col--nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    height: 100%;
+    padding-bottom: 40px;
+  }
+
+  .footer__nav-heading {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 17px;
+    color: #2e1f1f;
+    line-height: 21.6px;
+    margin: 0 0 4px;
+  }
+
+  .footer__nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer__nav-item {
+    padding: 4.8px 0;
+  }
+
+  .footer__nav-link {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #494949;
     text-decoration: none;
-    color: var(--color-foreground);
+    line-height: 1.6;
+    display: block;
   }
-  footer .footer__links,
-  footer .footer__payment {
+
+  .footer__nav-link:hover {
+    color: #2e1f1f;
+  }
+
+  .footer__col--social {
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 23.4px;
+    padding-top: 20px;
+  }
+
+  .footer__section-heading {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #2e1f1f;
+    line-height: 21.6px;
+    margin: 0 0 9.6px;
+  }
+
+  .footer__social-icons {
+    display: flex;
+    gap: 13.8px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-bottom: 8px;
+  }
+
+  .footer__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .footer__social-link svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .footer__locations-list {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .footer__location-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #494949;
+    line-height: 1.6;
+  }
+
+  .footer__location-link:hover {
+    color: #2e1f1f;
+  }
+
+  .footer__location-icon {
+    flex-shrink: 0;
+  }
+
+  .footer__mobile-description {
+    display: none;
+    background-color: #f0e7db;
+  }
+
+  /* Mobile accordion toggle — hidden on desktop */
+  .footer__accordion-toggle {
+    all: unset;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .footer__chevron {
+    display: none;
+  }
+
+  .footer__bottom {
+    background-color: #f0e7db;
+    margin: 0 0 0 0;
+    padding: 12px 20px;
+    text-align: center;
+    border-radius: 0 0 4px 4px;
+  }
+
+  .footer__copyright {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #494949;
+    margin: 0;
+  }
+
+  /* ── Mobile ───────────────────────────────────────────────── */
+  @media screen and (max-width: 767px) {
+    .footer {
+      padding: 12px;
+    }
+
+    .footer__inner {
+      grid-template-columns: 1fr;
+      align-items: start;
+      padding: 20px;
+      border-radius: 4px 4px 0 0;
+      gap: 0;
+    }
+
+    /* Brand column: centered on mobile */
+    .footer__col--brand {
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+      padding: 0 0 19px;
+    }
+
+    .footer__logo-img {
+      max-width: 230px;
+    }
+
+    .footer__address {
+      display: none;
+    }
+
+    .footer__mobile-description {
+      display: block;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      font-size: 14px;
+      color: #494949;
+      line-height: 1.6;
+      text-align: center;
+      padding: 0 20px 12px;
+    }
+
+    /* Social icons on mobile — centered below description */
+    .footer__col--social {
+      order: -1;
+      align-items: center;
+    }
+
+    .footer__col--social .footer__social {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .footer__col--social .footer__social-icons {
+      justify-content: center;
+    }
+
+    .footer__col--social .footer__store-locations,
+    .footer__col--social .footer__section-heading {
+      display: none;
+    }
+
+    /* Make social icons circular bordered on mobile */
+    .footer__social-link {
+      width: 32px;
+      height: 32px;
+      border: 1px solid #494949;
+      border-radius: 50%;
+    }
+
+    /* Nav columns — accordion style on mobile */
+    .footer__col--nav {
+      padding: 0;
+      gap: 0;
+    }
+
+    .footer__accordion-toggle {
+      all: unset;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      cursor: pointer;
+      padding: 12px 0;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      color: #2e1f1f;
+      letter-spacing: 0.35px;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(73,73,73,0.2);
+      box-sizing: border-box;
+    }
+
+    .footer__chevron {
+      display: flex;
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+
+    .footer__accordion-toggle[aria-expanded="true"] .footer__chevron {
+      transform: rotate(180deg);
+    }
+
+    .footer__nav-list {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .footer__nav-list.is-open {
+      max-height: 500px;
+    }
+
+    .footer__nav-link {
+      font-size: 14px;
+      padding: 6px 0;
+    }
   }
 {% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    var toggles = document.querySelectorAll('.footer__accordion-toggle');
+    toggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function() {
+        var expanded = this.getAttribute('aria-expanded') === 'true';
+        var targetId = this.getAttribute('aria-controls');
+        var list = document.getElementById(targetId);
+        if (!list) return;
+        this.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+        list.classList.toggle('is-open', !expanded);
+      });
+    });
+  })();
+{% endjavascript %}
 
 {% schema %}
 {
   "name": "t:general.footer",
   "settings": [
     {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:labels.logo"
+    },
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "t:labels.brand_name",
+      "default": "K.Chinadurai&CO"
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "t:labels.address",
+      "default": "Velachery Main Rd, Kamarajapuram, Palaniappa Nagar, Sembakkam, Chennai, Tamil Nadu 600073"
+    },
+    {
+      "type": "textarea",
+      "id": "mobile_description",
+      "label": "t:labels.mobile_description",
+      "default": "Exquisite silk sarees crafted with tradition and elegance since generations. We bring the finest handloom sarees from across India."
+    },
+    {
       "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
+      "id": "quick_links_menu",
+      "label": "t:labels.quick_links_menu"
+    },
+    {
+      "type": "link_list",
+      "id": "policies_menu",
+      "label": "t:labels.policies_menu"
+    },
+    {
+      "type": "header",
+      "content": "t:labels.social_media"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "t:labels.facebook_url"
+    },
+    {
+      "type": "url",
+      "id": "youtube_url",
+      "label": "t:labels.youtube_url"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "t:labels.instagram_url"
+    },
+    {
+      "type": "url",
+      "id": "whatsapp_url",
+      "label": "t:labels.whatsapp_url"
+    },
+    {
+      "type": "url",
+      "id": "pinterest_url",
+      "label": "t:labels.pinterest_url"
+    },
+    {
+      "type": "url",
+      "id": "twitter_url",
+      "label": "t:labels.twitter_url"
+    },
+    {
+      "type": "header",
+      "content": "t:labels.store_locations"
+    },
+    {
+      "type": "text",
+      "id": "location_1_label",
+      "label": "t:labels.location_1_label",
+      "default": "T.Nagar"
+    },
+    {
+      "type": "url",
+      "id": "location_1_url",
+      "label": "t:labels.location_1_url"
+    },
+    {
+      "type": "text",
+      "id": "location_2_label",
+      "label": "t:labels.location_2_label",
+      "default": "Nungambakam"
+    },
+    {
+      "type": "url",
+      "id": "location_2_url",
+      "label": "t:labels.location_2_url"
     },
     {
       "type": "checkbox",

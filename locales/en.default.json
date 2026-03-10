@@ -129,6 +129,20 @@
       "collection_placeholder": "Collection name"
     }
   },
+  "footer": {
+    "brand_name": "K.Chinadurai&CO",
+    "quick_links": "Quick links",
+    "policies_guidelines": "Policies & guidelines",
+    "social_media": "Social media",
+    "store_location": "Store location",
+    "all_rights_reserved": "All rights reserved.",
+    "social_facebook": "Facebook",
+    "social_youtube": "YouTube",
+    "social_instagram": "Instagram",
+    "social_whatsapp": "WhatsApp",
+    "social_pinterest": "Pinterest",
+    "social_twitter": "X (Twitter)"
+  },
   "blocks": {
     "category_item": {
       "name": "Category item"

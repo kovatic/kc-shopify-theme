@@ -1,3 +1,10 @@
+<div class="site-header" id="site-header">
+{% comment %} Mobile promo bar — outside topbar-wrap so it shows on mobile {% endcomment %}
+<div class="header-promo-bar">
+  <p class="header-promo-bar__text">{{ section.settings.promo_text }}</p>
+</div>
+
+<div class="site-header__topbar-wrap">
 {% comment %} Row 1: Top bar {% endcomment %}
 <div class="header-topbar">
   <div class="header-topbar__inner">
@@ -12,12 +19,8 @@
     </p>
   </div>
 </div>
-
-{% comment %} Mobile promo bar {% endcomment %}
-<div class="header-promo-bar">
-  <p class="header-promo-bar__text">{{ section.settings.promo_text }}</p>
-</div>
-
+</div>{% comment %} /site-header__topbar-wrap {% endcomment %}
+<div class="site-header__sticky">
 {% comment %} Row 2: Logo + Icons {% endcomment %}
 <div class="header-main">
   <div class="header-main__inner">
@@ -33,7 +36,12 @@
     <div class="header-main__logo">
       {% if section.settings.logo %}
         <a href="{{ routes.root_url }}">
-          {{- section.settings.logo | image_url: width: 220 | image_tag: alt: shop.name, class: 'header-main__logo-img' -}}
+          {{- section.settings.logo | image_url: width: 440 | image_tag:
+              alt: shop.name,
+              class: 'header-main__logo-img',
+              widths: '220, 440, 660',
+              sizes: '220px'
+          -}}
         </a>
       {% else %}
         <a href="{{ routes.root_url }}" class="header-main__shop-name">{{ shop.name }}</a>
@@ -232,8 +240,39 @@
     {% endfor %}
   </ul>
 </nav>
+</div>{% comment %} /site-header__sticky {% endcomment %}
+</div>{% comment %} /site-header {% endcomment %}
+
+<div class="site-header-spacer" id="site-header-spacer"></div>
 
 {% stylesheet %}
+  /* ── Fixed site header wrapper ── */
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 300;
+  }
+
+  /* Topbar wrap — collapses on scroll */
+  .site-header__topbar-wrap {
+    overflow: hidden;
+    max-height: 80px;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    opacity: 1;
+  }
+
+  .site-header.is-scrolled .site-header__topbar-wrap {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  /* Spacer that compensates for fixed header height */
+  .site-header-spacer {
+    display: block;
+  }
+
   /* ── Top bar ── */
   .header-topbar {
     background-color: var(--color-primary);
@@ -437,16 +476,27 @@
   }
 
   /* ── Mega menu ── */
+  /*
+    The mega-menu uses position:fixed so it escapes the site-header stacking
+    context and spans the full viewport width. Its top is set by JS to match
+    the bottom of the fixed header at the time of hover.
+  */
   .mega-menu {
     display: none;
     position: fixed;
     left: 0;
     right: 0;
+    /* top is set dynamically by JS */
     background-color: #efeee9;
-    z-index: 99;
+    z-index: 299;
     border-top: 1px solid #e0dfd9;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
   }
-  .header-nav__item--mega:hover .mega-menu { display: block; }
+
+  .site-header__sticky {
+    position: static;
+  }
+  .header-nav__item--mega.is-open .mega-menu { display: block; }
   .mega-menu__inner {
     display: flex;
     flex-direction: row;
@@ -667,8 +717,24 @@
     line-height: 1;
   }
 
+  /* ── Compact nav for mid-range widths ── */
+  @media screen and (max-width: 1380px) {
+    .header-nav__list { gap: 0; }
+    .header-nav__link { padding: 10px 10px; font-size: 0.9rem; }
+  }
+
+  @media screen and (max-width: 1180px) {
+    .header-nav__link { padding: 10px 7px; font-size: 0.82rem; }
+  }
+
   /* ── Mobile ── */
   @media screen and (max-width: 768px) {
+    /* On mobile the topbar-wrap is always collapsed — no transition needed */
+    .site-header__topbar-wrap {
+      max-height: 0 !important;
+      opacity: 0 !important;
+      transition: none !important;
+    }
     .header-topbar { display: none; }
     .header-promo-bar { display: block; }
     .header-hamburger { display: flex; }
@@ -688,6 +754,83 @@
 
 {% javascript %}
   (function() {
+    var siteHeader = document.getElementById('site-header');
+    var spacer = document.getElementById('site-header-spacer');
+    var topbarWrap = siteHeader && siteHeader.querySelector('.site-header__topbar-wrap');
+    var THRESHOLD = 10;
+
+    /* ── Measure header bottom edge ── */
+    function headerBottom() {
+      return siteHeader ? siteHeader.getBoundingClientRect().bottom : 0;
+    }
+
+    /* ── Spacer: compensate for fixed header ── */
+    function updateSpacer() {
+      if (spacer && siteHeader) {
+        spacer.style.height = siteHeader.offsetHeight + 'px';
+      }
+    }
+    updateSpacer();
+    window.addEventListener('resize', updateSpacer);
+    if (topbarWrap) {
+      topbarWrap.addEventListener('transitionend', function() {
+        updateSpacer();
+        updateMegaMenuTops();
+      });
+    }
+
+    /* ── Mega menu: position fixed top = header bottom ── */
+    function updateMegaMenuTops() {
+      var bottom = headerBottom();
+      document.querySelectorAll('.mega-menu').forEach(function(mm) {
+        mm.style.top = bottom + 'px';
+      });
+    }
+    updateMegaMenuTops();
+    window.addEventListener('resize', updateMegaMenuTops);
+
+    /* ── Mega menu: JS hover (CSS hover breaks with position:fixed detached menus) ── */
+    document.querySelectorAll('.header-nav__item--mega').forEach(function(item) {
+      var closeTimer = null;
+
+      function openMenu() {
+        clearTimeout(closeTimer);
+        updateMegaMenuTops(); // ensure top is current before showing
+        item.classList.add('is-open');
+      }
+
+      function scheduleClose() {
+        closeTimer = setTimeout(function() {
+          item.classList.remove('is-open');
+        }, 80); // small delay so cursor can move into the mega menu
+      }
+
+      var megaMenu = item.querySelector('.mega-menu');
+
+      item.addEventListener('mouseenter', openMenu);
+      item.addEventListener('mouseleave', scheduleClose);
+
+      if (megaMenu) {
+        megaMenu.addEventListener('mouseenter', function() {
+          clearTimeout(closeTimer);
+        });
+        megaMenu.addEventListener('mouseleave', scheduleClose);
+      }
+    });
+
+    /* ── Scroll: hide topbar ── */
+    function onScroll() {
+      if (window.scrollY > THRESHOLD) {
+        siteHeader.classList.add('is-scrolled');
+      } else {
+        siteHeader.classList.remove('is-scrolled');
+      }
+      updateSpacer();
+      updateMegaMenuTops();
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    /* ── Mobile drawer ── */
     var hamburger = document.querySelector('.header-hamburger');
     var drawer = document.getElementById('mobile-nav-drawer');
     var closeBtn = document.querySelector('.mobile-nav-drawer__close');
