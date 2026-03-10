@@ -20,7 +20,8 @@
     <div class="product-list__scroll-wrapper">
       <div class="product-list__grid" id="product-list-grid-{{ section.id }}">
         {%- for product in section.settings.collection.products limit: section.settings.products_count -%}
-          <div class="product-list__item">
+          {%- assign first_variant = product.first_available_variant | default: product.variants.first -%}
+          <div class="product-list__item" data-variant-id="{{ first_variant.id }}">
             <a class="product-list__item-link" href="{{ product.url }}">
               <div class="product-list__image-wrapper">
                 {%- if product.featured_image != blank -%}
@@ -29,15 +30,27 @@
                   {{ 'product-1' | placeholder_svg_tag: 'product-list__image product-list__image--placeholder' }}
                 {%- endif -%}
 
-                <button
-                  class="product-list__wishlist-btn"
-                  aria-label="{{ 'sections.product_list.add_to_wishlist' | t: title: product.title | escape }}"
-                  type="button"
-                >
-                  <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M8 15.5C8 15.5 1 11 1 6C1 3.79 2.79 2 5 2C6.3 2 7.45 2.64 8 3.67C8.55 2.64 9.7 2 11 2C13.21 2 15 3.79 15 6C15 11 8 15.5 8 15.5Z" stroke="#2e1f1f" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <button class="product-card-wishlist" type="button" aria-label="{{ 'sections.product_list.add_to_wishlist_generic' | t }}">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </button>
+                <div class="product-card-actions">
+                  <button class="product-card-actions__btn product-card-actions__btn--cart js-add-to-cart" type="button" aria-label="{{ 'sections.product_list.add_to_cart' | t }}">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                      <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                      <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                  <button class="product-card-actions__btn product-card-actions__btn--similar" type="button" aria-label="View similar">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.6"/>
+                      <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                      <path d="M11 8v6M8 11h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
 
               <div class="product-list__info">
@@ -45,6 +58,20 @@
                 <span class="product-list__price">{{ product.price | money }}</span>
               </div>
             </a>
+
+            <div class="product-card-mobile-bar">
+              <button class="product-card-mobile-bar__cart js-add-to-cart" type="button" aria-label="{{ 'sections.product_list.add_to_cart' | t }}">
+                {{- 'sections.product_list.add_to_cart' | t | upcase -}}
+              </button>
+              <button class="product-card-mobile-bar__similar" type="button" aria-label="View similar">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="20" height="20">
+                  <rect x="3" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                  <rect x="13" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                  <rect x="3" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                  <rect x="13" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                </svg>
+              </button>
+            </div>
           </div>
         {%- else -%}
           {%- for i in (1..section.settings.products_count) -%}
@@ -52,11 +79,30 @@
               <a class="product-list__item-link" href="#">
                 <div class="product-list__image-wrapper">
                   {{ 'product-' | append: i | placeholder_svg_tag: 'product-list__image product-list__image--placeholder' }}
-                  <button class="product-list__wishlist-btn" aria-label="{{ 'sections.product_list.add_to_wishlist_generic' | t }}" type="button">
-                    <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                      <path d="M8 15.5C8 15.5 1 11 1 6C1 3.79 2.79 2 5 2C6.3 2 7.45 2.64 8 3.67C8.55 2.64 9.7 2 11 2C13.21 2 15 3.79 15 6C15 11 8 15.5 8 15.5Z" stroke="#2e1f1f" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </button>
+                  <div class="product-card-actions" aria-label="Product actions">
+                    <button class="product-card-actions__btn product-card-actions__btn--cart" type="button" aria-label="{{ 'sections.product_list.add_to_cart' | t }}">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span>Add to cart</span>
+                    </button>
+                    <button class="product-card-actions__btn product-card-actions__btn--wishlist" type="button" aria-label="{{ 'sections.product_list.add_to_wishlist_generic' | t }}">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span>Wishlist</span>
+                    </button>
+                    <button class="product-card-actions__btn product-card-actions__btn--similar" type="button" aria-label="View similar">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.6"/>
+                        <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        <path d="M11 8v6M8 11h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                      </svg>
+                      <span>View similar</span>
+                    </button>
+                  </div>
                 </div>
                 <div class="product-list__info">
                   <span class="product-list__name">{{ 'sections.product_list.product_placeholder' | t }}</span>
@@ -220,26 +266,95 @@
     transform: scale(1.04);
   }
 
-  /* Wishlist button */
-  .product-list__wishlist-btn {
+  /* ── Wishlist — top right, fades in on hover ── */
+  .product-card-wishlist {
     position: absolute;
-    bottom: 1.25rem;
-    right: 1.25rem;
-    width: 2rem;
-    height: 2rem;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 2.875rem;
+    height: 2.875rem;
     border-radius: 50%;
-    background: #f0f0f0;
+    background: #fff;
     border: none;
     cursor: pointer;
+    color: #2e1f1f;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s ease;
-    z-index: 1;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.2s ease, transform 0.2s ease, background 0.15s ease, color 0.15s ease;
   }
 
-  .product-list__wishlist-btn:hover {
+  .product-card-wishlist svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .product-list__item-link:hover .product-card-wishlist {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .product-card-wishlist:hover { background: #e50e7e; color: #fff; }
+
+  /* ── Bottom row — add to cart + view similar ── */
+  .product-card-actions {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 8px;
+    pointer-events: none;
+  }
+
+  .product-card-actions__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.875rem;
+    height: 2.875rem;
+    border-radius: 50%;
     background: #fff;
+    border: none;
+    cursor: pointer;
+    color: #2e1f1f;
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, background 0.15s ease, color 0.15s ease;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+  }
+
+  .product-card-actions__btn svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .product-card-actions__btn--cart    { transition-delay: 0.06s; }
+  .product-card-actions__btn--similar { transition-delay: 0s; }
+
+  .product-list__item-link:hover .product-card-actions__btn {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .product-card-actions__btn:hover { background: #e50e7e; color: #fff; }
+  .product-card-actions__btn.is-added { background: #2e1f1f; color: #fff; pointer-events: none; }
+
+  /* ── Mobile action bar — always visible below image on mobile ── */
+  .product-card-mobile-bar {
+    display: none;
+  }
+
+  .product-card-mobile-bar__cart.is-added {
+    background: #2e1f1f;
+    color: #fff;
+    pointer-events: none;
   }
 
   /* Product info */
@@ -362,6 +477,60 @@
       right: 0.5rem;
     }
 
+    /* Wishlist always visible on mobile, smaller size */
+    .product-card-wishlist {
+      opacity: 1;
+      transform: translateY(0);
+      width: 2rem;
+      height: 2rem;
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+
+    .product-card-wishlist svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* Hide hover overlay actions on mobile */
+    .product-card-actions {
+      display: none;
+    }
+
+    /* Mobile action bar */
+    .product-card-mobile-bar {
+      display: flex;
+      align-items: stretch;
+      border-top: 1px solid #e8e0d5;
+    }
+
+    .product-card-mobile-bar__cart {
+      flex: 1;
+      padding: 0.65rem 0.5rem;
+      background: #fff;
+      border: none;
+      border-right: 1px solid #e8e0d5;
+      font-family: var(--font-body-family, 'Montserrat', sans-serif);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #2e1f1f;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .product-card-mobile-bar__similar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.75rem;
+      flex-shrink: 0;
+      background: #fff;
+      border: none;
+      color: #2e1f1f;
+      cursor: pointer;
+    }
+
     /* Horizontal scroll layout — mobile */
     .product-list-mobile--scroll .product-list__scroll-wrapper {
       overflow-x: auto;
@@ -437,6 +606,40 @@
       if (!id) return;
       var sectionId = id.id.replace('product-list-grid-', '');
       initScrollIndicator(sectionId);
+    });
+
+    function addToCart(variantId, btn) {
+      if (!variantId) return;
+      btn.disabled = true;
+      var originalContent = btn.innerHTML;
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        body: JSON.stringify({ id: variantId, quantity: 1 })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.id) {
+          btn.classList.add('is-added');
+          setTimeout(function() {
+            btn.classList.remove('is-added');
+            btn.disabled = false;
+          }, 1500);
+          document.dispatchEvent(new CustomEvent('cart:refresh'));
+        } else {
+          btn.disabled = false;
+        }
+      })
+      .catch(function() { btn.disabled = false; });
+    }
+
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.js-add-to-cart');
+      if (!btn) return;
+      e.preventDefault();
+      var card = btn.closest('[data-variant-id]');
+      if (!card) return;
+      addToCart(card.dataset.variantId, btn);
     });
   })();
 {% endjavascript %}

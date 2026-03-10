@@ -100,6 +100,7 @@
       "products_count": "Number of products",
       "view_all_url": "\"View all\" link",
       "view_all": "View all collection",
+      "add_to_cart": "Add to cart",
       "add_to_wishlist": "Add {{ title }} to wishlist",
       "add_to_wishlist_generic": "Add to wishlist",
       "product_placeholder": "Product name"
