@@ -15,21 +15,21 @@
         "slide_aE8iH4": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Group_1321314408_1.webp",
-            "subheading": "New Collection",
-            "heading": "Elegance in Every Thread",
-            "text": "Discover our curated collection of handcrafted sarees.",
+            "image": "shopify://shop_images/2_BANNER.jpg",
+            "subheading": "",
+            "heading": "",
+            "text": "",
             "button_label": "",
             "button_url": "shopify://collections/budget-silks",
             "text_position": "middle-left",
             "show_overlay": true,
-            "overlay_opacity": 30
+            "overlay_opacity": 0
           }
         },
         "slide_aPXt94": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Free-Shipping-Banner-Final_jpg.webp",
+            "image": "shopify://shop_images/Untitled_design.jpg",
             "subheading": "",
             "heading": "",
             "text": "",
