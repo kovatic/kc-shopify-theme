@@ -170,6 +170,16 @@
         "padding_bottom": 80
       }
     },
+    "custom_section_FLDGhd": {
+      "type": "custom-section",
+      "custom_css": [
+        "div {height: 80vh;}"
+      ],
+      "name": "t:general.custom_section",
+      "settings": {
+        "background_image": "shopify://shop_images/Kc_gol_banner.jpg"
+      }
+    },
     "promo_RGMMyX": {
       "type": "promo",
       "name": "t:sections.promo.name",
@@ -352,6 +362,7 @@
     "reel_7a3Lp6",
     "product_list_8L8wf6",
     "tab_product_list_PynKp9",
+    "custom_section_FLDGhd",
     "promo_RGMMyX",
     "brand_marquee_aQFqpK",
     "product_carousel_zpTxYK",
