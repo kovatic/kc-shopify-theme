@@ -19,113 +19,111 @@
 
       <div class="collection-page__layout">
 
-        {%- comment -%} ── LEFT: Facet filters ── {%- endcomment -%}
+        {%- comment -%} ── LEFT: Facet filters (Search & Discovery) ── {%- endcomment -%}
         <aside class="collection-page__sidebar" id="collection-filters">
 
-          {%- comment -%} Availability {%- endcomment -%}
-          <div class="facet-group">
-            <button class="facet-group__toggle" aria-expanded="true" aria-controls="facet-availability">
-              Availability
-              <svg class="facet-group__chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <div class="facet-group__body" id="facet-availability">
-              <ul class="facet-list">
-                <li class="facet-list__item">
-                  <a class="facet-list__link{% if current_tags contains 'available' %} is-active{% endif %}"
-                     href="{{ collection.url }}?filter.p.m.custom.available=true">
-                    <span class="facet-list__check"></span>In stock
-                  </a>
-                </li>
-                <li class="facet-list__item">
-                  <a class="facet-list__link{% if current_tags contains 'out-of-stock' %} is-active{% endif %}"
-                     href="{{ collection.url }}?filter.p.m.custom.available=false">
-                    <span class="facet-list__check"></span>Out of stock
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
+          {%- comment -%} Active filters — clear pills {%- endcomment -%}
+          {%- assign has_active = false -%}
+          {%- for filter in collection.filters -%}
+            {%- if filter.type == 'price_range' -%}
+              {%- if filter.min_value.value != blank or filter.max_value.value != blank -%}
+                {%- assign has_active = true -%}
+              {%- endif -%}
+            {%- else -%}
+              {%- if filter.active_values.size > 0 -%}
+                {%- assign has_active = true -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
 
-          {%- comment -%} Price {%- endcomment -%}
-          <div class="facet-group">
-            <button class="facet-group__toggle" aria-expanded="true" aria-controls="facet-price">
-              Price
-              <svg class="facet-group__chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <div class="facet-group__body" id="facet-price">
-              <form class="facet-price-form" id="facet-price-form">
-                <div class="facet-price-form__fields">
-                  <div class="facet-price-form__field">
-                    <label class="facet-price-form__label" for="price-min">From</label>
-                    <div class="facet-price-form__input-wrap">
-                      <span class="facet-price-form__currency">{{ cart.currency.symbol }}</span>
-                      <input class="facet-price-form__input" type="number" id="price-min" name="filter.v.price.gte" min="0" placeholder="0" value="{{ current_filter.value.min | divided_by: 100.0 }}">
-                    </div>
-                  </div>
-                  <div class="facet-price-form__field">
-                    <label class="facet-price-form__label" for="price-max">To</label>
-                    <div class="facet-price-form__input-wrap">
-                      <span class="facet-price-form__currency">{{ cart.currency.symbol }}</span>
-                      <input class="facet-price-form__input" type="number" id="price-max" name="filter.v.price.lte" min="0" placeholder="Any" value="{{ current_filter.value.max | divided_by: 100.0 }}">
-                    </div>
-                  </div>
-                </div>
-                <button class="facet-price-form__btn" type="submit">Apply</button>
-              </form>
-            </div>
-          </div>
-
-          {%- comment -%} Product type {%- endcomment -%}
-          {%- assign all_types = collection.products | map: 'type' | compact | uniq -%}
-          {%- if all_types.size > 0 -%}
-            <div class="facet-group">
-              <button class="facet-group__toggle" aria-expanded="true" aria-controls="facet-type">
-                Product type
-                <svg class="facet-group__chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <div class="facet-group__body" id="facet-type">
-                <ul class="facet-list">
-                  {%- for type in all_types -%}
-                    {%- if type != blank -%}
-                      <li class="facet-list__item">
-                        <a class="facet-list__link{% if collection.current_type == type %} is-active{% endif %}"
-                           href="{{ type | url_for_type }}">
-                          <span class="facet-list__check"></span>{{ type }}
-                        </a>
-                      </li>
-                    {%- endif -%}
-                  {%- endfor -%}
-                </ul>
-              </div>
+          {%- if has_active -%}
+            <div class="facet-active">
+              {%- for filter in collection.filters -%}
+                {%- for value in filter.active_values -%}
+                  <a class="facet-active__pill" href="{{ value.url_to_remove }}">
+                    {{ value.label }}
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+                  </a>
+                {%- endfor -%}
+                {%- if filter.type == 'price_range' -%}
+                  {%- if filter.min_value.value != blank or filter.max_value.value != blank -%}
+                    <a class="facet-active__pill" href="{{ filter.url_to_remove }}">
+                      {{ filter.label }}
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+                    </a>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
             </div>
           {%- endif -%}
 
-          {%- comment -%} Tags {%- endcomment -%}
-          {%- if collection.all_tags.size > 0 -%}
+          {%- comment -%} Dynamic filters from Search & Discovery {%- endcomment -%}
+          {%- for filter in collection.filters -%}
             <div class="facet-group">
-              <button class="facet-group__toggle" aria-expanded="true" aria-controls="facet-tags">
-                Filter
+              <button class="facet-group__toggle" aria-expanded="true" aria-controls="facet-{{ filter.param_name | handleize }}">
+                {{ filter.label }}
                 <svg class="facet-group__chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
-              <div class="facet-group__body" id="facet-tags">
-                <ul class="facet-list">
-                  {%- for tag in collection.all_tags -%}
-                    <li class="facet-list__item">
-                      {%- if current_tags contains tag -%}
-                        <a class="facet-list__link is-active" href="{{ collection.url | append: '/' | append: current_tags | join: '+' | remove: tag | remove: '+/' | remove: '/+' }}">
-                          <span class="facet-list__check"></span>{{ tag }}
-                        </a>
-                      {%- else -%}
-                        <a class="facet-list__link" href="{{ tag | link_to_tag: tag | split: 'href="' | last | split: '"' | first }}">
-                          <span class="facet-list__check"></span>{{ tag }}
-                        </a>
-                      {%- endif -%}
-                    </li>
-                  {%- endfor -%}
-                </ul>
+              <div class="facet-group__body" id="facet-{{ filter.param_name | handleize }}">
+
+                {%- case filter.type -%}
+
+                  {%- when 'list' -%}
+                    <ul class="facet-list">
+                      {%- for value in filter.values -%}
+                        <li class="facet-list__item">
+                          <a class="facet-list__link{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-disabled{% endif %}"
+                             href="{{ value.url_to_add | default: value.url_to_remove }}">
+                            <span class="facet-list__check"></span>
+                            {{ value.label }}
+                            <span class="facet-list__count">({{ value.count }})</span>
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+
+                  {%- when 'price_range' -%}
+                    <form class="facet-price-form" id="facet-price-form">
+                      {%- assign min_val = filter.min_value.value | default: '' -%}
+                      {%- assign max_val = filter.max_value.value | default: '' -%}
+                      {%- comment -%} Preserve other active filters when submitting price {%- endcomment -%}
+                      {%- for f in collection.filters -%}
+                        {%- if f.type == 'list' -%}
+                          {%- for v in f.active_values -%}
+                            <input type="hidden" name="{{ v.param_name }}" value="{{ v.value }}">
+                          {%- endfor -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                      <div class="facet-price-form__fields">
+                        <div class="facet-price-form__field">
+                          <label class="facet-price-form__label" for="price-min">From</label>
+                          <div class="facet-price-form__input-wrap">
+                            <span class="facet-price-form__currency">{{ cart.currency.symbol }}</span>
+                            <input class="facet-price-form__input" type="number" id="price-min"
+                              name="{{ filter.min_value.param_name }}" min="0"
+                              placeholder="0"
+                              value="{% if min_val != blank %}{{ min_val | money_without_currency | remove: ',' }}{% endif %}">
+                          </div>
+                        </div>
+                        <div class="facet-price-form__field">
+                          <label class="facet-price-form__label" for="price-max">To</label>
+                          <div class="facet-price-form__input-wrap">
+                            <span class="facet-price-form__currency">{{ cart.currency.symbol }}</span>
+                            <input class="facet-price-form__input" type="number" id="price-max"
+                              name="{{ filter.max_value.param_name }}" min="0"
+                              placeholder="Any"
+                              value="{% if max_val != blank %}{{ max_val | money_without_currency | remove: ',' }}{% endif %}">
+                          </div>
+                        </div>
+                      </div>
+                      <button class="facet-price-form__btn" type="submit">Apply</button>
+                    </form>
+
+                {%- endcase -%}
+
               </div>
             </div>
-          {%- endif -%}
+          {%- endfor -%}
 
         </aside>
 
@@ -387,6 +385,40 @@
     border-bottom: 1px solid #e8e0d5;
     padding-bottom: 0.75rem;
     margin-bottom: 0.75rem;
+  }
+
+  .facet-active {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .facet-active__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.6rem;
+    background: #2e1f1f;
+    color: #fff;
+    font-size: 0.72rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .facet-active__pill:hover {
+    background: #5a3a2a;
+  }
+
+  .facet-list__count {
+    color: #999;
+    font-size: 0.75em;
+  }
+
+  .facet-list__link.is-disabled {
+    opacity: 0.4;
+    pointer-events: none;
   }
 
   .facet-group__toggle {

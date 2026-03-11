@@ -243,6 +243,57 @@
 </div>{% comment %} /site-header__sticky {% endcomment %}
 </div>{% comment %} /site-header {% endcomment %}
 
+{% comment %} Search overlay {% endcomment %}
+<div class="header-search-overlay" id="header-search-overlay" aria-hidden="true" role="dialog" aria-label="{{ 'search.title' | t }}">
+  <div class="header-search-overlay__backdrop" id="header-search-backdrop"></div>
+  <div class="header-search-overlay__panel">
+
+    {% comment %} Search input bar {% endcomment %}
+    <div class="header-search-overlay__bar">
+      <div class="header-search-overlay__form-wrap">
+        <svg class="header-search-overlay__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <input
+          class="header-search-overlay__input"
+          id="header-search-input"
+          type="search"
+          name="q"
+          placeholder="{{ 'search.placeholder' | t }}"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          aria-label="{{ 'search.placeholder' | t }}"
+        >
+        <button class="header-search-overlay__clear" type="button" id="header-search-clear" aria-label="Clear search">
+          Clear
+        </button>
+      </div>
+    </div>
+
+    {% comment %} Predictive results {% endcomment %}
+    <div class="header-search-results" id="header-search-results" aria-live="polite" style="display:none;">
+      <div class="header-search-results__inner">
+        <div class="header-search-results__col header-search-results__col--suggestions">
+          <p class="header-search-results__heading">Suggestions</p>
+          <ul class="header-search-suggestions" id="header-search-suggestions"></ul>
+        </div>
+        <div class="header-search-results__col header-search-results__col--products">
+          <p class="header-search-results__heading">Products</p>
+          <div class="header-search-products" id="header-search-products"></div>
+        </div>
+      </div>
+      <div class="header-search-results__footer">
+        <a class="header-search-results__view-all" id="header-search-view-all" href="{{ routes.search_url }}">
+          SEARCH FOR ""
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <div class="site-header-spacer" id="site-header-spacer"></div>
 
 {% stylesheet %}
@@ -718,6 +769,263 @@
     line-height: 1;
   }
 
+  /* ── Search overlay ── */
+  .header-search-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .header-search-overlay.is-open {
+    pointer-events: auto;
+    opacity: 1;
+  }
+
+  .header-search-overlay__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+  }
+
+  .header-search-overlay__panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #f2f2f0;
+    transform: translateY(-6px);
+    transition: transform 0.2s ease;
+    max-height: 100vh;
+    overflow-y: auto;
+    z-index: 401;
+  }
+
+  .header-search-overlay.is-open .header-search-overlay__panel {
+    transform: translateY(0);
+  }
+
+  /* Input bar — note: top padding is set by JS to clear the fixed header */
+  .header-search-overlay__bar {
+    padding: 4rem 1.5rem;
+    border-bottom: 1px solid #e0dfd9;
+  }
+
+  .header-search-overlay__form-wrap {
+    display: flex;
+    align-items: center;
+    max-width: var(--page-width, 1400px);
+    margin: 0 auto;
+    background: #e8e8e6;
+    border-radius: 6px;
+    padding: 0 1rem;
+    height: 52px;
+    gap: 0.5rem;
+  }
+
+  .header-search-overlay__icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: #666;
+  }
+
+  .header-search-overlay__input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0 0.5rem;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 1rem;
+    color: #2e1f1f;
+    height: 100%;
+    min-width: 0;
+  }
+
+  .header-search-overlay__input::placeholder { color: #999; }
+
+  .header-search-overlay__clear {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.85rem;
+    padding: 0 0.5rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: color 0.15s;
+  }
+
+  .header-search-overlay__clear:hover { color: #2e1f1f; }
+
+  /* Results panel */
+  .header-search-results {
+    padding: 1.5rem 1.5rem 0;
+  }
+
+  .header-search-results__inner {
+    display: flex;
+    gap: 2rem;
+    max-width: var(--page-width, 1400px);
+    margin: 0 auto;
+    padding-bottom: 1.5rem;
+  }
+
+  .header-search-results__col--suggestions {
+    flex: 0 0 200px;
+    border-right: 1px solid #e0dfd9;
+    padding-right: 2rem;
+  }
+
+  .header-search-results__col--products {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .header-search-results__heading {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #999;
+    margin: 0 0 1rem;
+  }
+
+  /* Suggestions list */
+  .header-search-suggestions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .header-search-suggestions li a {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.9rem;
+    color: #42464b;
+    text-decoration: none;
+    display: block;
+  }
+
+  .header-search-suggestions li a:hover { color: var(--color-primary, #2e1f1f); }
+
+  .header-search-suggestions li a strong {
+    font-weight: 700;
+  }
+
+  /* Products grid — 2 columns */
+  .header-search-products {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 2rem;
+  }
+
+  .header-search-product {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .header-search-product__img {
+    width: 72px;
+    height: 88px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border-radius: 2px;
+    background: #e8e8e6;
+  }
+
+  .header-search-product__img--placeholder {
+    width: 72px;
+    height: 88px;
+    flex-shrink: 0;
+    background: #e8e8e6;
+    border-radius: 2px;
+  }
+
+  .header-search-product__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding-top: 0.2rem;
+  }
+
+  .header-search-product__vendor {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #999;
+  }
+
+  .header-search-product__title {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.875rem;
+    color: #2e1f1f;
+    line-height: 1.35;
+  }
+
+  .header-search-product__price {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.875rem;
+    color: #2e1f1f;
+    font-weight: 500;
+    margin-top: 0.1rem;
+  }
+
+  .header-search-product:hover .header-search-product__title {
+    text-decoration: underline;
+  }
+
+  /* Footer CTA */
+  .header-search-results__footer {
+    border-top: 1px solid #e0dfd9;
+    padding: 1.25rem 1.5rem;
+    max-width: var(--page-width, 1400px);
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .header-search-results__view-all {
+    display: inline-block;
+    padding: 0.85rem 2.5rem;
+    background: #2e1f1f;
+    color: #fff;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .header-search-results__view-all:hover { background: #5a3a2a; }
+
+  .header-search-results__empty {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.9rem;
+    color: #999;
+    padding: 1rem 0;
+  }
+
+  @media screen and (max-width: 768px) {
+    .header-search-results__col--suggestions { display: none; }
+    .header-search-products { grid-template-columns: 1fr; }
+    .header-search-overlay__bar { padding: 1rem; }
+  }
+
   /* ── Compact nav for mid-range widths ── */
   @media screen and (max-width: 1380px) {
     .header-nav__list { gap: 0; }
@@ -859,6 +1167,153 @@
         var expanded = this.getAttribute('aria-expanded') === 'true';
         this.setAttribute('aria-expanded', expanded ? 'false' : 'true');
       });
+    });
+
+    /* ── Search overlay ── */
+    var searchOverlay  = document.getElementById('header-search-overlay');
+    var searchInput    = document.getElementById('header-search-input');
+    var searchClear    = document.getElementById('header-search-clear');
+    var searchBackdrop = document.getElementById('header-search-backdrop');
+    var searchBtn      = document.querySelector('.header-icon-btn--search');
+    var searchResults  = document.getElementById('header-search-results');
+    var suggestionsEl  = document.getElementById('header-search-suggestions');
+    var productsEl     = document.getElementById('header-search-products');
+    var viewAllEl      = document.getElementById('header-search-view-all');
+    var predictiveTimer = null;
+
+    function positionPanel() {
+      /* no-op: panel is fixed at top:0 via CSS */
+    }
+
+    function openSearch() {
+      if (!searchOverlay) return;
+      positionPanel();
+      searchOverlay.classList.add('is-open');
+      searchOverlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      if (searchInput) { setTimeout(function() { searchInput.focus(); }, 50); }
+    }
+
+    function closeSearch() {
+      if (!searchOverlay) return;
+      searchOverlay.classList.remove('is-open');
+      searchOverlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (searchInput) searchInput.value = '';
+      if (searchResults) searchResults.style.display = 'none';
+    }
+
+    /* Predictive search using Shopify /search/suggest.json */
+    function renderSuggestions(queries, term) {
+      if (!suggestionsEl) return;
+      suggestionsEl.innerHTML = '';
+      queries.slice(0, 6).forEach(function(q) {
+        var li = document.createElement('li');
+        var a  = document.createElement('a');
+        a.href = '/search?type=product&q=' + encodeURIComponent(q.text);
+        /* bold the part that matches the typed term */
+        var label = q.text;
+        var idx = label.toLowerCase().indexOf(term.toLowerCase());
+        if (idx > -1) {
+          var before = label.slice(0, idx);
+          var match  = label.slice(idx, idx + term.length);
+          var after  = label.slice(idx + term.length);
+          a.innerHTML = (before ? escHtml(before) : '') +
+                        '<strong>' + escHtml(match) + '</strong>' +
+                        escHtml(after);
+        } else {
+          a.textContent = label;
+        }
+        li.appendChild(a);
+        suggestionsEl.appendChild(li);
+      });
+    }
+
+    function renderProducts(products) {
+      if (!productsEl) return;
+      productsEl.innerHTML = '';
+      if (products.length === 0) {
+        productsEl.innerHTML = '<p class="header-search-results__empty">No products found.</p>';
+        return;
+      }
+      products.slice(0, 4).forEach(function(p) {
+        var a = document.createElement('a');
+        a.className = 'header-search-product';
+        a.href = p.url;
+        var imgHtml = p.featured_image && p.featured_image.url
+          ? '<img class="header-search-product__img" src="' + p.featured_image.url + '&width=144" alt="' + escHtml(p.title) + '" width="72" height="88" loading="lazy">'
+          : '<div class="header-search-product__img--placeholder"></div>';
+        var price = p.price_min ? formatMoney(p.price_min) : '';
+        a.innerHTML = imgHtml +
+          '<div class="header-search-product__info">' +
+            (p.vendor ? '<span class="header-search-product__vendor">' + escHtml(p.vendor) + '</span>' : '') +
+            '<span class="header-search-product__title">' + escHtml(p.title) + '</span>' +
+            (price ? '<span class="header-search-product__price">From ' + price + '</span>' : '') +
+          '</div>';
+        productsEl.appendChild(a);
+      });
+    }
+
+    function formatMoney(cents) {
+      var amount = (cents / 100).toFixed(2);
+      return (window.Shopify && window.Shopify.currency && window.Shopify.currency.active === 'INR' ? '₹' : 'Rs. ') + parseFloat(amount).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+    }
+
+    function escHtml(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function runPredictive(term) {
+      if (!term || term.length < 2) {
+        if (searchResults) searchResults.style.display = 'none';
+        return;
+      }
+      var url = '/search/suggest.json?q=' + encodeURIComponent(term) +
+                '&resources[type]=product,query&resources[limit]=6' +
+                '&resources[options][unavailable_products]=last' +
+                '&resources[options][fields]=title,product_type,variants.title,vendor';
+      fetch(url)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var res        = data.resources && data.resources.results;
+          var products   = (res && res.products)   || [];
+          var queries    = (res && res.queries)     || [];
+          renderSuggestions(queries, term);
+          renderProducts(products);
+          if (viewAllEl) {
+            viewAllEl.textContent = 'SEARCH FOR "' + term.toUpperCase() + '"';
+            viewAllEl.href = '/search?type=product&q=' + encodeURIComponent(term);
+          }
+          if (searchResults) searchResults.style.display = 'block';
+        })
+        .catch(function() {});
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', function() {
+        var val = this.value.trim();
+        /* clear button always visible — no toggle needed */
+        clearTimeout(predictiveTimer);
+        predictiveTimer = setTimeout(function() { runPredictive(val); }, 220);
+      });
+    }
+
+    if (searchClear) {
+      searchClear.addEventListener('click', function() {
+        if (searchInput) { searchInput.value = ''; searchInput.focus(); }
+        if (searchResults) searchResults.style.display = 'none';
+      });
+    }
+
+    if (searchBtn)      searchBtn.addEventListener('click', openSearch);
+    if (searchBackdrop) searchBackdrop.addEventListener('click', closeSearch);
+
+    window.addEventListener('resize', positionPanel);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && searchOverlay && searchOverlay.classList.contains('is-open')) {
+        closeSearch();
+      }
     });
   })();
 {% endjavascript %}

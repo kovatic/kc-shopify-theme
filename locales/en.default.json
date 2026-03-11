@@ -17,7 +17,8 @@
     "wishlist_label": "Wishlist",
     "cart_label": "Cart",
     "menu_label": "Menu",
-    "close_menu_label": "Close menu"
+    "close_menu_label": "Close menu",
+    "close_search_label": "Close search"
   },
   "404": {
     "title": "404",
@@ -64,7 +65,7 @@
   },
   "search": {
     "title": "Search",
-    "placeholder": "Search articles, pages, or products",
+    "placeholder": "Search",
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
