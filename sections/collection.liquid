@@ -603,7 +603,7 @@
   .product-list__image-wrapper {
     position: relative;
     overflow: hidden;
-    aspect-ratio: 2 / 3;
+    aspect-ratio: 3 / 5;
     background-color: #e8e0d5;
   }
 
@@ -782,6 +782,7 @@
 
   /* ── Mobile ── */
   @media screen and (max-width: 768px) {
+    .collection-page { overflow-x: hidden; }
     .collection-page__container { padding: 0 1rem; }
 
     .collection-page__layout {
@@ -796,6 +797,8 @@
       grid-template-columns: repeat(2, 1fr);
       column-gap: 0.5rem;
       row-gap: 1.5rem;
+      margin: 0 -1rem;
+      width: calc(100% + 2rem);
     }
 
     .product-list__image-wrapper { aspect-ratio: 3 / 5; }
@@ -809,7 +812,7 @@
     }
 
     .product-list__price { font-size: 1rem; }
-    .product-list__info { gap: 0.25rem; padding-top: 0.5rem; }
+    .product-list__info { gap: 0.25rem; padding: 0.5rem 0.75rem 0; }
 
     .product-card-wishlist {
       opacity: 1;

@@ -5,9 +5,16 @@
   <div class="tab-product-list__container">
 
     {% comment %} Section heading {% endcomment %}
-    {% if section.settings.title != blank %}
-      <h2 class="tab-product-list__title">{{ section.settings.title | escape }}</h2>
-    {% endif %}
+    <div class="tab-product-list__header">
+      <div class="tab-product-list__divider" aria-hidden="true">
+        <span class="tab-product-list__divider-line"></span>
+        <span class="tab-product-list__divider-diamond">✦</span>
+        <span class="tab-product-list__divider-line"></span>
+      </div>
+      {% if section.settings.title != blank %}
+        <h2 class="tab-product-list__title">{{ section.settings.title | escape }}</h2>
+      {% endif %}
+    </div>
 
     {% if section.blocks.size > 0 %}
       {% comment %} Tab bar {% endcomment %}
@@ -137,13 +144,40 @@
     flex-direction: column;
     gap: 0;
   }
+  .tab-product-list__header {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .tab-product-list__divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .tab-product-list__divider-line {
+    display: block;
+    width: 7.5rem;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #c69239 50%, transparent);
+  }
+
+  .tab-product-list__divider-diamond {
+    color: #c69239;
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
   .tab-product-list__title {
-    font-family: var(--font-heading--family, 'Playfair Display', serif);
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
     font-size: 3rem;
     font-weight: 700;
     color: #2e1f1f;
-    margin: 0 0 32px;
-    line-height: 1.1;
+    margin-bottom: 1rem;
+    line-height: 1;
   }
 
   /* ── Tabs ── */
@@ -220,7 +254,7 @@
   /* ── Product image ── */
   .tab-product-list__img-wrap {
     position: relative;
-    aspect-ratio: 2 / 3;
+    aspect-ratio: 3 / 5;
     overflow: hidden;
     background-color: #e8e0d5;
   }
@@ -428,13 +462,19 @@
 
   /* ── Mobile ── */
   @media screen and (max-width: 768px) {
+    .tab-product-list {
+      overflow-x: hidden;
+    }
     .tab-product-list__container {
       padding: 0 16px;
     }
     .tab-product-list__title {
       font-size: 1.875rem;
       font-weight: 600;
-      margin-bottom: 20px;
+    }
+
+    .tab-product-list__divider-line {
+      width: 4rem;
     }
     .tab-product-list__tabs {
       gap: 16px;
@@ -453,6 +493,7 @@
       grid-template-columns: repeat(2, 1fr);
       column-gap: 0.5rem;
       row-gap: 1.5rem;
+      margin: 0 -16px;
     }
 
     .tab-product-list__img-wrap {
@@ -470,7 +511,7 @@
     }
     .tab-product-list__info {
       gap: 0.25rem;
-      padding-top: 0.5rem;
+      padding: 0.5rem 0.75rem 0;
     }
     .tab-product-list__wishlist {
       width: 2rem;
