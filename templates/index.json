@@ -311,9 +311,9 @@
             "image": "shopify://shop_images/image_37.png",
             "store_type": "Flagship Store",
             "store_name": "Eval",
-            "address": "Main Road, Eral, Thoothukudi District",
-            "phone": "9876543210",
-            "map_url": ""
+            "address": "Bus Stand, Eral, Tamil Nadu 628801",
+            "phone": "‭04630-271254‬",
+            "map_url": "https://maps.app.goo.gl/qEgSzdP9FnBhAzvr8"
           }
         },
         "store_dpm8Kk": {
@@ -359,7 +359,7 @@
       "name": "t:sections.stores.name",
       "settings": {
         "title": "Visit Our Stores",
-        "subtitle": "4 locations across Tamil Nadu & Chennai",
+        "subtitle": "5 locations across Tamil Nadu & Chennai",
         "padding_top": 32,
         "padding_bottom": 32
       }
