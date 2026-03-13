@@ -194,41 +194,42 @@
   .stores__divider {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 4px;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
   }
 
   .stores__divider-line {
     display: block;
-    width: 120px;
+    width: 7.5rem;
     height: 1px;
-    background: linear-gradient(90deg, rgba(198,146,57,0) 0%, #c69239 50%, rgba(198,146,57,0) 100%);
+    background: linear-gradient(to right, transparent, #c69239 50%, transparent);
   }
 
   .stores__divider-diamond {
     color: #c69239;
-    font-size: 18px;
+    font-size: 1.1rem;
     line-height: 1;
   }
 
   .stores__title {
     font-family: var(--font-heading-family, 'Playfair Display', serif);
-    font-size: 48px;
+    font-size: 3rem;
     font-weight: 700;
     color: #2e1f1f;
     text-align: center;
-    margin: 0;
+    margin: 0 0 1rem;
     line-height: 1;
   }
 
   .stores__subtitle {
     font-family: var(--font-body-family, 'Montserrat', sans-serif);
-    font-size: 18px;
+    font-size: 1.125rem;
     font-weight: 400;
     color: #7e6767;
     text-align: center;
     margin: 0;
-    line-height: 1.55;
+    line-height: 1.6;
   }
 
   /* Panels row */
@@ -611,25 +612,33 @@
     }
 
     .stores__header {
-      align-items: flex-start;
+      align-items: center;
       gap: 4px;
     }
 
     .stores__divider {
-      display: none;
+      display: flex;
+      margin-bottom: 0.75rem;
+    }
+
+    .stores__divider-line {
+      width: 2rem;
+    }
+
+    .stores__divider-diamond {
+      font-size: 0.7rem;
     }
 
     .stores__title {
-      font-size: 24px;
-      line-height: 36px;
-      text-align: left;
+      font-size: 1.875rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 0.5rem;
     }
 
     .stores__subtitle {
-      font-size: 14px;
-      color: #7e6767;
-      text-align: left;
-      line-height: 28px;
+      font-size: 0.875rem;
+      text-align: center;
     }
 
     /* Hide desktop accordion on mobile */
