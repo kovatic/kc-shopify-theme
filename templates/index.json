@@ -331,11 +331,11 @@
           "type": "store",
           "settings": {
             "image": "shopify://shop_images/image_37.png",
-            "store_type": "Flagship Store",
+            "store_type": "",
             "store_name": "Thoothukudi",
-            "address": "Main Road, Eral, Thoothukudi District",
-            "phone": "9876543210",
-            "map_url": ""
+            "address": "Toovipuram Main Rd, Toovipuram, Thoothukudi, Tamil Nadu 628001",
+            "phone": "‭0461-2111111‬",
+            "map_url": "https://maps.app.goo.gl/kzKhviCJuuxGHn4p6"
           }
         },
         "store_VPNbQQ": {
