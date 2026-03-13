@@ -309,7 +309,7 @@
           "type": "store",
           "settings": {
             "image": "shopify://shop_images/image_37.png",
-            "store_type": "Flagship Store",
+            "store_type": "",
             "store_name": "Eval",
             "address": "Bus Stand, Eral, Tamil Nadu 628801",
             "phone": "‭04630-271254‬",
@@ -320,11 +320,11 @@
           "type": "store",
           "settings": {
             "image": "shopify://shop_images/image_37.png",
-            "store_type": "Flagship Store",
-            "store_name": "Tiruchendur",
-            "address": "Main Road, Eral, Thoothukudi District",
-            "phone": "9876543210",
-            "map_url": ""
+            "store_type": "",
+            "store_name": "Thiruchendur",
+            "address": "130, 1, N Car St, Thiruchendur, Tamil Nadu 628215",
+            "phone": "‭04639-242777‬",
+            "map_url": "https://maps.app.goo.gl/2LA2iyVKWKLn7vHs7"
           }
         },
         "store_CRtjn9": {
