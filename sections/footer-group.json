@@ -14,7 +14,22 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "",
+        "logo": "shopify://shop_images/KC_Logo_1_fc729608-ffe0-4100-986e-48624fe4f316.png",
+        "brand_name": "K.Chinadurai&CO",
+        "address": "Velachery Main Rd, Kamarajapuram, Palaniappa Nagar, Sembakkam, Chennai, Tamil Nadu 600073",
+        "mobile_description": "Exquisite silk sarees crafted with tradition and elegance since generations. We bring the finest handloom sarees from across India.",
+        "quick_links_menu": "footer",
+        "policies_menu": "policy",
+        "facebook_url": "https://www.facebook.com/KCHINNADURAIANDCO/",
+        "youtube_url": "https://www.youtube.com/@k.chinnadurai_co",
+        "instagram_url": "https://www.instagram.com/k.chinnadurai_co/",
+        "whatsapp_url": "",
+        "pinterest_url": "",
+        "twitter_url": "",
+        "location_1_label": "",
+        "location_1_url": "",
+        "location_2_label": "",
+        "location_2_url": "",
         "show_payment_icons": true
       }
     }
