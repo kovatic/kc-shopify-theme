@@ -27,6 +27,7 @@
     "footer": "Footer",
     "group": "Group",
     "header": "Header",
+    "image": "Image",
     "mega_menu": "Mega menu",
     "headings": "Headings",
     "body": "Body",
@@ -182,6 +183,23 @@
       "data_source_single": "Single collection (products)",
       "data_source_multiple": "Multiple collections",
       "products_count": "Number of products"
+    },
+    "privacy_policy": {
+      "name": "Privacy policy"
+    },
+    "terms_and_conditions": {
+      "name": "Terms and conditions"
+    },
+    "faq": {
+      "name": "FAQ",
+      "show_page_content": "Show page intro content",
+      "blocks": {
+        "faq_item": {
+          "name": "FAQ item",
+          "question": "Question",
+          "answer": "Answer"
+        }
+      }
     }
   },
   "blocks": {

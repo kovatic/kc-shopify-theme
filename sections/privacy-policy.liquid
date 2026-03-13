@@ -1,0 +1,75 @@
+<div
+  class="policy-page"
+  style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="policy-page__inner">
+    <h1 class="policy-page__title">{{ page.title }}</h1>
+    <div class="policy-page__content rte">
+      {{ page.content }}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .policy-page {
+    padding-top: var(--padding-top);
+    padding-bottom: var(--padding-bottom);
+  }
+
+  .policy-page__inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .policy-page__title {
+    margin-bottom: 2rem;
+  }
+
+  .policy-page__content {
+    line-height: 1.8;
+  }
+
+  .policy-page__content h2 {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .policy-page__content p {
+    margin-bottom: 1rem;
+  }
+
+  .policy-page__content ul,
+  .policy-page__content ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.privacy_policy.name",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,39 @@
+{
+  "sections": {
+    "main": {
+      "type": "faq",
+      "settings": {
+        "show_page_content": false,
+        "padding_top": 40,
+        "padding_bottom": 40
+      },
+      "blocks": {
+        "faq_item_1": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We accept returns within 30 days of purchase.</p>"
+          }
+        },
+        "faq_item_2": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "<p>Standard shipping takes 5–7 business days.</p>"
+          }
+        },
+        "faq_item_3": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How do I contact support?",
+            "answer": "<p>You can reach us via the contact form on our website.</p>"
+          }
+        }
+      },
+      "block_order": ["faq_item_1", "faq_item_2", "faq_item_3"]
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

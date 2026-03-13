@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "terms-and-conditions",
+      "settings": {
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

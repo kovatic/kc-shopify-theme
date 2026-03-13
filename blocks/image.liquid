@@ -1,0 +1,79 @@
+{% doc %}
+  Renders an image block with optional link and alt text.
+
+  @example
+  {% content_for 'block', type: 'image', id: 'image' %}
+{% enddoc %}
+
+<div
+  class="image-block"
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.image -%}
+    {%- if block.settings.url != blank -%}
+      <a href="{{ block.settings.url }}" class="image-block__link">
+    {%- endif -%}
+
+    {{
+      block.settings.image
+      | image_url: width: 2000
+      | image_tag:
+        alt: block.settings.image.alt,
+        class: 'image-block__img',
+        loading: 'lazy'
+    }}
+
+    {%- if block.settings.url != blank -%}
+      </a>
+    {%- endif -%}
+  {%- else -%}
+    {{ 'image' | placeholder_svg_tag: 'image-block__placeholder' }}
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .image-block {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .image-block__link {
+    display: block;
+  }
+
+  .image-block__img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .image-block__placeholder {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.image",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "t:labels.url"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.image"
+    }
+  ]
+}
+{% endschema %}
