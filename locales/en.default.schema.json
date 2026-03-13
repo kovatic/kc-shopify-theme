@@ -212,7 +212,8 @@
     },
     "page_width": {
       "narrow": "Narrow",
-      "wide": "Wide"
+      "wide": "Wide",
+      "full": "Full (1900px)"
     },
     "size": {
       "large": "Large",
