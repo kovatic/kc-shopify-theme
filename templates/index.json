@@ -107,7 +107,7 @@
       "settings": {
         "title": "Featured Products",
         "subtitle": "Discover what's new this season.",
-        "collection": "budget-silks",
+        "collection": "saree",
         "layout_type_desktop": "wrap",
         "layout_type_mobile": "wrap",
         "products_count": 4,
@@ -123,14 +123,14 @@
           "type": "tab",
           "settings": {
             "tab_label": "Festive",
-            "collection": "budget-silks"
+            "collection": "saree"
           }
         },
         "tab_BGtcPL": {
           "type": "tab",
           "settings": {
             "tab_label": "Wedding",
-            "collection": "kanchipuram-checks"
+            "collection": "budget-silks"
           }
         },
         "tab_r7nxTJ": {
