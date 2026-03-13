@@ -143,7 +143,13 @@
     "social_instagram": "Instagram",
     "social_whatsapp": "WhatsApp",
     "social_pinterest": "Pinterest",
-    "social_twitter": "X (Twitter)"
+    "social_twitter": "X (Twitter)",
+    "trust": {
+      "free_shipping": "Free shipping on orders above ₹ 2000",
+      "easy_returns": "Easy returns within 7 days",
+      "customer_support": "Customer support",
+      "secure_payments": "100% secure payments"
+    }
   },
   "blocks": {
     "category_item": {
