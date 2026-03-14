@@ -12,23 +12,9 @@
     "main": {
       "type": "product",
       "settings": {}
-    },
-    "177347143890fc26ff": {
-      "type": "apps",
-      "blocks": {
-        "xb_wishlist_button_wishlist_qYBVCn": {
-          "type": "shopify://apps/xb-wishlist/blocks/button_wishlist/cc07f1e9-907b-431d-99f8-4fce3efa75f1",
-          "settings": {}
-        }
-      },
-      "block_order": [
-        "xb_wishlist_button_wishlist_qYBVCn"
-      ],
-      "settings": {}
     }
   },
   "order": [
-    "main",
-    "177347143890fc26ff"
+    "main"
   ]
 }
