@@ -214,8 +214,8 @@
         "button_label": "Shop Now",
         "button_url": "",
         "image": "shopify://shop_images/image_87.png",
-        "padding_top": 80,
-        "padding_bottom": 80
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     },
     "brand_marquee_aQFqpK": {
@@ -237,8 +237,8 @@
           "brand-64i8vubd",
           "brand-hzbqitsw"
         ],
-        "padding_top": 80,
-        "padding_bottom": 80
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     },
     "product_carousel_zpTxYK": {
