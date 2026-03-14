@@ -22,7 +22,12 @@
         {%- for product in section.settings.collection.products limit: section.settings.products_count -%}
           {%- assign first_variant = product.first_available_variant | default: product.variants.first -%}
           {%- assign is_available = product.available -%}
-          <div class="product-list__item{% unless is_available %} is-sold-out{% endunless %}" data-variant-id="{{ first_variant.id }}" data-available="{{ is_available }}">
+          <div class="product-list__item{% unless is_available %} is-sold-out{% endunless %}" data-variant-id="{{ first_variant.id }}" data-available="{{ is_available }}" data-product-id="{{ product.id }}">
+            <button class="product-card-wishlist xb-wishlist" type="button" data-product-id="{{ product.id }}" aria-label="{{ 'sections.product_list.add_to_wishlist_generic' | t }}">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
             <a class="product-list__item-link" href="{{ product.url }}">
               <div class="product-list__image-wrapper">
                 {%- if product.featured_image != blank -%}
@@ -30,12 +35,6 @@
                 {%- else -%}
                   {{ 'product-1' | placeholder_svg_tag: 'product-list__image product-list__image--placeholder' }}
                 {%- endif -%}
-
-                <button class="product-card-wishlist" type="button" aria-label="{{ 'sections.product_list.add_to_wishlist_generic' | t }}">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
                 <div class="product-card-actions">
                   <div class="product-card-actions__cart-wrap">
                     {%- if is_available -%}
@@ -253,6 +252,10 @@
     flex-shrink: 0;
   }
 
+  .product-list__item {
+    position: relative;
+  }
+
   .product-list__item-link {
     display: block;
     text-decoration: none;
@@ -290,6 +293,7 @@
     position: absolute;
     top: 0.75rem;
     right: 0.75rem;
+    z-index: 2;
     width: 2.875rem;
     height: 2.875rem;
     border-radius: 50%;
@@ -311,7 +315,7 @@
     height: 20px;
   }
 
-  .product-list__item-link:hover .product-card-wishlist {
+  .product-list__item:hover .product-card-wishlist {
     opacity: 1;
     transform: translateY(0);
   }
