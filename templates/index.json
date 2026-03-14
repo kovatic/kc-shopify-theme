@@ -223,20 +223,7 @@
       "name": "t:sections.brand_marquee.name",
       "settings": {
         "heading": "Other Popular Brands Available",
-        "brands": [
-          "brand-llujyxsj",
-          "brand-qqtptoii",
-          "brand-mi5mbprr",
-          "brand-iwdc0k1j",
-          "brand-4ea2evha",
-          "brand-wgs0p9ag",
-          "brand-ug5bltqh",
-          "brand-kl7cedxc",
-          "brand-vcgji6lq",
-          "brand-2cfgsd8d",
-          "brand-64i8vubd",
-          "brand-hzbqitsw"
-        ],
+        "brands": [],
         "padding_top": 60,
         "padding_bottom": 60
       }
