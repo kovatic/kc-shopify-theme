@@ -134,12 +134,7 @@
             {% for product in collection.products %}
               {%- assign first_variant = product.first_available_variant | default: product.variants.first -%}
               {%- assign is_available = product.available -%}
-              <div class="product-list__item{% unless is_available %} is-sold-out{% endunless %}" data-variant-id="{{ first_variant.id }}" data-available="{{ is_available }}" data-product-id="{{ product.id }}">
-                <button class="product-card-wishlist xb-wishlist" type="button" data-product-id="{{ product.id }}" aria-label="Add to wishlist">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
+              <div class="product-list__item{% unless is_available %} is-sold-out{% endunless %}" data-variant-id="{{ first_variant.id }}" data-available="{{ is_available }}">
                 <a class="product-list__item-link" href="{{ product.url }}">
                   <div class="product-list__image-wrapper">
                     {%- if product.featured_image != blank -%}
@@ -197,6 +192,7 @@
                     <span class="product-list__price">{{ product.price | money }}</span>
                   </div>
                 </a>
+                <xb-wishlist-button-collection xb-handle="{{ product.handle }}" xb-parent-class="product-list__item"></xb-wishlist-button-collection>
               </div>
             {% endfor %}
           </div>
@@ -620,31 +616,6 @@
 
   .product-list__item-link:hover .product-list__image { transform: scale(1.04); }
 
-  /* Wishlist */
-  .product-card-wishlist {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    z-index: 2;
-    width: 2.875rem;
-    height: 2.875rem;
-    border-radius: 50%;
-    background: #fff;
-    border: none;
-    cursor: pointer;
-    color: #2e1f1f;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
-    opacity: 0;
-    transform: translateY(-6px);
-    transition: opacity 0.2s ease, transform 0.2s ease, background 0.15s ease, color 0.15s ease;
-  }
-
-  .product-card-wishlist svg { width: 20px; height: 20px; }
-  .product-list__item:hover .product-card-wishlist { opacity: 1; transform: translateY(0); }
-  .product-card-wishlist:hover { background: #e50e7e; color: #fff; }
 
   /* Action buttons */
   .product-card-actions {
@@ -815,16 +786,6 @@
     .product-list__price { font-size: 1rem; }
     .product-list__info { gap: 0.25rem; padding: 0.5rem 0.75rem 0; }
 
-    .product-card-wishlist {
-      opacity: 1;
-      transform: translateY(0);
-      width: 2rem;
-      height: 2rem;
-      top: 0.5rem;
-      right: 0.5rem;
-    }
-
-    .product-card-wishlist svg { width: 15px; height: 15px; }
     .product-card-actions { display: none; }
 
     .product-card-mobile-bar {
