@@ -21,10 +21,7 @@
         <div class="category-item">
           <a class="category-item__link" href="{{ collection.url }}">
             <div class="category-item__frame">
-              <svg class="category-item__ornament" viewBox="0 0 138 138" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <circle cx="69" cy="69" r="65" fill="none" stroke="#2e1f1f" stroke-width="1" stroke-dasharray="4 3" opacity="0.6"/>
-                <circle cx="69" cy="69" r="60" fill="none" stroke="#2e1f1f" stroke-width="0.5" opacity="0.3"/>
-              </svg>
+              <img class="category-item__ornament" src="{{ 'category-frame.png' | asset_url }}" alt="" aria-hidden="true" loading="lazy">
               <div class="category-item__image-wrapper">
                 {%- if collection.featured_image != blank -%}
                   {{ collection.featured_image | image_url: width: 300, height: 300, crop: 'center' | image_tag: class: 'category-item__image', loading: 'lazy', alt: collection.title | escape }}
@@ -147,11 +144,12 @@
     height: 100%;
     pointer-events: none;
     z-index: 1;
+    object-fit: contain;
   }
 
   .category-item__image-wrapper {
     position: absolute;
-    inset: 5px;
+    inset: 12%;
     border-radius: 50%;
     overflow: hidden;
     opacity: 0.85;
