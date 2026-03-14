@@ -223,7 +223,11 @@
       "name": "t:sections.brand_marquee.name",
       "settings": {
         "heading": "Other Popular Brands Available",
-        "brands": [],
+        "brands": [
+          "brand-t2a4js5x",
+          "brand-nefldi5f",
+          "brand-csm5fkhp"
+        ],
         "padding_top": 60,
         "padding_bottom": 60
       }
