@@ -18,6 +18,15 @@
     "foreground_color": "#2e1f1f",
     "secondary_text_color": "#7e6767",
     "primary_text_color": "#2e1f1f",
-    "content_for_index": []
+    "content_for_index": [],
+    "blocks": {
+      "12342438634123318931": {
+        "type": "shopify://apps/xb-wishlist/blocks/xo-wishlist/cc07f1e9-907b-431d-99f8-4fce3efa75f1",
+        "disabled": false,
+        "settings": {
+          "selector_collection": ""
+        }
+      }
+    }
   }
 }
