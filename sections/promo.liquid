@@ -12,7 +12,7 @@
     {%- comment -%} Left: text content {%- endcomment -%}
     <div class="promo__content">
       {%- if section.settings.heading != blank -%}
-        <h2 class="promo__heading">{{ section.settings.heading | escape }}</h2>
+        <h2 class="promo__heading section-title">{{ section.settings.heading | escape }}</h2>
       {%- endif -%}
 
       {%- if section.settings.description != blank -%}

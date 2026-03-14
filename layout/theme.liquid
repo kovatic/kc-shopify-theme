@@ -8,22 +8,21 @@
     {% style %}
       {{ settings.headings_font | font_face: font_display: 'swap' }}
       {{ settings.body_font | font_face: font_display: 'swap' }}
-      h1, h2, h3 { 
-        font-family: {{ settings.headings_font.family }}; 
-        font-weight: {{ settings.headings_font.weight }}; 
-        color: {{ settings.primary_text_color }};
-        font-style: {{ settings.headings_font.style }}; 
+      body, h1, h2, h3, h4, h5, h6, p {
+        font-family: {{ settings.body_font.family }};
+        font-weight: {{ settings.body_font.weight }};
+        font-style: {{ settings.body_font.style }};
       }
-      body { 
-        font-family: {{ settings.body_font.family }}; 
-        font-weight: {{ settings.body_font.weight }}; 
-        font-style: {{ settings.body_font.style }}; 
-      }
-      p { 
-        font-family: {{ settings.body_font.family }}; 
-        font-weight: {{ settings.body_font.weight }}; 
+      p {
         color: {{ settings.secondary_text_color }};
-        font-style: {{ settings.body_font.style }}; 
+      }
+      h1, h2, h3, h4, h5, h6 {
+        color: {{ settings.primary_text_color }};
+      }
+      .section-title {
+        font-family: {{ settings.headings_font.family }};
+        font-weight: {{ settings.headings_font.weight }};
+        font-style: {{ settings.headings_font.style }};
       }
     {% endstyle %}
 
