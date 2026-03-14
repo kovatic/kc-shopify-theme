@@ -52,7 +52,7 @@
               {% for product in col.products limit: product_limit %}
                 {%- assign first_variant = product.first_available_variant | default: product.variants.first -%}
                 {%- assign is_available = product.available -%}
-                <li class="tab-product-list__item{% unless is_available %} is-sold-out{% endunless %}" data-variant-id="{{ first_variant.id }}" data-available="{{ is_available }}">
+                <li class="tab-product-list__item{% unless is_available %} is-sold-out{% endunless %}" data-variant-id="{{ first_variant.id }}" data-available="{{ is_available }}" style="position: relative;">
                   <a href="{{ product.url }}" class="tab-product-list__card">
                     <div class="tab-product-list__img-wrap">
                       {% if product.featured_image %}
@@ -61,11 +61,7 @@
                       {% else %}
                         {{ 'product-1' | placeholder_svg_tag: 'tab-product-list__img tab-product-list__img--placeholder' }}
                       {% endif %}
-                      <button class="product-card-wishlist" type="button" aria-label="{{ 'sections.tab_product_list.wishlist_label' | t }}">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                      </button>
+                      <xb-wishlist-button-collection xb-handle="{{ product.handle }}" xb-parent-class="tab-product-list__item"></xb-wishlist-button-collection>
                       <div class="product-card-actions">
                         <div class="product-card-actions__cart-wrap">
                           {%- if is_available -%}
@@ -274,38 +270,6 @@
     display: block;
   }
 
-  /* ── Wishlist — top right, fades in on hover ── */
-  .product-card-wishlist {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    width: 2.875rem;
-    height: 2.875rem;
-    border-radius: 50%;
-    background: #fff;
-    border: none;
-    cursor: pointer;
-    color: #2e1f1f;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
-    opacity: 0;
-    transform: translateY(-6px);
-    transition: opacity 0.2s ease, transform 0.2s ease, background 0.15s ease, color 0.15s ease;
-  }
-
-  .product-card-wishlist svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .tab-product-list__card:hover .product-card-wishlist {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .product-card-wishlist:hover { background: #e50e7e; color: #fff; }
 
   /* ── Bottom row — add to cart + view similar ── */
   .product-card-actions {
@@ -518,21 +482,6 @@
       height: 2rem;
       bottom: 0.75rem;
       right: 0.5rem;
-    }
-
-    /* Wishlist always visible on mobile, smaller size */
-    .product-card-wishlist {
-      opacity: 1;
-      transform: translateY(0);
-      width: 2rem;
-      height: 2rem;
-      top: 0.5rem;
-      right: 0.5rem;
-    }
-
-    .product-card-wishlist svg {
-      width: 15px;
-      height: 15px;
     }
 
     /* Hide hover overlay actions on mobile */
