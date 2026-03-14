@@ -102,10 +102,15 @@ class CartDrawer extends HTMLElement {
   }
 
   formatMoney(cents) {
-    const amount = (cents / 100).toFixed(2);
-    return window.Shopify && window.Shopify.currency
-      ? window.Shopify.currency.active + ' ' + amount
-      : '₹' + amount;
+    const format = window.shopMoneyFormat || '₹{{amount}}';
+    const value = cents / 100;
+    const amount = value.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const amountNoDecimals = Math.floor(value).toLocaleString('en-IN');
+    return format
+      .replace('{{amount}}', amount)
+      .replace('{{amount_no_decimals}}', amountNoDecimals)
+      .replace('{{amount_with_comma_separator}}', amount)
+      .replace('{{amount_no_decimals_with_comma_separator}}', amountNoDecimals);
   }
 
   escHtml(str) {

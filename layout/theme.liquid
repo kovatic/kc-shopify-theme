@@ -56,6 +56,7 @@
     {{ content_for_layout }}
 
     {% sections 'footer-group' %}
+    <script>window.shopMoneyFormat = {{ shop.money_format | json }};</script>
     <script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>
   </body>
 </html>
