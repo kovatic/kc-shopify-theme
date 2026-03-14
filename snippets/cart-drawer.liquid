@@ -34,9 +34,9 @@
                 {%- endif -%}
               </a>
               <div class="cart-drawer__item-info">
-                <a href="{{ item.url }}" class="cart-drawer__item-title">{{ item.product_title }}</a>
-                {%- unless item.variant_title == 'Default Title' -%}
-                  <p class="cart-drawer__item-variant">{{ item.variant_title }}</p>
+                <a href="{{ item.url }}" class="cart-drawer__item-title">{{ item.product.title }}</a>
+                {%- unless item.variant.title == 'Default Title' -%}
+                  <p class="cart-drawer__item-variant">{{ item.variant.title }}</p>
                 {%- endunless -%}
                 <p class="cart-drawer__item-price">{{ item.final_line_price | money }}</p>
                 <div class="cart-drawer__item-qty">
