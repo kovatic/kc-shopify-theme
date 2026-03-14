@@ -66,8 +66,8 @@
           "3-in-1"
         ],
         "background_color": "#f1eee9",
-        "padding_top": 32,
-        "padding_bottom": 20
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "product_list_hdgdex": {
@@ -81,8 +81,8 @@
         "layout_type_mobile": "scroll",
         "products_count": 4,
         "view_all_url": "shopify://collections/budget-silks",
-        "padding_top": 20,
-        "padding_bottom": 32
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     },
     "reel_7a3Lp6": {
@@ -97,8 +97,8 @@
           "pop",
           "nine-yard-collection"
         ],
-        "padding_top": 32,
-        "padding_bottom": 32
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     },
     "product_list_8L8wf6": {
@@ -112,8 +112,8 @@
         "layout_type_mobile": "wrap",
         "products_count": 4,
         "view_all_url": "shopify://collections/automated-collection",
-        "padding_top": 32,
-        "padding_bottom": 32
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     },
     "tab_product_list_PynKp9": {
@@ -190,6 +190,21 @@
       "name": "t:general.custom_section",
       "settings": {}
     },
+    "product_list_FYa6Kt": {
+      "type": "product-list",
+      "name": "t:sections.product_list.name",
+      "settings": {
+        "title": "Featured Products",
+        "subtitle": "Discover what's new this season.",
+        "collection": "saree",
+        "layout_type_desktop": "wrap",
+        "layout_type_mobile": "wrap",
+        "products_count": 4,
+        "view_all_url": "shopify://collections/automated-collection",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
     "promo_RGMMyX": {
       "type": "promo",
       "name": "t:sections.promo.name",
@@ -199,8 +214,8 @@
         "button_label": "Shop Now",
         "button_url": "",
         "image": "shopify://shop_images/image_87.png",
-        "padding_top": 40,
-        "padding_bottom": 40
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
     "brand_marquee_aQFqpK": {
@@ -222,8 +237,8 @@
           "brand-64i8vubd",
           "brand-hzbqitsw"
         ],
-        "padding_top": 32,
-        "padding_bottom": 32
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
     "product_carousel_zpTxYK": {
@@ -245,8 +260,8 @@
           "meena-copy-copy-copy-copy",
           "meena-copy"
         ],
-        "padding_top": 32,
-        "padding_bottom": 32
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     },
     "about_ANVEQm": {
@@ -372,8 +387,8 @@
       "settings": {
         "title": "Visit Our Stores",
         "subtitle": "5 locations across Tamil Nadu & Chennai",
-        "padding_top": 32,
-        "padding_bottom": 32
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     }
   },
@@ -385,6 +400,7 @@
     "product_list_8L8wf6",
     "tab_product_list_PynKp9",
     "custom_section_FLDGhd",
+    "product_list_FYa6Kt",
     "promo_RGMMyX",
     "brand_marquee_aQFqpK",
     "product_carousel_zpTxYK",
