@@ -77,6 +77,9 @@
                                 <svg class="icon-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                   <polyline points="20 6 9 17 4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
+                                <svg class="icon-spinner" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="28 56"/>
+                                </svg>
                               </button>
                             </form>
                             <span class="product-card-tooltip">Add to cart</span>
@@ -98,7 +101,10 @@
                             <input type="hidden" name="id" value="{{ first_variant.id }}">
                             <input type="hidden" name="quantity" value="1">
                             <button type="submit" name="add" class="product-card-mobile-bar__cart">
-                              {{- 'sections.product_list.add_to_cart' | t | upcase -}}
+                              <span class="mobile-bar-label">{{- 'sections.product_list.add_to_cart' | t | upcase -}}</span>
+                              <svg class="icon-spinner" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="16" height="16">
+                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="28 56"/>
+                              </svg>
                             </button>
                           </form>
                         {%- else -%}
@@ -337,11 +343,36 @@
     transform: translateY(0);
   }
 
-  /* Icon swap */
-  .product-card-actions__btn--cart .icon-check { display: none; }
+  /* Spinner animation */
+  @keyframes product-card-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Icon swap: cart → check → spinner */
+  .product-card-actions__btn--cart .icon-check  { display: none; }
+  .product-card-actions__btn--cart .icon-spinner { display: none; }
+
   .product-card-actions__btn--cart.is-added { background: #e50e7e; color: #fff; }
-  .product-card-actions__btn--cart.is-added .icon-cart { display: none; }
+  .product-card-actions__btn--cart.is-added .icon-cart  { display: none; }
   .product-card-actions__btn--cart.is-added .icon-check { display: block; }
+
+  .product-card-actions__btn--cart.is-loading { background: #e50e7e; color: #fff; pointer-events: none; }
+  .product-card-actions__btn--cart.is-loading .icon-cart    { display: none; }
+  .product-card-actions__btn--cart.is-loading .icon-check   { display: none; }
+  .product-card-actions__btn--cart.is-loading .icon-spinner {
+    display: block;
+    animation: product-card-spin 0.7s linear infinite;
+  }
+
+  /* Mobile bar spinner */
+  .product-card-mobile-bar__cart .icon-spinner { display: none; }
+  .product-card-mobile-bar__cart.is-loading .mobile-bar-label { visibility: hidden; }
+  .product-card-mobile-bar__cart.is-loading .icon-spinner {
+    display: block;
+    position: absolute;
+    animation: product-card-spin 0.7s linear infinite;
+  }
+  .product-card-mobile-bar__cart { position: relative; display: flex; align-items: center; justify-content: center; }
 
   /* Cart button wrapper + tooltip */
   .product-card-actions__cart-wrap {
