@@ -23,64 +23,70 @@
           {%- assign first_variant = product.first_available_variant | default: product.variants.first -%}
           {%- assign is_available = product.available -%}
           <div class="product-list__item{% unless is_available %} is-sold-out{% endunless %}" data-variant-id="{{ first_variant.id }}" data-available="{{ is_available }}">
-            <div class="product-list__image-wrapper">
-              <a class="product-list__item-link" href="{{ product.url }}">
+            <a class="product-list__item-link" href="{{ product.url }}">
+              <div class="product-list__image-wrapper">
                 {%- if product.featured_image != blank -%}
                   {{ product.featured_image | image_url: width: 600, height: 700, crop: 'center' | image_tag: class: 'product-list__image', loading: 'lazy', alt: product.title | escape }}
                 {%- else -%}
                   {{ 'product-1' | placeholder_svg_tag: 'product-list__image product-list__image--placeholder' }}
                 {%- endif -%}
-              </a>
 
-              <div class="product-card-actions">
-                <div class="product-card-actions__cart-wrap">
-                  {%- if is_available -%}
-                    <button class="product-card-actions__btn product-card-actions__btn--cart js-cart-toggle" type="button" aria-label="{{ 'sections.product_list.add_to_cart' | t }}">
-                      <svg class="icon-cart" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                        <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                      <svg class="icon-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <polyline points="20 6 9 17 4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </button>
-                    <span class="product-card-tooltip js-cart-tooltip">{{ 'sections.product_list.add_to_cart' | t }}</span>
-                  {%- else -%}
-                    <span class="product-card-oos-label">Out of stock</span>
-                  {%- endif -%}
+                <div class="product-card-actions">
+                  <div class="product-card-actions__cart-wrap">
+                    {%- if is_available -%}
+                      <form method="post" action="/cart/add" class="product-card-atc-form">
+                        <input type="hidden" name="id" value="{{ first_variant.id }}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" name="add" class="product-card-actions__btn product-card-actions__btn--cart" aria-label="{{ 'sections.product_list.add_to_cart' | t }}">
+                          <svg class="icon-cart" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                            <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                            <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                          <svg class="icon-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </button>
+                      </form>
+                      <span class="product-card-tooltip">{{ 'sections.product_list.add_to_cart' | t }}</span>
+                    {%- else -%}
+                      <span class="product-card-oos-label">Out of stock</span>
+                    {%- endif -%}
+                  </div>
+                  <button class="product-card-actions__btn product-card-actions__btn--similar" type="button" aria-label="View similar">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.6"/>
+                      <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                      <path d="M11 8v6M8 11h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    </svg>
+                  </button>
                 </div>
-                <button class="product-card-actions__btn product-card-actions__btn--similar" type="button" aria-label="View similar">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.6"/>
-                    <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                    <path d="M11 8v6M8 11h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                  </svg>
-                </button>
+
+                <div class="product-card-mobile-bar">
+                  {%- if is_available -%}
+                    <form method="post" action="/cart/add" class="product-card-atc-form product-card-atc-form--mobile">
+                      <input type="hidden" name="id" value="{{ first_variant.id }}">
+                      <input type="hidden" name="quantity" value="1">
+                      <button type="submit" name="add" class="product-card-mobile-bar__cart">
+                        {{- 'sections.product_list.add_to_cart' | t | upcase -}}
+                      </button>
+                    </form>
+                  {%- else -%}
+                    <button class="product-card-mobile-bar__cart product-card-mobile-bar__cart--soldout" type="button" disabled>
+                      OUT OF STOCK
+                    </button>
+                  {%- endif -%}
+                  <button class="product-card-mobile-bar__similar" type="button" aria-label="View similar">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="20" height="20">
+                      <rect x="3" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                      <rect x="13" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                      <rect x="3" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                      <rect x="13" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
 
-              <div class="product-card-mobile-bar">
-                {%- if is_available -%}
-                  <button class="product-card-mobile-bar__cart js-cart-toggle" type="button">
-                    {{- 'sections.product_list.add_to_cart' | t | upcase -}}
-                  </button>
-                {%- else -%}
-                  <button class="product-card-mobile-bar__cart product-card-mobile-bar__cart--soldout" type="button" disabled>
-                    OUT OF STOCK
-                  </button>
-                {%- endif -%}
-                <button class="product-card-mobile-bar__similar" type="button" aria-label="View similar">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="20" height="20">
-                    <rect x="3" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
-                    <rect x="13" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
-                    <rect x="3" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
-                    <rect x="13" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <a class="product-list__info-link" href="{{ product.url }}">
               <div class="product-list__info">
                 <span class="product-list__name">{{ product.title | escape }}</span>
                 <span class="product-list__price">{{ product.price | money }}</span>
@@ -260,15 +266,6 @@
     display: block;
     text-decoration: none;
     color: inherit;
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
-
-  .product-list__info-link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
   }
 
   .product-list__image-wrapper {
@@ -297,6 +294,19 @@
     transform: scale(1.04);
   }
 
+
+  .product-card-atc-form {
+    display: contents;
+  }
+
+  .product-card-atc-form--mobile {
+    flex: 1;
+    display: flex;
+  }
+
+  .product-card-atc-form--mobile .product-card-mobile-bar__cart {
+    flex: 1;
+  }
 
   /* ── Bottom row — add to cart + view similar ── */
   .product-card-actions {
@@ -679,113 +689,20 @@
         .then(function(r) { return r.json(); })
         .then(function(cart) {
           cartVariantIds = cart.items.map(function(i) { return String(i.variant_id); });
-          document.querySelectorAll('.product-list__item[data-variant-id]').forEach(applyCardState);
+          document.querySelectorAll('.product-list__item[data-variant-id]').forEach(function(card) {
+            var variantId = card.dataset.variantId;
+            var inCart = cartVariantIds.indexOf(variantId) !== -1;
+            var iconBtn = card.querySelector('.product-card-actions__btn--cart');
+            var mobileBtn = card.querySelector('.product-card-mobile-bar__cart');
+            if (iconBtn) iconBtn.classList.toggle('is-added', inCart);
+            if (mobileBtn) {
+              mobileBtn.classList.toggle('is-added', inCart);
+              if (inCart) mobileBtn.textContent = 'ADDED TO CART';
+              else mobileBtn.textContent = 'ADD TO CART';
+            }
+          });
         });
     }
-
-    function applyCardState(card) {
-      var variantId = card.dataset.variantId;
-      var available = card.dataset.available === 'true';
-      var inCart = cartVariantIds.indexOf(variantId) !== -1;
-
-      var iconBtn = card.querySelector('.product-card-actions__btn--cart');
-      var tooltip = card.querySelector('.js-cart-tooltip');
-      var mobileBtn = card.querySelector('.product-card-mobile-bar__cart');
-
-      if (!available) {
-        // out of stock: icon btn is not rendered; just update mobile
-        if (mobileBtn) {
-          mobileBtn.disabled = true;
-          mobileBtn.textContent = 'OUT OF STOCK';
-          mobileBtn.classList.add('product-card-mobile-bar__cart--soldout');
-          mobileBtn.classList.remove('is-added');
-        }
-        return;
-      }
-
-      if (inCart) {
-        if (iconBtn) { iconBtn.classList.add('is-added'); iconBtn.disabled = false; }
-        if (tooltip) tooltip.textContent = 'Remove from cart';
-        if (mobileBtn) {
-          mobileBtn.textContent = 'ADDED TO CART';
-          mobileBtn.classList.add('is-added');
-          mobileBtn.classList.remove('product-card-mobile-bar__cart--soldout');
-          mobileBtn.disabled = false;
-        }
-      } else {
-        if (iconBtn) { iconBtn.classList.remove('is-added'); iconBtn.disabled = false; }
-        if (tooltip) tooltip.textContent = 'Add to cart';
-        if (mobileBtn) {
-          mobileBtn.textContent = 'ADD TO CART';
-          mobileBtn.classList.remove('is-added', 'product-card-mobile-bar__cart--soldout');
-          mobileBtn.disabled = false;
-        }
-      }
-    }
-
-    function addToCart(variantId, btn) {
-      btn.disabled = true;
-      var drawer = document.querySelector('cart-drawer');
-      var formData = new FormData();
-      formData.append('id', variantId);
-      formData.append('quantity', 1);
-      fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: formData
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data.id) {
-          cartVariantIds.push(String(variantId));
-          var card = document.querySelector('.product-list__item[data-variant-id="' + variantId + '"]');
-          if (card) applyCardState(card);
-          return fetch('/cart.js').then(function(r) { return r.json(); }).then(function(cart) {
-            if (drawer) { drawer.renderCart(cart); drawer.open(); }
-            document.dispatchEvent(new CustomEvent('cart:refresh'));
-          });
-        }
-        btn.disabled = false;
-      })
-      .catch(function() { btn.disabled = false; })
-      .finally(function() { btn.disabled = false; });
-    }
-
-    function removeFromCart(variantId, btn) {
-      btn.disabled = true;
-      var drawer = document.querySelector('cart-drawer');
-      fetch('/cart/change.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: variantId, quantity: 0 })
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(cart) {
-        var idx = cartVariantIds.indexOf(String(variantId));
-        if (idx !== -1) cartVariantIds.splice(idx, 1);
-        var card = document.querySelector('.product-list__item[data-variant-id="' + variantId + '"]');
-        if (card) applyCardState(card);
-        if (drawer) drawer.renderCart(cart);
-        document.dispatchEvent(new CustomEvent('cart:refresh'));
-      })
-      .catch(function() { btn.disabled = false; });
-    }
-
-    document.addEventListener('click', function(e) {
-      var btn = e.target.closest('.js-cart-toggle');
-      if (!btn) return;
-      e.preventDefault();
-      e.stopPropagation();
-      var card = btn.closest('[data-variant-id]');
-      if (!card || card.dataset.available === 'false') return;
-      var variantId = card.dataset.variantId;
-      var inCart = cartVariantIds.indexOf(variantId) !== -1;
-      if (inCart) {
-        removeFromCart(variantId, btn);
-      } else {
-        addToCart(variantId, btn);
-      }
-    });
 
     document.addEventListener('cart:refresh', syncCartState);
 

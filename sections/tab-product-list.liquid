@@ -53,63 +53,69 @@
                 {%- assign first_variant = product.first_available_variant | default: product.variants.first -%}
                 {%- assign is_available = product.available -%}
                 <li class="tab-product-list__item{% unless is_available %} is-sold-out{% endunless %}" data-variant-id="{{ first_variant.id }}" data-available="{{ is_available }}" style="position: relative;">
-                  <div class="tab-product-list__img-wrap">
-                    <a href="{{ product.url }}" class="tab-product-list__card">
+                  <a href="{{ product.url }}" class="tab-product-list__card">
+                    <div class="tab-product-list__img-wrap">
                       {% if product.featured_image %}
                         {%- assign img_alt = product.title | escape -%}
                         {{ product.featured_image | image_url: width: 600 | image_tag: class: 'tab-product-list__img', alt: img_alt, loading: 'lazy' }}
                       {% else %}
                         {{ 'product-1' | placeholder_svg_tag: 'tab-product-list__img tab-product-list__img--placeholder' }}
                       {% endif %}
-                    </a>
-                    <xb-wishlist-button-collection xb-handle="{{ product.handle }}" xb-parent-class="tab-product-list__item"></xb-wishlist-button-collection>
-                    <div class="product-card-actions">
-                      <div class="product-card-actions__cart-wrap">
-                        {%- if is_available -%}
-                          <button class="product-card-actions__btn product-card-actions__btn--cart js-cart-toggle" type="button" aria-label="Add to cart">
-                            <svg class="icon-cart" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                              <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                              <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <svg class="icon-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                              <polyline points="20 6 9 17 4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                          </button>
-                          <span class="product-card-tooltip js-cart-tooltip">Add to cart</span>
-                        {%- else -%}
-                          <span class="product-card-oos-label">Out of stock</span>
-                        {%- endif -%}
+                      <xb-wishlist-button-collection xb-handle="{{ product.handle }}" xb-parent-class="tab-product-list__item"></xb-wishlist-button-collection>
+                      <div class="product-card-actions">
+                        <div class="product-card-actions__cart-wrap">
+                          {%- if is_available -%}
+                            <form method="post" action="/cart/add" class="product-card-atc-form">
+                              <input type="hidden" name="id" value="{{ first_variant.id }}">
+                              <input type="hidden" name="quantity" value="1">
+                              <button type="submit" name="add" class="product-card-actions__btn product-card-actions__btn--cart" aria-label="Add to cart">
+                                <svg class="icon-cart" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                  <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                  <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <svg class="icon-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                  <polyline points="20 6 9 17 4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                              </button>
+                            </form>
+                            <span class="product-card-tooltip">Add to cart</span>
+                          {%- else -%}
+                            <span class="product-card-oos-label">Out of stock</span>
+                          {%- endif -%}
+                        </div>
+                        <button class="product-card-actions__btn product-card-actions__btn--similar" type="button" aria-label="View similar">
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.6"/>
+                            <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                            <path d="M11 8v6M8 11h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                          </svg>
+                        </button>
                       </div>
-                      <button class="product-card-actions__btn product-card-actions__btn--similar" type="button" aria-label="View similar">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                          <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.6"/>
-                          <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                          <path d="M11 8v6M8 11h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                        </svg>
-                      </button>
-                    </div>
-                    <div class="product-card-mobile-bar">
-                      {%- if is_available -%}
-                        <button class="product-card-mobile-bar__cart js-cart-toggle" type="button">
-                          {{- 'sections.product_list.add_to_cart' | t | upcase -}}
+                      <div class="product-card-mobile-bar">
+                        {%- if is_available -%}
+                          <form method="post" action="/cart/add" class="product-card-atc-form product-card-atc-form--mobile">
+                            <input type="hidden" name="id" value="{{ first_variant.id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" name="add" class="product-card-mobile-bar__cart">
+                              {{- 'sections.product_list.add_to_cart' | t | upcase -}}
+                            </button>
+                          </form>
+                        {%- else -%}
+                          <button class="product-card-mobile-bar__cart product-card-mobile-bar__cart--soldout" type="button" disabled>
+                            OUT OF STOCK
+                          </button>
+                        {%- endif -%}
+                        <button class="product-card-mobile-bar__similar" type="button" aria-label="View similar">
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="20" height="20">
+                            <rect x="3" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                            <rect x="13" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                            <rect x="3" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                            <rect x="13" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                          </svg>
                         </button>
-                      {%- else -%}
-                        <button class="product-card-mobile-bar__cart product-card-mobile-bar__cart--soldout" type="button" disabled>
-                          OUT OF STOCK
-                        </button>
-                      {%- endif -%}
-                      <button class="product-card-mobile-bar__similar" type="button" aria-label="View similar">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="20" height="20">
-                          <rect x="3" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
-                          <rect x="13" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
-                          <rect x="3" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
-                          <rect x="13" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
-                        </svg>
-                      </button>
+                      </div>
                     </div>
-                  </div>
-                  <a href="{{ product.url }}" class="tab-product-list__info-link">
                     <div class="tab-product-list__info">
                       <p class="tab-product-list__name">{{ product.title | escape }}</p>
                       <p class="tab-product-list__price">{{ product.price | money }}</p>
@@ -247,9 +253,6 @@
     display: block;
     text-decoration: none;
     color: inherit;
-    position: absolute;
-    inset: 0;
-    z-index: 0;
   }
 
   /* ── Product image ── */
@@ -275,6 +278,19 @@
     display: block;
   }
 
+
+  .product-card-atc-form {
+    display: contents;
+  }
+
+  .product-card-atc-form--mobile {
+    flex: 1;
+    display: flex;
+  }
+
+  .product-card-atc-form--mobile .product-card-mobile-bar__cart {
+    flex: 1;
+  }
 
   /* ── Bottom row — add to cart + view similar ── */
   .product-card-actions {
@@ -686,7 +702,6 @@
       var btn = e.target.closest('.tab-product-list .js-cart-toggle');
       if (!btn) return;
       e.preventDefault();
-      e.stopPropagation();
       var card = btn.closest('[data-variant-id]');
       if (!card || card.dataset.available === 'false') return;
       var variantId = card.dataset.variantId;
