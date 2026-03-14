@@ -1156,15 +1156,17 @@
     var overlay = document.querySelector('.mobile-nav-drawer__overlay');
 
     function openDrawer() {
+      if (!drawer) return;
       drawer.classList.add('is-open');
       drawer.setAttribute('aria-hidden', 'false');
-      hamburger.setAttribute('aria-expanded', 'true');
+      if (hamburger) hamburger.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
     }
     function closeDrawer() {
+      if (!drawer) return;
       drawer.classList.remove('is-open');
       drawer.setAttribute('aria-hidden', 'true');
-      hamburger.setAttribute('aria-expanded', 'false');
+      if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
     }
 

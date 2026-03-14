@@ -30,6 +30,26 @@
                 {%- else -%}
                   {{ 'product-1' | placeholder_svg_tag: 'product-list__image product-list__image--placeholder' }}
                 {%- endif -%}
+
+                <div class="product-card-mobile-bar">
+                  {%- if is_available -%}
+                    <button type="button" class="product-card-mobile-bar__cart js-mobile-atc" aria-label="{{ 'sections.product_list.add_to_cart' | t }}">
+                      {{- 'sections.product_list.add_to_cart' | t | upcase -}}
+                    </button>
+                  {%- else -%}
+                    <button class="product-card-mobile-bar__cart product-card-mobile-bar__cart--soldout" type="button" disabled>
+                      OUT OF STOCK
+                    </button>
+                  {%- endif -%}
+                  <button class="product-card-mobile-bar__similar" type="button" aria-label="View similar">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="20" height="20">
+                      <rect x="3" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                      <rect x="13" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                      <rect x="3" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                      <rect x="13" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
               <div class="product-list__info">
                 <span class="product-list__name">{{ product.title | escape }}</span>
@@ -71,32 +91,13 @@
               </button>
             </div>
 
-            <div class="product-card-mobile-bar">
-              {%- if is_available -%}
-                <form method="post" action="/cart/add" class="product-card-atc-form product-card-atc-form--mobile">
-                  <input type="hidden" name="id" value="{{ first_variant.id }}">
-                  <input type="hidden" name="quantity" value="1">
-                  <button type="submit" name="add" class="product-card-mobile-bar__cart">
-                    <span class="mobile-bar-label">{{- 'sections.product_list.add_to_cart' | t | upcase -}}</span>
-                    <svg class="icon-spinner" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="16" height="16">
-                      <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="28 56"/>
-                    </svg>
-                  </button>
-                </form>
-              {%- else -%}
-                <button class="product-card-mobile-bar__cart product-card-mobile-bar__cart--soldout" type="button" disabled>
-                  OUT OF STOCK
-                </button>
-              {%- endif -%}
-              <button class="product-card-mobile-bar__similar" type="button" aria-label="View similar">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="20" height="20">
-                  <rect x="3" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
-                  <rect x="13" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
-                  <rect x="3" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
-                  <rect x="13" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/>
-                </svg>
-              </button>
-            </div>
+            {%- if is_available -%}
+              <form method="post" action="/cart/add" class="product-card-atc-form product-card-atc-form--mobile" style="display:none">
+                <input type="hidden" name="id" value="{{ first_variant.id }}">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" name="add" class="product-card-atc-form--mobile-submit"></button>
+              </form>
+            {%- endif -%}
 
             <xb-wishlist-button-collection xb-handle="{{ product.handle }}" xb-parent-class="product-list__item"></xb-wishlist-button-collection>
           </div>
@@ -304,14 +305,6 @@
     display: contents;
   }
 
-  .product-card-atc-form--mobile {
-    flex: 1;
-    display: flex;
-  }
-
-  .product-card-atc-form--mobile .product-card-mobile-bar__cart {
-    flex: 1;
-  }
 
   /* ── Bottom row — add to cart + view similar ── */
   .product-card-actions {
@@ -380,15 +373,6 @@
     animation: product-card-spin 0.7s linear infinite;
   }
 
-  /* Mobile bar spinner */
-  .product-card-mobile-bar__cart .icon-spinner { display: none; }
-  .product-card-mobile-bar__cart.is-loading .mobile-bar-label { visibility: hidden; }
-  .product-card-mobile-bar__cart.is-loading .icon-spinner {
-    display: block;
-    position: absolute;
-    animation: product-card-spin 0.7s linear infinite;
-  }
-  .product-card-mobile-bar__cart { position: relative; display: flex; align-items: center; justify-content: center; }
 
   /* Cart button wrapper + tooltip */
   .product-card-actions__cart-wrap {
@@ -733,6 +717,18 @@
           });
         });
     }
+
+    // Mobile ATC button — submits the hidden form outside the <a>
+    document.querySelectorAll('.product-list__item').forEach(function(card) {
+      var mobileAtcBtn = card.querySelector('.js-mobile-atc');
+      if (!mobileAtcBtn) return;
+      mobileAtcBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var hiddenForm = card.querySelector('.product-card-atc-form--mobile');
+        if (hiddenForm) hiddenForm.querySelector('[type="submit"]').click();
+      });
+    });
 
     document.addEventListener('cart:refresh', syncCartState);
 

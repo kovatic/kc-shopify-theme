@@ -273,6 +273,10 @@
   </div>
 </div>
 
+<script id="product-json-{{ section.id }}" type="application/json">
+  {{ product | json }}
+</script>
+
 {% stylesheet %}
   .product-page {
     padding: 48px 48px;
@@ -749,7 +753,9 @@
     var page = document.querySelector('.product-page');
     if (!page) return;
 
-    var product = {{ product | json }};
+    var productEl = document.getElementById('product-json-{{ section.id }}');
+    var product = productEl ? JSON.parse(productEl.textContent) : null;
+    if (!product) return;
 
     // Variant option buttons
     var optionBtns = page.querySelectorAll('.product-page__option-btn');
