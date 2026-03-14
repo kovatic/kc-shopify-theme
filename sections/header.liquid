@@ -59,7 +59,7 @@
         </a>
       {% endif %}
 
-      <a href="{{ routes.search_url }}?type=product&q=wishlist" class="header-icon-btn header-icon-btn--wishlist" aria-label="{{ 'header.wishlist_label' | t }}">
+      <a href="/pages/wishlist" class="header-icon-btn header-icon-btn--wishlist" aria-label="{{ 'header.wishlist_label' | t }}">
         {{ 'icon-wishlist.svg' | inline_asset_content }}
         {% if cart.item_count > 0 %}
           <span class="header-wishlist-count">0</span>
@@ -1054,7 +1054,7 @@
     .header-icon-btn { width: 36px; height: 36px; background: none; }
     .header-icon-btn:hover { background: none; color: var(--color-primary); }
     .header-icon-btn--account-desktop { display: none; }
-    .header-icon-btn--wishlist { display: none; }
+    .header-icon-btn--wishlist { display: flex; }
     .header-icon-btn--search { display: none; }
     .header-main__icons { gap: 4px; }
     .header-nav { display: none; }
