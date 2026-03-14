@@ -129,6 +129,23 @@
       "next": "Next slide",
       "product_placeholder": "Product name",
       "collection_placeholder": "Collection name"
+    },
+    "product": {
+      "description": "Product description",
+      "product_details": "Product details",
+      "delivery": "Delivery",
+      "delivery_info": "Free shipping on orders above ₹2000. Estimated delivery in 5-7 business days.",
+      "returns": "Return & exchange",
+      "returns_info": "Easy returns within 7 days of delivery. Item must be unused and in original packaging.",
+      "mrp": "Maximum retail price",
+      "manufacturer": "Manufactured & marketed by",
+      "contact": "Contact us",
+      "contact_us": "Get in touch",
+      "pincode_placeholder": "Enter Pincode to Check",
+      "pincode_check": "Check",
+      "pincode_label": "Your order can be deliverable by",
+      "previous": "Previous",
+      "next": "Next"
     }
   },
   "footer": {
@@ -149,6 +166,14 @@
       "easy_returns": "Easy returns within 7 days",
       "customer_support": "Customer support",
       "secure_payments": "100% secure payments"
+    }
+  },
+  "general": {
+    "breadcrumb": {
+      "home": "Home"
+    },
+    "product": {
+      "sold_out": "Sold out"
     }
   },
   "blocks": {

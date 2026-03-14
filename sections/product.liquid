@@ -1,45 +1,661 @@
 {% comment %}
-  This section is used in the product template to render product page with
-  media, content, and add-to-cart form.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
+  Product page section with 2-column layout on desktop, single column on mobile.
+  Mobile: swipe carousel + sticky ATC bar. Desktop: 2x2 image grid + info panel.
 {% endcomment %}
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+
+<div class="product-page">
+
+  {%- comment -%} Desktop breadcrumb (hidden on mobile) {%- endcomment -%}
+  <div class="product-page__breadcrumb product-page__breadcrumb--desktop">
+    <a href="{{ routes.root_url }}">{{ 'general.breadcrumb.home' | t }}</a>
+    <span class="product-page__breadcrumb-sep">/</span>
+    <span>{{ product.title | truncate: 40 }}</span>
+  </div>
+
+  <div class="product-page__layout">
+
+    {%- comment -%} LEFT: image gallery {%- endcomment -%}
+    <div class="product-page__gallery">
+
+      {%- comment -%} Desktop: 2x2 grid {%- endcomment -%}
+      <div class="product-page__images-grid">
+        {%- for image in product.images limit: 4 -%}
+          <div class="product-page__image-item">
+            {{ image | image_url: width: 600 | image_tag: loading: 'lazy', alt: image.alt | default: product.title }}
+          </div>
+        {%- else -%}
+          <div class="product-page__image-item product-page__image-item--placeholder">
+            {{ 'product-1' | placeholder_svg_tag }}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- comment -%} Mobile: horizontal swipe carousel {%- endcomment -%}
+      <div class="product-page__carousel" id="product-carousel">
+        <div class="product-page__carousel-track" id="carousel-track">
+          {%- for image in product.images limit: 4 -%}
+            <div class="product-page__carousel-slide">
+              {{ image | image_url: width: 800 | image_tag: loading: 'lazy', alt: image.alt | default: product.title }}
+            </div>
+          {%- else -%}
+            <div class="product-page__carousel-slide">
+              {{ 'product-1' | placeholder_svg_tag }}
+            </div>
+          {%- endfor -%}
+        </div>
+        {%- if product.images.size > 1 -%}
+          <div class="product-page__dots" id="carousel-dots">
+            {%- for image in product.images limit: 4 -%}
+              <button class="product-page__dot{% if forloop.first %} is-active{% endif %}" data-index="{{ forloop.index0 }}" aria-label="Go to image {{ forloop.index }}"></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+    </div>
+
+    {%- comment -%} RIGHT: product info {%- endcomment -%}
+    <div class="product-page__info">
+      <div class="product-page__info-inner">
+
+        {%- comment -%} Mobile: prev/next nav {%- endcomment -%}
+        <div class="product-page__nav product-page__nav--mobile">
+          {%- if collection -%}
+            {%- if collection.previous_product -%}
+              <a href="{{ collection.previous_product }}" class="product-page__nav-btn">← {{ 'sections.product.previous' | t }}</a>
+            {%- else -%}
+              <span class="product-page__nav-btn product-page__nav-btn--disabled">← {{ 'sections.product.previous' | t }}</span>
+            {%- endif -%}
+            {%- if collection.next_product -%}
+              <a href="{{ collection.next_product }}" class="product-page__nav-btn">{{ 'sections.product.next' | t }} →</a>
+            {%- else -%}
+              <span class="product-page__nav-btn product-page__nav-btn--disabled">{{ 'sections.product.next' | t }} →</span>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Mobile breadcrumb {%- endcomment -%}
+        <div class="product-page__breadcrumb product-page__breadcrumb--mobile">
+          <a href="{{ routes.root_url }}">{{ 'general.breadcrumb.home' | t }}</a>
+          <span class="product-page__breadcrumb-sep">/</span>
+          <span>{{ product.title | truncate: 30 }}</span>
+        </div>
+
+        <h1 class="product-page__title">{{ product.title }}</h1>
+
+        {%- if product.vendor != blank -%}
+          <a href="{{ product.vendor | url_for_vendor }}" class="product-page__vendor">{{ product.vendor }}</a>
+        {%- endif -%}
+
+        <div class="product-page__price-row">
+          <span class="product-page__price">
+            {%- if current_variant.compare_at_price > current_variant.price -%}
+              <span class="product-page__price-compare">{{ current_variant.compare_at_price | money }}</span>
+            {%- endif -%}
+            {{ current_variant.price | money }}
+          </span>
+          <div class="product-page__share">
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url }}{{ product.url }}" target="_blank" rel="noopener" aria-label="Share on Facebook" class="product-page__share-btn">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://twitter.com/intent/tweet?url={{ shop.url }}{{ product.url }}&text={{ product.title | url_encode }}" target="_blank" rel="noopener" aria-label="Share on X" class="product-page__share-btn">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="https://pinterest.com/pin/create/button/?url={{ shop.url }}{{ product.url }}&media={{ product.featured_image | image_url: width: 600 }}&description={{ product.title | url_encode }}" target="_blank" rel="noopener" aria-label="Share on Pinterest" class="product-page__share-btn">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+            </a>
+            <a href="mailto:?subject={{ product.title | url_encode }}&body={{ shop.url }}{{ product.url }}" aria-label="Share via email" class="product-page__share-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        {%- comment -%} Variant selector + ATC (desktop inline, mobile hidden — shown in sticky bar) {%- endcomment -%}
+        {% form 'product', product %}
+          <input type="hidden" name="id" value="{{ current_variant.id }}" id="variant-id-input">
+          {%- if product.variants.size > 1 -%}
+            <div class="product-page__variants">
+              {%- for option in product.options_with_values -%}
+                <div class="product-page__option">
+                  <label class="product-page__option-label">{{ option.name }}</label>
+                  <div class="product-page__option-values">
+                    {%- for value in option.values -%}
+                      <button type="button" class="product-page__option-btn{% if option.selected_value == value %} is-selected{% endif %}" data-option-index="{{ forloop.index0 }}" data-value="{{ value }}">{{ value }}</button>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Desktop ATC button {%- endcomment -%}
+          <button
+            type="submit"
+            name="add"
+            class="product-page__atc-btn product-page__atc-btn--desktop"
+            {%- unless current_variant.available -%}disabled{%- endunless -%}
+          >
+            {%- if current_variant.available -%}
+              {{ 'sections.product_list.add_to_cart' | t }}
+            {%- else -%}
+              {{ 'general.product.sold_out' | t }}
+            {%- endif -%}
+          </button>
+        {% endform %}
+
+        {%- comment -%} Pincode checker {%- endcomment -%}
+        <div class="product-page__pincode-wrap">
+          <p class="product-page__pincode-label">{{ 'sections.product.pincode_label' | t }}</p>
+          <div class="product-page__pincode">
+            <input type="text" class="product-page__pincode-input" placeholder="{{ 'sections.product.pincode_placeholder' | t }}" maxlength="6" inputmode="numeric">
+            <button type="button" class="product-page__pincode-btn">{{ 'sections.product.pincode_check' | t }}</button>
+          </div>
+        </div>
+
+        {%- comment -%} Accordions {%- endcomment -%}
+        <div class="product-page__accordions">
+          {%- if product.description != blank -%}
+            <details class="product-page__accordion">
+              <summary class="product-page__accordion-header">
+                {{ 'sections.product.description' | t }}
+                <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="product-page__accordion-body">{{ product.description }}</div>
+            </details>
+          {%- endif -%}
+          <details class="product-page__accordion">
+            <summary class="product-page__accordion-header">
+              {{ 'sections.product.product_details' | t }}
+              <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+            </summary>
+            <div class="product-page__accordion-body">
+              {%- if product.metafields.custom.product_details != blank -%}
+                {{ product.metafields.custom.product_details }}
+              {%- else -%}
+                <p>{{ product.title }}</p>
+              {%- endif -%}
+            </div>
+          </details>
+          <details class="product-page__accordion">
+            <summary class="product-page__accordion-header">
+              {{ 'sections.product.delivery' | t }}
+              <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+            </summary>
+            <div class="product-page__accordion-body"><p>{{ 'sections.product.delivery_info' | t }}</p></div>
+          </details>
+          <details class="product-page__accordion">
+            <summary class="product-page__accordion-header">
+              {{ 'sections.product.returns' | t }}
+              <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+            </summary>
+            <div class="product-page__accordion-body"><p>{{ 'sections.product.returns_info' | t }}</p></div>
+          </details>
+          <details class="product-page__accordion">
+            <summary class="product-page__accordion-header">
+              {{ 'sections.product.mrp' | t }}
+              <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+            </summary>
+            <div class="product-page__accordion-body"><p>{{ current_variant.price | money }}</p></div>
+          </details>
+          <details class="product-page__accordion">
+            <summary class="product-page__accordion-header">
+              {{ 'sections.product.manufacturer' | t }}
+              <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+            </summary>
+            <div class="product-page__accordion-body">
+              <p>{{ product.vendor | default: shop.name }}</p>
+            </div>
+          </details>
+          <details class="product-page__accordion">
+            <summary class="product-page__accordion-header">
+              {{ 'sections.product.contact' | t }}
+              <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+            </summary>
+            <div class="product-page__accordion-body"><p><a href="/pages/contact">{{ 'sections.product.contact_us' | t }}</a></p></div>
+          </details>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
-
-<div class="product-form">
+{%- comment -%} Mobile sticky ATC bar {%- endcomment -%}
+<div class="product-page__sticky-atc" id="sticky-atc">
   {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
-
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
-        >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
-      {% endfor %}
-    </select>
-
-    <input type="text" name="quantity" min="1" value="1">
-
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
+    <input type="hidden" name="id" value="{{ current_variant.id }}" id="variant-id-input-mobile">
+    <button
+      type="submit"
+      name="add"
+      class="product-page__atc-btn"
+      {%- unless current_variant.available -%}disabled{%- endunless -%}
+    >
+      {%- if current_variant.available -%}
+        {{ 'sections.product_list.add_to_cart' | t }}
+      {%- else -%}
+        {{ 'general.product.sold_out' | t }}
+      {%- endif -%}
+    </button>
   {% endform %}
 </div>
+
+{% stylesheet %}
+  .product-page {
+    padding: 48px 48px;
+    background-color: #efeee9;
+    font-family: 'Montserrat', sans-serif;
+    min-width: 0;
+    overflow-anchor: none;
+  }
+
+  /* Breadcrumb */
+  .product-page__breadcrumb {
+    font-size: 0.8rem;
+    color: #777;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .product-page__breadcrumb a { color: #777; text-decoration: none; }
+  .product-page__breadcrumb a:hover { color: #d7116a; }
+  .product-page__breadcrumb-sep { color: #bbb; }
+  .product-page__breadcrumb--mobile { display: none; }
+
+  /* Layout */
+  .product-page__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+    min-width: 0;
+  }
+  .product-page__gallery,
+  .product-page__info { min-width: 0; }
+
+  /* Desktop: 2x2 grid */
+  .product-page__images-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .product-page__image-item {
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    border-radius: 6px;
+    background-color: #f5f2ed;
+  }
+  .product-page__image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .product-page__image-item--placeholder svg { width: 100%; height: 100%; }
+
+  /* Mobile carousel — hidden on desktop */
+  .product-page__carousel { display: none; }
+
+  /* Info panel */
+  .product-page__info-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Mobile nav — hidden on desktop */
+  .product-page__nav--mobile { display: none; }
+
+  .product-page__title {
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+    color: #202020;
+    line-height: 1.3;
+  }
+  .product-page__vendor {
+    font-size: 0.85rem;
+    color: #666;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .product-page__vendor:hover { color: #d7116a; }
+
+  .product-page__price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .product-page__price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #202020;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .product-page__price-compare {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #999;
+    text-decoration: line-through;
+  }
+  .product-page__share { display: flex; align-items: center; gap: 10px; }
+  .product-page__share-btn {
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+  }
+  .product-page__share-btn:hover { color: #d7116a; }
+
+  /* Variants */
+  .product-page__variants { display: flex; flex-direction: column; gap: 12px; }
+  .product-page__option-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .product-page__option-values { display: flex; flex-wrap: wrap; gap: 8px; }
+  .product-page__option-btn {
+    padding: 6px 14px;
+    border: 1.5px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .product-page__option-btn:hover,
+  .product-page__option-btn.is-selected {
+    border-color: #d7116a;
+    background: #d7116a;
+    color: #fff;
+  }
+
+  /* ATC button */
+  .product-page__atc-btn {
+    width: 100%;
+    padding: 14px 20px;
+    background-color: #d7116a;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background-color 0.2s;
+  }
+  .product-page__atc-btn:hover { background-color: #b80d58; }
+  .product-page__atc-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+  /* Pincode */
+  .product-page__pincode-label {
+    font-size: 0.82rem;
+    color: #444;
+    margin-bottom: 6px;
+  }
+  .product-page__pincode {
+    display: flex;
+    border: 1.5px solid #afafaf;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .product-page__pincode-input {
+    flex: 1;
+    padding: 10px 14px;
+    border: none;
+    outline: none;
+    font-size: 0.9rem;
+    font-family: inherit;
+    background: #fff;
+  }
+  .product-page__pincode-btn {
+    padding: 10px 18px;
+    background: transparent;
+    color: #202020;
+    border: none;
+    border-left: 1.5px solid #afafaf;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: inherit;
+    text-decoration: underline;
+    transition: color 0.2s;
+  }
+  .product-page__pincode-btn:hover { color: #d7116a; }
+
+  /* Accordions */
+  .product-page__accordions { border-top: 1px solid rgba(32,32,32,0.12); }
+  .product-page__accordion { border-bottom: 1px solid rgba(32,32,32,0.12); }
+  .product-page__accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #202020;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+  .product-page__accordion-header::-webkit-details-marker { display: none; }
+  .product-page__accordion-icon { transition: transform 0.2s; flex-shrink: 0; color: #666; }
+  .product-page__accordion[open] .product-page__accordion-icon { transform: rotate(180deg); }
+  .product-page__accordion-body {
+    padding: 0 0 16px;
+    font-size: 0.85rem;
+    color: #444;
+    line-height: 1.6;
+  }
+  .product-page__accordion-body a { color: #d7116a; text-decoration: underline; }
+
+  /* Sticky mobile ATC — hidden on desktop */
+  .product-page__sticky-atc { display: none; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .product-page {
+      padding: 0 0 100px;
+      background-color: #fff;
+    }
+
+    /* Hide desktop elements */
+    .product-page__breadcrumb--desktop { display: none; }
+    .product-page__images-grid { display: none; }
+    .product-page__atc-btn--desktop { display: none; }
+
+    /* Layout: single column */
+    .product-page__layout {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    /* Carousel */
+    .product-page__carousel {
+      display: block;
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+    .product-page__carousel-track {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .product-page__carousel-track::-webkit-scrollbar { display: none; }
+    .product-page__carousel-slide {
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+      aspect-ratio: 3 / 4;
+    }
+    .product-page__carousel-slide img,
+    .product-page__carousel-slide svg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Dot indicators */
+    .product-page__dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 0 4px;
+    }
+    .product-page__dot {
+      width: 18px;
+      height: 2px;
+      border-radius: 9999px;
+      border: none;
+      background: #202020;
+      opacity: 0.3;
+      cursor: pointer;
+      padding: 0;
+      transition: opacity 0.2s, background 0.2s;
+    }
+    .product-page__dot.is-active {
+      background: #800000;
+      opacity: 1;
+    }
+
+    /* Info panel */
+    .product-page__info { padding: 0; }
+    .product-page__info-inner {
+      padding: 20px 20px 0;
+      gap: 12px;
+      background-color: #fff;
+    }
+
+    /* Mobile nav */
+    .product-page__nav--mobile {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .product-page__nav-btn {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #202020;
+      text-decoration: none;
+    }
+    .product-page__nav-btn--disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+
+    /* Mobile breadcrumb */
+    .product-page__breadcrumb--mobile {
+      display: flex;
+      margin-bottom: 0;
+    }
+
+    .product-page__title { font-size: 1.1rem !important; }
+
+    .product-page__pincode-wrap { margin-top: 4px; }
+
+    /* Sticky ATC bar */
+    .product-page__sticky-atc {
+      display: block;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      padding: 12px 20px;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.1);
+      z-index: 50;
+    }
+    .product-page__sticky-atc .product-page__atc-btn {
+      border-radius: 4px;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    var page = document.querySelector('.product-page');
+    if (!page) return;
+
+    var product = {{ product | json }};
+
+    // Variant option buttons
+    var optionBtns = page.querySelectorAll('.product-page__option-btn');
+    var variantInputs = document.querySelectorAll('input[id^="variant-id-input"]');
+
+    function getSelectedOptions() {
+      var groups = {};
+      optionBtns.forEach(function(btn) {
+        if (btn.classList.contains('is-selected')) {
+          groups[btn.getAttribute('data-option-index')] = btn.getAttribute('data-value');
+        }
+      });
+      var opts = [];
+      for (var i = 0; i < product.options.length; i++) {
+        opts.push(groups[i] || '');
+      }
+      return opts;
+    }
+
+    function findVariant(opts) {
+      return product.variants.find(function(v) {
+        return opts.every(function(opt, i) {
+          return v['option' + (i + 1)] === opt;
+        });
+      });
+    }
+
+    optionBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var idx = btn.getAttribute('data-option-index');
+        optionBtns.forEach(function(b) {
+          if (b.getAttribute('data-option-index') === idx) b.classList.remove('is-selected');
+        });
+        btn.classList.add('is-selected');
+        var variant = findVariant(getSelectedOptions());
+        if (variant) {
+          variantInputs.forEach(function(input) { input.value = variant.id; });
+        }
+      });
+    });
+
+    // Mobile carousel dot sync
+    var track = document.getElementById('carousel-track');
+    var dots = document.querySelectorAll('.product-page__dot');
+    if (track && dots.length) {
+      track.addEventListener('scroll', function() {
+        var idx = Math.round(track.scrollLeft / track.offsetWidth);
+        dots.forEach(function(d, i) {
+          d.classList.toggle('is-active', i === idx);
+        });
+      }, { passive: true });
+      dots.forEach(function(dot) {
+        dot.addEventListener('click', function() {
+          var idx = parseInt(dot.getAttribute('data-index'));
+          track.scrollTo({ left: idx * track.offsetWidth, behavior: 'smooth' });
+        });
+      });
+    }
+  })();
+{% endjavascript %}
 
 {% schema %}
 {
