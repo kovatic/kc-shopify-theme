@@ -145,6 +145,8 @@
           </button>
         {% endform %}
 
+        <xb-wishlist-button xb-handle="{{ product.handle }}" class="product-page__wishlist-btn"></xb-wishlist-button>
+
         {%- comment -%} Pincode checker {%- endcomment -%}
         <div class="product-page__pincode-wrap">
           <p class="product-page__pincode-label">{{ 'sections.product.pincode_label' | t }}</p>
@@ -400,6 +402,35 @@
   }
   .product-page__atc-btn:hover { background-color: #b80d58; }
   .product-page__atc-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+  .product-page__atc-btn.is-loading {
+    background-color: #b80d58;
+    cursor: wait;
+    pointer-events: none;
+    position: relative;
+    color: transparent;
+  }
+  .product-page__atc-btn.is-loading::after {
+    content: '';
+    position: absolute;
+    inset: 50% 50%;
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0 -9px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: atc-spin 0.6s linear infinite;
+  }
+  @keyframes atc-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Wishlist button */
+  .product-page__wishlist-btn {
+    display: block;
+    width: 100%;
+  }
 
   /* Pincode */
   .product-page__pincode-label {

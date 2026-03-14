@@ -1,0 +1,70 @@
+{% doc %}
+  Renders a sliding cart drawer. Included once in layout/theme.liquid.
+  Opened by clicking the header cart icon or after add-to-cart.
+{% enddoc %}
+
+<cart-drawer class="cart-drawer{% if cart == empty %} is-empty{% endif %}" id="CartDrawer">
+
+  <div class="cart-drawer__overlay" id="CartDrawer-Overlay"></div>
+
+  <div class="cart-drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'cart.title' | t }}" tabindex="-1">
+
+    <div class="cart-drawer__header">
+      <h2 class="cart-drawer__title">{{ 'cart.title' | t }}</h2>
+      <button class="cart-drawer__close" type="button" aria-label="{{ 'header.close_menu_label' | t }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="cart-drawer__body" id="CartDrawer-Body">
+      {%- if cart == empty -%}
+        <div class="cart-drawer__empty">
+          <p>{{ 'cart.empty' | t }}</p>
+          <a href="{{ routes.all_products_collection_url }}" class="cart-drawer__continue">{{ 'cart.continue_shopping' | t }}</a>
+        </div>
+      {%- else -%}
+        <div class="cart-drawer__items" id="CartDrawer-Items">
+          {%- for item in cart.items -%}
+            <div class="cart-drawer__item" data-key="{{ item.key }}">
+              <a href="{{ item.url }}" class="cart-drawer__item-image">
+                {%- if item.image -%}
+                  {{ item.image | image_url: width: 120 | image_tag: loading: 'lazy', alt: item.title }}
+                {%- endif -%}
+              </a>
+              <div class="cart-drawer__item-info">
+                <a href="{{ item.url }}" class="cart-drawer__item-title">{{ item.product_title }}</a>
+                {%- unless item.variant_title == 'Default Title' -%}
+                  <p class="cart-drawer__item-variant">{{ item.variant_title }}</p>
+                {%- endunless -%}
+                <p class="cart-drawer__item-price">{{ item.final_line_price | money }}</p>
+                <div class="cart-drawer__item-qty">
+                  <button type="button" class="cart-drawer__qty-btn" data-action="decrease" data-key="{{ item.key }}">−</button>
+                  <span class="cart-drawer__qty-value">{{ item.quantity }}</span>
+                  <button type="button" class="cart-drawer__qty-btn" data-action="increase" data-key="{{ item.key }}">+</button>
+                </div>
+              </div>
+              <button type="button" class="cart-drawer__item-remove" data-key="{{ item.key }}" aria-label="Remove {{ item.title }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="cart-drawer__footer">
+      <div class="cart-drawer__subtotal">
+        <span>{{ 'cart.subtotal' | t }}</span>
+        <span id="CartDrawer-Subtotal">{{ cart.total_price | money }}</span>
+      </div>
+      <p class="cart-drawer__tax-note">{{ 'cart.taxes_note' | t }}</p>
+      <a href="{{ routes.checkout_url }}" class="cart-drawer__checkout">{{ 'cart.checkout' | t }}</a>
+      <a href="{{ routes.cart_url }}" class="cart-drawer__view-cart">{{ 'cart.view_cart' | t }}</a>
+    </div>
+
+  </div>
+</cart-drawer>
