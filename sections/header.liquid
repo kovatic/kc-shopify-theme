@@ -325,6 +325,12 @@
     height: 150px; /* fallback until JS measures actual header height */
   }
 
+  @media screen and (max-width: 768px) {
+    .site-header-spacer {
+      height: 70px; /* mobile header is always 70px */
+    }
+  }
+
   /* ── Top bar ── */
   .header-topbar {
     background-color: var(--color-primary);
@@ -1077,10 +1083,13 @@
     /* ── Spacer: compensate for fixed header ── */
     function updateSpacer() {
       if (spacer && siteHeader) {
-        spacer.style.height = siteHeader.offsetHeight + 'px';
+        var h = siteHeader.offsetHeight;
+        if (h > 0) spacer.style.height = h + 'px';
       }
     }
     updateSpacer();
+    document.addEventListener('DOMContentLoaded', updateSpacer);
+    window.addEventListener('load', updateSpacer);
     window.addEventListener('resize', updateSpacer);
     if (topbarWrap) {
       topbarWrap.addEventListener('transitionend', function() {

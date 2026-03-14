@@ -661,7 +661,7 @@
 {% endstylesheet %}
 
 {% javascript %}
-  (function () {
+  document.addEventListener('DOMContentLoaded', function () {
     /* ── Desktop accordion ── */
     var panels = document.querySelectorAll('.stores__panels--desktop .stores__panel');
     panels.forEach(function (panel) {
@@ -725,7 +725,7 @@
         }
       }
     }, { passive: true });
-  })();
+  });
 {% endjavascript %}
 
 {% schema %}
