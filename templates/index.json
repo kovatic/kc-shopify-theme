@@ -112,8 +112,8 @@
         "layout_type_mobile": "wrap",
         "products_count": 4,
         "view_all_url": "shopify://collections/automated-collection",
-        "padding_top": 32,
-        "padding_bottom": 32
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     },
     "tab_product_list_PynKp9": {
