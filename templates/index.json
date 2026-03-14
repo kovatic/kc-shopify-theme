@@ -309,44 +309,55 @@
           "type": "store",
           "settings": {
             "image": "shopify://shop_images/image_37.png",
-            "store_type": "Flagship Store",
+            "store_type": "",
             "store_name": "Eval",
-            "address": "Main Road, Eral, Thoothukudi District",
-            "phone": "9876543210",
-            "map_url": ""
+            "address": "Bus Stand, Eral, Tamil Nadu 628801",
+            "phone": "‭04630-271254‬",
+            "map_url": "https://maps.app.goo.gl/qEgSzdP9FnBhAzvr8"
           }
         },
         "store_dpm8Kk": {
           "type": "store",
           "settings": {
             "image": "shopify://shop_images/image_37.png",
-            "store_type": "Flagship Store",
-            "store_name": "Tiruchendur",
-            "address": "Main Road, Eral, Thoothukudi District",
-            "phone": "9876543210",
-            "map_url": ""
+            "store_type": "",
+            "store_name": "Thiruchendur",
+            "address": "130, 1, N Car St, Thiruchendur, Tamil Nadu 628215",
+            "phone": "‭04639-242777‬",
+            "map_url": "https://maps.app.goo.gl/2LA2iyVKWKLn7vHs7"
           }
         },
         "store_CRtjn9": {
           "type": "store",
           "settings": {
             "image": "shopify://shop_images/image_37.png",
-            "store_type": "Flagship Store",
+            "store_type": "",
             "store_name": "Thoothukudi",
-            "address": "Main Road, Eral, Thoothukudi District",
-            "phone": "9876543210",
-            "map_url": ""
+            "address": "Toovipuram Main Rd, Toovipuram, Thoothukudi, Tamil Nadu 628001",
+            "phone": "‭0461-2111111‬",
+            "map_url": "https://maps.app.goo.gl/kzKhviCJuuxGHn4p6"
           }
         },
         "store_VPNbQQ": {
           "type": "store",
           "settings": {
             "image": "shopify://shop_images/image_37.png",
-            "store_type": "Flagship Store",
+            "store_type": "",
             "store_name": "Chennai",
-            "address": "Main Road, Eral, Thoothukudi District",
-            "phone": "9876543210",
-            "map_url": ""
+            "address": "Velachery Main Rd, Kamarajapuram, Palaniappa Nagar, Sembakkam, Chennai, Tamil Nadu, 600073",
+            "phone": "044 2111 1111",
+            "map_url": "https://maps.app.goo.gl/hVmkkdPL7g7K4M2eA"
+          }
+        },
+        "store_iVqhef": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/image_37.png",
+            "store_type": "",
+            "store_name": "Tirunelveli",
+            "address": "Tirunelveli, 9, Triuvanandapuram Road, Vannarpettai,Tirunelveli, Tamil Nadu 627003",
+            "phone": "‭94882 02320‬",
+            "map_url": "https://maps.app.goo.gl/fhUxmfCm5VjLxvh1A"
           }
         }
       },
@@ -354,12 +365,13 @@
         "store_EbaiC9",
         "store_dpm8Kk",
         "store_CRtjn9",
-        "store_VPNbQQ"
+        "store_VPNbQQ",
+        "store_iVqhef"
       ],
       "name": "t:sections.stores.name",
       "settings": {
         "title": "Visit Our Stores",
-        "subtitle": "4 locations across Tamil Nadu & Chennai",
+        "subtitle": "5 locations across Tamil Nadu & Chennai",
         "padding_top": 32,
         "padding_bottom": 32
       }
