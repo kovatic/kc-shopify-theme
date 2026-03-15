@@ -122,8 +122,10 @@ customElements.define('cart-drawer', CartDrawer);
 
 // Intercept all add-to-cart forms
 document.addEventListener('submit', function(e) {
-  const form = e.target.closest('form[action="/cart/add"]');
+  const form = e.target.closest('form');
   if (!form) return;
+  const action = (form.getAttribute('action') || '').replace(/^https?:\/\/[^/]+/, '');
+  if (action !== '/cart/add') return; // let checkout and other forms submit normally
 
   const drawer = document.querySelector('cart-drawer');
   if (!drawer) return;
