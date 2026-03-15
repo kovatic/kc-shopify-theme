@@ -249,10 +249,18 @@ body.cart-drawer-open {
   text-transform: uppercase;
   border-radius: 4px;
   transition: background 0.2s;
+  border: none;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
 .cart-drawer__checkout:hover {
   background: #b80d58;
+
+}
+
+.cart-drawer__footer form {
+  width: 100%;
 }
 
 .cart-drawer__view-cart {
