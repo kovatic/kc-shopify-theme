@@ -177,7 +177,7 @@
           "type": "image",
           "name": "t:general.image",
           "settings": {
-            "image": "shopify://shop_images/Kc_gol_banner.jpg",
+            "image": "shopify://shop_images/1200x400.png",
             "url": "https://kcgoldhouse.com/"
           },
           "blocks": {}
