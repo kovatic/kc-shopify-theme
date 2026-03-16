@@ -12,6 +12,20 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
+        "slide_wm6bhi": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/2918041.jpg",
+            "subheading": "New Collection",
+            "heading": "Elegance in Every Thread",
+            "text": "Discover our curated collection of handcrafted sarees.",
+            "button_label": "Shop Now",
+            "button_url": "",
+            "text_position": "middle-left",
+            "show_overlay": true,
+            "overlay_opacity": 30
+          }
+        },
         "slide_aE8iH4": {
           "type": "slide",
           "settings": {
@@ -42,6 +56,7 @@
         }
       },
       "block_order": [
+        "slide_wm6bhi",
         "slide_aE8iH4",
         "slide_aPXt94"
       ],
