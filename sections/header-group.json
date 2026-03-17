@@ -106,6 +106,7 @@
       ],
       "settings": {
         "logo": "shopify://shop_images/eng_logo_9e0bdf3f-7512-42d8-9fbd-3bded5607b88.png",
+        "logo_mobile": "shopify://shop_images/eng_logo_copy.png",
         "top_menu": "top-menu",
         "menu": "main-menu",
         "whatsapp_number": "+91-9488202320",
