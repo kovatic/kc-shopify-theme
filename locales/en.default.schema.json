@@ -64,6 +64,7 @@
     "label": "Label",
     "layout_direction": "Layout direction",
     "logo": "Logo",
+    "logo_mobile": "Logo (mobile)",
     "menu": "Menu",
     "top_menu": "Top bar menu",
     "whatsapp_number": "WhatsApp number",

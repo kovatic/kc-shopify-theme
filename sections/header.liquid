@@ -25,17 +25,32 @@
 <div class="header-main">
   <div class="header-main__inner">
 
-    <button class="header-hamburger" aria-label="{{ 'header.menu_label' | t }}" aria-expanded="false" aria-controls="mobile-nav-drawer">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M2.5 5H17.5M2.5 10H17.5M2.5 15H17.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-      </svg>
-    </button>
+    <div class="header-main__left">
+      <button class="header-hamburger" aria-label="{{ 'header.menu_label' | t }}" aria-expanded="false" aria-controls="mobile-nav-drawer">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M2.5 5H17.5M2.5 10H17.5M2.5 15H17.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button class="header-icon-btn header-icon-btn--search header-icon-btn--search-mobile" aria-label="{{ 'header.search_label' | t }}">
+        {{ 'icon-search.svg' | inline_asset_content }}
+      </button>
+    </div>
 
     <div class="header-main__spacer" aria-hidden="true"></div>
 
-    <div class="header-main__logo">
-      {% if section.settings.logo %}
-        <a href="{{ routes.root_url }}">
+    <div class="header-main__logo{% if section.settings.logo_mobile %} has-mobile-logo{% endif %}">
+      {%- if section.settings.logo_mobile -%}
+        <a href="{{ routes.root_url }}" class="header-main__logo-link--mobile">
+          {{- section.settings.logo_mobile | image_url: width: 320 | image_tag:
+              alt: shop.name,
+              class: 'header-main__logo-img',
+              widths: '160, 320',
+              sizes: '160px'
+          -}}
+        </a>
+      {%- endif -%}
+      {%- if section.settings.logo -%}
+        <a href="{{ routes.root_url }}" class="header-main__logo-link--desktop">
           {{- section.settings.logo | image_url: width: 440 | image_tag:
               alt: shop.name,
               class: 'header-main__logo-img',
@@ -43,9 +58,9 @@
               sizes: '220px'
           -}}
         </a>
-      {% else %}
-        <a href="{{ routes.root_url }}" class="header-main__shop-name">{{ shop.name }}</a>
-      {% endif %}
+      {%- else -%}
+        <a href="{{ routes.root_url }}" class="header-main__shop-name header-main__logo-link--desktop">{{ shop.name }}</a>
+      {%- endif -%}
     </div>
 
     <div class="header-main__icons">
@@ -405,6 +420,7 @@
     height: auto;
     display: block;
   }
+  .header-main__logo-link--mobile { display: none; }
   .header-main__shop-name {
     font-size: 1.5rem;
     font-weight: 700;
@@ -669,6 +685,14 @@
     margin: 0;
     line-height: 1.4;
   }
+
+  /* ── Left group (hamburger + mobile search) ── */
+  .header-main__left {
+    display: none;
+    align-items: center;
+    gap: 4px;
+  }
+  .header-icon-btn--search-mobile { display: none; }
 
   /* ── Hamburger (mobile only) ── */
   .header-hamburger {
@@ -1053,8 +1077,13 @@
     }
     .header-topbar { display: none; }
     .header-promo-bar { display: block; }
+    .header-main__left { display: flex; }
     .header-hamburger { display: flex; }
+    .header-icon-btn--search-mobile { display: flex; }
     .header-main__inner { height: 70px; justify-content: space-between; }
+    .header-main { box-shadow: 0 1px 6px rgba(0,0,0,0.08); }
+    .header-main__logo-link--mobile { display: block; }
+    .has-mobile-logo .header-main__logo-link--desktop { display: none; }
     .header-main__spacer { display: none; }
     .header-main__logo { flex: 1; justify-content: center; }
     .header-main__logo-img { max-height: 56px; }
@@ -1187,6 +1216,7 @@
     var searchClear    = document.getElementById('header-search-clear');
     var searchBackdrop = document.getElementById('header-search-backdrop');
     var searchBtn      = document.querySelector('.header-icon-btn--search');
+    var searchBtns     = document.querySelectorAll('.header-icon-btn--search');
     var searchResults  = document.getElementById('header-search-results');
     var suggestionsEl  = document.getElementById('header-search-suggestions');
     var productsEl     = document.getElementById('header-search-products');
@@ -1317,7 +1347,7 @@
       });
     }
 
-    if (searchBtn)      searchBtn.addEventListener('click', openSearch);
+    searchBtns.forEach(function(btn) { btn.addEventListener('click', openSearch); });
     if (searchBackdrop) searchBackdrop.addEventListener('click', closeSearch);
 
     window.addEventListener('resize', positionPanel);
@@ -1451,6 +1481,11 @@
       "type": "image_picker",
       "id": "logo",
       "label": "t:labels.logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_mobile",
+      "label": "t:labels.logo_mobile"
     },
     {
       "type": "link_list",
