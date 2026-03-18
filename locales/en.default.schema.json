@@ -110,7 +110,11 @@
     "collection": "Collection",
     "collections": "Collections",
     "title": "Title",
-    "url": "Link URL"
+    "url": "Link URL",
+    "share_image": "Social share image"
+  },
+  "general": {
+    "social": "Social media"
   },
   "sections": {
     "tab_product_list": {

@@ -70,6 +70,16 @@
     ]
   },
   {
+    "name": "t:general.social",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "t:labels.share_image"
+      }
+    ]
+  },
+  {
     "name": "t:general.colors",
     "settings": [
       {

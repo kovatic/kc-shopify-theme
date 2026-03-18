@@ -10,7 +10,7 @@
       <line x1="7" y1="12" x2="17" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
       <line x1="11" y1="18" x2="13" y2="18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
     </svg>
-    Sort by
+    {{ 'collection.sort_by' | t }}
     <svg class="collection-mobile-bar__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
@@ -22,7 +22,7 @@
       <line x1="3" y1="12" x2="15" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
       <line x1="3" y1="18" x2="9" y2="18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
     </svg>
-    Filters
+    {{ 'collection.filters' | t }}
   </button>
 </div>
 
@@ -30,7 +30,7 @@
   <div class="collection-page__container">
 
     <div class="collection-page__header">
-      <h2 >{{ collection.title }}</h2>
+      <h1>{{ collection.title }}</h1>
       {%- if collection.description != blank -%}
         <div class="collection-page__desc-wrap">
           <div class="collection-page__desc" id="collection-desc">{{ collection.description | strip_html }}</div>

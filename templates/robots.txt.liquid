@@ -1,0 +1,20 @@
+{% layout none %}
+{% for group in robots.default_groups %}
+  {{- group.user_agent -}}
+  {% for rule in group.rules %}
+    {{- rule -}}
+  {% endfor %}
+  {% for sitemap in group.sitemaps %}
+    {{- sitemap -}}
+  {% endfor %}
+{% endfor %}
+
+User-agent: *
+Disallow: /cart
+Disallow: /checkout
+Disallow: /account
+Disallow: /orders
+Disallow: /search
+Disallow: /policies
+Disallow: /*?*sort_by=
+Disallow: /*?*page=

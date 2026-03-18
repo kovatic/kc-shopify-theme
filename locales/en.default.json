@@ -56,6 +56,10 @@
   "collections": {
     "title": "Collections"
   },
+  "collection": {
+    "sort_by": "Sort by",
+    "filters": "Filters"
+  },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
     "card": "Gift card",
