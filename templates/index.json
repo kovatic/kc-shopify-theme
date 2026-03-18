@@ -309,6 +309,100 @@
         "padding_bottom": 80
       }
     },
+    "testimonials_dKBhcg": {
+      "type": "testimonials",
+      "blocks": {
+        "video_XWQPY9": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/✨ Zip & Go Tissue Pattu Saree – Now Available! ✨Make every moment stylish and effortless with ou (1).mp4",
+            "video_url": "",
+            "image": "shopify://shop_images/istockphoto-1310454968-612x612.jpg",
+            "alt": ""
+          }
+        },
+        "video_eKc6FW": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/✨ Zip & Go Tissue Pattu Saree – Now Available! ✨Make every moment stylish and effortless with ou (1).mp4",
+            "video_url": "",
+            "image": "shopify://shop_images/istockphoto-1654117403-612x612.jpg",
+            "alt": ""
+          }
+        },
+        "video_Ct4BiT": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/✨ Zip & Go Tissue Pattu Saree – Now Available! ✨Make every moment stylish and effortless with ou (1).mp4",
+            "video_url": "",
+            "image": "shopify://shop_images/istockphoto-1212679579-612x612.jpg",
+            "alt": ""
+          }
+        },
+        "video_NGGN8H": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/✨ Zip & Go Tissue Pattu Saree – Now Available! ✨Make every moment stylish and effortless with ou.mp4",
+            "video_url": "",
+            "image": "shopify://shop_images/istockphoto-1310454968-612x612.jpg",
+            "alt": ""
+          }
+        },
+        "review_pnwei3": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "John Doe",
+            "reviewer_date": "4 days ago",
+            "rating": 5,
+            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
+          }
+        },
+        "review_VjQRNF": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "John Doe",
+            "reviewer_date": "4 days ago",
+            "rating": 5,
+            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
+          }
+        },
+        "review_hwi7jM": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "John Doe",
+            "reviewer_date": "4 days ago",
+            "rating": 5,
+            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
+          }
+        },
+        "review_h9RpiA": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "John Doe",
+            "reviewer_date": "4 days ago",
+            "rating": 5,
+            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
+          }
+        }
+      },
+      "block_order": [
+        "video_XWQPY9",
+        "video_eKc6FW",
+        "video_Ct4BiT",
+        "video_NGGN8H",
+        "review_pnwei3",
+        "review_VjQRNF",
+        "review_hwi7jM",
+        "review_h9RpiA"
+      ],
+      "name": "Testimonials",
+      "settings": {
+        "title": "Our Customer Testimonials",
+        "subtitle": "Trusted and praised for excellence",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
     "stores_NYzLxX": {
       "type": "stores",
       "blocks": {
@@ -397,6 +491,7 @@
     "brand_marquee_aQFqpK",
     "product_carousel_zpTxYK",
     "about_ANVEQm",
+    "testimonials_dKBhcg",
     "stores_NYzLxX"
   ]
 }
