@@ -173,7 +173,11 @@
       "contact_us": "Get in touch",
       "pincode_placeholder": "Enter Pincode to Check",
       "pincode_check": "Check",
-      "pincode_label": "Your order can be deliverable by",
+      "pincode_label": "Check delivery availability",
+      "pincode_invalid": "Please enter a valid 6-digit pincode.",
+      "pincode_deliverable": "Delivery available to __area__.",
+      "pincode_not_serviceable": "Sorry, delivery is not available to this pincode.",
+      "pincode_api_error": "Could not verify pincode. Please try again.",
       "previous": "Previous",
       "next": "Next"
     }

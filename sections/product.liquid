@@ -155,13 +155,29 @@
           </div>
         {% endform %}
 
-        {%- comment -%} Pincode checker {%- endcomment -%}
-        <div class="product-page__pincode-wrap">
+        {%- comment -%} Pincode checker — hidden until Shiprocket proxy is configured {%- endcomment -%}
+        <div class="product-page__pincode-wrap" style="display:none">
           <p class="product-page__pincode-label">{{ 'sections.product.pincode_label' | t }}</p>
           <div class="product-page__pincode">
-            <input type="text" class="product-page__pincode-input" placeholder="{{ 'sections.product.pincode_placeholder' | t }}" maxlength="6" inputmode="numeric">
-            <button type="button" class="product-page__pincode-btn">{{ 'sections.product.pincode_check' | t }}</button>
+            <input
+              type="text"
+              class="product-page__pincode-input"
+              id="pincode-input-{{ section.id }}"
+              placeholder="{{ 'sections.product.pincode_placeholder' | t }}"
+              maxlength="6"
+              inputmode="numeric"
+              autocomplete="postal-code"
+              aria-label="{{ 'sections.product.pincode_placeholder' | t }}"
+              aria-describedby="pincode-result-{{ section.id }}"
+            >
+            <button type="button" class="product-page__pincode-btn" id="pincode-btn-{{ section.id }}">
+              <span class="pincode-btn__label">{{ 'sections.product.pincode_check' | t }}</span>
+              <svg class="pincode-btn__spinner" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="14" height="14">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="28 56"/>
+              </svg>
+            </button>
           </div>
+          <div class="product-page__pincode-result" id="pincode-result-{{ section.id }}" aria-live="polite"></div>
         </div>
 
         {%- comment -%} Accordions {%- endcomment -%}
@@ -573,6 +589,41 @@
   }
   .product-page__pincode-btn:hover { color: #d7116a; }
 
+  .product-page__pincode-btn.is-loading {
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  .product-page__pincode-btn.is-loading .pincode-btn__label { display: none; }
+  .pincode-btn__spinner { display: none; }
+  .product-page__pincode-btn.is-loading .pincode-btn__spinner {
+    display: inline-block;
+    animation: pincode-spin 0.7s linear infinite;
+  }
+
+  @keyframes pincode-spin { to { transform: rotate(360deg); } }
+
+  .product-page__pincode-result {
+    margin-top: 8px;
+    font-size: 0.8rem;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    min-height: 1.2em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .product-page__pincode-result:empty { display: none; }
+
+  .product-page__pincode-result.is-success { color: #1a7a3c; }
+  .product-page__pincode-result.is-error   { color: #c0392b; }
+  .product-page__pincode-result.is-warning { color: #b8620a; }
+
+  .product-page__pincode-input.is-invalid {
+    border-color: #c0392b;
+    outline: none;
+  }
+
   /* Accordions */
   .product-page__accordions { border-top: 1px solid rgba(32,32,32,0.12); }
   .product-page__accordion { border-bottom: 1px solid rgba(32,32,32,0.12); }
@@ -811,6 +862,68 @@
         d.classList.remove('is-open');
       });
     });
+
+    // Pincode checker
+    var pincodeInput = document.getElementById('pincode-input-{{ section.id }}');
+    var pincodeBtn   = document.getElementById('pincode-btn-{{ section.id }}');
+    var pincodeResult = document.getElementById('pincode-result-{{ section.id }}');
+
+    function setPincodeResult(type, message) {
+      pincodeResult.className = 'product-page__pincode-result is-' + type;
+      pincodeResult.textContent = message;
+    }
+
+    function checkPincode() {
+      var pin = pincodeInput.value.trim();
+
+      // Format validation
+      if (!/^\d{6}$/.test(pin)) {
+        pincodeInput.classList.add('is-invalid');
+        setPincodeResult('error', '{{ "sections.product.pincode_invalid" | t | escape }}');
+        return;
+      }
+
+      pincodeInput.classList.remove('is-invalid');
+      pincodeResult.className = 'product-page__pincode-result';
+      pincodeResult.textContent = '';
+      pincodeBtn.classList.add('is-loading');
+
+      fetch('https://api.postalpincode.in/pincode/' + pin)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          pincodeBtn.classList.remove('is-loading');
+          var record = data && data[0];
+          if (!record || record.Status === 'Error' || !record.PostOffice || record.PostOffice.length === 0) {
+            setPincodeResult('error', '{{ "sections.product.pincode_not_serviceable" | t | escape }}');
+            return;
+          }
+          var po = record.PostOffice[0];
+          var area = po.Name + ', ' + po.District + ', ' + po.State;
+          setPincodeResult('success', '{{ "sections.product.pincode_deliverable" | t | escape }}'.replace('__area__', area));
+        })
+        .catch(function() {
+          pincodeBtn.classList.remove('is-loading');
+          setPincodeResult('warning', '{{ "sections.product.pincode_api_error" | t | escape }}');
+        });
+    }
+
+    if (pincodeBtn) {
+      pincodeBtn.addEventListener('click', checkPincode);
+    }
+    if (pincodeInput) {
+      pincodeInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') checkPincode();
+      });
+      // allow digits only
+      pincodeInput.addEventListener('input', function() {
+        pincodeInput.value = pincodeInput.value.replace(/\D/g, '');
+        pincodeInput.classList.remove('is-invalid');
+        if (pincodeResult.classList.contains('is-error')) {
+          pincodeResult.className = 'product-page__pincode-result';
+          pincodeResult.textContent = '';
+        }
+      });
+    }
 
     // Mobile carousel dot sync
     var track = document.getElementById('carousel-track');
