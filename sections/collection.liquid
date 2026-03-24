@@ -170,19 +170,26 @@
                     <div class="product-card-actions">
                       <div class="product-card-actions__cart-wrap">
                         {%- if is_available -%}
-                          <button class="product-card-actions__btn product-card-actions__btn--cart js-cart-toggle" type="button" aria-label="Add to cart">
-                            <svg class="icon-cart" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                              <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                              <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <svg class="icon-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                              <polyline points="20 6 9 17 4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                          </button>
-                          <span class="product-card-tooltip js-cart-tooltip">Add to cart</span>
+                          <form method="post" action="/cart/add" class="product-card-atc-form">
+                            <input type="hidden" name="id" value="{{ first_variant.id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" name="add" class="product-card-actions__btn product-card-actions__btn--cart" aria-label="{{ 'sections.product_list.add_to_cart' | t }}">
+                              <svg class="icon-cart" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                              <svg class="icon-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                              <svg class="icon-spinner" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="28 56"/>
+                              </svg>
+                            </button>
+                          </form>
+                          <span class="product-card-tooltip">{{ 'sections.product_list.add_to_cart' | t }}</span>
                         {%- else -%}
-                          <span class="product-card-oos-label">Out of stock</span>
+                          <span class="product-card-oos-label">{{ 'general.product.sold_out' | t }}</span>
                         {%- endif -%}
                       </div>
                       <button class="product-card-actions__btn product-card-actions__btn--similar" type="button" aria-label="View similar">
@@ -196,9 +203,13 @@
 
                     <div class="product-card-mobile-bar">
                       {%- if is_available -%}
-                        <button class="product-card-mobile-bar__cart js-cart-toggle" type="button">ADD TO CART</button>
+                        <button type="button" class="product-card-mobile-bar__cart js-mobile-atc" aria-label="{{ 'sections.product_list.add_to_cart' | t }}">
+                          {{- 'sections.product_list.add_to_cart' | t | upcase -}}
+                        </button>
                       {%- else -%}
-                        <button class="product-card-mobile-bar__cart product-card-mobile-bar__cart--soldout" type="button" disabled>OUT OF STOCK</button>
+                        <button class="product-card-mobile-bar__cart product-card-mobile-bar__cart--soldout" type="button" disabled>
+                          {{ 'general.product.sold_out' | t | upcase }}
+                        </button>
                       {%- endif -%}
                       <button class="product-card-mobile-bar__similar" type="button" aria-label="View similar">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="20" height="20">
@@ -216,6 +227,15 @@
                     <span class="product-list__price">{{ product.price | money }}</span>
                   </div>
                 </a>
+
+                {%- if is_available -%}
+                  <form method="post" action="/cart/add" class="product-card-atc-form product-card-atc-form--mobile" style="display:none">
+                    <input type="hidden" name="id" value="{{ first_variant.id }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" name="add" class="product-card-atc-form--mobile-submit"></button>
+                  </form>
+                {%- endif -%}
+
                 <xb-wishlist-button-collection xb-handle="{{ product.handle }}" xb-parent-class="product-list__item"></xb-wishlist-button-collection>
               </div>
             {% endfor %}
@@ -1000,35 +1020,31 @@
         .then(function(r) { return r.json(); })
         .then(function(cart) {
           cartVariantIds = cart.items.map(function(i) { return String(i.variant_id); });
-          document.querySelectorAll('.collection-page .product-list__item[data-variant-id]').forEach(applyCardState);
+          document.querySelectorAll('.collection-page .product-list__item[data-variant-id]').forEach(function(card) {
+            var variantId = card.dataset.variantId;
+            var inCart = cartVariantIds.indexOf(variantId) !== -1;
+            var iconBtn = card.querySelector('.product-card-actions__btn--cart');
+            var mobileBtn = card.querySelector('.product-card-mobile-bar__cart');
+            if (iconBtn) iconBtn.classList.toggle('is-added', inCart);
+            if (mobileBtn) {
+              mobileBtn.classList.toggle('is-added', inCart);
+              if (inCart) mobileBtn.textContent = 'ADDED TO CART';
+              else mobileBtn.textContent = mobileBtn.dataset.label || 'ADD TO CART';
+            }
+          });
         });
     }
 
-    function applyCardState(card) {
-      var variantId = card.dataset.variantId;
-      var available = card.dataset.available === 'true';
-      var inCart = cartVariantIds.indexOf(variantId) !== -1;
-      var iconBtn = card.querySelector('.product-card-actions__btn--cart');
-      var tooltip = card.querySelector('.js-cart-tooltip');
-      var mobileBtn = card.querySelector('.product-card-mobile-bar__cart');
+    /* ATC form submit — intercept for AJAX + spinner */
+    document.addEventListener('submit', function(e) {
+      var form = e.target.closest('.collection-page .product-card-atc-form:not(.product-card-atc-form--mobile)');
+      if (!form) return;
+      e.preventDefault();
+      var btn = form.querySelector('.product-card-actions__btn--cart');
+      var variantId = form.querySelector('input[name="id"]').value;
+      if (!btn || btn.classList.contains('is-loading')) return;
 
-      if (!available) {
-        if (mobileBtn) { mobileBtn.disabled = true; mobileBtn.textContent = 'OUT OF STOCK'; mobileBtn.classList.add('product-card-mobile-bar__cart--soldout'); mobileBtn.classList.remove('is-added'); }
-        return;
-      }
-      if (inCart) {
-        if (iconBtn) { iconBtn.classList.add('is-added'); iconBtn.disabled = false; }
-        if (tooltip) tooltip.textContent = 'Remove from cart';
-        if (mobileBtn) { mobileBtn.textContent = 'ADDED TO CART'; mobileBtn.classList.add('is-added'); mobileBtn.classList.remove('product-card-mobile-bar__cart--soldout'); mobileBtn.disabled = false; }
-      } else {
-        if (iconBtn) { iconBtn.classList.remove('is-added'); iconBtn.disabled = false; }
-        if (tooltip) tooltip.textContent = 'Add to cart';
-        if (mobileBtn) { mobileBtn.textContent = 'ADD TO CART'; mobileBtn.classList.remove('is-added', 'product-card-mobile-bar__cart--soldout'); mobileBtn.disabled = false; }
-      }
-    }
-
-    function addToCart(variantId, btn) {
-      btn.disabled = true;
+      btn.classList.add('is-loading');
       fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
@@ -1036,42 +1052,29 @@
       })
       .then(function(r) { return r.json(); })
       .then(function(data) {
+        btn.classList.remove('is-loading');
         if (data.id) {
+          btn.classList.add('is-added');
           cartVariantIds.push(String(variantId));
-          var card = document.querySelector('.collection-page .product-list__item[data-variant-id="' + variantId + '"]');
-          if (card) applyCardState(card);
+          var mobileBtn = form.closest('.product-list__item').querySelector('.product-card-mobile-bar__cart');
+          if (mobileBtn) { mobileBtn.classList.add('is-added'); mobileBtn.textContent = 'ADDED TO CART'; }
           document.dispatchEvent(new CustomEvent('cart:refresh'));
-        } else { btn.disabled = false; }
+        }
       })
-      .catch(function() { btn.disabled = false; });
-    }
+      .catch(function() { btn.classList.remove('is-loading'); });
+    });
 
-    function removeFromCart(variantId, btn) {
-      btn.disabled = true;
-      fetch('/cart/change.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-        body: JSON.stringify({ id: variantId, quantity: 0 })
-      })
-      .then(function(r) { return r.json(); })
-      .then(function() {
-        var idx = cartVariantIds.indexOf(String(variantId));
-        if (idx !== -1) cartVariantIds.splice(idx, 1);
-        var card = document.querySelector('.collection-page .product-list__item[data-variant-id="' + variantId + '"]');
-        if (card) applyCardState(card);
-        document.dispatchEvent(new CustomEvent('cart:refresh'));
-      })
-      .catch(function() { btn.disabled = false; });
-    }
-
-    document.addEventListener('click', function(e) {
-      var btn = e.target.closest('.collection-page .js-cart-toggle');
-      if (!btn) return;
-      e.preventDefault();
-      var card = btn.closest('[data-variant-id]');
-      if (!card || card.dataset.available === 'false') return;
-      var variantId = card.dataset.variantId;
-      if (cartVariantIds.indexOf(variantId) !== -1) { removeFromCart(variantId, btn); } else { addToCart(variantId, btn); }
+    /* Mobile ATC button — submits the hidden form outside the <a> */
+    document.querySelectorAll('.collection-page .product-list__item').forEach(function(card) {
+      var mobileAtcBtn = card.querySelector('.js-mobile-atc');
+      if (!mobileAtcBtn) return;
+      mobileAtcBtn.dataset.label = mobileAtcBtn.textContent.trim();
+      mobileAtcBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var hiddenForm = card.querySelector('.product-card-atc-form--mobile');
+        if (hiddenForm) hiddenForm.querySelector('[type="submit"]').click();
+      });
     });
 
     document.addEventListener('cart:refresh', syncCartState);
