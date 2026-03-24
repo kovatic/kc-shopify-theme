@@ -46,7 +46,8 @@
     "sidebar": "Sidebar",
     "text": "Text",
     "theme": "Theme",
-    "typography": "Typography"
+    "typography": "Typography",
+    "social": "Social media"
   },
   "labels": {
     "alignment": "Alignment",
@@ -113,9 +114,6 @@
     "url": "Link URL",
     "share_image": "Social share image"
   },
-  "general": {
-    "social": "Social media"
-  },
   "sections": {
     "tab_product_list": {
       "name": "Tab product list",
@@ -170,6 +168,9 @@
           "name": "Store"
         }
       }
+    },
+    "store_detail": {
+      "name": "Store detail page"
     },
     "about": {
       "name": "About",

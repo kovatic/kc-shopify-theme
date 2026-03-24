@@ -1,0 +1,964 @@
+{%- liquid
+  assign store = metaobject
+  assign store_name    = store.store_name.value
+  assign store_type    = store.store_type.value
+  assign address       = store.address.value
+  assign city          = store.city.value
+  assign state         = store.state.value
+  assign pincode       = store.pincode.value
+  assign phone         = store.phone.value
+  assign email         = store.email.value
+  assign whatsapp      = store.whatsapp.value
+  assign map_url       = store.map_url.value
+  assign map_embed     = store.map_embed.value
+  assign hours_weekday = store.hours_weekday.value
+  assign hours_weekend = store.hours_weekend.value
+  assign hours_holidays = store.hours_holidays.value
+  assign description   = store.description.value
+  assign area_info     = store.area_info.value
+  assign landmarks     = store.landmarks.value
+  assign parking_info  = store.parking_info.value
+  assign transport_info = store.transport_info.value
+  assign services      = store.services.value
+  assign hero_image    = store.hero_image.value
+  assign gallery_image_1 = store.gallery_image_1.value
+  assign gallery_image_2 = store.gallery_image_2.value
+  assign gallery_image_3 = store.gallery_image_3.value
+  assign gallery_image_4 = store.gallery_image_4.value
+  assign faq_q1        = store.faq_q1.value
+  assign faq_a1        = store.faq_a1.value
+  assign faq_q2        = store.faq_q2.value
+  assign faq_a2        = store.faq_a2.value
+  assign faq_q3        = store.faq_q3.value
+  assign faq_a3        = store.faq_a3.value
+  assign page_title_override = store.page_title.value
+  assign meta_desc_override  = store.meta_description.value
+-%}
+
+{%- comment -%} ── LocalBusiness JSON-LD structured data ── {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ClothingStore",
+  "name": {{ store_name | json }},
+  "image": {% if hero_image %}{{ hero_image | image_url: width: 1200 | prepend: 'https:' | json }}{% else %}""{% endif %},
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": {{ address | json }},
+    "addressLocality": {{ city | json }},
+    "addressRegion": {{ state | json }},
+    "postalCode": {{ pincode | json }},
+    "addressCountry": "IN"
+  },
+  {% if phone %}"telephone": {{ phone | json }},{% endif %}
+  {% if email %}"email": {{ email | json }},{% endif %}
+  {% if map_url %}"hasMap": {{ map_url | json }},{% endif %}
+  "openingHours": [
+    {% if hours_weekday %}{{ hours_weekday | json }}{% if hours_weekend %},{% endif %}{% endif %}
+    {% if hours_weekend %}{{ hours_weekend | json }}{% endif %}
+  ],
+  "url": {{ canonical_url | json }},
+  "priceRange": "₹₹",
+  "currenciesAccepted": "INR"
+}
+</script>
+
+<div
+  class="store-detail"
+  style="
+    --padding-top: {{ section.settings.padding_top }}px;
+    --padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+
+  {%- comment -%} ── BREADCRUMB ── {%- endcomment -%}
+  <nav class="store-detail__breadcrumb" aria-label="{{ 'sections.store_detail.breadcrumb_label' | t }}">
+    <div class="store-detail__breadcrumb-inner">
+      <a href="{{ routes.root_url }}">{{ 'general.breadcrumb.home' | t }}</a>
+      <span aria-hidden="true">›</span>
+      <a href="{{ routes.root_url }}pages/stores">{{ 'sections.store_detail.stores' | t }}</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">{{ store_name | escape }}</span>
+    </div>
+  </nav>
+
+  {%- comment -%} ── HERO ── {%- endcomment -%}
+  <div class="store-detail__hero">
+    {%- if hero_image != blank -%}
+      {{ hero_image | image_url: width: 2000 | image_tag:
+        class: 'store-detail__hero-image',
+        loading: 'eager',
+        fetchpriority: 'high',
+        alt: store_name | escape
+      }}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'store-detail__hero-image store-detail__hero-image--placeholder' }}
+    {%- endif -%}
+    <div class="store-detail__hero-overlay" aria-hidden="true"></div>
+    <div class="store-detail__hero-content">
+      {%- if store_type != blank -%}
+        <span class="store-detail__hero-type">{{ store_type | upcase | escape }}</span>
+      {%- endif -%}
+      {%- if store_name != blank -%}
+        <h1 class="store-detail__hero-name">{{ store_name | escape }}</h1>
+      {%- endif -%}
+      {%- if city != blank -%}
+        <p class="store-detail__hero-location">
+          <svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 1C4.067 1 2.5 2.567 2.5 4.5C2.5 7.5 6 11 6 11C6 11 9.5 7.5 9.5 4.5C9.5 2.567 7.933 1 6 1Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="4.5" r="1.25" stroke="currentColor" stroke-width="1.2"/></svg>
+          {{ city | escape }}{% if state != blank %}, {{ state | escape }}{% endif %}
+        </p>
+      {%- endif -%}
+      <div class="store-detail__hero-actions">
+        {%- if phone != blank -%}
+          <a class="store-detail__btn store-detail__btn--gold" href="tel:{{ phone | remove: ' ' }}">
+            <svg width="13" height="13" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 8.5a1 1 0 0 1-.21.63 1.7 1.7 0 0 1-.44.47C9.93 9.87 9.5 10 9 10c-.63 0-1.3-.15-2-.46s-1.4-.75-2.1-1.33A15.1 15.1 0 0 1 3 6.1C2.42 5.4 1.97 4.7 1.66 4S1.2 2.63 1.2 2c0-.47.1-.9.3-1.27.2-.38.5-.72.9-1.01.48-.33.99-.5 1.47-.47.18 0 .37.04.53.12.17.08.32.2.44.38L5.9 2.2c.12.17.2.33.27.48.06.15.1.28.1.4 0 .16-.05.31-.14.46a2.2 2.2 0 0 1-.37.45l-.5.52a.33.33 0 0 0-.1.25c0 .06.01.11.03.16l.06.14c.12.22.32.5.6.84.29.34.6.68.93 1.01.33.33.65.63.97.9.34.27.62.46.85.56l.14.05c.04.01.09.02.14.02a.35.35 0 0 0 .26-.11l.5-.51c.14-.14.28-.24.41-.3.14-.07.27-.1.41-.1.12 0 .25.02.39.08.14.05.28.13.43.24l2.06 1.47c.18.12.3.27.37.44.07.17.1.35.1.55Z" stroke="currentColor" stroke-width="1.2"/></svg>
+            {{ 'sections.store_detail.call' | t }}
+          </a>
+        {%- endif -%}
+        {%- if map_url != blank -%}
+          <a class="store-detail__btn store-detail__btn--outline" href="{{ map_url }}" target="_blank" rel="noopener noreferrer">
+            <svg width="13" height="13" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 1C4.067 1 2.5 2.567 2.5 4.5C2.5 7.5 6 11 6 11C6 11 9.5 7.5 9.5 4.5C9.5 2.567 7.933 1 6 1Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="4.5" r="1.25" stroke="currentColor" stroke-width="1.2"/></svg>
+            {{ 'sections.store_detail.directions' | t }}
+          </a>
+        {%- endif -%}
+        {%- if whatsapp != blank -%}
+          <a class="store-detail__btn store-detail__btn--whatsapp" href="https://wa.me/{{ whatsapp | remove: '+' | remove: ' ' }}" target="_blank" rel="noopener noreferrer">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            {{ 'sections.store_detail.whatsapp' | t }}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ── MAIN BODY ── {%- endcomment -%}
+  <div class="store-detail__body">
+
+    {%- comment -%} ── LEFT COLUMN ── {%- endcomment -%}
+    <div class="store-detail__main">
+
+      {%- comment -%} About the store {%- endcomment -%}
+      {%- if description != blank -%}
+        <section class="store-detail__section" aria-labelledby="sd-about-heading">
+          <h2 id="sd-about-heading" class="store-detail__section-title">
+            {{ 'sections.store_detail.about_heading' | t: store: store_name | escape }}
+          </h2>
+          <div class="store-detail__prose">{{ description }}</div>
+        </section>
+      {%- endif -%}
+
+      {%- comment -%} Location context {%- endcomment -%}
+      {%- if area_info != blank or landmarks != blank -%}
+        <section class="store-detail__section" aria-labelledby="sd-location-heading">
+          <h2 id="sd-location-heading" class="store-detail__section-title">
+            {{ 'sections.store_detail.location_heading' | t }}
+          </h2>
+          {%- if area_info != blank -%}
+            <div class="store-detail__prose">{{ area_info }}</div>
+          {%- endif -%}
+          {%- if landmarks != blank -%}
+            <div class="store-detail__info-row">
+              <span class="store-detail__info-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></svg>
+              </span>
+              <p class="store-detail__info-text">{{ landmarks | escape }}</p>
+            </div>
+          {%- endif -%}
+        </section>
+      {%- endif -%}
+
+      {%- comment -%} Services {%- endcomment -%}
+      {%- if services != blank -%}
+        <section class="store-detail__section" aria-labelledby="sd-services-heading">
+          <h2 id="sd-services-heading" class="store-detail__section-title">
+            {{ 'sections.store_detail.services_heading' | t }}
+          </h2>
+          {%- assign service_items = services | split: ',' -%}
+          <ul class="store-detail__services-list">
+            {%- for service in service_items -%}
+              {%- unless service == blank -%}
+                <li class="store-detail__service-item">
+                  <span class="store-detail__service-check" aria-hidden="true">✦</span>
+                  {{ service | strip | escape }}
+                </li>
+              {%- endunless -%}
+            {%- endfor -%}
+          </ul>
+        </section>
+      {%- endif -%}
+
+      {%- comment -%} Photo gallery {%- endcomment -%}
+      {%- assign gallery_count = 0 -%}
+      {%- if gallery_image_1 != blank -%}{%- assign gallery_count = gallery_count | plus: 1 -%}{%- endif -%}
+      {%- if gallery_image_2 != blank -%}{%- assign gallery_count = gallery_count | plus: 1 -%}{%- endif -%}
+      {%- if gallery_image_3 != blank -%}{%- assign gallery_count = gallery_count | plus: 1 -%}{%- endif -%}
+      {%- if gallery_image_4 != blank -%}{%- assign gallery_count = gallery_count | plus: 1 -%}{%- endif -%}
+
+      {%- if gallery_count > 0 -%}
+        <section class="store-detail__section" aria-labelledby="sd-gallery-heading">
+          <h2 id="sd-gallery-heading" class="store-detail__section-title">
+            {{ 'sections.store_detail.gallery_heading' | t }}
+          </h2>
+          <div class="store-detail__gallery store-detail__gallery--{{ gallery_count }}">
+            {%- if gallery_image_1 != blank -%}
+              {{ gallery_image_1 | image_url: width: 900 | image_tag: class: 'store-detail__gallery-img', loading: 'lazy', alt: store_name | escape }}
+            {%- endif -%}
+            {%- if gallery_image_2 != blank -%}
+              {{ gallery_image_2 | image_url: width: 900 | image_tag: class: 'store-detail__gallery-img', loading: 'lazy', alt: store_name | escape }}
+            {%- endif -%}
+            {%- if gallery_image_3 != blank -%}
+              {{ gallery_image_3 | image_url: width: 900 | image_tag: class: 'store-detail__gallery-img', loading: 'lazy', alt: store_name | escape }}
+            {%- endif -%}
+            {%- if gallery_image_4 != blank -%}
+              {{ gallery_image_4 | image_url: width: 900 | image_tag: class: 'store-detail__gallery-img', loading: 'lazy', alt: store_name | escape }}
+            {%- endif -%}
+          </div>
+        </section>
+      {%- endif -%}
+
+      {%- comment -%} Map embed {%- endcomment -%}
+      {%- if map_embed != blank -%}
+        <section class="store-detail__section" aria-labelledby="sd-map-heading">
+          <h2 id="sd-map-heading" class="store-detail__section-title">
+            {{ 'sections.store_detail.map_heading' | t }}
+          </h2>
+          <div class="store-detail__map-wrap">
+            {{ map_embed }}
+          </div>
+        </section>
+      {%- endif -%}
+
+      {%- comment -%} FAQ {%- endcomment -%}
+      {%- assign has_faq = false -%}
+      {%- if faq_q1 != blank -%}{%- assign has_faq = true -%}{%- endif -%}
+      {%- if has_faq -%}
+        <section class="store-detail__section" aria-labelledby="sd-faq-heading">
+          <h2 id="sd-faq-heading" class="store-detail__section-title">
+            {{ 'sections.store_detail.faq_heading' | t }}
+          </h2>
+          <div class="store-detail__faq">
+            {%- if faq_q1 != blank and faq_a1 != blank -%}
+              <details class="store-detail__faq-item">
+                <summary class="store-detail__faq-q">{{ faq_q1 | escape }}</summary>
+                <div class="store-detail__faq-a">{{ faq_a1 }}</div>
+              </details>
+            {%- endif -%}
+            {%- if faq_q2 != blank and faq_a2 != blank -%}
+              <details class="store-detail__faq-item">
+                <summary class="store-detail__faq-q">{{ faq_q2 | escape }}</summary>
+                <div class="store-detail__faq-a">{{ faq_a2 }}</div>
+              </details>
+            {%- endif -%}
+            {%- if faq_q3 != blank and faq_a3 != blank -%}
+              <details class="store-detail__faq-item">
+                <summary class="store-detail__faq-q">{{ faq_q3 | escape }}</summary>
+                <div class="store-detail__faq-a">{{ faq_a3 }}</div>
+              </details>
+            {%- endif -%}
+          </div>
+        </section>
+      {%- endif -%}
+
+    </div>
+
+    {%- comment -%} ── RIGHT SIDEBAR ── {%- endcomment -%}
+    <aside class="store-detail__sidebar" aria-label="{{ 'sections.store_detail.sidebar_label' | t }}">
+
+      {%- comment -%} Contact card {%- endcomment -%}
+      <div class="store-detail__card">
+        <h3 class="store-detail__card-title">{{ 'sections.store_detail.contact_heading' | t }}</h3>
+
+        {%- if address != blank or city != blank -%}
+          <div class="store-detail__card-row">
+            <span class="store-detail__card-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1C4.067 1 2.5 2.567 2.5 4.5C2.5 7.5 6 11 6 11C6 11 9.5 7.5 9.5 4.5C9.5 2.567 7.933 1 6 1Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="4.5" r="1.25" stroke="currentColor" stroke-width="1.2"/></svg>
+            </span>
+            <address class="store-detail__card-address">
+              {%- if address != blank -%}{{ address | escape }}<br>{%- endif -%}
+              {%- if city != blank -%}{{ city | escape }}{%- endif -%}
+              {%- if state != blank -%}, {{ state | escape }}{%- endif -%}
+              {%- if pincode != blank -%} – {{ pincode | escape }}{%- endif -%}
+            </address>
+          </div>
+        {%- endif -%}
+
+        {%- if phone != blank -%}
+          <div class="store-detail__card-row">
+            <span class="store-detail__card-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 8.5a1 1 0 0 1-.21.63 1.7 1.7 0 0 1-.44.47C9.93 9.87 9.5 10 9 10c-.63 0-1.3-.15-2-.46s-1.4-.75-2.1-1.33A15.1 15.1 0 0 1 3 6.1C2.42 5.4 1.97 4.7 1.66 4S1.2 2.63 1.2 2c0-.47.1-.9.3-1.27.2-.38.5-.72.9-1.01.48-.33.99-.5 1.47-.47.18 0 .37.04.53.12.17.08.32.2.44.38L5.9 2.2c.12.17.2.33.27.48.06.15.1.28.1.4 0 .16-.05.31-.14.46a2.2 2.2 0 0 1-.37.45l-.5.52a.33.33 0 0 0-.1.25c0 .06.01.11.03.16l.06.14c.12.22.32.5.6.84.29.34.6.68.93 1.01.33.33.65.63.97.9.34.27.62.46.85.56l.14.05c.04.01.09.02.14.02a.35.35 0 0 0 .26-.11l.5-.51c.14-.14.28-.24.41-.3.14-.07.27-.1.41-.1.12 0 .25.02.39.08.14.05.28.13.43.24l2.06 1.47c.18.12.3.27.37.44.07.17.1.35.1.55Z" stroke="currentColor" stroke-width="1.2"/></svg>
+            </span>
+            <a class="store-detail__card-link" href="tel:{{ phone | remove: ' ' }}">{{ phone | escape }}</a>
+          </div>
+        {%- endif -%}
+
+        {%- if email != blank -%}
+          <div class="store-detail__card-row">
+            <span class="store-detail__card-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+            </span>
+            <a class="store-detail__card-link" href="mailto:{{ email | escape }}">{{ email | escape }}</a>
+          </div>
+        {%- endif -%}
+
+        {%- if whatsapp != blank -%}
+          <div class="store-detail__card-row">
+            <span class="store-detail__card-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </span>
+            <a class="store-detail__card-link" href="https://wa.me/{{ whatsapp | remove: '+' | remove: ' ' }}" target="_blank" rel="noopener noreferrer">{{ whatsapp | escape }}</a>
+          </div>
+        {%- endif -%}
+
+        {%- if map_url != blank -%}
+          <a class="store-detail__card-cta" href="{{ map_url }}" target="_blank" rel="noopener noreferrer">
+            {{ 'sections.store_detail.get_directions' | t }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Hours card {%- endcomment -%}
+      {%- if hours_weekday != blank or hours_weekend != blank -%}
+        <div class="store-detail__card">
+          <h3 class="store-detail__card-title">{{ 'sections.store_detail.hours_heading' | t }}</h3>
+          {%- if hours_weekday != blank -%}
+            <div class="store-detail__hours-row">
+              <span class="store-detail__hours-label">{{ 'sections.store_detail.hours_weekday' | t }}</span>
+              <span class="store-detail__hours-value">{{ hours_weekday | escape }}</span>
+            </div>
+          {%- endif -%}
+          {%- if hours_weekend != blank -%}
+            <div class="store-detail__hours-row">
+              <span class="store-detail__hours-label">{{ 'sections.store_detail.hours_weekend' | t }}</span>
+              <span class="store-detail__hours-value">{{ hours_weekend | escape }}</span>
+            </div>
+          {%- endif -%}
+          {%- if hours_holidays != blank -%}
+            <div class="store-detail__hours-row">
+              <span class="store-detail__hours-label">{{ 'sections.store_detail.hours_holidays' | t }}</span>
+              <span class="store-detail__hours-value">{{ hours_holidays | escape }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Access card {%- endcomment -%}
+      {%- if parking_info != blank or transport_info != blank -%}
+        <div class="store-detail__card">
+          <h3 class="store-detail__card-title">{{ 'sections.store_detail.access_heading' | t }}</h3>
+          {%- if parking_info != blank -%}
+            <div class="store-detail__card-row">
+              <span class="store-detail__card-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><circle cx="7" cy="17" r="1"/><circle cx="17" cy="17" r="1"/></svg>
+              </span>
+              <p class="store-detail__card-text">{{ parking_info | escape }}</p>
+            </div>
+          {%- endif -%}
+          {%- if transport_info != blank -%}
+            <div class="store-detail__card-row">
+              <span class="store-detail__card-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="20" height="13" rx="2"/><path d="M8 21h8m-4-5v5"/></svg>
+              </span>
+              <p class="store-detail__card-text">{{ transport_info | escape }}</p>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    </aside>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .store-detail {
+    padding-top: var(--padding-top, 0px);
+    padding-bottom: var(--padding-bottom, 80px);
+    background: #faf8f5;
+  }
+
+  /* ── Breadcrumb ── */
+  .store-detail__breadcrumb {
+    background: #fff;
+    border-bottom: 1px solid #ece6dc;
+  }
+
+  .store-detail__breadcrumb-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px 40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 12px;
+    color: #7e6767;
+  }
+
+  .store-detail__breadcrumb-inner a {
+    color: #7e6767;
+    text-decoration: none;
+  }
+
+  .store-detail__breadcrumb-inner a:hover {
+    color: #c3134e;
+  }
+
+  .store-detail__breadcrumb-inner span[aria-current] {
+    color: #2e1f1f;
+    font-weight: 600;
+  }
+
+  /* ── Hero ── */
+  .store-detail__hero {
+    position: relative;
+    height: 520px;
+    overflow: hidden;
+  }
+
+  .store-detail__hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .store-detail__hero-image--placeholder {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .store-detail__hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(20,12,12,0.82) 0%, rgba(20,12,12,0.25) 55%, rgba(20,12,12,0) 100%);
+    pointer-events: none;
+  }
+
+  .store-detail__hero-content {
+    position: absolute;
+    bottom: 48px;
+    left: 0;
+    right: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .store-detail__hero-type {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    color: #c69239;
+    display: block;
+  }
+
+  .store-detail__hero-name {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .store-detail__hero-location {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    margin: 0;
+  }
+
+  .store-detail__hero-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+
+  /* ── Buttons ── */
+  .store-detail__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 22px;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .store-detail__btn--gold {
+    background: linear-gradient(135deg, #d99d26 0%, #dbb870 100%);
+    color: #1f1414;
+  }
+
+  .store-detail__btn--outline {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.4);
+  }
+
+  .store-detail__btn--whatsapp {
+    background: #25d366;
+    color: #fff;
+  }
+
+  .store-detail__btn:hover {
+    opacity: 0.82;
+  }
+
+  /* ── Body layout ── */
+  .store-detail__body {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 40px 0;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 48px;
+    align-items: start;
+  }
+
+  /* ── Sections ── */
+  .store-detail__section {
+    margin-bottom: 48px;
+  }
+
+  .store-detail__section:last-child {
+    margin-bottom: 0;
+  }
+
+  .store-detail__section-title {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2e1f1f;
+    margin: 0 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e8dfd4;
+  }
+
+  .store-detail__prose {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 15px;
+    line-height: 1.75;
+    color: #4a3a38;
+  }
+
+  .store-detail__prose p {
+    margin: 0 0 1em;
+  }
+
+  .store-detail__prose p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Info row */
+  .store-detail__info-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: #fff;
+    border-left: 3px solid #c69239;
+  }
+
+  .store-detail__info-icon {
+    flex-shrink: 0;
+    color: #c69239;
+    margin-top: 1px;
+  }
+
+  .store-detail__info-text {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 14px;
+    color: #4a3a38;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Services list */
+  .store-detail__services-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 24px;
+  }
+
+  .store-detail__service-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 14px;
+    color: #4a3a38;
+  }
+
+  .store-detail__service-check {
+    color: #c69239;
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+
+  /* Gallery */
+  .store-detail__gallery {
+    display: grid;
+    gap: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .store-detail__gallery--1 {
+    grid-template-columns: 1fr;
+  }
+
+  .store-detail__gallery--2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .store-detail__gallery--3 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .store-detail__gallery--3 .store-detail__gallery-img:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .store-detail__gallery--4 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .store-detail__gallery-img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .store-detail__gallery--1 .store-detail__gallery-img {
+    height: 400px;
+  }
+
+  /* Map */
+  .store-detail__map-wrap {
+    border-radius: 4px;
+    overflow: hidden;
+    line-height: 0;
+  }
+
+  .store-detail__map-wrap iframe {
+    width: 100%;
+    height: 380px;
+    border: 0;
+    display: block;
+  }
+
+  /* FAQ */
+  .store-detail__faq {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid #e8dfd4;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .store-detail__faq-item {
+    border-bottom: 1px solid #e8dfd4;
+  }
+
+  .store-detail__faq-item:last-child {
+    border-bottom: none;
+  }
+
+  .store-detail__faq-q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 14px;
+    font-weight: 600;
+    color: #2e1f1f;
+    cursor: pointer;
+    background: #fff;
+    list-style: none;
+    transition: background 0.15s ease;
+  }
+
+  .store-detail__faq-q::-webkit-details-marker {
+    display: none;
+  }
+
+  .store-detail__faq-q::after {
+    content: '+';
+    font-size: 18px;
+    font-weight: 400;
+    color: #c69239;
+    flex-shrink: 0;
+    margin-left: 12px;
+    transition: transform 0.2s ease;
+  }
+
+  .store-detail__faq-item[open] .store-detail__faq-q::after {
+    content: '–';
+  }
+
+  .store-detail__faq-item[open] .store-detail__faq-q {
+    background: #fdf9f2;
+  }
+
+  .store-detail__faq-a {
+    padding: 0 20px 18px;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 14px;
+    line-height: 1.7;
+    color: #4a3a38;
+    background: #fdf9f2;
+  }
+
+  /* ── Sidebar ── */
+  .store-detail__sidebar {
+    position: sticky;
+    top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .store-detail__card {
+    background: #fff;
+    border: 1px solid #e8dfd4;
+    border-radius: 4px;
+    padding: 24px;
+  }
+
+  .store-detail__card-title {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2e1f1f;
+    margin: 0 0 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e8dfd4;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .store-detail__card-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .store-detail__card-row:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .store-detail__card-icon {
+    flex-shrink: 0;
+    color: #c69239;
+    margin-top: 1px;
+  }
+
+  .store-detail__card-address {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 13px;
+    line-height: 1.6;
+    color: #4a3a38;
+    font-style: normal;
+  }
+
+  .store-detail__card-link {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 13px;
+    color: #c3134e;
+    text-decoration: none;
+    word-break: break-all;
+  }
+
+  .store-detail__card-link:hover {
+    text-decoration: underline;
+  }
+
+  .store-detail__card-text {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 13px;
+    color: #4a3a38;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .store-detail__card-cta {
+    display: block;
+    text-align: center;
+    margin-top: 18px;
+    padding: 11px 20px;
+    background: linear-gradient(135deg, #d99d26 0%, #dbb870 100%);
+    color: #1f1414;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .store-detail__card-cta:hover {
+    opacity: 0.82;
+  }
+
+  /* Hours */
+  .store-detail__hours-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0ebe3;
+    gap: 12px;
+  }
+
+  .store-detail__hours-row:last-child {
+    border-bottom: none;
+  }
+
+  .store-detail__hours-label {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 12px;
+    font-weight: 600;
+    color: #7e6767;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+  }
+
+  .store-detail__hours-value {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 13px;
+    color: #2e1f1f;
+    font-weight: 500;
+    text-align: right;
+  }
+
+  /* ── Mobile ── */
+  @media screen and (max-width: 767px) {
+    .store-detail {
+      padding-bottom: 48px;
+    }
+
+    .store-detail__breadcrumb-inner {
+      padding: 10px 16px;
+      font-size: 11px;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .store-detail__hero {
+      height: 420px;
+    }
+
+    .store-detail__hero-name {
+      font-size: 2rem;
+    }
+
+    .store-detail__hero-content {
+      bottom: 28px;
+      padding: 0 20px;
+      gap: 7px;
+    }
+
+    .store-detail__hero-actions {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .store-detail__btn {
+      justify-content: center;
+    }
+
+    .store-detail__body {
+      grid-template-columns: 1fr;
+      padding: 32px 16px 0;
+      gap: 32px;
+    }
+
+    .store-detail__sidebar {
+      position: static;
+    }
+
+    .store-detail__section {
+      margin-bottom: 32px;
+    }
+
+    .store-detail__services-list {
+      grid-template-columns: 1fr;
+    }
+
+    .store-detail__gallery-img {
+      height: 200px;
+    }
+
+    .store-detail__gallery--1 .store-detail__gallery-img {
+      height: 280px;
+    }
+
+    .store-detail__gallery--3 .store-detail__gallery-img:first-child {
+      height: 240px;
+    }
+
+    .store-detail__map-wrap iframe {
+      height: 280px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.store_detail.name",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.store_detail.name"
+    }
+  ]
+}
+{% endschema %}

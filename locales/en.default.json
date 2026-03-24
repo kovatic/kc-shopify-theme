@@ -130,6 +130,27 @@
       "call": "Call",
       "map": "Map"
     },
+    "store_detail": {
+      "breadcrumb_label": "Breadcrumb",
+      "stores": "Our stores",
+      "call": "Call store",
+      "directions": "Get directions",
+      "whatsapp": "WhatsApp",
+      "get_directions": "Get directions",
+      "about_heading": "About {{ store }}",
+      "location_heading": "Location & neighbourhood",
+      "services_heading": "Services available",
+      "gallery_heading": "Store gallery",
+      "map_heading": "Find us on the map",
+      "faq_heading": "Frequently asked questions",
+      "contact_heading": "Contact & address",
+      "hours_heading": "Opening hours",
+      "access_heading": "Parking & transport",
+      "hours_weekday": "Mon – Fri",
+      "hours_weekend": "Sat – Sun",
+      "hours_holidays": "Holidays",
+      "sidebar_label": "Store information"
+    },
     "product_carousel": {
       "name": "Product carousel",
       "shop_now": "Shop Now",
