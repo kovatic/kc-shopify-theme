@@ -246,6 +246,32 @@
       </div>
     </div>
   </div>
+
+  {%- comment -%} Judge.me review widget {%- endcomment -%}
+  <div class="product-page__reviews">
+    {%- assign has_legacy = false -%}
+    {%- if product.metafields.judgeme.widget.size > 20 -%}
+      {%- assign has_legacy = true -%}
+    {%- endif -%}
+    <div style="clear:both"></div>
+    <div
+      id="judgeme_product_reviews"
+      class="jdgm-widget jdgm-review-widget"
+      data-product-title="{{ product.title | escape }}"
+      data-id="{{ product.id }}"
+      data-product-id="{{ product.id }}"
+      data-widget="review"
+      data-auto-install="true"
+    >
+      {%- if has_legacy -%}
+        <div class="jdgm-legacy-widget-content" style="display:none;">{{ product.metafields.judgeme.widget }}</div>
+      {%- endif -%}
+    </div>
+    {%- if product.metafields.judgeme.review_widget_data -%}
+      <script>jdgm.data ||= {}; jdgm.data.reviewWidget ||= {}; jdgm.data.reviewWidget[{{ product.id }}] = {{ product.metafields.judgeme.review_widget_data }}</script>
+    {%- endif -%}
+  </div>
+
 </div>
 
 {%- comment -%} Mobile sticky ATC bar {%- endcomment -%}
@@ -622,6 +648,19 @@
   .product-page__pincode-input.is-invalid {
     border-color: #c0392b;
     outline: none;
+  }
+
+  /* Reviews */
+  .product-page__reviews {
+    max-width: 1900px;
+    margin: 0 auto;
+    padding: 48px 80px 60px;
+  }
+
+  @media screen and (max-width: 767px) {
+    .product-page__reviews {
+      padding: 32px 16px 48px;
+    }
   }
 
   /* Accordions */
