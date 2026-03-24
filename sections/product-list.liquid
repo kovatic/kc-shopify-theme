@@ -26,7 +26,7 @@
             <a class="product-list__item-link" href="{{ product.url }}">
               <div class="product-list__image-wrapper">
                 {%- if product.featured_image != blank -%}
-                  {{ product.featured_image | image_url: width: 600, height: 700, crop: 'center' | image_tag: class: 'product-list__image', loading: 'lazy', alt: product.title | escape }}
+                  {{ product.featured_image | image_url: width: 600 | image_tag: class: 'product-list__image', loading: 'lazy', alt: product.title | escape }}
                 {%- else -%}
                   {{ 'product-1' | placeholder_svg_tag: 'product-list__image product-list__image--placeholder' }}
                 {%- endif -%}
@@ -285,7 +285,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: bottom !important;
+    object-position: center;
     display: block;
     transition: transform 0.4s ease;
   }
@@ -650,7 +650,7 @@
 
     /* Wrap layout — mobile */
     .product-list-mobile--wrap .product-list__image-wrapper {
-      aspect-ratio: 3 / 5;
+      aspect-ratio: 3 / 4;
     }
 
     .product-list-mobile--wrap .product-list__grid {
