@@ -62,8 +62,8 @@
         <span id="CartDrawer-Subtotal">{{ cart.total_price | money }}</span>
       </div>
       <p class="cart-drawer__tax-note">{{ 'cart.taxes_note' | t }}</p>
-      <form action="{{ routes.checkout_url }}" method="post">
-        <button type="submit" class="cart-drawer__checkout">{{ 'cart.checkout' | t }}</button>
+      <form action="{{ routes.cart_url }}" method="post">
+        <button type="submit" name="checkout" class="cart-drawer__checkout">{{ 'cart.checkout' | t }}</button>
       </form>
       <a href="{{ routes.cart_url }}" class="cart-drawer__view-cart">{{ 'cart.view_cart' | t }}</a>
     </div>
