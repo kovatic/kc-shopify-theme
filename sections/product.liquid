@@ -255,35 +255,6 @@
     </div>
   </div>
 
-  {%- comment -%} Judge.me review widget {%- endcomment -%}
-  <div class="product-page__reviews">
-    <!-- Start of Judge.me code -->
-    {%- assign has_legacy = false -%}
-    {%- if product.metafields.judgeme.widget.size > 20 -%}
-      {%- assign has_legacy = true -%}
-    {%- endif -%}
-    <div style="clear:both"></div>
-    <div
-      id="judgeme_product_reviews"
-      class="jdgm-widget jdgm-review-widget"
-      data-product-title="{{ product.title | escape }}"
-      data-id="{{ product.id }}"
-      data-product-id="{{ product.id }}"
-      data-widget="review"
-      data-auto-install="false"
-      data-shop-reviews-count="{{ shop.metafields.judgeme.shop_reviews_count | default: 0 | escape }}"
-      data-entry-point="review_widget.js"
-      data-entry-key="review-widget/main.js"
-    >
-      {%- if has_legacy -%}
-        <div class="jdgm-legacy-widget-content" style="display:none;">{{ product.metafields.judgeme.widget }}</div>
-      {%- endif -%}
-    </div>
-    {%- if product.metafields.judgeme.review_widget_data -%}
-      <script>jdgm.data ||= {}; jdgm.data.reviewWidget ||= {}; jdgm.data.reviewWidget[{{ product.id }}] = {{ product.metafields.judgeme.review_widget_data }}</script>
-    {%- endif -%}
-    <!-- End of Judge.me code -->
-  </div>
 
 </div>
 
@@ -352,6 +323,159 @@
     </button>
   </div>
   <div class="lb-counter" id="lb-counter-{{ section.id }}"></div>
+</div>
+
+{%- comment -%} ── More from this category ───────────────────────────── {%- endcomment -%}
+{%- assign current_collection = product.collections.first -%}
+{%- if current_collection != blank -%}
+  {%- assign shown = 0 -%}
+  {%- for p in current_collection.products -%}{%- unless p.id == product.id -%}{%- assign shown = shown | plus: 1 -%}{%- endunless -%}{%- endfor -%}
+  {%- if shown > 0 -%}
+    <div class="pp-row product-list product-list-desktop--wrap product-list-mobile--wrap" style="--padding-top:48px;--padding-bottom:32px;">
+      <div class="product-list__container">
+        <div class="product-list__header">
+          <div class="product-list__divider" aria-hidden="true">
+            <span class="product-list__divider-line"></span>
+            <span class="product-list__divider-diamond">✦</span>
+            <span class="product-list__divider-line"></span>
+          </div>
+          <h2 class="product-list__title section-title">{{ 'sections.product.more_from_category' | t: category: current_collection.title }}</h2>
+        </div>
+        <div class="product-list__scroll-wrapper">
+          <div class="product-list__grid" id="pp-cat-grid-{{ section.id }}">
+            {%- assign cat_shown = 0 -%}
+            {%- for p in current_collection.products -%}
+              {%- unless p.id == product.id -%}
+                {%- if cat_shown < 4 -%}
+                  {%- assign cat_shown = cat_shown | plus: 1 -%}
+                  {%- assign fv = p.first_available_variant | default: p.variants.first -%}
+                  {%- assign is_available = p.available -%}
+                  <div class="product-list__item{% unless is_available %} is-sold-out{% endunless %}" data-variant-id="{{ fv.id }}" data-available="{{ is_available }}">
+                    <a class="product-list__item-link" href="{{ p.url }}">
+                      <div class="product-list__image-wrapper">
+                        {%- if p.featured_image -%}
+                          {{ p.featured_image | image_url: width: 600 | image_tag: class: 'product-list__image', loading: 'lazy', alt: p.title | escape }}
+                        {%- else -%}
+                          {{ 'product-1' | placeholder_svg_tag: 'product-list__image product-list__image--placeholder' }}
+                        {%- endif -%}
+                        <div class="product-card-actions">
+                          <div class="product-card-actions__cart-wrap">
+                            {%- if is_available -%}
+                              <form method="post" action="/cart/add" class="product-card-atc-form">
+                                <input type="hidden" name="id" value="{{ fv.id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" name="add" class="product-card-actions__btn product-card-actions__btn--cart" aria-label="{{ 'sections.product_list.add_to_cart' | t }}">
+                                  <svg class="icon-cart" viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                  <svg class="icon-check" viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                  <svg class="icon-spinner" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="28 56"/></svg>
+                                </button>
+                              </form>
+                              <span class="product-card-tooltip">{{ 'sections.product_list.add_to_cart' | t }}</span>
+                            {%- else -%}
+                              <span class="product-card-oos-label">{{ 'general.product.sold_out' | t }}</span>
+                            {%- endif -%}
+                          </div>
+                          <button class="product-card-actions__btn product-card-actions__btn--similar" type="button" aria-label="View similar">
+                            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.6"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M11 8v6M8 11h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                          </button>
+                        </div>
+                        <div class="product-card-mobile-bar">
+                          {%- if is_available -%}
+                            <button type="button" class="product-card-mobile-bar__cart js-mobile-atc" aria-label="{{ 'sections.product_list.add_to_cart' | t }}">{{- 'sections.product_list.add_to_cart' | t | upcase -}}</button>
+                          {%- else -%}
+                            <button class="product-card-mobile-bar__cart product-card-mobile-bar__cart--soldout" type="button" disabled>{{ 'general.product.sold_out' | t | upcase }}</button>
+                          {%- endif -%}
+                          <button class="product-card-mobile-bar__similar" type="button" aria-label="View similar">
+                            <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><rect x="3" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/></svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="product-list__info">
+                        <span class="product-list__name">{{ p.title | escape }}</span>
+                        <span class="product-list__price">{{ p.price | money }}</span>
+                      </div>
+                    </a>
+                    {%- if is_available -%}
+                      <form method="post" action="/cart/add" class="product-card-atc-form product-card-atc-form--mobile" style="display:none">
+                        <input type="hidden" name="id" value="{{ fv.id }}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" name="add" class="product-card-atc-form--mobile-submit"></button>
+                      </form>
+                    {%- endif -%}
+                    <xb-wishlist-button-collection xb-handle="{{ p.handle }}" xb-parent-class="product-list__item"></xb-wishlist-button-collection>
+                  </div>
+                {%- endif -%}
+              {%- endunless -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+{%- endif -%}
+
+{%- comment -%} ── You may also like (AJAX) ──────────────────────────── {%- endcomment -%}
+<div class="pp-row product-list product-list-desktop--wrap product-list-mobile--wrap" id="pp-recommendations-{{ section.id }}" style="display:none;--padding-top:48px;--padding-bottom:32px;">
+  <div class="product-list__container">
+    <div class="product-list__header">
+      <div class="product-list__divider" aria-hidden="true">
+        <span class="product-list__divider-line"></span>
+        <span class="product-list__divider-diamond">✦</span>
+        <span class="product-list__divider-line"></span>
+      </div>
+      <h2 class="product-list__title section-title">{{ 'sections.product.you_may_also_like' | t }}</h2>
+    </div>
+    <div class="product-list__scroll-wrapper">
+      <div class="product-list__grid" id="pp-recommendations-track-{{ section.id }}"></div>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} ── Recently viewed ───────────────────────────────────── {%- endcomment -%}
+<div class="pp-row product-list product-list-desktop--wrap product-list-mobile--wrap" id="pp-recently-viewed-{{ section.id }}" style="display:none;--padding-top:48px;--padding-bottom:32px;">
+  <div class="product-list__container">
+    <div class="product-list__header">
+      <div class="product-list__divider" aria-hidden="true">
+        <span class="product-list__divider-line"></span>
+        <span class="product-list__divider-diamond">✦</span>
+        <span class="product-list__divider-line"></span>
+      </div>
+      <h2 class="product-list__title section-title">{{ 'sections.product.recently_viewed' | t }}</h2>
+    </div>
+    <div class="product-list__scroll-wrapper">
+      <div class="product-list__grid" id="pp-recently-viewed-track-{{ section.id }}"></div>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} Judge.me review widget — below all product lists {%- endcomment -%}
+<div class="product-page__reviews">
+  <!-- Start of Judge.me code -->
+  {%- assign has_legacy = false -%}
+  {%- if product.metafields.judgeme.widget.size > 20 -%}
+    {%- assign has_legacy = true -%}
+  {%- endif -%}
+  <div style="clear:both"></div>
+  <div
+    id="judgeme_product_reviews"
+    class="jdgm-widget jdgm-review-widget"
+    data-product-title="{{ product.title | escape }}"
+    data-id="{{ product.id }}"
+    data-product-id="{{ product.id }}"
+    data-widget="review"
+    data-auto-install="false"
+    data-shop-reviews-count="{{ shop.metafields.judgeme.shop_reviews_count | default: 0 | escape }}"
+    data-entry-point="review_widget.js"
+    data-entry-key="review-widget/main.js"
+  >
+    {%- if has_legacy -%}
+      <div class="jdgm-legacy-widget-content" style="display:none;">{{ product.metafields.judgeme.widget }}</div>
+    {%- endif -%}
+  </div>
+  {%- if product.metafields.judgeme.review_widget_data -%}
+    <script>jdgm.data ||= {}; jdgm.data.reviewWidget ||= {}; jdgm.data.reviewWidget[{{ product.id }}] = {{ product.metafields.judgeme.review_widget_data }}</script>
+  {%- endif -%}
+  <!-- End of Judge.me code -->
 </div>
 
 <script id="product-json-{{ section.id }}" type="application/json">
@@ -736,6 +860,129 @@
     });
   }
 
+  // ── Shared helpers ───────────────────────────────────────────
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function formatMoney(cents) {
+    var fmt = window.shopMoneyFormat || 'Rs. {{amount}}';
+    var val = cents / 100;
+    var amt   = val.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    var amtNd = Math.floor(val).toLocaleString('en-IN');
+    return fmt
+      .replace(/\{\{\s*amount_no_decimals_with_comma_separator\s*\}\}/, amtNd)
+      .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, amt)
+      .replace(/\{\{\s*amount_no_decimals\s*\}\}/, amtNd)
+      .replace(/\{\{\s*amount\s*\}\}/, amt);
+  }
+  var soldOutLabel = '{{ "general.product.sold_out" | t | escape }}';
+  var atcLabel     = '{{ "sections.product_list.add_to_cart" | t | escape }}';
+
+  function buildCard(p) {
+    var fv       = p.variants && p.variants[0];
+    var varId    = fv ? fv.id : '';
+    var available = p.available;
+    var imgSrc   = p.images && p.images[0]
+      ? (p.images[0].src.indexOf('cdn.shopify') !== -1
+          ? p.images[0].src  // already a sized CDN URL (recently viewed)
+          : p.images[0].src.replace(/(\.\w+)(\?|$)/, '_600x$1$2'))
+      : '';
+    var img = imgSrc
+      ? '<img class="product-list__image" src="' + imgSrc + '" alt="' + escHtml(p.title) + '" loading="lazy">'
+      : '<div class="product-list__image product-list__image--placeholder"></div>';
+
+    var cartBtn = available
+      ? '<form method="post" action="/cart/add" class="product-card-atc-form">'
+        + '<input type="hidden" name="id" value="' + varId + '">'
+        + '<input type="hidden" name="quantity" value="1">'
+        + '<button type="submit" name="add" class="product-card-actions__btn product-card-actions__btn--cart" aria-label="' + atcLabel + '">'
+        + '<svg class="icon-cart" viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        + '<svg class="icon-check" viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        + '<svg class="icon-spinner" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="28 56"/></svg>'
+        + '</button></form>'
+        + '<span class="product-card-tooltip">' + atcLabel + '</span>'
+      : '<span class="product-card-oos-label">' + soldOutLabel + '</span>';
+
+    var mobileBar = available
+      ? '<button type="button" class="product-card-mobile-bar__cart js-mobile-atc">' + atcLabel.toUpperCase() + '</button>'
+      : '<button class="product-card-mobile-bar__cart product-card-mobile-bar__cart--soldout" type="button" disabled>' + soldOutLabel.toUpperCase() + '</button>';
+
+    var hiddenForm = available
+      ? '<form method="post" action="/cart/add" class="product-card-atc-form product-card-atc-form--mobile" style="display:none">'
+        + '<input type="hidden" name="id" value="' + varId + '">'
+        + '<input type="hidden" name="quantity" value="1">'
+        + '<button type="submit" name="add" class="product-card-atc-form--mobile-submit"></button>'
+        + '</form>'
+      : '';
+
+    return '<div class="product-list__item' + (available ? '' : ' is-sold-out') + '" data-variant-id="' + varId + '" data-available="' + available + '">'
+      + '<a class="product-list__item-link" href="' + p.url + '">'
+      + '<div class="product-list__image-wrapper">'
+      + img
+      + '<div class="product-card-actions">'
+      + '<div class="product-card-actions__cart-wrap">' + cartBtn + '</div>'
+      + '<button class="product-card-actions__btn product-card-actions__btn--similar" type="button" aria-label="View similar">'
+      + '<svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.6"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M11 8v6M8 11h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'
+      + '</button></div>'
+      + '<div class="product-card-mobile-bar">' + mobileBar
+      + '<button class="product-card-mobile-bar__similar" type="button" aria-label="View similar">'
+      + '<svg viewBox="0 0 24 24" fill="none" width="20" height="20"><rect x="3" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="13" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.6"/></svg>'
+      + '</button></div>'
+      + '</div>'
+      + '<div class="product-list__info">'
+      + '<span class="product-list__name">' + escHtml(p.title) + '</span>'
+      + '<span class="product-list__price">' + formatMoney(fv ? fv.price : 0) + '</span>'
+      + '</div></a>'
+      + hiddenForm
+      + '</div>';
+  }
+
+  // ── You may also like (Shopify recommendations API) ──────────
+  var recoSection = document.getElementById('pp-recommendations-{{ section.id }}');
+  var recoTrack   = document.getElementById('pp-recommendations-track-{{ section.id }}');
+  if (recoSection && recoTrack) {
+    fetch('/recommendations/products.json?product_id={{ product.id }}&limit=4&intent=related')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var products = data && data.products;
+        if (!products || !products.length) return;
+        recoTrack.innerHTML = products.slice(0, 4).map(buildCard).join('');
+        recoSection.style.display = '';
+      })
+      .catch(function() {});
+  }
+
+  // ── Recently viewed ──────────────────────────────────────────
+  var rvSection = document.getElementById('pp-recently-viewed-{{ section.id }}');
+  var rvTrack   = document.getElementById('pp-recently-viewed-track-{{ section.id }}');
+
+  var RV_KEY = 'pp_recently_viewed';
+  var RV_MAX = 10;
+  var currentHandle = '{{ product.handle }}';
+  var currentEntry  = {
+    handle:    currentHandle,
+    title:     '{{ product.title | escape }}',
+    url:       '{{ product.url }}',
+    available: {{ product.available }},
+    variants:  [{ id: {{ current_variant.id }}, price: {{ current_variant.price }} }],
+    images:    [{ src: '{{ product.featured_image | image_url: width: 600 }}' }]
+  };
+
+  var rvList = [];
+  try { rvList = JSON.parse(localStorage.getItem(RV_KEY) || '[]'); } catch(e) {}
+  rvList = rvList.filter(function(p) { return p.handle !== currentHandle; });
+  rvList.unshift(currentEntry);
+  if (rvList.length > RV_MAX) rvList = rvList.slice(0, RV_MAX);
+  try { localStorage.setItem(RV_KEY, JSON.stringify(rvList)); } catch(e) {}
+
+  if (rvSection && rvTrack) {
+    var toShow = rvList.filter(function(p) { return p.handle !== currentHandle; }).slice(0, 4);
+    if (toShow.length) {
+      rvTrack.innerHTML = toShow.map(buildCard).join('');
+      rvSection.style.display = '';
+    }
+  }
+
 } // end init()
 
   if (document.readyState === 'loading') {
@@ -1100,14 +1347,21 @@
 
   /* Reviews */
   .product-page__reviews {
+    background-color: #efeee9;
+    padding: 48px 0 60px;
+  }
+  .product-page__reviews > * {
     max-width: 1900px;
     margin: 0 auto;
-    padding: 48px 80px 60px;
+    padding: 0 50px;
   }
 
   @media screen and (max-width: 767px) {
     .product-page__reviews {
-      padding: 32px 16px 48px;
+      padding: 32px 0 48px;
+    }
+    .product-page__reviews > * {
+      padding: 0 16px;
     }
   }
 
@@ -1399,6 +1653,9 @@
     font-size: 0.8rem;
     z-index: 2;
   }
+
+  /* ── Related rows background ───────────────────────────────── */
+  .pp-row { background-color: #efeee9; }
 
 {% endstylesheet %}
 
