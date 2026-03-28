@@ -426,16 +426,19 @@
     fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ id: variantId, quantity: 1 })
+      body: JSON.stringify({ id: parseInt(variantId), quantity: 1 })
     })
     .then(function(r) { return r.json(); })
-    .then(function() {
-      btn.classList.remove('is-loading');
-      btn.disabled = false;
-      // Refresh cart bubble / drawer if theme supports it
-      document.dispatchEvent(new CustomEvent('cart:refresh'));
+    .then(function() { return fetch('/cart.js').then(function(r) { return r.json(); }); })
+    .then(function(cart) {
+      var drawer = document.querySelector('cart-drawer');
+      if (drawer) {
+        drawer.renderCart(cart);
+        drawer.open();
+      }
     })
-    .catch(function() {
+    .catch(function(err) { console.error('Cart error:', err); })
+    .finally(function() {
       btn.classList.remove('is-loading');
       btn.disabled = false;
     });
