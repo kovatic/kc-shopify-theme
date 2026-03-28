@@ -179,7 +179,8 @@
       "pincode_not_serviceable": "Sorry, delivery is not available to this pincode.",
       "pincode_api_error": "Could not verify pincode. Please try again.",
       "previous": "Previous",
-      "next": "Next"
+      "next": "Next",
+      "quantity": "Quantity"
     }
   },
   "footer": {
