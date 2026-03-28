@@ -74,7 +74,7 @@
       "settings": {
         "title": "New Arrivals",
         "subtitle": "Discover what's new this season.",
-        "collection": "saree",
+        "collection": "sarees",
         "layout_type_desktop": "wrap",
         "layout_type_mobile": "scroll",
         "products_count": 4,
