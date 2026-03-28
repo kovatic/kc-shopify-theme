@@ -8,6 +8,486 @@
  * ------------------------------------------------------------
  */
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "banner_C4FemU": {
+      "type": "banner",
+      "blocks": {
+        "slide_aE8iH4": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/2_BANNER.jpg",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "shopify://collections/budget-silks",
+            "text_position": "middle-left",
+            "show_overlay": true,
+            "overlay_opacity": 30
+          }
+        },
+        "slide_aPXt94": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Untitled_design.jpg",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "",
+            "text_position": "middle-left",
+            "show_overlay": true,
+            "overlay_opacity": 30
+          }
+        }
+      },
+      "block_order": [
+        "slide_aE8iH4",
+        "slide_aPXt94"
+      ],
+      "name": "t:sections.banner.name",
+      "settings": {
+        "banner_height": 650,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "category_aE6ijQ": {
+      "type": "category",
+      "name": "t:general.shop_by_category",
+      "settings": {
+        "title": "Shop by Category",
+        "subtitle": "Explore our collections tailored for every style.",
+        "collections": [
+          "saree",
+          "top",
+          "crop-top",
+          "gown",
+          "3-in-1"
+        ],
+        "background_color": "#f1eee9",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "product_list_hdgdex": {
+      "type": "product-list",
+      "name": "t:sections.product_list.name",
+      "settings": {
+        "title": "New Arrivals",
+        "subtitle": "Discover what's new this season.",
+        "collection": "saree",
+        "layout_type_desktop": "wrap",
+        "layout_type_mobile": "scroll",
+        "products_count": 4,
+        "view_all_url": "shopify://collections/budget-silks",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "reel_7a3Lp6": {
+      "type": "reel",
+      "name": "t:sections.reel.name",
+      "settings": {
+        "title": "Trending Collections",
+        "subtitle": "Explore our curated collections of the finest ethnic wear",
+        "collections": [
+          "kanchipuram-checks",
+          "budget-silks",
+          "pop",
+          "nine-yard-collection"
+        ],
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "product_list_8L8wf6": {
+      "type": "product-list",
+      "name": "t:sections.product_list.name",
+      "settings": {
+        "title": "Featured Products",
+        "subtitle": "Discover what's new this season.",
+        "collection": "saree",
+        "layout_type_desktop": "wrap",
+        "layout_type_mobile": "wrap",
+        "products_count": 4,
+        "view_all_url": "shopify://collections/automated-collection",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "tab_product_list_PynKp9": {
+      "type": "tab-product-list",
+      "blocks": {
+        "tab_nBQFfe": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Festive",
+            "collection": "saree"
+          }
+        },
+        "tab_BGtcPL": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Wedding",
+            "collection": "budget-silks"
+          }
+        },
+        "tab_r7nxTJ": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Traditional",
+            "collection": "nine-yard-collection"
+          }
+        },
+        "tab_4h4VfU": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Party Wear",
+            "collection": "meena-copy-copy"
+          }
+        },
+        "tab_Pa8TWy": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Casual",
+            "collection": "meena-copy-copy-copy-copy"
+          }
+        }
+      },
+      "block_order": [
+        "tab_nBQFfe",
+        "tab_BGtcPL",
+        "tab_r7nxTJ",
+        "tab_4h4VfU",
+        "tab_Pa8TWy"
+      ],
+      "name": "t:sections.tab_product_list.name",
+      "settings": {
+        "title": "Shop by Occasion",
+        "products_per_tab": 4,
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "custom_section_FLDGhd": {
+      "type": "custom-section",
+      "blocks": {
+        "image_LUFpc7": {
+          "type": "image",
+          "name": "t:general.image",
+          "settings": {
+            "image": "shopify://shop_images/1200x400.png",
+            "url": "https://kcgoldhouse.com/"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "image_LUFpc7"
+      ],
+      "custom_css": [],
+      "name": "t:general.custom_section",
+      "settings": {}
+    },
+    "product_list_FYa6Kt": {
+      "type": "product-list",
+      "name": "t:sections.product_list.name",
+      "settings": {
+        "title": "Featured Products",
+        "subtitle": "Discover what's new this season.",
+        "collection": "saree",
+        "layout_type_desktop": "wrap",
+        "layout_type_mobile": "wrap",
+        "products_count": 4,
+        "view_all_url": "shopify://collections/automated-collection",
+        "padding_top": 40,
+        "padding_bottom": 60
+      }
+    },
+    "promo_RGMMyX": {
+      "type": "promo",
+      "name": "t:sections.promo.name",
+      "settings": {
+        "heading": "Gift Voucher",
+        "description": "The Perfect Gift, Wrapped in Tradition\n\nPhysical Gift Cards:\nRedeemable exclusively at Pothys textile showrooms across India.\nValid for one year from the date of issue.\nCustomize the card for your loved ones and surprise them with our convenient direct delivery option.",
+        "button_label": "Shop Now",
+        "button_url": "",
+        "image": "shopify://shop_images/image_87.png",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "brand_marquee_aQFqpK": {
+      "type": "brand-marquee",
+      "name": "t:sections.brand_marquee.name",
+      "settings": {
+        "heading": "Other Popular Brands Available",
+        "brands": [
+          "brand-t2a4js5x",
+          "brand-nefldi5f",
+          "brand-csm5fkhp",
+          "brand-iwwoaddg"
+        ],
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "product_carousel_zpTxYK": {
+      "type": "product-carousel",
+      "name": "t:sections.product_carousel.name",
+      "settings": {
+        "title": "Celebrities' Favorites",
+        "subtitle": "Discover what's new this season.",
+        "data_source": "multiple_collections",
+        "single_collection": "",
+        "products_count": 7,
+        "collections": [
+          "meena",
+          "meena-copy-copy-copy-copy-copy",
+          "nine-yard-collection",
+          "meena-copy-copy-copy",
+          "meena-copy-copy",
+          "reena",
+          "meena-copy-copy-copy-copy",
+          "meena-copy"
+        ],
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "about_ANVEQm": {
+      "type": "about",
+      "blocks": {
+        "brand_logo_7iQD8t": {
+          "type": "brand_logo",
+          "settings": {
+            "logo": "shopify://shop_images/KC_Logo_1_fc729608-ffe0-4100-986e-48624fe4f316.png",
+            "name": "Brand name",
+            "url": ""
+          }
+        },
+        "brand_logo_HEKGBE": {
+          "type": "brand_logo",
+          "settings": {
+            "logo": "shopify://shop_images/image_52.png",
+            "name": "Brand name",
+            "url": ""
+          }
+        },
+        "brand_logo_9ycq9P": {
+          "type": "brand_logo",
+          "settings": {
+            "logo": "shopify://shop_images/image_53.png",
+            "name": "Brand name",
+            "url": ""
+          }
+        },
+        "brand_logo_MXrGiT": {
+          "type": "brand_logo",
+          "settings": {
+            "logo": "shopify://shop_images/image_54.png",
+            "name": "Brand name",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "brand_logo_7iQD8t",
+        "brand_logo_HEKGBE",
+        "brand_logo_9ycq9P",
+        "brand_logo_MXrGiT"
+      ],
+      "name": "t:sections.about.name",
+      "settings": {
+        "founder_image": "shopify://shop_images/image_50.png",
+        "founder_name": "Mr. K. Chinnadurai",
+        "heading": "56 Years of Timeless Excellence, Where Every Saree Is Truly Unique",
+        "description": "<p>Mr. K. Chinnadurai, a visionary who believed that simple work philosophies could create great ventures, founded K. Chinnadurai & Co. in<strong> 1970</strong> during his teenage years in Tuticorin District. Starting with a small showroom and direct customer sales, the business quickly gained a reputation for outstanding service and high-quality garments.</p>",
+        "brand_label": "Our Brand",
+        "padding_top": 8,
+        "padding_bottom": 80
+      }
+    },
+    "testimonials_dKBhcg": {
+      "type": "testimonials",
+      "blocks": {
+        "video_XWQPY9": {
+          "type": "video",
+          "settings": {
+            "video_url": "",
+            "image": "shopify://shop_images/istockphoto-1310454968-612x612.jpg",
+            "alt": ""
+          }
+        },
+        "video_eKc6FW": {
+          "type": "video",
+          "settings": {
+            "video_url": "",
+            "image": "shopify://shop_images/istockphoto-1654117403-612x612.jpg",
+            "alt": ""
+          }
+        },
+        "video_Ct4BiT": {
+          "type": "video",
+          "settings": {
+            "video_url": "",
+            "image": "shopify://shop_images/istockphoto-1212679579-612x612.jpg",
+            "alt": ""
+          }
+        },
+        "video_NGGN8H": {
+          "type": "video",
+          "settings": {
+            "video_url": "",
+            "image": "shopify://shop_images/istockphoto-1310454968-612x612.jpg",
+            "alt": ""
+          }
+        },
+        "review_pnwei3": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "John Doe",
+            "reviewer_date": "4 days ago",
+            "rating": 5,
+            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
+          }
+        },
+        "review_VjQRNF": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "John Doe",
+            "reviewer_date": "4 days ago",
+            "rating": 5,
+            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
+          }
+        },
+        "review_hwi7jM": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "John Doe",
+            "reviewer_date": "4 days ago",
+            "rating": 5,
+            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
+          }
+        },
+        "review_h9RpiA": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "John Doe",
+            "reviewer_date": "4 days ago",
+            "rating": 5,
+            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
+          }
+        }
+      },
+      "block_order": [
+        "video_XWQPY9",
+        "video_eKc6FW",
+        "video_Ct4BiT",
+        "video_NGGN8H",
+        "review_pnwei3",
+        "review_VjQRNF",
+        "review_hwi7jM",
+        "review_h9RpiA"
+      ],
+      "name": "Testimonials",
+      "settings": {
+        "title": "Our Customer Testimonials",
+        "subtitle": "Trusted and praised for excellence",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "stores_NYzLxX": {
+      "type": "stores",
+      "blocks": {
+        "store_EbaiC9": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/image_37.png",
+            "store_type": "",
+            "store_name": "Eval",
+            "address": "Bus Stand, Eral, Tamil Nadu 628801",
+            "phone": "04630-271254",
+            "map_url": "https://maps.app.goo.gl/qEgSzdP9FnBhAzvr8"
+          }
+        },
+        "store_dpm8Kk": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/image_37.png",
+            "store_type": "",
+            "store_name": "Thiruchendur",
+            "address": "130, 1, N Car St, Thiruchendur, Tamil Nadu 628215",
+            "phone": "04639-242777",
+            "map_url": "https://maps.app.goo.gl/2LA2iyVKWKLn7vHs7"
+          }
+        },
+        "store_CRtjn9": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/image_37.png",
+            "store_type": "",
+            "store_name": "Thoothukudi",
+            "address": "Toovipuram Main Rd, Toovipuram, Thoothukudi, Tamil Nadu 628001",
+            "phone": "0461-2111111",
+            "map_url": "https://maps.app.goo.gl/kzKhviCJuuxGHn4p6"
+          }
+        },
+        "store_VPNbQQ": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/image_37.png",
+            "store_type": "",
+            "store_name": "Chennai",
+            "address": "Velachery Main Rd, Kamarajapuram, Palaniappa Nagar, Sembakkam, Chennai, Tamil Nadu, 600073",
+            "phone": "044 2111 1111",
+            "map_url": "https://maps.app.goo.gl/hVmkkdPL7g7K4M2eA"
+          }
+        },
+        "store_iVqhef": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/image_37.png",
+            "store_type": "",
+            "store_name": "Tirunelveli",
+            "address": "Tirunelveli, 9, Triuvanandapuram Road, Vannarpettai,Tirunelveli, Tamil Nadu 627003",
+            "phone": "94882 02320",
+            "map_url": "https://maps.app.goo.gl/fhUxmfCm5VjLxvh1A"
+          }
+        }
+      },
+      "block_order": [
+        "store_EbaiC9",
+        "store_dpm8Kk",
+        "store_CRtjn9",
+        "store_VPNbQQ",
+        "store_iVqhef"
+      ],
+      "name": "t:sections.stores.name",
+      "settings": {
+        "title": "Visit Our Stores",
+        "subtitle": "5 locations across Tamil Nadu & Chennai",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    }
+  },
+  "order": [
+    "banner_C4FemU",
+    "category_aE6ijQ",
+    "product_list_hdgdex",
+    "reel_7a3Lp6",
+    "product_list_8L8wf6",
+    "tab_product_list_PynKp9",
+    "custom_section_FLDGhd",
+    "product_list_FYa6Kt",
+    "promo_RGMMyX",
+    "brand_marquee_aQFqpK",
+    "product_carousel_zpTxYK",
+    "about_ANVEQm",
+    "testimonials_dKBhcg",
+    "stores_NYzLxX"
+  ]
 }
