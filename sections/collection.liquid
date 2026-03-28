@@ -162,7 +162,7 @@
                 <a class="product-list__item-link" href="{{ product.url }}">
                   <div class="product-list__image-wrapper">
                     {%- if product.featured_image != blank -%}
-                      {{ product.featured_image | image_url: width: 600, height: 700, crop: 'center' | image_tag: class: 'product-list__image', loading: 'lazy', alt: product.title | escape }}
+                      {{ product.featured_image | image_url: width: 600 | image_tag: class: 'product-list__image', loading: 'lazy', alt: product.title | escape }}
                     {%- else -%}
                       {{ 'product-1' | placeholder_svg_tag: 'product-list__image product-list__image--placeholder' }}
                     {%- endif -%}
