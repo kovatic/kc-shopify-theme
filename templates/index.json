@@ -15,7 +15,6 @@
         "slide_aE8iH4": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/2_BANNER.jpg",
             "subheading": "",
             "heading": "",
             "text": "",
@@ -29,7 +28,6 @@
         "slide_aPXt94": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Untitled_design.jpg",
             "subheading": "",
             "heading": "",
             "text": "",
@@ -80,7 +78,7 @@
         "layout_type_desktop": "wrap",
         "layout_type_mobile": "scroll",
         "products_count": 4,
-        "view_all_url": "shopify://collections/budget-silks",
+        "view_all_url": "shopify://collections/sarees",
         "padding_top": 60,
         "padding_bottom": 60
       }
@@ -177,7 +175,6 @@
           "type": "image",
           "name": "t:general.image",
           "settings": {
-            "image": "shopify://shop_images/1200x400.png",
             "url": "https://kcgoldhouse.com/"
           },
           "blocks": {}
@@ -213,7 +210,6 @@
         "description": "The Perfect Gift, Wrapped in Tradition\n\nPhysical Gift Cards:\nRedeemable exclusively at Pothys textile showrooms across India.\nValid for one year from the date of issue.\nCustomize the card for your loved ones and surprise them with our convenient direct delivery option.",
         "button_label": "Shop Now",
         "button_url": "",
-        "image": "shopify://shop_images/image_87.png",
         "padding_top": 60,
         "padding_bottom": 60
       }
@@ -262,7 +258,6 @@
         "brand_logo_7iQD8t": {
           "type": "brand_logo",
           "settings": {
-            "logo": "shopify://shop_images/KC_Logo_1_fc729608-ffe0-4100-986e-48624fe4f316.png",
             "name": "Brand name",
             "url": ""
           }
@@ -270,7 +265,6 @@
         "brand_logo_HEKGBE": {
           "type": "brand_logo",
           "settings": {
-            "logo": "shopify://shop_images/image_52.png",
             "name": "Brand name",
             "url": ""
           }
@@ -278,7 +272,6 @@
         "brand_logo_9ycq9P": {
           "type": "brand_logo",
           "settings": {
-            "logo": "shopify://shop_images/image_53.png",
             "name": "Brand name",
             "url": ""
           }
@@ -286,7 +279,6 @@
         "brand_logo_MXrGiT": {
           "type": "brand_logo",
           "settings": {
-            "logo": "shopify://shop_images/image_54.png",
             "name": "Brand name",
             "url": ""
           }
@@ -300,7 +292,6 @@
       ],
       "name": "t:sections.about.name",
       "settings": {
-        "founder_image": "shopify://shop_images/image_50.png",
         "founder_name": "Mr. K. Chinnadurai",
         "heading": "56 Years of Timeless Excellence, Where Every Saree Is Truly Unique",
         "description": "<p>Mr. K. Chinnadurai, a visionary who believed that simple work philosophies could create great ventures, founded K. Chinnadurai & Co. in<strong> 1970</strong> during his teenage years in Tuticorin District. Starting with a small showroom and direct customer sales, the business quickly gained a reputation for outstanding service and high-quality garments.</p>",
@@ -316,7 +307,6 @@
           "type": "video",
           "settings": {
             "video_url": "",
-            "image": "shopify://shop_images/istockphoto-1310454968-612x612.jpg",
             "alt": ""
           }
         },
@@ -324,7 +314,6 @@
           "type": "video",
           "settings": {
             "video_url": "",
-            "image": "shopify://shop_images/istockphoto-1654117403-612x612.jpg",
             "alt": ""
           }
         },
@@ -332,7 +321,6 @@
           "type": "video",
           "settings": {
             "video_url": "",
-            "image": "shopify://shop_images/istockphoto-1212679579-612x612.jpg",
             "alt": ""
           }
         },
@@ -340,7 +328,6 @@
           "type": "video",
           "settings": {
             "video_url": "",
-            "image": "shopify://shop_images/istockphoto-1310454968-612x612.jpg",
             "alt": ""
           }
         },
@@ -405,7 +392,6 @@
         "store_EbaiC9": {
           "type": "store",
           "settings": {
-            "image": "shopify://shop_images/image_37.png",
             "store_type": "",
             "store_name": "Eval",
             "address": "Bus Stand, Eral, Tamil Nadu 628801",
@@ -416,7 +402,6 @@
         "store_dpm8Kk": {
           "type": "store",
           "settings": {
-            "image": "shopify://shop_images/image_37.png",
             "store_type": "",
             "store_name": "Thiruchendur",
             "address": "130, 1, N Car St, Thiruchendur, Tamil Nadu 628215",
@@ -427,7 +412,6 @@
         "store_CRtjn9": {
           "type": "store",
           "settings": {
-            "image": "shopify://shop_images/image_37.png",
             "store_type": "",
             "store_name": "Thoothukudi",
             "address": "Toovipuram Main Rd, Toovipuram, Thoothukudi, Tamil Nadu 628001",
@@ -438,7 +422,6 @@
         "store_VPNbQQ": {
           "type": "store",
           "settings": {
-            "image": "shopify://shop_images/image_37.png",
             "store_type": "",
             "store_name": "Chennai",
             "address": "Velachery Main Rd, Kamarajapuram, Palaniappa Nagar, Sembakkam, Chennai, Tamil Nadu, 600073",
@@ -449,7 +432,6 @@
         "store_iVqhef": {
           "type": "store",
           "settings": {
-            "image": "shopify://shop_images/image_37.png",
             "store_type": "",
             "store_name": "Tirunelveli",
             "address": "Tirunelveli, 9, Triuvanandapuram Road, Vannarpettai,Tirunelveli, Tamil Nadu 627003",
