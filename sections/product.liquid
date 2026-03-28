@@ -865,15 +865,15 @@
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
   function formatMoney(cents) {
-    var fmt = window.shopMoneyFormat || 'Rs. {{ amount }}';
+    var fmt = window.shopMoneyFormat || 'Rs. {{amount}}';
     var val = cents / 100;
-    var amt = val.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    var amt   = val.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     var amtNd = Math.floor(val).toLocaleString('en-IN');
     return fmt
-      .replace('{{ amount_no_decimals_with_comma_separator }}', amtNd)
-      .replace('{{ amount_with_comma_separator }}', amt)
-      .replace('{{ amount_no_decimals }}', amtNd)
-      .replace('{{ amount }}', amt);
+      .replace(/\{\{\s*amount_no_decimals_with_comma_separator\s*\}\}/, amtNd)
+      .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, amt)
+      .replace(/\{\{\s*amount_no_decimals\s*\}\}/, amtNd)
+      .replace(/\{\{\s*amount\s*\}\}/, amt);
   }
   var soldOutLabel = '{{ "general.product.sold_out" | t | escape }}';
   var atcLabel     = '{{ "sections.product_list.add_to_cart" | t | escape }}';
