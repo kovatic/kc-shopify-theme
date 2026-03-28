@@ -90,6 +90,12 @@
           <a href="{{ product.vendor | url_for_vendor }}" class="product-page__vendor">{{ product.vendor }}</a>
         {%- endif -%}
 
+        <!-- Start of Judge.me code -->
+        <div style='{{ jm_style }}' class='jdgm-widget jdgm-preview-badge' data-id='{{ product.id }}' data-auto-install='false'>
+          {{ product.metafields.judgeme.badge }}
+        </div>
+        <!-- End of Judge.me code -->
+
         <div class="product-page__price-row">
           <span class="product-page__price">
             {%- if current_variant.compare_at_price > current_variant.price -%}
@@ -354,6 +360,24 @@
 
 <script>
 (function() {
+  function debounce(fn, ms) {
+    var t;
+    return function() {
+      var args = arguments;
+      clearTimeout(t);
+      t = setTimeout(function() { fn.apply(null, args); }, ms);
+    };
+  }
+
+  function throttleRaf(fn) {
+    var rafId = null;
+    return function() {
+      var args = arguments;
+      if (rafId) return;
+      rafId = requestAnimationFrame(function() { rafId = null; fn.apply(null, args); });
+    };
+  }
+
   function init() {
   var page = document.querySelector('.product-page');
   if (!page) return;
@@ -419,25 +443,28 @@
     });
   }
 
-  // ── AJAX Add to Cart ─────────────────────────────────────────
-  function ajaxAddToCart(variantId, btn) {
-    btn.classList.add('is-loading');
-    btn.disabled = true;
+  // ── AJAX Add to Cart (batched) ────────────────────────────────
+  var atcPending = 0;
+  var atcTimer   = null;
+
+  function flushAtc(variantId) {
+    var qty = atcPending;
+    atcPending = 0;
+    atcBtns.forEach(function(b) { b.classList.add('is-loading'); b.disabled = true; });
     fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ id: variantId, quantity: 1 })
+      body: JSON.stringify({ id: parseInt(variantId), quantity: qty })
     })
     .then(function(r) { return r.json(); })
-    .then(function() {
-      btn.classList.remove('is-loading');
-      btn.disabled = false;
-      // Refresh cart bubble / drawer if theme supports it
-      document.dispatchEvent(new CustomEvent('cart:refresh'));
+    .then(function() { return fetch('/cart.js').then(function(r) { return r.json(); }); })
+    .then(function(cart) {
+      var drawer = document.querySelector('cart-drawer');
+      if (drawer) { drawer.renderCart(cart); drawer.open(); }
     })
-    .catch(function() {
-      btn.classList.remove('is-loading');
-      btn.disabled = false;
+    .catch(function(err) { console.error('Cart error:', err); })
+    .finally(function() {
+      atcBtns.forEach(function(b) { b.classList.remove('is-loading'); b.disabled = false; });
     });
   }
 
@@ -445,7 +472,9 @@
     btn.addEventListener('click', function() {
       var variantId = document.getElementById('variant-id-input').value;
       if (!variantId) return;
-      ajaxAddToCart(variantId, btn);
+      atcPending++;
+      clearTimeout(atcTimer);
+      atcTimer = setTimeout(function() { flushAtc(variantId); }, 400);
     });
   });
 
@@ -519,10 +548,10 @@
   if (pincodeBtn) pincodeBtn.addEventListener('click', checkPincode);
   if (pincodeInput) {
     pincodeInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') checkPincode(); });
-    pincodeInput.addEventListener('input', function() {
+    pincodeInput.addEventListener('input', debounce(function() {
       pincodeInput.value = pincodeInput.value.replace(/\D/g, '');
       pincodeInput.classList.remove('is-invalid');
-    });
+    }, 150));
   }
 
   // ── Image zoom (desktop) ─────────────────────────────────────
@@ -555,7 +584,7 @@
       item.addEventListener('mouseleave', function() {
         zoomResult.classList.remove('is-visible');
       });
-      item.addEventListener('mousemove', function(e) {
+      item.addEventListener('mousemove', throttleRaf(function(e) {
         if (window.innerWidth < 992) return;
         var rect = item.getBoundingClientRect();
         var x = Math.max(0, Math.min(rect.width,  e.clientX - rect.left));
@@ -564,7 +593,7 @@
         var factor = 3;
         zoomResult.style.backgroundSize     = (rect.width * factor) + 'px ' + (rect.height * factor) + 'px';
         zoomResult.style.backgroundPosition = '-' + (x * factor - resultSize / 2) + 'px -' + (y * factor - resultSize / 2) + 'px';
-      });
+      }));
     });
   }
 
@@ -572,10 +601,10 @@
   var track = document.getElementById('carousel-track');
   var dots  = page.querySelectorAll('.product-page__dot');
   if (track && dots.length) {
-    track.addEventListener('scroll', function() {
+    track.addEventListener('scroll', throttleRaf(function() {
       var idx = Math.round(track.scrollLeft / track.offsetWidth);
       dots.forEach(function(d, i) { d.classList.toggle('is-active', i === idx); });
-    }, { passive: true });
+    }), { passive: true });
     dots.forEach(function(dot) {
       dot.addEventListener('click', function() {
         track.scrollTo({ left: parseInt(dot.getAttribute('data-index')) * track.offsetWidth, behavior: 'smooth' });
@@ -644,18 +673,18 @@
     });
     lbClose.addEventListener('click', lbClose2);
     overlay.addEventListener('click', function(e) { if (e.target === overlay) lbClose2(); });
-    if (lbPrev) lbPrev.addEventListener('click', function() { if (lbIndex > 0) lbLoad(lbIndex - 1); });
-    if (lbNext) lbNext.addEventListener('click', function() { if (lbIndex < lbSrcs.length - 1) lbLoad(lbIndex + 1); });
-    if (lbZoomIn)  lbZoomIn.addEventListener('click',  function() { lbScale = Math.min(lbMax, lbScale + lbStep); lbClamp(); lbTransform(true); });
-    if (lbZoomOut) lbZoomOut.addEventListener('click', function() { lbScale = Math.max(lbMin, lbScale - lbStep); if (lbScale === 1) { lbTx = 0; lbTy = 0; } lbClamp(); lbTransform(true); });
-    if (lbReset)   lbReset.addEventListener('click', lbReset2);
+    if (lbPrev) lbPrev.addEventListener('click', debounce(function() { if (lbIndex > 0) lbLoad(lbIndex - 1); }, 150));
+    if (lbNext) lbNext.addEventListener('click', debounce(function() { if (lbIndex < lbSrcs.length - 1) lbLoad(lbIndex + 1); }, 150));
+    if (lbZoomIn)  lbZoomIn.addEventListener('click',  debounce(function() { lbScale = Math.min(lbMax, lbScale + lbStep); lbClamp(); lbTransform(true); }, 100));
+    if (lbZoomOut) lbZoomOut.addEventListener('click', debounce(function() { lbScale = Math.max(lbMin, lbScale - lbStep); if (lbScale === 1) { lbTx = 0; lbTy = 0; } lbClamp(); lbTransform(true); }, 100));
+    if (lbReset)   lbReset.addEventListener('click', debounce(lbReset2, 150));
 
-    overlay.addEventListener('wheel', function(e) {
+    overlay.addEventListener('wheel', throttleRaf(function(e) {
       e.preventDefault();
       lbScale = Math.max(lbMin, Math.min(lbMax, lbScale + (e.deltaY < 0 ? lbStep : -lbStep)));
       if (lbScale === 1) { lbTx = 0; lbTy = 0; }
       lbClamp(); lbTransform(false);
-    }, { passive: false });
+    }), { passive: false });
 
     var lbDrag = { on: false, x: 0, y: 0, tx: 0, ty: 0 };
     lbImg.addEventListener('mousedown', function(e) {
@@ -664,12 +693,12 @@
       lbDrag.on = true; lbDrag.x = e.clientX; lbDrag.y = e.clientY; lbDrag.tx = lbTx; lbDrag.ty = lbTy;
       lbImg.classList.add('is-dragging');
     });
-    window.addEventListener('mousemove', function(e) {
+    window.addEventListener('mousemove', throttleRaf(function(e) {
       if (!lbDrag.on) return;
       lbTx = lbDrag.tx + (e.clientX - lbDrag.x);
       lbTy = lbDrag.ty + (e.clientY - lbDrag.y);
       lbClamp(); lbTransform(false);
-    });
+    }));
     window.addEventListener('mouseup', function() {
       if (!lbDrag.on) return;
       lbDrag.on = false; lbImg.classList.remove('is-dragging');
