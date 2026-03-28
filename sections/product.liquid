@@ -1027,7 +1027,16 @@
     min-width: 0;
   }
   .product-page__gallery { min-width: 0; position: relative; }
-  .product-page__info { min-width: 0; }
+  .product-page__info {
+    min-width: 0;
+    align-self: start;
+    position: sticky;
+    top: 160px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .product-page__info::-webkit-scrollbar { display: none; }
 
   /* Desktop: 2x2 grid */
   .product-page__images-grid {
