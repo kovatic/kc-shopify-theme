@@ -180,7 +180,10 @@
       "pincode_api_error": "Could not verify pincode. Please try again.",
       "previous": "Previous",
       "next": "Next",
-      "quantity": "Quantity"
+      "quantity": "Quantity",
+      "more_from_category": "More from {{ category }}",
+      "you_may_also_like": "You may also like",
+      "recently_viewed": "Recently viewed"
     }
   },
   "footer": {
