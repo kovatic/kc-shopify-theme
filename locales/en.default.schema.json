@@ -168,6 +168,7 @@
       "address": "Address",
       "phone": "Phone number",
       "map_url": "Map link URL",
+      "store_url": "Store page link",
       "blocks": {
         "store": {
           "name": "Store"

@@ -42,6 +42,9 @@
               {%- endif -%}
             </div>
             <div class="stores__panel-gradient" aria-hidden="true"></div>
+            {%- if block.settings.store_url != blank -%}
+              <a class="stores__panel-link" href="{{ block.settings.store_url }}" aria-label="{{ block.settings.store_name | escape }}"></a>
+            {%- endif -%}
             <div class="stores__panel-collapsed">
               {%- if block.settings.store_type != blank -%}
                 <span class="stores__panel-type">{{ block.settings.store_type | upcase | escape }}</span>
@@ -118,6 +121,9 @@
                   {%- endif -%}
                 </div>
                 <div class="stores__slide-gradient" aria-hidden="true"></div>
+                {%- if block.settings.store_url != blank -%}
+                  <a class="stores__slide-link" href="{{ block.settings.store_url }}" aria-label="{{ block.settings.store_name | escape }}"></a>
+                {%- endif -%}
                 <div class="stores__slide-info">
                   {%- if block.settings.store_type != blank -%}
                     <span class="stores__slide-type">{{ block.settings.store_type | upcase | escape }}</span>
@@ -294,6 +300,30 @@
   .stores__panels:hover .stores__panel.is-active:not(:hover) .stores__panel-image {
     filter: grayscale(100%);
     transform: scale(1);
+  }
+
+  /* Full-card link overlay */
+  .stores__panel-link,
+  .stores__slide-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .stores__panel-expanded,
+  .stores__slide-info {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .stores__panel-expanded a,
+  .stores__slide-info a {
+    pointer-events: auto;
+  }
+
+  .stores__panel-collapsed {
+    z-index: 2;
   }
 
   /* Gradient overlay */
@@ -768,6 +798,11 @@
           "type": "url",
           "id": "map_url",
           "label": "t:sections.stores.map_url"
+        },
+        {
+          "type": "url",
+          "id": "store_url",
+          "label": "t:sections.stores.store_url"
         }
       ]
     }
