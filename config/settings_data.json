@@ -31,6 +31,11 @@
         "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
         "disabled": false,
         "settings": {}
+      },
+      "13386407466480679122": {
+        "type": "shopify://apps/interakt-whatsapp-marketing/blocks/app_embed/8ae4eea6-7869-4909-8446-2f9389fe7a63",
+        "disabled": false,
+        "settings": {}
       }
     }
   }
