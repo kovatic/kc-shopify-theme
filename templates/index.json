@@ -12,24 +12,9 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
-        "slide_aE8iH4": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/2_BANNER.jpg",
-            "subheading": "",
-            "heading": "",
-            "text": "",
-            "button_label": "",
-            "button_url": "shopify://collections/budget-silks",
-            "text_position": "middle-left",
-            "show_overlay": true,
-            "overlay_opacity": 30
-          }
-        },
         "slide_aPXt94": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Untitled_design.jpg",
             "subheading": "",
             "heading": "",
             "text": "",
@@ -42,7 +27,6 @@
         }
       },
       "block_order": [
-        "slide_aE8iH4",
         "slide_aPXt94"
       ],
       "name": "t:sections.banner.name",
@@ -59,11 +43,8 @@
         "title": "Shop by Category",
         "subtitle": "Explore our collections tailored for every style.",
         "collections": [
-          "saree",
-          "top",
-          "crop-top",
-          "gown",
-          "3-in-1"
+          "soft-silk-saree",
+          "necklace-saree"
         ],
         "background_color": "#f1eee9",
         "padding_top": 40,
@@ -76,11 +57,11 @@
       "settings": {
         "title": "New Arrivals",
         "subtitle": "Discover what's new this season.",
-        "collection": "saree",
+        "collection": "sarees",
         "layout_type_desktop": "wrap",
         "layout_type_mobile": "scroll",
         "products_count": 4,
-        "view_all_url": "shopify://collections/budget-silks",
+        "view_all_url": "shopify://collections/sarees",
         "padding_top": 60,
         "padding_bottom": 60
       }
@@ -178,7 +159,6 @@
           "type": "image",
           "name": "t:general.image",
           "settings": {
-            "image": "shopify://shop_images/1200x400.png",
             "url": "https://kcgoldhouse.com/"
           },
           "blocks": {}
@@ -214,7 +194,6 @@
         "description": "The Perfect Gift, Wrapped in Tradition\n\nPhysical Gift Cards:\nRedeemable exclusively at Pothys textile showrooms across India.\nValid for one year from the date of issue.\nCustomize the card for your loved ones and surprise them with our convenient direct delivery option.",
         "button_label": "Shop Now",
         "button_url": "",
-        "image": "shopify://shop_images/image_87.png",
         "padding_top": 60,
         "padding_bottom": 60
       }
@@ -225,10 +204,25 @@
       "settings": {
         "heading": "Other Popular Brands Available",
         "brands": [
-          "brand-t2a4js5x",
-          "brand-nefldi5f",
-          "brand-csm5fkhp",
-          "brand-iwwoaddg"
+          "brand-tnircrkh",
+          "brand-loe4qgt4",
+          "brand-nhygxu9c",
+          "brand-wqrmw4rg",
+          "brand-tfhbnkhz",
+          "brand-8cim8oqq",
+          "brand-vro0c6ek",
+          "brand-dirjnbtk",
+          "brand-urqexs2a",
+          "brand-coahxzjp",
+          "brand-5sspvdc2",
+          "brand-4svefti5",
+          "brand-avc2hh5i",
+          "brand-oiuffkxd",
+          "brand-4t3gyley",
+          "brand-xhgwawub",
+          "brand-omjziaj3",
+          "brand-al8eubeh",
+          "brand-abkbeghn"
         ],
         "padding_top": 60,
         "padding_bottom": 60
@@ -263,7 +257,7 @@
         "brand_logo_7iQD8t": {
           "type": "brand_logo",
           "settings": {
-            "logo": "shopify://shop_images/KC_Logo_1_fc729608-ffe0-4100-986e-48624fe4f316.png",
+            "logo": "shopify://shop_images/KC_Logo_1_fc729608-ffe0-4100-986e-48624fe4f316.webp",
             "name": "Brand name",
             "url": ""
           }
@@ -271,7 +265,7 @@
         "brand_logo_HEKGBE": {
           "type": "brand_logo",
           "settings": {
-            "logo": "shopify://shop_images/image_52.png",
+            "logo": "shopify://shop_images/image_52.webp",
             "name": "Brand name",
             "url": ""
           }
@@ -279,7 +273,7 @@
         "brand_logo_9ycq9P": {
           "type": "brand_logo",
           "settings": {
-            "logo": "shopify://shop_images/image_53.png",
+            "logo": "shopify://shop_images/image_53.avif",
             "name": "Brand name",
             "url": ""
           }
@@ -287,7 +281,7 @@
         "brand_logo_MXrGiT": {
           "type": "brand_logo",
           "settings": {
-            "logo": "shopify://shop_images/image_54.png",
+            "logo": "shopify://shop_images/image_54.avif",
             "name": "Brand name",
             "url": ""
           }
@@ -301,7 +295,7 @@
       ],
       "name": "t:sections.about.name",
       "settings": {
-        "founder_image": "shopify://shop_images/image_50.png",
+        "founder_image": "shopify://shop_images/image_50.avif",
         "founder_name": "Mr. K. Chinnadurai",
         "heading": "56 Years of Timeless Excellence, Where Every Saree Is Truly Unique",
         "description": "<p>Mr. K. Chinnadurai, a visionary who believed that simple work philosophies could create great ventures, founded K. Chinnadurai & Co. in<strong> 1970</strong> during his teenage years in Tuticorin District. Starting with a small showroom and direct customer sales, the business quickly gained a reputation for outstanding service and high-quality garments.</p>",
@@ -316,36 +310,28 @@
         "video_XWQPY9": {
           "type": "video",
           "settings": {
-            "video": "shopify://files/videos/✨ Zip & Go Tissue Pattu Saree – Now Available! ✨Make every moment stylish and effortless with ou (1).mp4",
             "video_url": "",
-            "image": "shopify://shop_images/istockphoto-1310454968-612x612.jpg",
             "alt": ""
           }
         },
         "video_eKc6FW": {
           "type": "video",
           "settings": {
-            "video": "shopify://files/videos/✨ Zip & Go Tissue Pattu Saree – Now Available! ✨Make every moment stylish and effortless with ou (1).mp4",
             "video_url": "",
-            "image": "shopify://shop_images/istockphoto-1654117403-612x612.jpg",
             "alt": ""
           }
         },
         "video_Ct4BiT": {
           "type": "video",
           "settings": {
-            "video": "shopify://files/videos/✨ Zip & Go Tissue Pattu Saree – Now Available! ✨Make every moment stylish and effortless with ou (1).mp4",
             "video_url": "",
-            "image": "shopify://shop_images/istockphoto-1212679579-612x612.jpg",
             "alt": ""
           }
         },
         "video_NGGN8H": {
           "type": "video",
           "settings": {
-            "video": "shopify://files/videos/✨ Zip & Go Tissue Pattu Saree – Now Available! ✨Make every moment stylish and effortless with ou.mp4",
             "video_url": "",
-            "image": "shopify://shop_images/istockphoto-1310454968-612x612.jpg",
             "alt": ""
           }
         },
@@ -410,9 +396,8 @@
         "store_EbaiC9": {
           "type": "store",
           "settings": {
-            "image": "shopify://shop_images/image_37.png",
             "store_type": "",
-            "store_name": "Eval",
+            "store_name": "Eral",
             "address": "Bus Stand, Eral, Tamil Nadu 628801",
             "phone": "04630-271254",
             "map_url": "https://maps.app.goo.gl/qEgSzdP9FnBhAzvr8"
@@ -421,7 +406,6 @@
         "store_dpm8Kk": {
           "type": "store",
           "settings": {
-            "image": "shopify://shop_images/image_37.png",
             "store_type": "",
             "store_name": "Thiruchendur",
             "address": "130, 1, N Car St, Thiruchendur, Tamil Nadu 628215",
@@ -432,7 +416,6 @@
         "store_CRtjn9": {
           "type": "store",
           "settings": {
-            "image": "shopify://shop_images/image_37.png",
             "store_type": "",
             "store_name": "Thoothukudi",
             "address": "Toovipuram Main Rd, Toovipuram, Thoothukudi, Tamil Nadu 628001",
@@ -443,7 +426,6 @@
         "store_VPNbQQ": {
           "type": "store",
           "settings": {
-            "image": "shopify://shop_images/image_37.png",
             "store_type": "",
             "store_name": "Chennai",
             "address": "Velachery Main Rd, Kamarajapuram, Palaniappa Nagar, Sembakkam, Chennai, Tamil Nadu, 600073",
@@ -454,7 +436,6 @@
         "store_iVqhef": {
           "type": "store",
           "settings": {
-            "image": "shopify://shop_images/image_37.png",
             "store_type": "",
             "store_name": "Tirunelveli",
             "address": "Tirunelveli, 9, Triuvanandapuram Road, Vannarpettai,Tirunelveli, Tamil Nadu 627003",
