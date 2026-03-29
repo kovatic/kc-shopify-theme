@@ -43,11 +43,8 @@
         "title": "Shop by Category",
         "subtitle": "Explore our collections tailored for every style.",
         "collections": [
-          "saree",
-          "top",
-          "crop-top",
-          "gown",
-          "3-in-1"
+          "soft-silk-saree",
+          "necklace-saree"
         ],
         "background_color": "#f1eee9",
         "padding_top": 40,
