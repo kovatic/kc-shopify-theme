@@ -8,6 +8,17 @@
  * ------------------------------------------------------------
  */
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "store_detail_rrcBUq": {
+      "type": "store-detail",
+      "name": "t:sections.store_detail.name",
+      "settings": {
+        "padding_top": 0,
+        "padding_bottom": 80
+      }
+    }
+  },
+  "order": [
+    "store_detail_rrcBUq"
+  ]
 }
