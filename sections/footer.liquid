@@ -71,31 +71,28 @@
           <circle cx="8" cy="23" r="2" stroke="#494949" stroke-width="1.5"/>
           <circle cx="24" cy="23" r="2" stroke="#494949" stroke-width="1.5"/>
         </svg>
-        <span>{{ 'footer.trust.free_shipping' | t }}</span>
+        <span>{{ section.settings.trust_free_shipping | escape }}</span>
       </div>
       <div class="footer__trust-item">
         <svg class="footer__trust-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M6 16A10 10 0 1016 6" stroke="#494949" stroke-width="1.5" stroke-linecap="round"/>
           <path d="M6 6v10h10" stroke="#494949" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span>{{ 'footer.trust.easy_returns' | t }}</span>
+        <span>{{ section.settings.trust_easy_returns | escape }}</span>
       </div>
       <div class="footer__trust-item">
         <svg class="footer__trust-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M16 4a8 8 0 018 8v1h2a2 2 0 012 2v3a2 2 0 01-2 2h-2a8 8 0 01-16 0h-2a2 2 0 01-2-2v-3a2 2 0 012-2h2v-1a8 8 0 018-8z" stroke="#494949" stroke-width="1.5" stroke-linejoin="round"/>
           <path d="M13 18.5s1 1.5 3 1.5 3-1.5 3-1.5" stroke="#494949" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-        <div class="footer__trust-item-text">
-          <span>{{ 'footer.trust.customer_support' | t }}</span>
-          <span class="footer__trust-phone">+91 94882 02320</span>
-        </div>
+        <span>{{ section.settings.trust_customer_support | escape }}</span>
       </div>
       <div class="footer__trust-item">
         <svg class="footer__trust-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M16 3L5 7v9c0 6 4.5 10.5 11 13 6.5-2.5 11-7 11-13V7L16 3z" stroke="#494949" stroke-width="1.5" stroke-linejoin="round"/>
           <path d="M11 16l3 3 7-7" stroke="#494949" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span>{{ 'footer.trust.secure_payments' | t }}</span>
+        <span>{{ section.settings.trust_secure_payments | escape }}</span>
       </div>
     </div>
 
@@ -163,31 +160,28 @@
             <circle cx="8" cy="23" r="2" stroke="#494949" stroke-width="1.5"/>
             <circle cx="24" cy="23" r="2" stroke="#494949" stroke-width="1.5"/>
           </svg>
-          <span>{{ 'footer.trust.free_shipping' | t }}</span>
+          <span>{{ section.settings.trust_free_shipping | escape }}</span>
         </div>
         <div class="footer__trust-item">
           <svg class="footer__trust-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M6 16A10 10 0 1016 6" stroke="#494949" stroke-width="1.5" stroke-linecap="round"/>
             <path d="M6 6v10h10" stroke="#494949" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <span>{{ 'footer.trust.easy_returns' | t }}</span>
+          <span>{{ section.settings.trust_easy_returns | escape }}</span>
         </div>
         <div class="footer__trust-item">
           <svg class="footer__trust-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M16 4a8 8 0 018 8v1h2a2 2 0 012 2v3a2 2 0 01-2 2h-2a8 8 0 01-16 0h-2a2 2 0 01-2-2v-3a2 2 0 012-2h2v-1a8 8 0 018-8z" stroke="#494949" stroke-width="1.5" stroke-linejoin="round"/>
             <path d="M13 18.5s1 1.5 3 1.5 3-1.5 3-1.5" stroke="#494949" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
-          <div class="footer__trust-item-text">
-            <span>{{ 'footer.trust.customer_support' | t }}</span>
-            <span class="footer__trust-phone">+91 94882 02320</span>
-          </div>
+          <span>{{ section.settings.trust_customer_support | escape }}</span>
         </div>
         <div class="footer__trust-item">
           <svg class="footer__trust-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M16 3L5 7v9c0 6 4.5 10.5 11 13 6.5-2.5 11-7 11-13V7L16 3z" stroke="#494949" stroke-width="1.5" stroke-linejoin="round"/>
             <path d="M11 16l3 3 7-7" stroke="#494949" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <span>{{ 'footer.trust.secure_payments' | t }}</span>
+          <span>{{ section.settings.trust_secure_payments | escape }}</span>
         </div>
       </div>
 
@@ -195,7 +189,10 @@
 
   </div>
 
-  {%- comment -%} Mobile description (shown only on mobile below logo) {%- endcomment -%}
+  {%- comment -%} Mobile: brand name + description (shown only on mobile below logo) {%- endcomment -%}
+  {%- if section.settings.brand_name != blank -%}
+    <p class="footer__mobile-brand-name">{{ section.settings.brand_name }}</p>
+  {%- endif -%}
   {%- if section.settings.mobile_description != blank -%}
     <div class="footer__mobile-description">
       {{ section.settings.mobile_description }}
@@ -237,12 +234,6 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
-  }
-
-  .footer__trust-phone {
-    font-size: 13px;
-    font-weight: 600;
-    color: #2e1f1f;
   }
 
   .footer__trust-mobile {
@@ -294,11 +285,6 @@
       gap: 2px;
     }
 
-    .footer__trust-mobile .footer__trust-phone {
-      font-size: 13px;
-      font-weight: 600;
-      color: #2e1f1f;
-    }
   }
 
   .footer {
@@ -457,6 +443,10 @@
     height: 16px;
   }
 
+  .footer__mobile-brand-name {
+    display: none;
+  }
+
   .footer__mobile-description {
     display: none;
     background-color: #f0e7db;
@@ -519,6 +509,18 @@
       display: none;
     }
 
+    .footer__mobile-brand-name {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      font-size: 18px;
+      color: #2e1f1f;
+      text-align: center;
+      margin: 0;
+      padding: 12px 20px 0;
+      background-color: #f0e7db;
+    }
+
     .footer__mobile-description {
       display: block;
       font-family: 'Montserrat', sans-serif;
@@ -527,7 +529,8 @@
       color: #494949;
       line-height: 1.6;
       text-align: center;
-      padding: 0 20px 12px;
+      padding: 4px 20px 12px;
+      background-color: #f0e7db;
     }
 
     /* Social icons on mobile — centered below description */
@@ -698,6 +701,34 @@
       "id": "show_payment_icons",
       "label": "t:labels.show_payment_icons",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:labels.trust_bar"
+    },
+    {
+      "type": "text",
+      "id": "trust_free_shipping",
+      "label": "t:labels.trust_free_shipping",
+      "default": "Free shipping"
+    },
+    {
+      "type": "text",
+      "id": "trust_easy_returns",
+      "label": "t:labels.trust_easy_returns",
+      "default": "Easy returns"
+    },
+    {
+      "type": "text",
+      "id": "trust_customer_support",
+      "label": "t:labels.trust_customer_support",
+      "default": "Customer support"
+    },
+    {
+      "type": "text",
+      "id": "trust_secure_payments",
+      "label": "t:labels.trust_secure_payments",
+      "default": "100% Secure payments"
     }
   ]
 }
