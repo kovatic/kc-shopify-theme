@@ -143,6 +143,7 @@
         "tab_4h4VfU",
         "tab_Pa8TWy"
       ],
+      "disabled": true,
       "name": "t:sections.tab_product_list.name",
       "settings": {
         "title": "Shop by Occasion",

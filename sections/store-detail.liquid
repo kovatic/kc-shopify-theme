@@ -14,8 +14,8 @@
   assign hours_weekday = store.hours_weekday.value
   assign hours_weekend = store.hours_weekend.value
   assign hours_holidays = store.hours_holidays.value
-  assign description   = store.description.value
-  assign area_info     = store.area_info.value
+  assign description   = store.description
+  assign area_info     = store.area_info
   assign landmarks     = store.landmarks.value
   assign parking_info  = store.parking_info.value
   assign transport_info = store.transport_info.value
@@ -143,7 +143,7 @@
           <h2 id="sd-about-heading" class="store-detail__section-title">
             {{ 'sections.store_detail.about_heading' | t: store: store_name | escape }}
           </h2>
-          <div class="store-detail__prose">{{ description }}</div>
+          <div class="store-detail__prose">{{ description | metafield_tag }}</div>
         </section>
       {%- endif -%}
 
@@ -154,7 +154,7 @@
             {{ 'sections.store_detail.location_heading' | t }}
           </h2>
           {%- if area_info != blank -%}
-            <div class="store-detail__prose">{{ area_info }}</div>
+            <div class="store-detail__prose">{{ area_info | metafield_tag }}</div>
           {%- endif -%}
           {%- if landmarks != blank -%}
             <div class="store-detail__info-row">
