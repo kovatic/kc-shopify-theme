@@ -16,9 +16,47 @@
         "padding_top": 0,
         "padding_bottom": 80
       }
+    },
+    "faq_b8y44k": {
+      "type": "faq",
+      "blocks": {
+        "faq_item_bXyDrN": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We accept returns within 30 days of purchase.</p>"
+          }
+        },
+        "faq_item_QjCPjL": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We accept returns within 30 days of purchase.</p>"
+          }
+        },
+        "faq_item_jVi6qX": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We accept returns within 30 days of purchase.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_item_bXyDrN",
+        "faq_item_QjCPjL",
+        "faq_item_jVi6qX"
+      ],
+      "name": "t:sections.faq.name",
+      "settings": {
+        "show_page_content": false,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
     }
   },
   "order": [
-    "store_detail_rrcBUq"
+    "store_detail_rrcBUq",
+    "faq_b8y44k"
   ]
 }
