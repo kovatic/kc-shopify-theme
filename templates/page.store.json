@@ -11,10 +11,20 @@
   "sections": {
     "main": {
       "type": "page",
+      "disabled": true,
       "settings": {}
+    },
+    "store_detail_T7FjwG": {
+      "type": "store-detail",
+      "name": "t:sections.store_detail.name",
+      "settings": {
+        "padding_top": 0,
+        "padding_bottom": 80
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "store_detail_T7FjwG"
   ]
 }
