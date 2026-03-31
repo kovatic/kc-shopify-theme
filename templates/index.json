@@ -408,13 +408,15 @@
         },
         "store_dpm8Kk": {
           "type": "store",
+          "source": "{{ metaobjects.store.thiruchendur }}",
           "settings": {
-            "store_type": "",
-            "store_name": "Thiruchendur",
-            "address": "130, 1, N Car St, Thiruchendur, Tamil Nadu 628215",
-            "phone": "04639-242777",
-            "map_url": "https://maps.app.goo.gl/2LA2iyVKWKLn7vHs7",
-            "store_url": ""
+            "image": "{{ metaobjects.store.thiruchendur.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.thiruchendur.store_type.value }}",
+            "store_name": "{{ metaobjects.store.thiruchendur.store_name.value }}",
+            "address": "{{ metaobjects.store.thiruchendur.address.value }}",
+            "phone": "{{ metaobjects.store.thiruchendur.phone.value }}",
+            "map_url": "{{ metaobjects.store.thiruchendur.map_url.value }}",
+            "store_url": "{{ metaobjects.store.thiruchendur.system.url }}"
           }
         },
         "store_CRtjn9": {
