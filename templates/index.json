@@ -44,7 +44,10 @@
         "subtitle": "Explore our collections tailored for every style.",
         "collections": [
           "soft-silk-saree",
-          "necklace-saree"
+          "necklace-saree",
+          "geogrette-saree",
+          "kora-cotton",
+          "tissue-saree"
         ],
         "background_color": "#f1eee9",
         "padding_top": 40,
