@@ -395,13 +395,15 @@
       "blocks": {
         "store_EbaiC9": {
           "type": "store",
+          "source": "{{ metaobjects.store.eral }}",
           "settings": {
-            "store_type": "",
-            "store_name": "Eral",
-            "address": "Bus Stand, Eral, Tamil Nadu 628801",
-            "phone": "04630-271254",
-            "map_url": "https://maps.app.goo.gl/qEgSzdP9FnBhAzvr8",
-            "store_url": ""
+            "image": "{{ metaobjects.store.eral.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.eral.store_type.value }}",
+            "store_name": "{{ metaobjects.store.eral.store_name.value }}",
+            "address": "{{ metaobjects.store.eral.address.value }}",
+            "phone": "{{ metaobjects.store.eral.phone.value }}",
+            "map_url": "{{ metaobjects.store.eral.map_url.value }}",
+            "store_url": "{{ metaobjects.store.eral.system.url }}"
           }
         },
         "store_dpm8Kk": {
