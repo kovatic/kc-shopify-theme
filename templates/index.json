@@ -86,13 +86,13 @@
       "type": "product-list",
       "name": "t:sections.product_list.name",
       "settings": {
-        "title": "Featured Products",
+        "title": "Banarasi Silk Sarees",
         "subtitle": "Discover what's new this season.",
-        "collection": "saree",
+        "collection": "banarasi-silk-saree",
         "layout_type_desktop": "wrap",
         "layout_type_mobile": "wrap",
         "products_count": 4,
-        "view_all_url": "shopify://collections/automated-collection",
+        "view_all_url": "shopify://collections/banarasi-silk-saree",
         "padding_top": 60,
         "padding_bottom": 60
       }
@@ -175,13 +175,13 @@
       "type": "product-list",
       "name": "t:sections.product_list.name",
       "settings": {
-        "title": "Featured Products",
+        "title": "Tissue Saree",
         "subtitle": "Discover what's new this season.",
-        "collection": "saree",
+        "collection": "tissue-saree",
         "layout_type_desktop": "wrap",
         "layout_type_mobile": "wrap",
         "products_count": 4,
-        "view_all_url": "shopify://collections/automated-collection",
+        "view_all_url": "shopify://collections/tissue-saree",
         "padding_top": 40,
         "padding_bottom": 60
       }
