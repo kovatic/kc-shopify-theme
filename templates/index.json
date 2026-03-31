@@ -421,13 +421,15 @@
         },
         "store_CRtjn9": {
           "type": "store",
+          "source": "{{ metaobjects.store.thoothukudi }}",
           "settings": {
-            "store_type": "",
-            "store_name": "Thoothukudi",
-            "address": "Toovipuram Main Rd, Toovipuram, Thoothukudi, Tamil Nadu 628001",
-            "phone": "0461-2111111",
-            "map_url": "https://maps.app.goo.gl/kzKhviCJuuxGHn4p6",
-            "store_url": ""
+            "image": "{{ metaobjects.store.thoothukudi.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.thoothukudi.store_type.value }}",
+            "store_name": "{{ metaobjects.store.thoothukudi.store_name.value }}",
+            "address": "{{ metaobjects.store.thoothukudi.address.value }}",
+            "phone": "{{ metaobjects.store.thoothukudi.phone.value }}",
+            "map_url": "{{ metaobjects.store.thoothukudi.map_url.value }}",
+            "store_url": "{{ metaobjects.store.thoothukudi.system.url }}"
           }
         },
         "store_VPNbQQ": {
@@ -445,13 +447,15 @@
         },
         "store_iVqhef": {
           "type": "store",
+          "source": "{{ metaobjects.store.tirunelveli }}",
           "settings": {
-            "store_type": "",
-            "store_name": "Tirunelveli",
-            "address": "Tirunelveli, 9, Triuvanandapuram Road, Vannarpettai,Tirunelveli, Tamil Nadu 627003",
-            "phone": "94882 02320",
-            "map_url": "https://maps.app.goo.gl/fhUxmfCm5VjLxvh1A",
-            "store_url": ""
+            "image": "{{ metaobjects.store.tirunelveli.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.tirunelveli.store_type.value }}",
+            "store_name": "{{ metaobjects.store.tirunelveli.store_name.value }}",
+            "address": "{{ metaobjects.store.tirunelveli.address.value }}",
+            "phone": "{{ metaobjects.store.tirunelveli.phone.value }}",
+            "map_url": "{{ metaobjects.store.tirunelveli.map_url.value }}",
+            "store_url": "{{ metaobjects.store.tirunelveli.system.url }}"
           }
         }
       },
