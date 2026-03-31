@@ -23,7 +23,7 @@
             "button_url": "shopify://collections/banarasi-silk-saree",
             "text_position": "middle-left",
             "show_overlay": true,
-            "overlay_opacity": 30
+            "overlay_opacity": 0
           }
         }
       },
