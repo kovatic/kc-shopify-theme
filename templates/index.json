@@ -400,7 +400,8 @@
             "store_name": "Eral",
             "address": "Bus Stand, Eral, Tamil Nadu 628801",
             "phone": "04630-271254",
-            "map_url": "https://maps.app.goo.gl/qEgSzdP9FnBhAzvr8"
+            "map_url": "https://maps.app.goo.gl/qEgSzdP9FnBhAzvr8",
+            "store_url": ""
           }
         },
         "store_dpm8Kk": {
@@ -410,7 +411,8 @@
             "store_name": "Thiruchendur",
             "address": "130, 1, N Car St, Thiruchendur, Tamil Nadu 628215",
             "phone": "04639-242777",
-            "map_url": "https://maps.app.goo.gl/2LA2iyVKWKLn7vHs7"
+            "map_url": "https://maps.app.goo.gl/2LA2iyVKWKLn7vHs7",
+            "store_url": ""
           }
         },
         "store_CRtjn9": {
@@ -420,17 +422,21 @@
             "store_name": "Thoothukudi",
             "address": "Toovipuram Main Rd, Toovipuram, Thoothukudi, Tamil Nadu 628001",
             "phone": "0461-2111111",
-            "map_url": "https://maps.app.goo.gl/kzKhviCJuuxGHn4p6"
+            "map_url": "https://maps.app.goo.gl/kzKhviCJuuxGHn4p6",
+            "store_url": ""
           }
         },
         "store_VPNbQQ": {
           "type": "store",
+          "source": "{{ metaobjects.store.chennai }}",
           "settings": {
-            "store_type": "",
-            "store_name": "Chennai",
-            "address": "Velachery Main Rd, Kamarajapuram, Palaniappa Nagar, Sembakkam, Chennai, Tamil Nadu, 600073",
-            "phone": "044 2111 1111",
-            "map_url": "https://maps.app.goo.gl/hVmkkdPL7g7K4M2eA"
+            "image": "{{ metaobjects.store.chennai.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.chennai.store_type.value }}",
+            "store_name": "{{ metaobjects.store.chennai.store_name.value }}",
+            "address": "{{ metaobjects.store.chennai.address.value }}",
+            "phone": "{{ metaobjects.store.chennai.phone.value }}",
+            "map_url": "{{ metaobjects.store.chennai.map_url.value }}",
+            "store_url": "{{ metaobjects.store.chennai.system.url }}"
           }
         },
         "store_iVqhef": {
@@ -440,7 +446,8 @@
             "store_name": "Tirunelveli",
             "address": "Tirunelveli, 9, Triuvanandapuram Road, Vannarpettai,Tirunelveli, Tamil Nadu 627003",
             "phone": "94882 02320",
-            "map_url": "https://maps.app.goo.gl/fhUxmfCm5VjLxvh1A"
+            "map_url": "https://maps.app.goo.gl/fhUxmfCm5VjLxvh1A",
+            "store_url": ""
           }
         }
       },
