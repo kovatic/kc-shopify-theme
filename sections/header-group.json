@@ -17,81 +17,24 @@
         "mega_menu_UxxNjG": {
           "type": "mega_menu",
           "settings": {
-            "nav_link": "Pure Silk",
-            "col1_heading": "Shop By Brand",
-            "col1_menu": "",
-            "col2_heading": "Shop Kanchipuram Silk",
+            "nav_link": "Stores",
+            "col1_heading": "Locations",
+            "col1_menu": "stores-menu",
+            "col2_heading": "",
             "col2_menu": "",
             "col3_heading": "",
             "col3_menu": "",
-            "card1_label": "Samudrika Pattu",
+            "card1_label": "",
             "card1_url": "",
-            "card2_label": "Vastrakala Pattu",
-            "card2_url": "",
-            "card3_label": "Parampara Pattu",
-            "card3_url": ""
-          }
-        },
-        "mega_menu_y3kzKW": {
-          "type": "mega_menu",
-          "settings": {
-            "nav_link": "Cotton Saree",
-            "col1_heading": "Shop By Brand",
-            "col1_menu": "",
-            "col2_heading": "Shop Kanchipuram Silk",
-            "col2_menu": "",
-            "col3_heading": "Shop Samudra Silk",
-            "col3_menu": "",
-            "card1_label": "Samudrika Pattu",
-            "card1_url": "",
-            "card2_label": "Vastrakala Pattu",
+            "card2_label": "",
             "card2_url": "",
             "card3_label": "",
-            "card3_url": ""
-          }
-        },
-        "mega_menu_wR4abG": {
-          "type": "mega_menu",
-          "settings": {
-            "nav_link": "Half Saree",
-            "col1_heading": "Shop By Brand",
-            "col1_menu": "",
-            "col2_heading": "Shop Kanchipuram Silk",
-            "col2_menu": "",
-            "col3_heading": "",
-            "col3_menu": "",
-            "card1_label": "Samudrika Pattu",
-            "card1_url": "",
-            "card2_label": "Vastrakala Pattu",
-            "card2_url": "",
-            "card3_label": "Parampara Pattu",
-            "card3_url": ""
-          }
-        },
-        "mega_menu_haVNRP": {
-          "type": "mega_menu",
-          "settings": {
-            "nav_link": "Anarkalis",
-            "col1_heading": "Shop By Brand",
-            "col1_menu": "",
-            "col2_heading": "Shop Kanchipuram Silk",
-            "col2_menu": "",
-            "col3_heading": "",
-            "col3_menu": "",
-            "card1_label": "Samudrika Pattu",
-            "card1_url": "",
-            "card2_label": "Vastrakala Pattu",
-            "card2_url": "",
-            "card3_label": "Parampara Pattu",
             "card3_url": ""
           }
         }
       },
       "block_order": [
-        "mega_menu_UxxNjG",
-        "mega_menu_y3kzKW",
-        "mega_menu_wR4abG",
-        "mega_menu_haVNRP"
+        "mega_menu_UxxNjG"
       ],
       "settings": {
         "logo": "shopify://shop_images/eng_logo_9e0bdf3f-7512-42d8-9fbd-3bded5607b88.webp",
