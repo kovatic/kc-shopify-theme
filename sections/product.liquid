@@ -392,7 +392,7 @@
                       </div>
                       <div class="product-list__info">
                         <span class="product-list__name">{{ p.title | escape }}</span>
-                        <span class="product-list__price">{{ p.price | money }}</span>
+                        <span class="product-list__price">{{ p.price_min | money }}</span>
                       </div>
                     </a>
                     {%- if is_available -%}
@@ -516,6 +516,18 @@
   var atcBtns       = document.querySelectorAll('.js-atc-btn');
   var priceEl       = page.querySelector('.product-page__price');
 
+  function formatMoney(cents) {
+    var fmt = window.shopMoneyFormat || 'Rs. {{amount}}';
+    var val = cents / 100;
+    var amt   = val.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    var amtNd = Math.floor(val).toLocaleString('en-IN');
+    return fmt
+      .replace(/\{\{\s*amount_no_decimals_with_comma_separator\s*\}\}/, amtNd)
+      .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, amt)
+      .replace(/\{\{\s*amount_no_decimals\s*\}\}/, amtNd)
+      .replace(/\{\{\s*amount\s*\}\}/, amt);
+  }
+
   function getSelectedOptions() {
     var groups = {};
     optionBtns.forEach(function(btn) {
@@ -548,13 +560,13 @@
       url.searchParams.set('variant', variant.id);
       history.replaceState({}, '', url.toString());
     }
-    // Update price using Shopify money format
-    if (priceEl && window.Shopify && Shopify.formatMoney) {
+    // Update price
+    if (priceEl) {
       var html = '';
       if (variant.compare_at_price > variant.price) {
-        html += '<span class="product-page__price-compare">' + Shopify.formatMoney(variant.compare_at_price) + '</span> ';
+        html += '<span class="product-page__price-compare">' + formatMoney(variant.compare_at_price) + '</span> ';
       }
-      html += Shopify.formatMoney(variant.price);
+      html += formatMoney(variant.price);
       priceEl.innerHTML = html;
     }
     // Update ATC buttons availability
@@ -931,7 +943,7 @@
       + '</div>'
       + '<div class="product-list__info">'
       + '<span class="product-list__name">' + escHtml(p.title) + '</span>'
-      + '<span class="product-list__price">' + formatMoney(fv ? fv.price : 0) + '</span>'
+      + '<span class="product-list__price">' + formatMoney(p.price_min || (fv ? fv.price : 0)) + '</span>'
       + '</div></a>'
       + hiddenForm
       + '</div>';
