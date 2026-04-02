@@ -315,6 +315,7 @@
       "blocks": {
         "video_XWQPY9": {
           "type": "video",
+          "disabled": true,
           "settings": {
             "video_url": "",
             "alt": ""
@@ -322,6 +323,7 @@
         },
         "video_eKc6FW": {
           "type": "video",
+          "disabled": true,
           "settings": {
             "video_url": "",
             "alt": ""
@@ -329,6 +331,7 @@
         },
         "video_Ct4BiT": {
           "type": "video",
+          "disabled": true,
           "settings": {
             "video_url": "",
             "alt": ""
@@ -336,6 +339,7 @@
         },
         "video_NGGN8H": {
           "type": "video",
+          "disabled": true,
           "settings": {
             "video_url": "",
             "alt": ""
