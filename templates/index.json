@@ -193,6 +193,7 @@
     },
     "promo_RGMMyX": {
       "type": "promo",
+      "disabled": true,
       "name": "t:sections.promo.name",
       "settings": {
         "heading": "Gift Voucher",
