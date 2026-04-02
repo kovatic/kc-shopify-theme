@@ -3,7 +3,24 @@
   Mobile: swipe carousel + sticky ATC bar. Desktop: 2x2 image grid + info panel.
 {% endcomment %}
 
-{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign current_variant = product.selected_variant -%}
+{%- unless current_variant -%}
+  {%- assign lowest_price = nil -%}
+  {%- for v in product.variants -%}
+    {%- if v.available -%}
+      {%- if lowest_price == nil -%}
+        {%- assign current_variant = v -%}
+        {%- assign lowest_price = v.price -%}
+      {%- elsif v.price < lowest_price -%}
+        {%- assign current_variant = v -%}
+        {%- assign lowest_price = v.price -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- unless current_variant -%}
+    {%- assign current_variant = product.variants | first -%}
+  {%- endunless -%}
+{%- endunless -%}
 
 <div class="product-page">
 
@@ -112,11 +129,12 @@
             <div class="product-page__variants">
               {%- for option in product.options_with_values -%}
                 {%- assign option_index = forloop.index0 -%}
+                {%- assign current_option_value = current_variant.options[option_index] -%}
                 <div class="product-page__option">
                   <label class="product-page__option-label">{{ option.name }}</label>
                   <div class="product-page__option-values">
                     {%- for value in option.values -%}
-                      <button type="button" class="product-page__option-btn{% if option.selected_value == value %} is-selected{% endif %}" data-option-index="{{ option_index }}" data-value="{{ value }}">{{ value }}</button>
+                      <button type="button" class="product-page__option-btn{% if current_option_value == value %} is-selected{% endif %}" data-option-index="{{ option_index }}" data-value="{{ value }}">{{ value }}</button>
                     {%- endfor -%}
                   </div>
                 </div>
