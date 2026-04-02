@@ -285,6 +285,11 @@
           Clear
         </button>
       </div>
+      <button class="header-search-overlay__close" type="button" id="header-search-close" aria-label="Close search">
+        <svg viewBox="0 0 24 24" fill="none" width="24" height="24" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
     </div>
 
     {% comment %} Predictive results {% endcomment %}
@@ -840,15 +845,19 @@
 
   /* Input bar — note: top padding is set by JS to clear the fixed header */
   .header-search-overlay__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     padding: 4rem 1.5rem;
     border-bottom: 1px solid #e0dfd9;
+    max-width: var(--page-width, 1900px);
+    margin: 0 auto;
   }
 
   .header-search-overlay__form-wrap {
     display: flex;
     align-items: center;
-    max-width: var(--page-width, 1900px);
-    margin: 0 auto;
+    flex: 1;
     background: #e8e8e6;
     border-radius: 6px;
     padding: 0 1rem;
@@ -892,6 +901,25 @@
   }
 
   .header-search-overlay__clear:hover { color: #2e1f1f; }
+
+  .header-search-overlay__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    border-radius: 50%;
+    transition: color 0.15s, background-color 0.15s;
+  }
+  .header-search-overlay__close:hover {
+    color: #2e1f1f;
+    background-color: #e8e8e6;
+  }
 
   /* Results panel */
   .header-search-results {
@@ -1285,7 +1313,8 @@
         var imgHtml = p.featured_image && p.featured_image.url
           ? '<img class="header-search-product__img" src="' + p.featured_image.url + '&width=144" alt="' + escHtml(p.title) + '" width="72" height="88" loading="lazy">'
           : '<div class="header-search-product__img--placeholder"></div>';
-        var price = p.price_min ? formatMoney(p.price_min) : '';
+        var priceRaw = p.price_min ? parseFloat(p.price_min) : 0;
+        var price = priceRaw ? formatMoney(priceRaw * 100) : '';
         a.innerHTML = imgHtml +
           '<div class="header-search-product__info">' +
             (p.vendor ? '<span class="header-search-product__vendor">' + escHtml(p.vendor) + '</span>' : '') +
@@ -1297,8 +1326,15 @@
     }
 
     function formatMoney(cents) {
-      var amount = (cents / 100).toFixed(2);
-      return (window.Shopify && window.Shopify.currency && window.Shopify.currency.active === 'INR' ? '₹' : 'Rs. ') + parseFloat(amount).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+      var fmt = window.shopMoneyFormat || 'Rs. {{amount}}';
+      var val = cents / 100;
+      var amt   = val.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      var amtNd = Math.floor(val).toLocaleString('en-IN');
+      return fmt
+        .replace(/\{\{\s*amount_no_decimals_with_comma_separator\s*\}\}/, amtNd)
+        .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, amt)
+        .replace(/\{\{\s*amount_no_decimals\s*\}\}/, amtNd)
+        .replace(/\{\{\s*amount\s*\}\}/, amt);
     }
 
     function escHtml(str) {
@@ -1349,6 +1385,8 @@
 
     searchBtns.forEach(function(btn) { btn.addEventListener('click', openSearch); });
     if (searchBackdrop) searchBackdrop.addEventListener('click', closeSearch);
+    var searchCloseBtn = document.getElementById('header-search-close');
+    if (searchCloseBtn) searchCloseBtn.addEventListener('click', closeSearch);
 
     window.addEventListener('resize', positionPanel);
 
