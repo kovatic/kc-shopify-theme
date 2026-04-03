@@ -3,6 +3,7 @@
   id="testimonials-{{ section.id }}"
   style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;"
   data-section-id="{{ section.id }}"
+  data-api-token="{{ section.settings.judgeme_api_token | escape }}"
   data-shop-domain="{{ shop.permanent_domain }}"
   data-min-rating="{{ section.settings.min_rating }}"
   data-max-reviews="{{ section.settings.max_reviews }}"
@@ -491,105 +492,79 @@
       if (e.key === 'Escape') closeModal();
     });
 
-    /* ── Judge.me review fetching via Shopify app proxy ── */
-    document.querySelectorAll('.testimonials[data-shop-domain]').forEach(function(section) {
+    /* ── Judge.me review fetching ── */
+    document.querySelectorAll('.testimonials[data-api-token]').forEach(function(section) {
+      var apiToken      = section.dataset.apiToken;
       var shopDomain    = section.dataset.shopDomain;
       var minRating     = parseInt(section.dataset.minRating, 10) || 1;
       var maxReviews    = parseInt(section.dataset.maxReviews, 10) || 10;
       var productHandle = section.dataset.productHandle || '';
       var sectionId     = section.dataset.sectionId;
 
-      if (!shopDomain) return;
-
-      /* Build the Judge.me widget proxy URL — this goes through the Shopify app proxy
-         so it works without CORS issues and needs no API token */
-      var proxyUrl = '/apps/judgeme/reviews/all_reviews_page?shop_domain=' + encodeURIComponent(shopDomain)
-        + '&review_type=product-reviews&per_page=' + maxReviews;
-
-      if (productHandle) {
-        proxyUrl += '&handle=' + encodeURIComponent(productHandle);
+      if (!apiToken || !shopDomain) {
+        showMessage(sectionId, 'Please add your Judge.me API token in the theme editor.');
+        return;
       }
 
-      fetch(proxyUrl)
-        .then(function(res) { return res.text(); })
-        .then(function(htmlStr) {
-          /* Parse the Judge.me HTML widget response to extract review data */
-          var parser = new DOMParser();
-          var doc = parser.parseFromString(htmlStr, 'text/html');
-          var reviewEls = doc.querySelectorAll('.jdgm-rev');
+      /* Fetch more than needed so we can filter by min rating client-side.
+         Pass api_token as both header and query param for maximum compatibility. */
+      var perPage = maxReviews * 3;
+      var apiUrl = 'https://api.judge.me/api/v1/reviews'
+        + '?api_token=' + encodeURIComponent(apiToken)
+        + '&shop_domain=' + encodeURIComponent(shopDomain)
+        + '&per_page=' + perPage;
 
-          if (!reviewEls || reviewEls.length === 0) {
-            var loadingEl = document.getElementById('testimonials-loading-' + sectionId);
-            if (loadingEl) loadingEl.querySelector('.testimonials__loading-text').textContent = 'No reviews found.';
-            return;
-          }
-
-          var reviews = [];
-          reviewEls.forEach(function(el) {
-            var ratingEl = el.querySelector('[data-score]');
-            var rating = ratingEl ? parseInt(ratingEl.getAttribute('data-score'), 10) : 5;
-
-            if (rating < minRating) return;
-            if (reviews.length >= maxReviews) return;
-
-            var authorEl = el.querySelector('.jdgm-rev__author');
-            var dateEl = el.querySelector('.jdgm-rev__timestamp');
-            var titleEl = el.querySelector('.jdgm-rev__title');
-            var bodyEl = el.querySelector('.jdgm-rev__body');
-            var productEl = el.querySelector('.jdgm-rev__product-title');
-
-            reviews.push({
-              name: authorEl ? authorEl.textContent.trim() : 'Anonymous',
-              date: dateEl ? dateEl.textContent.trim() : '',
-              rating: rating,
-              title: titleEl ? titleEl.textContent.trim() : '',
-              body: bodyEl ? bodyEl.textContent.trim() : '',
-              product: productEl ? productEl.textContent.trim() : ''
-            });
-          });
-
-          if (reviews.length === 0) {
-            var loadingEl = document.getElementById('testimonials-loading-' + sectionId);
-            if (loadingEl) loadingEl.querySelector('.testimonials__loading-text').textContent = 'No reviews match the selected filters.';
-            return;
-          }
-
-          renderReviews(reviews, sectionId);
+      fetch(apiUrl)
+        .then(function(res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
         })
-        .catch(function() {
-          /* Fallback: try the external Judge.me CDN endpoint */
-          var cdnUrl = 'https://cache.judge.me/reviews/' + encodeURIComponent(shopDomain) + '/all-reviews.json';
-          fetch(cdnUrl)
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-              var allReviews = data.reviews || [];
-              var filtered = [];
-              for (var i = 0; i < allReviews.length; i++) {
-                if (filtered.length >= maxReviews) break;
-                var r = allReviews[i];
-                if ((r.rating || 0) < minRating) continue;
-                if (productHandle && r.product_handle !== productHandle) continue;
-                filtered.push({
-                  name: (r.reviewer && r.reviewer.name) ? r.reviewer.name : 'Anonymous',
-                  date: r.created_at || '',
-                  rating: r.rating || 5,
-                  title: r.title || '',
-                  body: r.body || '',
-                  product: r.product_title || ''
-                });
-              }
-              if (filtered.length === 0) {
-                var loadingEl = document.getElementById('testimonials-loading-' + sectionId);
-                if (loadingEl) loadingEl.querySelector('.testimonials__loading-text').textContent = 'No reviews found.';
-                return;
-              }
-              renderReviews(filtered, sectionId);
-            })
-            .catch(function() {
-              var loadingEl = document.getElementById('testimonials-loading-' + sectionId);
-              if (loadingEl) loadingEl.querySelector('.testimonials__loading-text').textContent = 'Could not load reviews. Please ensure Judge.me is installed.';
+        .then(function(data) {
+          var allReviews = data.reviews || [];
+          var filtered = [];
+
+          for (var i = 0; i < allReviews.length; i++) {
+            if (filtered.length >= maxReviews) break;
+            var r = allReviews[i];
+
+            /* Skip hidden or spam reviews */
+            if (r.hidden || r.curated === 'spam') continue;
+
+            /* Filter by minimum rating */
+            if ((r.rating || 0) < minRating) continue;
+
+            /* Filter by product handle if set */
+            if (productHandle && r.product_handle !== productHandle) continue;
+
+            var name = 'Anonymous';
+            if (r.reviewer && r.reviewer.name) name = r.reviewer.name;
+
+            filtered.push({
+              name: name,
+              date: r.created_at || '',
+              rating: r.rating || 5,
+              title: r.title || '',
+              body: r.body || '',
+              product: r.product_title || ''
             });
+          }
+
+          if (filtered.length === 0) {
+            showMessage(sectionId, 'No reviews found matching the selected filters.');
+            return;
+          }
+
+          renderReviews(filtered, sectionId);
+        })
+        .catch(function(err) {
+          console.error('Testimonials: Judge.me API error', err);
+          showMessage(sectionId, 'Could not load reviews. Please check your API token.');
         });
+
+      function showMessage(secId, msg) {
+        var loadingEl = document.getElementById('testimonials-loading-' + secId);
+        if (loadingEl) loadingEl.querySelector('.testimonials__loading-text').textContent = msg;
+      }
     });
 
     function renderReviews(reviews, sectionId) {
@@ -714,6 +689,12 @@
     {
       "type": "header",
       "content": "t:sections.testimonials.judgeme_header"
+    },
+    {
+      "type": "text",
+      "id": "judgeme_api_token",
+      "label": "t:sections.testimonials.api_token",
+      "info": "t:sections.testimonials.api_token_info"
     },
     {
       "type": "range",
