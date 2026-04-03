@@ -14,6 +14,27 @@
     "header": {
       "type": "header",
       "blocks": {
+        "mega_menu_R8gjQt": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_link": "Kora Cotton Sarees",
+            "col1_heading": "",
+            "col1_menu": "kora-cotton-sarees-menu",
+            "col2_heading": "",
+            "col2_menu": "",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_image": "shopify://shop_images/DSC07967.jpg",
+            "card1_label": "Rose Carbon Kora Saree",
+            "card1_url": "shopify://products/rose-carbon-kora-saree",
+            "card2_image": "shopify://shop_images/DSC07947_1.webp",
+            "card2_label": "Mulberry Mist Saree",
+            "card2_url": "shopify://products/mulberry-mist-saree",
+            "card3_image": "shopify://shop_images/DSC07960_1.webp",
+            "card3_label": "Oceanic Kora Cotton",
+            "card3_url": "shopify://products/oceanic-kora-cotton"
+          }
+        },
         "mega_menu_NkwY3L": {
           "type": "mega_menu",
           "settings": {
@@ -99,6 +120,7 @@
         }
       },
       "block_order": [
+        "mega_menu_R8gjQt",
         "mega_menu_NkwY3L",
         "mega_menu_zWUDDb",
         "mega_menu_794wpC",
