@@ -160,6 +160,9 @@
       "product_placeholder": "Product name",
       "collection_placeholder": "Collection name"
     },
+    "testimonials": {
+      "loading": "Loading reviews…"
+    },
     "product": {
       "description": "Product description",
       "product_details": "Product details",
