@@ -344,58 +344,22 @@
             "video_url": "",
             "alt": ""
           }
-        },
-        "review_pnwei3": {
-          "type": "review",
-          "settings": {
-            "reviewer_name": "John Doe",
-            "reviewer_date": "4 days ago",
-            "rating": 5,
-            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
-          }
-        },
-        "review_VjQRNF": {
-          "type": "review",
-          "settings": {
-            "reviewer_name": "John Doe",
-            "reviewer_date": "4 days ago",
-            "rating": 5,
-            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
-          }
-        },
-        "review_hwi7jM": {
-          "type": "review",
-          "settings": {
-            "reviewer_name": "John Doe",
-            "reviewer_date": "4 days ago",
-            "rating": 5,
-            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
-          }
-        },
-        "review_h9RpiA": {
-          "type": "review",
-          "settings": {
-            "reviewer_name": "John Doe",
-            "reviewer_date": "4 days ago",
-            "rating": 5,
-            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
-          }
         }
       },
       "block_order": [
         "video_XWQPY9",
         "video_eKc6FW",
         "video_Ct4BiT",
-        "video_NGGN8H",
-        "review_pnwei3",
-        "review_VjQRNF",
-        "review_hwi7jM",
-        "review_h9RpiA"
+        "video_NGGN8H"
       ],
       "name": "Testimonials",
       "settings": {
         "title": "Our Customer Testimonials",
         "subtitle": "Trusted and praised for excellence",
+        "judgeme_api_token": "ZSvNMfrzmME40DPM_PQHhV2QlwM",
+        "min_rating": 4,
+        "max_reviews": 10,
+        "product_filter": "",
         "padding_top": 60,
         "padding_bottom": 60
       }
