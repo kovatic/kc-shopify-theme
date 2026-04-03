@@ -194,7 +194,9 @@
       "data_source": "Data source",
       "data_source_single": "Single collection (products)",
       "data_source_multiple": "Multiple collections",
-      "products_count": "Number of products"
+      "products_count": "Number of products",
+      "enable_reel_video": "Show reel videos",
+      "enable_reel_video_info": "Uses the reel video from each collection's metafield (custom.reels). Only the center card plays."
     },
     "privacy_policy": {
       "name": "Privacy policy"

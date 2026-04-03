@@ -1,5 +1,6 @@
 {%- liquid
   assign data_source = section.settings.data_source
+  assign is_reel = section.settings.enable_reel_video
 
   if data_source == 'single_collection'
     assign source_collection = section.settings.single_collection
@@ -12,9 +13,10 @@
 -%}
 
 <div
-  class="product-carousel"
+  class="product-carousel{% if is_reel %} product-carousel--reel{% endif %}"
   id="product-carousel-{{ section.id }}"
   style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;"
+  {% if is_reel %}data-reel="true"{% endif %}
 >
   <div class="product-carousel__container">
 
@@ -75,15 +77,30 @@
       {%- else -%}
         {%- if items.count > 0 -%}
           {%- for collection in items -%}
+            {%- assign reel_video = collection.metafields.custom.reels.value -%}
             <a
-              class="product-carousel__card"
+              class="product-carousel__card{% if is_reel and reel_video != blank %} product-carousel__card--reel{% endif %}"
               href="{{ collection.url }}"
               data-index="{{ forloop.index0 }}"
             >
               <div class="product-carousel__card-media">
+                {%- if is_reel and reel_video != blank -%}
+                  {{ reel_video | video_tag:
+                    muted: true,
+                    loop: true,
+                    playsinline: true,
+                    autoplay: false,
+                    class: 'product-carousel__card-video'
+                  }}
+                {%- endif -%}
                 {%- if collection.featured_image != blank -%}
+                  {%- if is_reel and reel_video != blank -%}
+                    {%- assign card_img_class = 'product-carousel__card-image product-carousel__card-poster' -%}
+                  {%- else -%}
+                    {%- assign card_img_class = 'product-carousel__card-image' -%}
+                  {%- endif -%}
                   {{ collection.featured_image | image_url: width: 680 | image_tag:
-                    class: 'product-carousel__card-image',
+                    class: card_img_class,
                     loading: 'lazy',
                     alt: collection.title | escape
                   }}
@@ -201,7 +218,7 @@
   .product-carousel__stage {
     position: relative;
     width: 100%;
-    height: 560px;
+    height: 600px;
   }
 
   /* Card base */
@@ -239,6 +256,33 @@
     width: 100%;
     height: 100%;
     display: block;
+  }
+
+  /* Reel video card */
+  .product-carousel__card-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    z-index: 0;
+  }
+
+  .product-carousel__card-poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .product-carousel__card--reel[data-playing="true"] .product-carousel__card-poster {
+    opacity: 0;
+    pointer-events: none;
   }
 
   .product-carousel__card-gradient {
@@ -325,7 +369,7 @@
     }
 
     .product-carousel__stage {
-      height: 420px;
+      height: 460px;
     }
 
     .product-carousel__divider-line {
@@ -337,41 +381,31 @@
 {% javascript %}
   (function () {
     function initCarousel(sectionId) {
-      var stage = document.querySelector('#product-carousel-' + sectionId + ' .product-carousel__stage');
+      var wrapper = document.getElementById('product-carousel-' + sectionId);
+      var stage = wrapper ? wrapper.querySelector('.product-carousel__stage') : null;
       if (!stage) return;
 
       var cards = Array.from(stage.querySelectorAll('.product-carousel__card'));
       var total = cards.length;
       if (total === 0) return;
 
-      /*
-       * virtualIndex always increments (never decrements for autoplay/next).
-       * Each card's visual slot = ((cardIndex - virtualIndex) % total + total) % total
-       * mapped to: 0 = center, 1 = right-1, 2 = right-2, total-1 = left-1, total-2 = left-2 …
-       * This means advancing virtualIndex always shifts every card one step LEFT,
-       * which looks like continuous forward motion — no backward jump on wrap.
-       */
+      var isReel = wrapper.hasAttribute('data-reel');
       var virtualIndex = 0;
 
       function getSizes(stageWidth) {
         var isMobile = stageWidth < 768;
-        /*
-         * sizes[0] = center card, sizes[1] = adjacent, sizes[2] = outer, …
-         * Cards are placed flush — no gap — each one's left/right edge
-         * touches the next card.
-         */
         return isMobile
           ? [
-              { w: 180, h: 280, opacity: 1,    z: 10 },
-              { w: 130, h: 220, opacity: 0.9,  z: 8  },
-              { w: 100, h: 175, opacity: 0.7,  z: 6  },
-              { w: 80,  h: 145, opacity: 0.5,  z: 4  }
+              { w: 195, h: 310, opacity: 1,    z: 10 },
+              { w: 140, h: 245, opacity: 0.9,  z: 8  },
+              { w: 108, h: 195, opacity: 0.7,  z: 6  },
+              { w: 85,  h: 160, opacity: 0.5,  z: 4  }
             ]
           : [
-              { w: 338, h: 423, opacity: 1,    z: 10 },
-              { w: 269, h: 368, opacity: 0.95, z: 8  },
-              { w: 206, h: 323, opacity: 0.85, z: 6  },
-              { w: 100, h: 287, opacity: 0.6,  z: 4  }
+              { w: 355, h: 470, opacity: 1,    z: 10 },
+              { w: 282, h: 405, opacity: 0.95, z: 8  },
+              { w: 216, h: 350, opacity: 0.85, z: 6  },
+              { w: 105, h: 310, opacity: 0.6,  z: 4  }
             ];
       }
 
@@ -381,15 +415,10 @@
         var sizes = getSizes(stageWidth);
         var half = Math.floor(total / 2);
 
-        /*
-         * Build a position map keyed by offset (-half … +half).
-         * Start from center (offset 0) and accumulate left/right edges flush.
-         */
         var posMap = {};
         var centerSize = sizes[0];
         posMap[0] = { left: centerX - centerSize.w / 2, size: centerSize };
 
-        // Build right side: each card's left = previous card's right edge
         var rightEdge = centerX + centerSize.w / 2;
         for (var r = 1; r <= half; r++) {
           var s = sizes[Math.min(r, sizes.length - 1)];
@@ -397,7 +426,6 @@
           rightEdge += s.w;
         }
 
-        // Build left side: each card's right = previous card's left edge
         var leftEdge = centerX - centerSize.w / 2;
         for (var l = 1; l <= half; l++) {
           var sl = sizes[Math.min(l, sizes.length - 1)];
@@ -417,9 +445,31 @@
           card.style.zIndex    = entry.size.z;
           card.setAttribute('aria-current', slot === 0 ? 'true' : 'false');
         });
+
+        if (isReel) updateVideoPlayback();
       }
 
-      /* Always move forward — virtualIndex only ever increases */
+      /* ── Reel video: only center card plays ── */
+      function updateVideoPlayback() {
+        cards.forEach(function (card, i) {
+          var slot = ((i - virtualIndex) % total + total) % total;
+          var video = card.querySelector('.product-carousel__card-video');
+          if (!video) return;
+
+          if (slot === 0) {
+            card.setAttribute('data-playing', 'true');
+            var playPromise = video.play();
+            if (playPromise !== undefined) {
+              playPromise.catch(function() {});
+            }
+          } else {
+            card.removeAttribute('data-playing');
+            video.pause();
+            video.currentTime = 0;
+          }
+        });
+      }
+
       function next() {
         virtualIndex = (virtualIndex + 1) % total;
         render();
@@ -430,16 +480,11 @@
         render();
       }
 
-      /* Click a non-active card: advance forward the shortest number of steps */
       cards.forEach(function (card, i) {
         card.addEventListener('click', function (e) {
           var slot = ((i - virtualIndex) % total + total) % total;
           if (slot === 0) return;
           e.preventDefault();
-          /* always step forward to reach the clicked card */
-          var steps = slot <= Math.floor(total / 2) ? slot : total - slot;
-          var direction = slot <= Math.floor(total / 2) ? 1 : -1;
-          /* for continuous forward feel, always go forward */
           virtualIndex = (virtualIndex + slot) % total;
           render();
           resetAutoplay();
@@ -450,7 +495,10 @@
       var nextBtn = document.getElementById('pc-next-' + sectionId);
       var autoplayTimer = null;
 
+      /* Reel mode: no autoplay — user controls the carousel.
+         Product/collection mode: autoplay every 3s. */
       function startAutoplay() {
+        if (isReel) return;
         autoplayTimer = setInterval(next, 3000);
       }
 
@@ -462,8 +510,10 @@
       if (prevBtn) prevBtn.addEventListener('click', function () { prev(); resetAutoplay(); });
       if (nextBtn) nextBtn.addEventListener('click', function () { next(); resetAutoplay(); });
 
-      stage.addEventListener('mouseenter', function () { clearInterval(autoplayTimer); });
-      stage.addEventListener('mouseleave', startAutoplay);
+      if (!isReel) {
+        stage.addEventListener('mouseenter', function () { clearInterval(autoplayTimer); });
+        stage.addEventListener('mouseleave', startAutoplay);
+      }
 
       var touchStartX = 0;
       stage.addEventListener('touchstart', function(e) {
@@ -533,6 +583,13 @@
       "type": "collection_list",
       "id": "collections",
       "label": "t:labels.collections"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_reel_video",
+      "label": "t:sections.product_carousel.enable_reel_video",
+      "info": "t:sections.product_carousel.enable_reel_video_info",
+      "default": false
     },
     {
       "type": "range",
