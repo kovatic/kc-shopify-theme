@@ -218,8 +218,6 @@
       "title": "Title",
       "subtitle": "Subtitle",
       "judgeme_header": "Judge.me reviews",
-      "api_token": "Judge.me API token",
-      "api_token_info": "Find your public API token in Judge.me > Settings > General",
       "min_rating": "Minimum rating",
       "min_rating_info": "Only show reviews with this rating or higher",
       "max_reviews": "Maximum reviews",
