@@ -250,6 +250,7 @@
           "art-silk-saree",
           "kancheepuram-saree-silk-saree"
         ],
+        "enable_reel_video": true,
         "padding_top": 60,
         "padding_bottom": 60
       }
