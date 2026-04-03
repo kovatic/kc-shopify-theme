@@ -14,6 +14,24 @@
     "header": {
       "type": "header",
       "blocks": {
+        "mega_menu_zWUDDb": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_link": "Geogratte Sarees",
+            "col1_heading": "",
+            "col1_menu": "geogrette-sarees",
+            "col2_heading": "",
+            "col2_menu": "",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_label": "Coral Red Georgette Saree",
+            "card1_url": "shopify://products/magenta-georgette-saree",
+            "card2_label": "Emerald Charm Georgette Saree",
+            "card2_url": "shopify://products/emerald-charm-georgette-saree",
+            "card3_label": "Magenta Georgette Saree",
+            "card3_url": "shopify://products/magenta-georgette-saree-1"
+          }
+        },
         "mega_menu_794wpC": {
           "type": "mega_menu",
           "settings": {
@@ -57,6 +75,7 @@
         }
       },
       "block_order": [
+        "mega_menu_zWUDDb",
         "mega_menu_794wpC",
         "mega_menu_UxxNjG"
       ],
