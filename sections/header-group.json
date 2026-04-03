@@ -14,6 +14,24 @@
     "header": {
       "type": "header",
       "blocks": {
+        "mega_menu_794wpC": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_link": "Soft Silk Sarees",
+            "col1_heading": "",
+            "col1_menu": "",
+            "col2_heading": "",
+            "col2_menu": "",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_label": "",
+            "card1_url": "",
+            "card2_label": "",
+            "card2_url": "",
+            "card3_label": "",
+            "card3_url": ""
+          }
+        },
         "mega_menu_UxxNjG": {
           "type": "mega_menu",
           "settings": {
@@ -36,6 +54,7 @@
         }
       },
       "block_order": [
+        "mega_menu_794wpC",
         "mega_menu_UxxNjG"
       ],
       "settings": {
