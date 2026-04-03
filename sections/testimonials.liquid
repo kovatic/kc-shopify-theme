@@ -3,7 +3,6 @@
   id="testimonials-{{ section.id }}"
   style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;"
   data-section-id="{{ section.id }}"
-  data-judgeme-api-token="{{ section.settings.judgeme_api_token | escape }}"
   data-shop-domain="{{ shop.permanent_domain }}"
   data-min-rating="{{ section.settings.min_rating }}"
   data-max-reviews="{{ section.settings.max_reviews }}"
@@ -253,7 +252,7 @@
     gap: 14px;
   }
 
-  .testimonials__google-icon {
+  .testimonials__judgeme-icon {
     position: absolute;
     top: 12px;
     right: 12px;
@@ -492,112 +491,171 @@
       if (e.key === 'Escape') closeModal();
     });
 
-    /* ── Judge.me review fetching ── */
-    document.querySelectorAll('.testimonials[data-judgeme-api-token]').forEach(function(section) {
-      var apiToken     = section.dataset.judgemeApiToken;
-      var shopDomain   = section.dataset.shopDomain;
-      var minRating    = parseInt(section.dataset.minRating, 10) || 1;
-      var maxReviews   = parseInt(section.dataset.maxReviews, 10) || 10;
+    /* ── Judge.me review fetching via Shopify app proxy ── */
+    document.querySelectorAll('.testimonials[data-shop-domain]').forEach(function(section) {
+      var shopDomain    = section.dataset.shopDomain;
+      var minRating     = parseInt(section.dataset.minRating, 10) || 1;
+      var maxReviews    = parseInt(section.dataset.maxReviews, 10) || 10;
       var productHandle = section.dataset.productHandle || '';
-      var sectionId    = section.dataset.sectionId;
+      var sectionId     = section.dataset.sectionId;
 
-      if (!apiToken || !shopDomain) {
-        var loadingEl = document.getElementById('testimonials-loading-' + sectionId);
-        if (loadingEl) loadingEl.querySelector('.testimonials__loading-text').textContent = 'Please add your Judge.me API token in the theme editor settings.';
-        return;
-      }
+      if (!shopDomain) return;
 
-      var apiUrl = 'https://judge.me/api/v1/reviews?api_token=' + encodeURIComponent(apiToken)
-        + '&shop_domain=' + encodeURIComponent(shopDomain)
-        + '&per_page=' + maxReviews
-        + '&rating_min=' + minRating;
+      /* Build the Judge.me widget proxy URL — this goes through the Shopify app proxy
+         so it works without CORS issues and needs no API token */
+      var proxyUrl = '/apps/judgeme/reviews/all_reviews_page?shop_domain=' + encodeURIComponent(shopDomain)
+        + '&review_type=product-reviews&per_page=' + maxReviews;
 
       if (productHandle) {
-        apiUrl += '&handle=' + encodeURIComponent(productHandle);
+        proxyUrl += '&handle=' + encodeURIComponent(productHandle);
       }
 
-      fetch(apiUrl)
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
-          var reviews = data.reviews || [];
-          if (reviews.length === 0) {
+      fetch(proxyUrl)
+        .then(function(res) { return res.text(); })
+        .then(function(htmlStr) {
+          /* Parse the Judge.me HTML widget response to extract review data */
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(htmlStr, 'text/html');
+          var reviewEls = doc.querySelectorAll('.jdgm-rev');
+
+          if (!reviewEls || reviewEls.length === 0) {
             var loadingEl = document.getElementById('testimonials-loading-' + sectionId);
             if (loadingEl) loadingEl.querySelector('.testimonials__loading-text').textContent = 'No reviews found.';
             return;
           }
 
-          var track1 = document.getElementById('testimonials-track-1-' + sectionId);
-          var track2 = document.getElementById('testimonials-track-2-' + sectionId);
-          if (!track1 || !track2) return;
+          var reviews = [];
+          reviewEls.forEach(function(el) {
+            var ratingEl = el.querySelector('[data-score]');
+            var rating = ratingEl ? parseInt(ratingEl.getAttribute('data-score'), 10) : 5;
 
-          var html = '';
-          reviews.forEach(function(review) {
-            var name = review.reviewer && review.reviewer.name ? review.reviewer.name : 'Anonymous';
-            var initial = name.charAt(0).toUpperCase();
-            var rating = review.rating || 5;
-            var body = review.body || '';
-            var title = review.title || '';
-            var productTitle = review.product_title || '';
-            var createdAt = review.created_at ? new Date(review.created_at) : null;
-            var dateStr = '';
+            if (rating < minRating) return;
+            if (reviews.length >= maxReviews) return;
 
-            if (createdAt) {
-              var now = new Date();
-              var diffMs = now - createdAt;
-              var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-              if (diffDays === 0) dateStr = 'Today';
-              else if (diffDays === 1) dateStr = '1 day ago';
-              else if (diffDays < 30) dateStr = diffDays + ' days ago';
-              else if (diffDays < 365) {
-                var months = Math.floor(diffDays / 30);
-                dateStr = months === 1 ? '1 month ago' : months + ' months ago';
-              } else {
-                var years = Math.floor(diffDays / 365);
-                dateStr = years === 1 ? '1 year ago' : years + ' years ago';
-              }
-            }
+            var authorEl = el.querySelector('.jdgm-rev__author');
+            var dateEl = el.querySelector('.jdgm-rev__timestamp');
+            var titleEl = el.querySelector('.jdgm-rev__title');
+            var bodyEl = el.querySelector('.jdgm-rev__body');
+            var productEl = el.querySelector('.jdgm-rev__product-title');
 
-            var stars = '';
-            for (var i = 1; i <= 5; i++) {
-              var fill = i <= rating ? '#f59e0b' : '#d1d5db';
-              stars += '<svg viewBox="0 0 16 16" fill="' + fill + '" width="16" height="16" aria-hidden="true"><path d="M8 1.139l1.854 3.756 4.146.603-3 2.924.708 4.128L8 10.412l-3.708 1.138.708-4.128-3-2.924 4.146-.603z"/></svg>';
-            }
-
-            var displayText = title ? title : body;
-            if (displayText.length > 150) displayText = displayText.substring(0, 150) + '…';
-
-            html += '<div class="testimonials__review-card">';
-            html += '<div class="testimonials__google-icon" aria-hidden="true">';
-            html += '<svg width="22" height="22" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="55" height="55" rx="10" fill="#1B1B1B"/><path d="M39.93 22.09l-7.19-4.15a5.55 5.55 0 00-5.55 0l-7.19 4.15a5.55 5.55 0 00-2.78 4.81v8.3a5.55 5.55 0 002.78 4.81l7.19 4.15a5.55 5.55 0 005.55 0l7.19-4.15a5.55 5.55 0 002.78-4.81v-8.3a5.55 5.55 0 00-2.78-4.81z" fill="#fff"/><path d="M30.55 28.5a3.05 3.05 0 11-6.1 0 3.05 3.05 0 016.1 0z" fill="#1B1B1B"/></svg>';
-            html += '</div>';
-            html += '<div class="testimonials__reviewer">';
-            html += '<div class="testimonials__avatar">' + initial + '</div>';
-            html += '<div class="testimonials__reviewer-info">';
-            html += '<span class="testimonials__reviewer-name">' + escapeHtml(name) + '</span>';
-            if (dateStr) html += '<span class="testimonials__reviewer-date">' + dateStr + '</span>';
-            html += '</div></div>';
-            html += '<div class="testimonials__stars" aria-label="' + rating + ' out of 5 stars">' + stars + '</div>';
-            if (productTitle) html += '<p class="testimonials__review-product">' + escapeHtml(productTitle) + '</p>';
-            if (displayText) html += '<p class="testimonials__review-text">"' + escapeHtml(displayText) + '"</p>';
-            html += '</div>';
+            reviews.push({
+              name: authorEl ? authorEl.textContent.trim() : 'Anonymous',
+              date: dateEl ? dateEl.textContent.trim() : '',
+              rating: rating,
+              title: titleEl ? titleEl.textContent.trim() : '',
+              body: bodyEl ? bodyEl.textContent.trim() : '',
+              product: productEl ? productEl.textContent.trim() : ''
+            });
           });
 
-          track1.innerHTML = html;
-          track2.innerHTML = html;
+          if (reviews.length === 0) {
+            var loadingEl = document.getElementById('testimonials-loading-' + sectionId);
+            if (loadingEl) loadingEl.querySelector('.testimonials__loading-text').textContent = 'No reviews match the selected filters.';
+            return;
+          }
 
-          var wrap = document.getElementById('testimonials-reviews-' + sectionId);
-          if (wrap) wrap.setAttribute('data-loaded', 'true');
-
-          /* Adjust marquee speed */
-          var duration = Math.max(20, reviews.length * 5);
-          var marquee = wrap.querySelector('.testimonials__marquee');
-          if (marquee) marquee.style.setProperty('--marquee-duration', duration + 's');
+          renderReviews(reviews, sectionId);
         })
         .catch(function() {
-          var loadingEl = document.getElementById('testimonials-loading-' + sectionId);
-          if (loadingEl) loadingEl.querySelector('.testimonials__loading-text').textContent = 'Could not load reviews. Please check your API token.';
+          /* Fallback: try the external Judge.me CDN endpoint */
+          var cdnUrl = 'https://cache.judge.me/reviews/' + encodeURIComponent(shopDomain) + '/all-reviews.json';
+          fetch(cdnUrl)
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+              var allReviews = data.reviews || [];
+              var filtered = [];
+              for (var i = 0; i < allReviews.length; i++) {
+                if (filtered.length >= maxReviews) break;
+                var r = allReviews[i];
+                if ((r.rating || 0) < minRating) continue;
+                if (productHandle && r.product_handle !== productHandle) continue;
+                filtered.push({
+                  name: (r.reviewer && r.reviewer.name) ? r.reviewer.name : 'Anonymous',
+                  date: r.created_at || '',
+                  rating: r.rating || 5,
+                  title: r.title || '',
+                  body: r.body || '',
+                  product: r.product_title || ''
+                });
+              }
+              if (filtered.length === 0) {
+                var loadingEl = document.getElementById('testimonials-loading-' + sectionId);
+                if (loadingEl) loadingEl.querySelector('.testimonials__loading-text').textContent = 'No reviews found.';
+                return;
+              }
+              renderReviews(filtered, sectionId);
+            })
+            .catch(function() {
+              var loadingEl = document.getElementById('testimonials-loading-' + sectionId);
+              if (loadingEl) loadingEl.querySelector('.testimonials__loading-text').textContent = 'Could not load reviews. Please ensure Judge.me is installed.';
+            });
         });
     });
+
+    function renderReviews(reviews, sectionId) {
+      var track1 = document.getElementById('testimonials-track-1-' + sectionId);
+      var track2 = document.getElementById('testimonials-track-2-' + sectionId);
+      if (!track1 || !track2) return;
+
+      var html = '';
+      reviews.forEach(function(review) {
+        var name = review.name || 'Anonymous';
+        var initial = name.charAt(0).toUpperCase();
+        var rating = review.rating || 5;
+        var dateStr = review.date;
+
+        /* Convert ISO date to relative time */
+        if (dateStr && dateStr.indexOf('T') !== -1) {
+          var createdAt = new Date(dateStr);
+          var now = new Date();
+          var diffDays = Math.floor((now - createdAt) / (1000 * 60 * 60 * 24));
+          if (diffDays === 0) dateStr = 'Today';
+          else if (diffDays === 1) dateStr = '1 day ago';
+          else if (diffDays < 30) dateStr = diffDays + ' days ago';
+          else if (diffDays < 365) {
+            var months = Math.floor(diffDays / 30);
+            dateStr = months === 1 ? '1 month ago' : months + ' months ago';
+          } else {
+            var years = Math.floor(diffDays / 365);
+            dateStr = years === 1 ? '1 year ago' : years + ' years ago';
+          }
+        }
+
+        var stars = '';
+        for (var i = 1; i <= 5; i++) {
+          var fill = i <= rating ? '#f59e0b' : '#d1d5db';
+          stars += '<svg viewBox="0 0 16 16" fill="' + fill + '" width="16" height="16" aria-hidden="true"><path d="M8 1.139l1.854 3.756 4.146.603-3 2.924.708 4.128L8 10.412l-3.708 1.138.708-4.128-3-2.924 4.146-.603z"/></svg>';
+        }
+
+        var displayText = review.title || review.body || '';
+        if (displayText.length > 150) displayText = displayText.substring(0, 150) + '…';
+
+        html += '<div class="testimonials__review-card">';
+        html += '<div class="testimonials__judgeme-icon" aria-hidden="true">';
+        html += '<svg width="22" height="22" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="55" height="55" rx="10" fill="#1B1B1B"/><path d="M39.93 22.09l-7.19-4.15a5.55 5.55 0 00-5.55 0l-7.19 4.15a5.55 5.55 0 00-2.78 4.81v8.3a5.55 5.55 0 002.78 4.81l7.19 4.15a5.55 5.55 0 005.55 0l7.19-4.15a5.55 5.55 0 002.78-4.81v-8.3a5.55 5.55 0 00-2.78-4.81z" fill="#fff"/><path d="M30.55 28.5a3.05 3.05 0 11-6.1 0 3.05 3.05 0 016.1 0z" fill="#1B1B1B"/></svg>';
+        html += '</div>';
+        html += '<div class="testimonials__reviewer">';
+        html += '<div class="testimonials__avatar">' + initial + '</div>';
+        html += '<div class="testimonials__reviewer-info">';
+        html += '<span class="testimonials__reviewer-name">' + escapeHtml(name) + '</span>';
+        if (dateStr) html += '<span class="testimonials__reviewer-date">' + escapeHtml(dateStr) + '</span>';
+        html += '</div></div>';
+        html += '<div class="testimonials__stars" aria-label="' + rating + ' out of 5 stars">' + stars + '</div>';
+        if (review.product) html += '<p class="testimonials__review-product">' + escapeHtml(review.product) + '</p>';
+        if (displayText) html += '<p class="testimonials__review-text">"' + escapeHtml(displayText) + '"</p>';
+        html += '</div>';
+      });
+
+      track1.innerHTML = html;
+      track2.innerHTML = html;
+
+      var wrap = document.getElementById('testimonials-reviews-' + sectionId);
+      if (wrap) wrap.setAttribute('data-loaded', 'true');
+
+      var duration = Math.max(20, reviews.length * 5);
+      var marquee = wrap.querySelector('.testimonials__marquee');
+      if (marquee) marquee.style.setProperty('--marquee-duration', duration + 's');
+    }
 
     function escapeHtml(str) {
       var div = document.createElement('div');
@@ -656,12 +714,6 @@
     {
       "type": "header",
       "content": "t:sections.testimonials.judgeme_header"
-    },
-    {
-      "type": "text",
-      "id": "judgeme_api_token",
-      "label": "t:sections.testimonials.api_token",
-      "info": "t:sections.testimonials.api_token_info"
     },
     {
       "type": "range",
