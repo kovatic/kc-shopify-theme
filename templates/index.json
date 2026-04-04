@@ -12,6 +12,36 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
+        "slide_WeH4zi": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Coupon_Web.webp",
+            "mobile_image": "shopify://shop_images/Coupon_Mobile.webp",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "",
+            "text_position": "middle-left",
+            "show_overlay": false,
+            "overlay_opacity": 30
+          }
+        },
+        "slide_FGrRqi": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Jewels_web.webp",
+            "mobile_image": "shopify://shop_images/Jewels_mobile.webp",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "",
+            "text_position": "middle-left",
+            "show_overlay": false,
+            "overlay_opacity": 80
+          }
+        },
         "slide_aPXt94": {
           "type": "slide",
           "settings": {
@@ -29,6 +59,8 @@
         }
       },
       "block_order": [
+        "slide_WeH4zi",
+        "slide_FGrRqi",
         "slide_aPXt94"
       ],
       "name": "t:sections.banner.name",
