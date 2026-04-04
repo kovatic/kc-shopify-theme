@@ -12,6 +12,20 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
+        "slide_krfQVT": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Website_Launch_Desktop.jpg",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "",
+            "text_position": "middle-left",
+            "show_overlay": false,
+            "overlay_opacity": 30
+          }
+        },
         "slide_WeH4zi": {
           "type": "slide",
           "settings": {
@@ -30,7 +44,7 @@
         "slide_FGrRqi": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Jewels_web.webp",
+            "image": "shopify://shop_images/Jewels_web.jpg",
             "mobile_image": "shopify://shop_images/Jewels_mobile.webp",
             "subheading": "",
             "heading": "",
@@ -59,6 +73,7 @@
         }
       },
       "block_order": [
+        "slide_krfQVT",
         "slide_WeH4zi",
         "slide_FGrRqi",
         "slide_aPXt94"
