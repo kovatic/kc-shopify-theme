@@ -16,6 +16,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Website_Launch_Desktop.jpg",
+            "mobile_image": "shopify://shop_images/Website_Launch_Mobile.jpg",
             "subheading": "",
             "heading": "",
             "text": "",
