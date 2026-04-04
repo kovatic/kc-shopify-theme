@@ -31,7 +31,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Coupon_Web.jpg",
-            "mobile_image": "shopify://shop_images/Coupon_Mobile.webp",
+            "mobile_image": "shopify://shop_images/Coupon_Mobile.jpg",
             "subheading": "",
             "heading": "",
             "text": "",
@@ -46,7 +46,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Jewels_web.jpg",
-            "mobile_image": "shopify://shop_images/Jewels_mobile.webp",
+            "mobile_image": "shopify://shop_images/Jewels_mobile.jpg",
             "subheading": "",
             "heading": "",
             "text": "",
