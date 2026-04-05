@@ -51,10 +51,18 @@
       </div>
     {%- endif -%}
 
-    {%- comment -%} Judge.me reviews widget {%- endcomment -%}
+    {%- comment -%} Judge.me all reviews widget {%- endcomment -%}
     <div class="testimonials__widget-wrap">
-      <div id="judgeme_product_reviews_badge"></div>
-      {% render 'judgeme_widgets', widget_type: 'judgeme_all_reviews_widget', concierge_install: true %}
+      <div
+        id="judgeme_all_reviews_widget"
+        class="jdgm-widget jdgm-all-reviews-widget"
+        data-shop-domain="{{ shop.permanent_domain }}"
+        data-number-of-reviews="30"
+        data-widget="all_reviews"
+        data-auto-install="false"
+        data-entry-point="all_reviews_widget.js"
+        data-entry-key="all-reviews-widget/main.js"
+      ></div>
     </div>
 
   </div>
@@ -352,6 +360,16 @@
 
   })();
 {% endjavascript %}
+
+<script>
+  (function() {
+    if (window.jdgm) return;
+    var s = document.createElement('script');
+    s.src = 'https://cdn.judge.me/assets/all_reviews_widget.js';
+    s.async = true;
+    document.head.appendChild(s);
+  })();
+</script>
 
 {% schema %}
 {
