@@ -51,74 +51,18 @@
       </div>
     {%- endif -%}
 
-    {%- comment -%} Review cards marquee {%- endcomment -%}
-    {%- assign review_blocks = section.blocks | where: 'type', 'review' -%}
-    {%- if review_blocks.size > 0 -%}
-      <div class="testimonials__marquee-wrap">
-        <div class="testimonials__marquee" style="--marquee-duration: {{ review_blocks.size | times: 5 | at_least: 20 }}s">
-          {%- comment -%} Track 1 {%- endcomment -%}
-          <div class="testimonials__marquee-track">
-            {%- for block in review_blocks -%}
-              {%- assign name = block.settings.reviewer_name | default: 'Anonymous' -%}
-              {%- assign initial = name | slice: 0 | upcase -%}
-              <div class="testimonials__review-card" {{ block.shopify_attributes }}>
-                <div class="testimonials__reviewer">
-                  <div class="testimonials__avatar">{{ initial }}</div>
-                  <div class="testimonials__reviewer-info">
-                    <span class="testimonials__reviewer-name">{{ name | escape }}</span>
-                    {%- if block.settings.reviewer_date != blank -%}
-                      <span class="testimonials__reviewer-date">{{ block.settings.reviewer_date | escape }}</span>
-                    {%- endif -%}
-                  </div>
-                </div>
-                <div class="testimonials__stars" aria-label="{{ block.settings.rating }} out of 5 stars">
-                  {%- for i in (1..5) -%}
-                    {%- if i <= block.settings.rating -%}
-                      <svg viewBox="0 0 16 16" fill="#f59e0b" width="16" height="16" aria-hidden="true"><path d="M8 1.139l1.854 3.756 4.146.603-3 2.924.708 4.128L8 10.412l-3.708 1.138.708-4.128-3-2.924 4.146-.603z"/></svg>
-                    {%- else -%}
-                      <svg viewBox="0 0 16 16" fill="#d1d5db" width="16" height="16" aria-hidden="true"><path d="M8 1.139l1.854 3.756 4.146.603-3 2.924.708 4.128L8 10.412l-3.708 1.138.708-4.128-3-2.924 4.146-.603z"/></svg>
-                    {%- endif -%}
-                  {%- endfor -%}
-                </div>
-                {%- if block.settings.review_text != blank -%}
-                  <p class="testimonials__review-text">"{{ block.settings.review_text | escape }}"</p>
-                {%- endif -%}
-              </div>
-            {%- endfor -%}
-          </div>
-          {%- comment -%} Track 2 (duplicate for seamless loop) {%- endcomment -%}
-          <div class="testimonials__marquee-track" aria-hidden="true">
-            {%- for block in review_blocks -%}
-              {%- assign name = block.settings.reviewer_name | default: 'Anonymous' -%}
-              {%- assign initial = name | slice: 0 | upcase -%}
-              <div class="testimonials__review-card">
-                <div class="testimonials__reviewer">
-                  <div class="testimonials__avatar">{{ initial }}</div>
-                  <div class="testimonials__reviewer-info">
-                    <span class="testimonials__reviewer-name">{{ name | escape }}</span>
-                    {%- if block.settings.reviewer_date != blank -%}
-                      <span class="testimonials__reviewer-date">{{ block.settings.reviewer_date | escape }}</span>
-                    {%- endif -%}
-                  </div>
-                </div>
-                <div class="testimonials__stars" aria-label="{{ block.settings.rating }} out of 5 stars">
-                  {%- for i in (1..5) -%}
-                    {%- if i <= block.settings.rating -%}
-                      <svg viewBox="0 0 16 16" fill="#f59e0b" width="16" height="16" aria-hidden="true"><path d="M8 1.139l1.854 3.756 4.146.603-3 2.924.708 4.128L8 10.412l-3.708 1.138.708-4.128-3-2.924 4.146-.603z"/></svg>
-                    {%- else -%}
-                      <svg viewBox="0 0 16 16" fill="#d1d5db" width="16" height="16" aria-hidden="true"><path d="M8 1.139l1.854 3.756 4.146.603-3 2.924.708 4.128L8 10.412l-3.708 1.138.708-4.128-3-2.924 4.146-.603z"/></svg>
-                    {%- endif -%}
-                  {%- endfor -%}
-                </div>
-                {%- if block.settings.review_text != blank -%}
-                  <p class="testimonials__review-text">"{{ block.settings.review_text | escape }}"</p>
-                {%- endif -%}
-              </div>
-            {%- endfor -%}
-          </div>
-        </div>
+    {%- comment -%} Reviews marquee — populated from Judge.me widget via JS {%- endcomment -%}
+    <div class="testimonials__marquee-wrap" id="testimonials-marquee-{{ section.id }}">
+      <div class="testimonials__marquee" id="testimonials-marquee-inner-{{ section.id }}">
+        <div class="testimonials__marquee-track" id="testimonials-track-1-{{ section.id }}"></div>
+        <div class="testimonials__marquee-track" aria-hidden="true" id="testimonials-track-2-{{ section.id }}"></div>
       </div>
-    {%- endif -%}
+    </div>
+
+    {%- comment -%} Loading state {%- endcomment -%}
+    <div class="testimonials__loading" id="testimonials-loading-{{ section.id }}">
+      <p class="testimonials__loading-text">{{ 'sections.testimonials.loading' | t }}</p>
+    </div>
 
   </div>
 </div>
@@ -358,6 +302,40 @@
     margin: 0;
   }
 
+  /* ── Loading state ── */
+  .testimonials__loading {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .testimonials__loading-text {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 14px;
+    color: #7e6767;
+    margin: 0;
+  }
+
+  .testimonials__marquee-wrap[data-loaded="true"] + .testimonials__loading {
+    display: none;
+  }
+
+  .testimonials__marquee-wrap:not([data-loaded="true"]) .testimonials__marquee {
+    display: none;
+  }
+
+  /* ── Hide Judge.me cards carousel — we extract its data via JS ── */
+  .jdgm-cards-carousel {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    padding: 0 !important;
+    margin: -1px !important;
+  }
+
   /* ── Video modal ── */
   .testimonials__modal {
     display: none;
@@ -505,6 +483,103 @@
       if (e.key === 'Escape') closeModal();
     });
 
+    /* ── Extract Judge.me reviews and render custom marquee ── */
+    function extractJudgemeReviews() {
+      var widget = document.querySelector('.jdgm-cards-carousel');
+      if (!widget) return [];
+
+      var cards = widget.querySelectorAll('.jdgm-card:not(.jdgm-clone-before):not(.jdgm-clone-after)');
+      var reviews = [];
+      var seen = {};
+
+      cards.forEach(function(card) {
+        var id = card.getAttribute('data-review-id');
+        if (!id || seen[id]) return;
+        seen[id] = true;
+
+        var nameEl = card.querySelector('.jdgm-reviewer-name');
+        var textEl = card.querySelector('.jdgm-text');
+        var starsOn = card.querySelectorAll('.jdgm-star.jdgm--on').length;
+
+        var name = nameEl ? nameEl.textContent.trim() : 'Anonymous';
+        var text = textEl ? textEl.textContent.trim() : '';
+        if (text.length > 150) text = text.substring(0, 150) + '…';
+
+        reviews.push({ name: name, text: text, rating: starsOn || 5 });
+      });
+
+      return reviews;
+    }
+
+    function buildMarqueeCards(reviews) {
+      var html = '';
+      reviews.forEach(function(r) {
+        var initial = r.name.charAt(0).toUpperCase();
+        var stars = '';
+        for (var i = 1; i <= 5; i++) {
+          var fill = i <= r.rating ? '#f59e0b' : '#d1d5db';
+          stars += '<svg viewBox="0 0 16 16" fill="' + fill + '" width="16" height="16" aria-hidden="true"><path d="M8 1.139l1.854 3.756 4.146.603-3 2.924.708 4.128L8 10.412l-3.708 1.138.708-4.128-3-2.924 4.146-.603z"/></svg>';
+        }
+
+        html += '<div class="testimonials__review-card">';
+        html += '<div class="testimonials__reviewer">';
+        html += '<div class="testimonials__avatar">' + initial + '</div>';
+        html += '<div class="testimonials__reviewer-info">';
+        html += '<span class="testimonials__reviewer-name">' + escapeHtml(r.name) + '</span>';
+        html += '</div></div>';
+        html += '<div class="testimonials__stars" aria-label="' + r.rating + ' out of 5 stars">' + stars + '</div>';
+        if (r.text) html += '<p class="testimonials__review-text">"' + escapeHtml(r.text) + '"</p>';
+        html += '</div>';
+      });
+      return html;
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+
+    function initMarquee() {
+      var reviews = extractJudgemeReviews();
+      if (reviews.length === 0) return false;
+
+      var sections = document.querySelectorAll('.testimonials[data-section-id]');
+      sections.forEach(function(section) {
+        var sectionId = section.dataset.sectionId;
+        var track1 = document.getElementById('testimonials-track-1-' + sectionId);
+        var track2 = document.getElementById('testimonials-track-2-' + sectionId);
+        var wrap = document.getElementById('testimonials-marquee-' + sectionId);
+        var marqueeInner = document.getElementById('testimonials-marquee-inner-' + sectionId);
+
+        if (!track1 || !track2) return;
+
+        var html = buildMarqueeCards(reviews);
+        track1.innerHTML = html;
+        track2.innerHTML = html;
+
+        if (wrap) wrap.setAttribute('data-loaded', 'true');
+        var duration = Math.max(20, reviews.length * 5);
+        if (marqueeInner) marqueeInner.style.setProperty('--marquee-duration', duration + 's');
+      });
+
+      return true;
+    }
+
+    /* Poll until Judge.me renders its cards */
+    var attempts = 0;
+    var pollInterval = setInterval(function() {
+      attempts++;
+      if (initMarquee() || attempts > 60) {
+        clearInterval(pollInterval);
+        if (attempts > 60) {
+          document.querySelectorAll('.testimonials__loading-text').forEach(function(el) {
+            el.textContent = 'No reviews available.';
+          });
+        }
+      }
+    }, 500);
+
   })();
 {% endjavascript %}
 
@@ -537,39 +612,6 @@
           "type": "text",
           "id": "alt",
           "label": "t:sections.testimonials.blocks.video.alt"
-        }
-      ]
-    },
-    {
-      "type": "review",
-      "name": "t:sections.testimonials.blocks.review.name",
-      "settings": [
-        {
-          "type": "text",
-          "id": "reviewer_name",
-          "label": "t:sections.testimonials.blocks.review.reviewer_name",
-          "default": "John Doe"
-        },
-        {
-          "type": "text",
-          "id": "reviewer_date",
-          "label": "t:sections.testimonials.blocks.review.reviewer_date",
-          "default": "1 week ago"
-        },
-        {
-          "type": "range",
-          "id": "rating",
-          "label": "t:sections.testimonials.blocks.review.rating",
-          "min": 1,
-          "max": 5,
-          "step": 1,
-          "default": 5
-        },
-        {
-          "type": "textarea",
-          "id": "review_text",
-          "label": "t:sections.testimonials.blocks.review.review_text",
-          "default": "Great product, highly recommended!"
         }
       ]
     }
@@ -619,11 +661,7 @@
         { "type": "video" },
         { "type": "video" },
         { "type": "video" },
-        { "type": "video" },
-        { "type": "review" },
-        { "type": "review" },
-        { "type": "review" },
-        { "type": "review" }
+        { "type": "video" }
       ]
     }
   ]
