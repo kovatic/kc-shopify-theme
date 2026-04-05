@@ -12,21 +12,71 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
-        "slide_aPXt94": {
+        "slide_krfQVT": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/Website_Launch_Desktop.jpg",
+            "mobile_image": "shopify://shop_images/Website_Launch_Mobile.jpg",
             "subheading": "",
             "heading": "",
             "text": "",
             "button_label": "",
             "button_url": "",
             "text_position": "middle-left",
-            "show_overlay": true,
+            "show_overlay": false,
             "overlay_opacity": 30
+          }
+        },
+        "slide_WeH4zi": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Coupon_Web.jpg",
+            "mobile_image": "shopify://shop_images/Coupon_Mobile.jpg",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "",
+            "text_position": "middle-left",
+            "show_overlay": false,
+            "overlay_opacity": 30
+          }
+        },
+        "slide_FGrRqi": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Jewels_web.jpg",
+            "mobile_image": "shopify://shop_images/Jewels_mobile.jpg",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "",
+            "text_position": "middle-left",
+            "show_overlay": false,
+            "overlay_opacity": 80
+          }
+        },
+        "slide_aPXt94": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/final_1.jpg",
+            "mobile_image": "shopify://shop_images/final_mobile_a071476e-bced-4b6c-b852-984e8fa2504c.jpg",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "shopify://collections/banarasi-silk-saree",
+            "text_position": "middle-left",
+            "show_overlay": true,
+            "overlay_opacity": 0
           }
         }
       },
       "block_order": [
+        "slide_krfQVT",
+        "slide_WeH4zi",
+        "slide_FGrRqi",
         "slide_aPXt94"
       ],
       "name": "t:sections.banner.name",
@@ -44,7 +94,10 @@
         "subtitle": "Explore our collections tailored for every style.",
         "collections": [
           "soft-silk-saree",
-          "necklace-saree"
+          "necklace-saree",
+          "geogrette-saree",
+          "kora-cotton",
+          "tissue-saree"
         ],
         "background_color": "#f1eee9",
         "padding_top": 40,
@@ -73,10 +126,10 @@
         "title": "Trending Collections",
         "subtitle": "Explore our curated collections of the finest ethnic wear",
         "collections": [
-          "kanchipuram-checks",
-          "budget-silks",
-          "pop",
-          "nine-yard-collection"
+          "necklace-saree",
+          "silk-saree",
+          "soft-silk-saree",
+          "banarasi-silk-saree"
         ],
         "padding_top": 60,
         "padding_bottom": 60
@@ -86,13 +139,13 @@
       "type": "product-list",
       "name": "t:sections.product_list.name",
       "settings": {
-        "title": "Featured Products",
+        "title": "Banarasi Silk Sarees",
         "subtitle": "Discover what's new this season.",
-        "collection": "saree",
+        "collection": "banarasi-silk-saree",
         "layout_type_desktop": "wrap",
         "layout_type_mobile": "wrap",
         "products_count": 4,
-        "view_all_url": "shopify://collections/automated-collection",
+        "view_all_url": "shopify://collections/banarasi-silk-saree",
         "padding_top": 60,
         "padding_bottom": 60
       }
@@ -167,6 +220,7 @@
       "block_order": [
         "image_LUFpc7"
       ],
+      "disabled": true,
       "custom_css": [],
       "name": "t:general.custom_section",
       "settings": {}
@@ -175,19 +229,20 @@
       "type": "product-list",
       "name": "t:sections.product_list.name",
       "settings": {
-        "title": "Featured Products",
+        "title": "Tissue Saree",
         "subtitle": "Discover what's new this season.",
-        "collection": "saree",
+        "collection": "tissue-saree",
         "layout_type_desktop": "wrap",
         "layout_type_mobile": "wrap",
         "products_count": 4,
-        "view_all_url": "shopify://collections/automated-collection",
+        "view_all_url": "shopify://collections/tissue-saree",
         "padding_top": 40,
         "padding_bottom": 60
       }
     },
     "promo_RGMMyX": {
       "type": "promo",
+      "disabled": true,
       "name": "t:sections.promo.name",
       "settings": {
         "heading": "Gift Voucher",
@@ -238,15 +293,13 @@
         "single_collection": "",
         "products_count": 7,
         "collections": [
-          "meena",
-          "meena-copy-copy-copy-copy-copy",
-          "nine-yard-collection",
-          "meena-copy-copy-copy",
-          "meena-copy-copy",
-          "reena",
-          "meena-copy-copy-copy-copy",
-          "meena-copy"
+          "silk-saree",
+          "juet-silk-saree",
+          "banarasi-silk-saree",
+          "art-silk-saree",
+          "kancheepuram-saree-silk-saree"
         ],
+        "enable_reel_video": true,
         "padding_top": 60,
         "padding_bottom": 60
       }
@@ -309,6 +362,7 @@
       "blocks": {
         "video_XWQPY9": {
           "type": "video",
+          "disabled": true,
           "settings": {
             "video_url": "",
             "alt": ""
@@ -316,6 +370,7 @@
         },
         "video_eKc6FW": {
           "type": "video",
+          "disabled": true,
           "settings": {
             "video_url": "",
             "alt": ""
@@ -323,6 +378,7 @@
         },
         "video_Ct4BiT": {
           "type": "video",
+          "disabled": true,
           "settings": {
             "video_url": "",
             "alt": ""
@@ -330,45 +386,10 @@
         },
         "video_NGGN8H": {
           "type": "video",
+          "disabled": true,
           "settings": {
             "video_url": "",
             "alt": ""
-          }
-        },
-        "review_pnwei3": {
-          "type": "review",
-          "settings": {
-            "reviewer_name": "John Doe",
-            "reviewer_date": "4 days ago",
-            "rating": 5,
-            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
-          }
-        },
-        "review_VjQRNF": {
-          "type": "review",
-          "settings": {
-            "reviewer_name": "John Doe",
-            "reviewer_date": "4 days ago",
-            "rating": 5,
-            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
-          }
-        },
-        "review_hwi7jM": {
-          "type": "review",
-          "settings": {
-            "reviewer_name": "John Doe",
-            "reviewer_date": "4 days ago",
-            "rating": 5,
-            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
-          }
-        },
-        "review_h9RpiA": {
-          "type": "review",
-          "settings": {
-            "reviewer_name": "John Doe",
-            "reviewer_date": "4 days ago",
-            "rating": 5,
-            "review_text": "The silk sarees from Chinnadurai are absolutely stunning. The quality is unmatched."
           }
         }
       },
@@ -376,16 +397,15 @@
         "video_XWQPY9",
         "video_eKc6FW",
         "video_Ct4BiT",
-        "video_NGGN8H",
-        "review_pnwei3",
-        "review_VjQRNF",
-        "review_hwi7jM",
-        "review_h9RpiA"
+        "video_NGGN8H"
       ],
       "name": "Testimonials",
       "settings": {
         "title": "Our Customer Testimonials",
         "subtitle": "Trusted and praised for excellence",
+        "min_rating": 4,
+        "max_reviews": 10,
+        "product_filter": "",
         "padding_top": 60,
         "padding_bottom": 60
       }
@@ -395,52 +415,67 @@
       "blocks": {
         "store_EbaiC9": {
           "type": "store",
+          "source": "{{ metaobjects.store.eral }}",
           "settings": {
-            "store_type": "",
-            "store_name": "Eral",
-            "address": "Bus Stand, Eral, Tamil Nadu 628801",
-            "phone": "04630-271254",
-            "map_url": "https://maps.app.goo.gl/qEgSzdP9FnBhAzvr8"
+            "image": "{{ metaobjects.store.eral.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.eral.store_type.value }}",
+            "store_name": "{{ metaobjects.store.eral.store_name.value }}",
+            "address": "{{ metaobjects.store.eral.address.value }}",
+            "phone": "{{ metaobjects.store.eral.phone.value }}",
+            "map_url": "{{ metaobjects.store.eral.map_url.value }}",
+            "store_url": "{{ metaobjects.store.eral.system.url }}"
           }
         },
         "store_dpm8Kk": {
           "type": "store",
+          "source": "{{ metaobjects.store.thiruchendur }}",
           "settings": {
-            "store_type": "",
-            "store_name": "Thiruchendur",
-            "address": "130, 1, N Car St, Thiruchendur, Tamil Nadu 628215",
-            "phone": "04639-242777",
-            "map_url": "https://maps.app.goo.gl/2LA2iyVKWKLn7vHs7"
+            "image": "{{ metaobjects.store.thiruchendur.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.thiruchendur.store_type.value }}",
+            "store_name": "{{ metaobjects.store.thiruchendur.store_name.value }}",
+            "address": "{{ metaobjects.store.thiruchendur.address.value }}",
+            "phone": "{{ metaobjects.store.thiruchendur.phone.value }}",
+            "map_url": "{{ metaobjects.store.thiruchendur.map_url.value }}",
+            "store_url": "{{ metaobjects.store.thiruchendur.system.url }}"
           }
         },
         "store_CRtjn9": {
           "type": "store",
+          "source": "{{ metaobjects.store.thoothukudi }}",
           "settings": {
-            "store_type": "",
-            "store_name": "Thoothukudi",
-            "address": "Toovipuram Main Rd, Toovipuram, Thoothukudi, Tamil Nadu 628001",
-            "phone": "0461-2111111",
-            "map_url": "https://maps.app.goo.gl/kzKhviCJuuxGHn4p6"
+            "image": "{{ metaobjects.store.thoothukudi.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.thoothukudi.store_type.value }}",
+            "store_name": "{{ metaobjects.store.thoothukudi.store_name.value }}",
+            "address": "{{ metaobjects.store.thoothukudi.address.value }}",
+            "phone": "{{ metaobjects.store.thoothukudi.phone.value }}",
+            "map_url": "{{ metaobjects.store.thoothukudi.map_url.value }}",
+            "store_url": "{{ metaobjects.store.thoothukudi.system.url }}"
           }
         },
         "store_VPNbQQ": {
           "type": "store",
+          "source": "{{ metaobjects.store.chennai }}",
           "settings": {
-            "store_type": "",
-            "store_name": "Chennai",
-            "address": "Velachery Main Rd, Kamarajapuram, Palaniappa Nagar, Sembakkam, Chennai, Tamil Nadu, 600073",
-            "phone": "044 2111 1111",
-            "map_url": "https://maps.app.goo.gl/hVmkkdPL7g7K4M2eA"
+            "image": "{{ metaobjects.store.chennai.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.chennai.store_type.value }}",
+            "store_name": "{{ metaobjects.store.chennai.store_name.value }}",
+            "address": "{{ metaobjects.store.chennai.address.value }}",
+            "phone": "{{ metaobjects.store.chennai.phone.value }}",
+            "map_url": "{{ metaobjects.store.chennai.map_url.value }}",
+            "store_url": "{{ metaobjects.store.chennai.system.url }}"
           }
         },
         "store_iVqhef": {
           "type": "store",
+          "source": "{{ metaobjects.store.tirunelveli }}",
           "settings": {
-            "store_type": "",
-            "store_name": "Tirunelveli",
-            "address": "Tirunelveli, 9, Triuvanandapuram Road, Vannarpettai,Tirunelveli, Tamil Nadu 627003",
-            "phone": "94882 02320",
-            "map_url": "https://maps.app.goo.gl/fhUxmfCm5VjLxvh1A"
+            "image": "{{ metaobjects.store.tirunelveli.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.tirunelveli.store_type.value }}",
+            "store_name": "{{ metaobjects.store.tirunelveli.store_name.value }}",
+            "address": "{{ metaobjects.store.tirunelveli.address.value }}",
+            "phone": "{{ metaobjects.store.tirunelveli.phone.value }}",
+            "map_url": "{{ metaobjects.store.tirunelveli.map_url.value }}",
+            "store_url": "{{ metaobjects.store.tirunelveli.system.url }}"
           }
         }
       },
