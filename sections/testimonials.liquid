@@ -3,8 +3,6 @@
   id="testimonials-{{ section.id }}"
   style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;"
   data-section-id="{{ section.id }}"
-  data-api-token="{{ section.settings.judgeme_api_token | escape }}"
-  data-shop-domain="{{ shop.permanent_domain }}"
   data-min-rating="{{ section.settings.min_rating }}"
   data-max-reviews="{{ section.settings.max_reviews }}"
   data-product-handle="{{ section.settings.product_filter | escape }}"
@@ -492,29 +490,18 @@
       if (e.key === 'Escape') closeModal();
     });
 
-    /* ── Judge.me review fetching ── */
-    document.querySelectorAll('.testimonials[data-api-token]').forEach(function(section) {
-      var apiToken      = section.dataset.apiToken;
-      var shopDomain    = section.dataset.shopDomain;
+    /* ── Judge.me review fetching via Shopify App Proxy (no CORS) ── */
+    document.querySelectorAll('.testimonials[data-section-id]').forEach(function(section) {
       var minRating     = parseInt(section.dataset.minRating, 10) || 1;
       var maxReviews    = parseInt(section.dataset.maxReviews, 10) || 10;
       var productHandle = section.dataset.productHandle || '';
       var sectionId     = section.dataset.sectionId;
 
-      if (!apiToken || !shopDomain) {
-        showMessage(sectionId, 'Please add your Judge.me API token in the theme editor.');
-        return;
-      }
+      var perPage = Math.min(maxReviews * 3, 100);
+      var apiUrl = '/apps/judgeme/reviews?per_page=' + perPage;
+      if (productHandle) apiUrl += '&product_handle=' + encodeURIComponent(productHandle);
 
-      /* Fetch more than needed so we can filter by min rating client-side.
-         Pass api_token as both header and query param for maximum compatibility. */
-      var perPage = maxReviews * 3;
-      var apiUrl = 'https://api.judge.me/api/v1/reviews'
-        + '?api_token=' + encodeURIComponent(apiToken)
-        + '&shop_domain=' + encodeURIComponent(shopDomain)
-        + '&per_page=' + perPage;
-
-      fetch(apiUrl)
+      fetch(apiUrl, { headers: { 'Accept': 'application/json' } })
         .then(function(res) {
           if (!res.ok) throw new Error('HTTP ' + res.status);
           return res.json();
@@ -689,12 +676,6 @@
     {
       "type": "header",
       "content": "t:sections.testimonials.judgeme_header"
-    },
-    {
-      "type": "text",
-      "id": "judgeme_api_token",
-      "label": "t:sections.testimonials.api_token",
-      "info": "t:sections.testimonials.api_token_info"
     },
     {
       "type": "range",
