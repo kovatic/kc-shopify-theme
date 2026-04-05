@@ -391,25 +391,18 @@
             "video_url": "",
             "alt": ""
           }
-        }
+        },
       },
       "block_order": [
         "video_XWQPY9",
         "video_eKc6FW",
         "video_Ct4BiT",
-        "video_NGGN8H",
-        "review_pnwei3",
-        "review_VjQRNF",
-        "review_hwi7jM",
-        "review_h9RpiA"
+        "video_NGGN8H"
       ],
       "name": "Testimonials",
       "settings": {
         "title": "Our Customer Testimonials",
         "subtitle": "Trusted and praised for excellence",
-        "min_rating": 4,
-        "max_reviews": 10,
-        "product_filter": "",
         "padding_top": 60,
         "padding_bottom": 60
       }
