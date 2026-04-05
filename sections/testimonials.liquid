@@ -3,9 +3,6 @@
   id="testimonials-{{ section.id }}"
   style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;"
   data-section-id="{{ section.id }}"
-  data-min-rating="{{ section.settings.min_rating }}"
-  data-max-reviews="{{ section.settings.max_reviews }}"
-  data-product-handle="{{ section.settings.product_filter | escape }}"
 >
   <div class="testimonials__container">
 
@@ -54,17 +51,10 @@
       </div>
     {%- endif -%}
 
-    {%- comment -%} Judge.me reviews — marquee auto-scroll (populated via JS) {%- endcomment -%}
-    <div class="testimonials__marquee-wrap" id="testimonials-reviews-{{ section.id }}">
-      <div class="testimonials__marquee">
-        <div class="testimonials__marquee-track" id="testimonials-track-1-{{ section.id }}"></div>
-        <div class="testimonials__marquee-track" aria-hidden="true" id="testimonials-track-2-{{ section.id }}"></div>
-      </div>
-    </div>
-
-    {%- comment -%} Loading / empty state {%- endcomment -%}
-    <div class="testimonials__loading" id="testimonials-loading-{{ section.id }}">
-      <p class="testimonials__loading-text">{{ 'sections.testimonials.loading' | t }}</p>
+    {%- comment -%} Judge.me reviews widget {%- endcomment -%}
+    <div class="testimonials__widget-wrap">
+      <div id="judgeme_product_reviews_badge"></div>
+      {% render 'judgeme_widgets', widget_type: 'judgeme_all_reviews_widget', concierge_install: true %}
     </div>
 
   </div>
@@ -211,105 +201,9 @@
     background: rgba(0,0,0,0.8);
   }
 
-  /* ── Marquee reviews ── */
-  .testimonials__marquee-wrap {
-    overflow: hidden;
+  /* ── Judge.me widget ── */
+  .testimonials__widget-wrap {
     width: 100%;
-  }
-
-  .testimonials__marquee {
-    display: flex;
-    width: max-content;
-    animation: testimonials-marquee var(--marquee-duration, 40s) linear infinite;
-  }
-
-  .testimonials__marquee:hover {
-    animation-play-state: paused;
-  }
-
-  @keyframes testimonials-marquee {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  .testimonials__marquee-track {
-    display: flex;
-    gap: 12px;
-    padding-right: 12px;
-  }
-
-  .testimonials__review-card {
-    width: 322px;
-    flex-shrink: 0;
-    background: #f0e7db;
-    border: 1px solid #efe2d1;
-    border-radius: 6px;
-    padding: 16px 15px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .testimonials__judgeme-icon {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-  }
-
-  .testimonials__reviewer {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .testimonials__avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #2e1f1f;
-    color: #fff;
-    font-family: var(--font-body-family, 'Poppins', sans-serif);
-    font-size: 13px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .testimonials__reviewer-info {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .testimonials__reviewer-name {
-    font-family: var(--font-body-family, 'Poppins', sans-serif);
-    font-size: 14px;
-    font-weight: 600;
-    color: #212121;
-    line-height: 1.28;
-  }
-
-  .testimonials__reviewer-date {
-    font-family: var(--font-body-family, 'Poppins', sans-serif);
-    font-size: 12px;
-    color: #737373;
-    line-height: 1.2;
-  }
-
-  .testimonials__stars {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-  }
-
-  .testimonials__review-text {
-    font-family: var(--font-body-family, 'Montserrat', sans-serif);
-    font-size: 14px;
-    color: #737373;
-    line-height: 1.5;
-    margin: 0;
   }
 
   /* ── Video modal ── */
@@ -372,37 +266,6 @@
     display: block;
   }
 
-  /* ── Loading state ── */
-  .testimonials__loading {
-    text-align: center;
-    padding: 20px;
-  }
-
-  .testimonials__loading-text {
-    font-family: var(--font-body-family, 'Montserrat', sans-serif);
-    font-size: 14px;
-    color: #7e6767;
-    margin: 0;
-  }
-
-  .testimonials__marquee-wrap[data-loaded="true"] + .testimonials__loading {
-    display: none;
-  }
-
-  .testimonials__marquee-wrap:not([data-loaded="true"]) .testimonials__marquee {
-    display: none;
-  }
-
-  .testimonials__review-product {
-    font-family: var(--font-body-family, 'Poppins', sans-serif);
-    font-size: 12px;
-    color: #9e8080;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
   /* ── Mobile ── */
   @media screen and (max-width: 768px) {
     .testimonials__container {
@@ -418,9 +281,6 @@
       width: calc((100vw - 2rem) / 1.5);
     }
 
-    .testimonials__review-card {
-      width: 280px;
-    }
   }
 {% endstylesheet %}
 
@@ -490,140 +350,6 @@
       if (e.key === 'Escape') closeModal();
     });
 
-    /* ── Judge.me review fetching via Shopify App Proxy (no CORS) ── */
-    document.querySelectorAll('.testimonials[data-section-id]').forEach(function(section) {
-      var minRating     = parseInt(section.dataset.minRating, 10) || 1;
-      var maxReviews    = parseInt(section.dataset.maxReviews, 10) || 10;
-      var productHandle = section.dataset.productHandle || '';
-      var sectionId     = section.dataset.sectionId;
-
-      var perPage = Math.min(maxReviews * 3, 100);
-      var apiUrl = '/apps/judgeme/reviews?per_page=' + perPage;
-      if (productHandle) apiUrl += '&product_handle=' + encodeURIComponent(productHandle);
-
-      fetch(apiUrl, { headers: { 'Accept': 'application/json' } })
-        .then(function(res) {
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          return res.json();
-        })
-        .then(function(data) {
-          var allReviews = data.reviews || [];
-          var filtered = [];
-
-          for (var i = 0; i < allReviews.length; i++) {
-            if (filtered.length >= maxReviews) break;
-            var r = allReviews[i];
-
-            /* Skip hidden or spam reviews */
-            if (r.hidden || r.curated === 'spam') continue;
-
-            /* Filter by minimum rating */
-            if ((r.rating || 0) < minRating) continue;
-
-            /* Filter by product handle if set */
-            if (productHandle && r.product_handle !== productHandle) continue;
-
-            var name = 'Anonymous';
-            if (r.reviewer && r.reviewer.name) name = r.reviewer.name;
-
-            filtered.push({
-              name: name,
-              date: r.created_at || '',
-              rating: r.rating || 5,
-              title: r.title || '',
-              body: r.body || '',
-              product: r.product_title || ''
-            });
-          }
-
-          if (filtered.length === 0) {
-            showMessage(sectionId, 'No reviews found matching the selected filters.');
-            return;
-          }
-
-          renderReviews(filtered, sectionId);
-        })
-        .catch(function(err) {
-          console.error('Testimonials: Judge.me API error', err);
-          showMessage(sectionId, 'Could not load reviews. Please check your API token.');
-        });
-
-      function showMessage(secId, msg) {
-        var loadingEl = document.getElementById('testimonials-loading-' + secId);
-        if (loadingEl) loadingEl.querySelector('.testimonials__loading-text').textContent = msg;
-      }
-    });
-
-    function renderReviews(reviews, sectionId) {
-      var track1 = document.getElementById('testimonials-track-1-' + sectionId);
-      var track2 = document.getElementById('testimonials-track-2-' + sectionId);
-      if (!track1 || !track2) return;
-
-      var html = '';
-      reviews.forEach(function(review) {
-        var name = review.name || 'Anonymous';
-        var initial = name.charAt(0).toUpperCase();
-        var rating = review.rating || 5;
-        var dateStr = review.date;
-
-        /* Convert ISO date to relative time */
-        if (dateStr && dateStr.indexOf('T') !== -1) {
-          var createdAt = new Date(dateStr);
-          var now = new Date();
-          var diffDays = Math.floor((now - createdAt) / (1000 * 60 * 60 * 24));
-          if (diffDays === 0) dateStr = 'Today';
-          else if (diffDays === 1) dateStr = '1 day ago';
-          else if (diffDays < 30) dateStr = diffDays + ' days ago';
-          else if (diffDays < 365) {
-            var months = Math.floor(diffDays / 30);
-            dateStr = months === 1 ? '1 month ago' : months + ' months ago';
-          } else {
-            var years = Math.floor(diffDays / 365);
-            dateStr = years === 1 ? '1 year ago' : years + ' years ago';
-          }
-        }
-
-        var stars = '';
-        for (var i = 1; i <= 5; i++) {
-          var fill = i <= rating ? '#f59e0b' : '#d1d5db';
-          stars += '<svg viewBox="0 0 16 16" fill="' + fill + '" width="16" height="16" aria-hidden="true"><path d="M8 1.139l1.854 3.756 4.146.603-3 2.924.708 4.128L8 10.412l-3.708 1.138.708-4.128-3-2.924 4.146-.603z"/></svg>';
-        }
-
-        var displayText = review.title || review.body || '';
-        if (displayText.length > 150) displayText = displayText.substring(0, 150) + '…';
-
-        html += '<div class="testimonials__review-card">';
-        html += '<div class="testimonials__judgeme-icon" aria-hidden="true">';
-        html += '<svg width="22" height="22" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="55" height="55" rx="10" fill="#1B1B1B"/><path d="M39.93 22.09l-7.19-4.15a5.55 5.55 0 00-5.55 0l-7.19 4.15a5.55 5.55 0 00-2.78 4.81v8.3a5.55 5.55 0 002.78 4.81l7.19 4.15a5.55 5.55 0 005.55 0l7.19-4.15a5.55 5.55 0 002.78-4.81v-8.3a5.55 5.55 0 00-2.78-4.81z" fill="#fff"/><path d="M30.55 28.5a3.05 3.05 0 11-6.1 0 3.05 3.05 0 016.1 0z" fill="#1B1B1B"/></svg>';
-        html += '</div>';
-        html += '<div class="testimonials__reviewer">';
-        html += '<div class="testimonials__avatar">' + initial + '</div>';
-        html += '<div class="testimonials__reviewer-info">';
-        html += '<span class="testimonials__reviewer-name">' + escapeHtml(name) + '</span>';
-        if (dateStr) html += '<span class="testimonials__reviewer-date">' + escapeHtml(dateStr) + '</span>';
-        html += '</div></div>';
-        html += '<div class="testimonials__stars" aria-label="' + rating + ' out of 5 stars">' + stars + '</div>';
-        if (review.product) html += '<p class="testimonials__review-product">' + escapeHtml(review.product) + '</p>';
-        if (displayText) html += '<p class="testimonials__review-text">"' + escapeHtml(displayText) + '"</p>';
-        html += '</div>';
-      });
-
-      track1.innerHTML = html;
-      track2.innerHTML = html;
-
-      var wrap = document.getElementById('testimonials-reviews-' + sectionId);
-      if (wrap) wrap.setAttribute('data-loaded', 'true');
-
-      var duration = Math.max(20, reviews.length * 5);
-      var marquee = wrap.querySelector('.testimonials__marquee');
-      if (marquee) marquee.style.setProperty('--marquee-duration', duration + 's');
-    }
-
-    function escapeHtml(str) {
-      var div = document.createElement('div');
-      div.appendChild(document.createTextNode(str));
-      return div.innerHTML;
-    }
   })();
 {% endjavascript %}
 
