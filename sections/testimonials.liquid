@@ -51,19 +51,74 @@
       </div>
     {%- endif -%}
 
-    {%- comment -%} Judge.me all reviews widget {%- endcomment -%}
-    <div class="testimonials__widget-wrap">
-      <div
-        id="judgeme_all_reviews_widget"
-        class="jdgm-widget jdgm-all-reviews-widget"
-        data-shop-domain="{{ shop.permanent_domain }}"
-        data-number-of-reviews="30"
-        data-widget="all_reviews"
-        data-auto-install="false"
-        data-entry-point="all_reviews_widget.js"
-        data-entry-key="all-reviews-widget/main.js"
-      ></div>
-    </div>
+    {%- comment -%} Review cards marquee {%- endcomment -%}
+    {%- assign review_blocks = section.blocks | where: 'type', 'review' -%}
+    {%- if review_blocks.size > 0 -%}
+      <div class="testimonials__marquee-wrap">
+        <div class="testimonials__marquee" style="--marquee-duration: {{ review_blocks.size | times: 5 | at_least: 20 }}s">
+          {%- comment -%} Track 1 {%- endcomment -%}
+          <div class="testimonials__marquee-track">
+            {%- for block in review_blocks -%}
+              {%- assign name = block.settings.reviewer_name | default: 'Anonymous' -%}
+              {%- assign initial = name | slice: 0 | upcase -%}
+              <div class="testimonials__review-card" {{ block.shopify_attributes }}>
+                <div class="testimonials__reviewer">
+                  <div class="testimonials__avatar">{{ initial }}</div>
+                  <div class="testimonials__reviewer-info">
+                    <span class="testimonials__reviewer-name">{{ name | escape }}</span>
+                    {%- if block.settings.reviewer_date != blank -%}
+                      <span class="testimonials__reviewer-date">{{ block.settings.reviewer_date | escape }}</span>
+                    {%- endif -%}
+                  </div>
+                </div>
+                <div class="testimonials__stars" aria-label="{{ block.settings.rating }} out of 5 stars">
+                  {%- for i in (1..5) -%}
+                    {%- if i <= block.settings.rating -%}
+                      <svg viewBox="0 0 16 16" fill="#f59e0b" width="16" height="16" aria-hidden="true"><path d="M8 1.139l1.854 3.756 4.146.603-3 2.924.708 4.128L8 10.412l-3.708 1.138.708-4.128-3-2.924 4.146-.603z"/></svg>
+                    {%- else -%}
+                      <svg viewBox="0 0 16 16" fill="#d1d5db" width="16" height="16" aria-hidden="true"><path d="M8 1.139l1.854 3.756 4.146.603-3 2.924.708 4.128L8 10.412l-3.708 1.138.708-4.128-3-2.924 4.146-.603z"/></svg>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+                {%- if block.settings.review_text != blank -%}
+                  <p class="testimonials__review-text">"{{ block.settings.review_text | escape }}"</p>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+          {%- comment -%} Track 2 (duplicate for seamless loop) {%- endcomment -%}
+          <div class="testimonials__marquee-track" aria-hidden="true">
+            {%- for block in review_blocks -%}
+              {%- assign name = block.settings.reviewer_name | default: 'Anonymous' -%}
+              {%- assign initial = name | slice: 0 | upcase -%}
+              <div class="testimonials__review-card">
+                <div class="testimonials__reviewer">
+                  <div class="testimonials__avatar">{{ initial }}</div>
+                  <div class="testimonials__reviewer-info">
+                    <span class="testimonials__reviewer-name">{{ name | escape }}</span>
+                    {%- if block.settings.reviewer_date != blank -%}
+                      <span class="testimonials__reviewer-date">{{ block.settings.reviewer_date | escape }}</span>
+                    {%- endif -%}
+                  </div>
+                </div>
+                <div class="testimonials__stars" aria-label="{{ block.settings.rating }} out of 5 stars">
+                  {%- for i in (1..5) -%}
+                    {%- if i <= block.settings.rating -%}
+                      <svg viewBox="0 0 16 16" fill="#f59e0b" width="16" height="16" aria-hidden="true"><path d="M8 1.139l1.854 3.756 4.146.603-3 2.924.708 4.128L8 10.412l-3.708 1.138.708-4.128-3-2.924 4.146-.603z"/></svg>
+                    {%- else -%}
+                      <svg viewBox="0 0 16 16" fill="#d1d5db" width="16" height="16" aria-hidden="true"><path d="M8 1.139l1.854 3.756 4.146.603-3 2.924.708 4.128L8 10.412l-3.708 1.138.708-4.128-3-2.924 4.146-.603z"/></svg>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+                {%- if block.settings.review_text != blank -%}
+                  <p class="testimonials__review-text">"{{ block.settings.review_text | escape }}"</p>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
 
   </div>
 </div>
@@ -209,9 +264,98 @@
     background: rgba(0,0,0,0.8);
   }
 
-  /* ── Judge.me widget ── */
-  .testimonials__widget-wrap {
+  /* ── Marquee reviews ── */
+  .testimonials__marquee-wrap {
+    overflow: hidden;
     width: 100%;
+  }
+
+  .testimonials__marquee {
+    display: flex;
+    width: max-content;
+    animation: testimonials-marquee var(--marquee-duration, 40s) linear infinite;
+  }
+
+  .testimonials__marquee:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes testimonials-marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .testimonials__marquee-track {
+    display: flex;
+    gap: 12px;
+    padding-right: 12px;
+  }
+
+  .testimonials__review-card {
+    width: 322px;
+    flex-shrink: 0;
+    background: #f0e7db;
+    border: 1px solid #efe2d1;
+    border-radius: 6px;
+    padding: 16px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .testimonials__reviewer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .testimonials__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #2e1f1f;
+    color: #fff;
+    font-family: var(--font-body-family, 'Poppins', sans-serif);
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .testimonials__reviewer-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .testimonials__reviewer-name {
+    font-family: var(--font-body-family, 'Poppins', sans-serif);
+    font-size: 14px;
+    font-weight: 600;
+    color: #212121;
+    line-height: 1.28;
+  }
+
+  .testimonials__reviewer-date {
+    font-family: var(--font-body-family, 'Poppins', sans-serif);
+    font-size: 12px;
+    color: #737373;
+    line-height: 1.2;
+  }
+
+  .testimonials__stars {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .testimonials__review-text {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 14px;
+    color: #737373;
+    line-height: 1.5;
+    margin: 0;
   }
 
   /* ── Video modal ── */
@@ -289,6 +433,9 @@
       width: calc((100vw - 2rem) / 1.5);
     }
 
+    .testimonials__review-card {
+      width: 280px;
+    }
   }
 {% endstylesheet %}
 
@@ -361,16 +508,6 @@
   })();
 {% endjavascript %}
 
-<script>
-  (function() {
-    if (window.jdgm) return;
-    var s = document.createElement('script');
-    s.src = 'https://cdn.judge.me/assets/all_reviews_widget.js';
-    s.async = true;
-    document.head.appendChild(s);
-  })();
-</script>
-
 {% schema %}
 {
   "name": "t:sections.testimonials.name",
@@ -402,6 +539,39 @@
           "label": "t:sections.testimonials.blocks.video.alt"
         }
       ]
+    },
+    {
+      "type": "review",
+      "name": "t:sections.testimonials.blocks.review.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "reviewer_name",
+          "label": "t:sections.testimonials.blocks.review.reviewer_name",
+          "default": "John Doe"
+        },
+        {
+          "type": "text",
+          "id": "reviewer_date",
+          "label": "t:sections.testimonials.blocks.review.reviewer_date",
+          "default": "1 week ago"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "t:sections.testimonials.blocks.review.rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "review_text",
+          "label": "t:sections.testimonials.blocks.review.review_text",
+          "default": "Great product, highly recommended!"
+        }
+      ]
     }
   ],
   "settings": [
@@ -416,36 +586,6 @@
       "id": "subtitle",
       "label": "t:sections.testimonials.subtitle",
       "default": "Trusted and praised for excellence"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.testimonials.judgeme_header"
-    },
-    {
-      "type": "range",
-      "id": "min_rating",
-      "label": "t:sections.testimonials.min_rating",
-      "min": 1,
-      "max": 5,
-      "step": 1,
-      "default": 4,
-      "info": "t:sections.testimonials.min_rating_info"
-    },
-    {
-      "type": "range",
-      "id": "max_reviews",
-      "label": "t:sections.testimonials.max_reviews",
-      "min": 4,
-      "max": 30,
-      "step": 1,
-      "default": 10,
-      "info": "t:sections.testimonials.max_reviews_info"
-    },
-    {
-      "type": "text",
-      "id": "product_filter",
-      "label": "t:sections.testimonials.product_filter",
-      "info": "t:sections.testimonials.product_filter_info"
     },
     {
       "type": "header",
@@ -479,7 +619,11 @@
         { "type": "video" },
         { "type": "video" },
         { "type": "video" },
-        { "type": "video" }
+        { "type": "video" },
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" }
       ]
     }
   ]
