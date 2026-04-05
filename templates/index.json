@@ -128,7 +128,8 @@
         "collections": [
           "necklace-saree",
           "silk-saree",
-          "soft-silk-saree"
+          "soft-silk-saree",
+          "banarasi-silk-saree"
         ],
         "padding_top": 60,
         "padding_bottom": 60
@@ -219,6 +220,7 @@
       "block_order": [
         "image_LUFpc7"
       ],
+      "disabled": true,
       "custom_css": [],
       "name": "t:general.custom_section",
       "settings": {}
@@ -401,7 +403,6 @@
       "settings": {
         "title": "Our Customer Testimonials",
         "subtitle": "Trusted and praised for excellence",
-        "judgeme_api_token": "j3xk7JXpVla5x_m1gn6Lr-XGdIc",
         "min_rating": 4,
         "max_reviews": 10,
         "product_filter": "",
