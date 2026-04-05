@@ -355,6 +355,56 @@
         "padding_bottom": 80
       }
     },
+    "testimonials_dKBhcg": {
+      "type": "testimonials",
+      "blocks": {
+        "video_XWQPY9": {
+          "type": "video",
+          "disabled": true,
+          "settings": {
+            "video_url": "",
+            "alt": ""
+          }
+        },
+        "video_eKc6FW": {
+          "type": "video",
+          "disabled": true,
+          "settings": {
+            "video_url": "",
+            "alt": ""
+          }
+        },
+        "video_Ct4BiT": {
+          "type": "video",
+          "disabled": true,
+          "settings": {
+            "video_url": "",
+            "alt": ""
+          }
+        },
+        "video_NGGN8H": {
+          "type": "video",
+          "disabled": true,
+          "settings": {
+            "video_url": "",
+            "alt": ""
+          }
+        }
+      },
+      "block_order": [
+        "video_XWQPY9",
+        "video_eKc6FW",
+        "video_Ct4BiT",
+        "video_NGGN8H"
+      ],
+      "name": "Testimonials",
+      "settings": {
+        "title": "Our Customer Testimonials",
+        "subtitle": "Trusted and praised for excellence",
+        "padding_top": 60,
+        "padding_bottom": 0
+      }
+    },
     "17753772276ca8c352": {
       "type": "apps",
       "blocks": {
@@ -426,56 +476,6 @@
         "judge_me_reviews_testimonials_carousel_88hPc9"
       ],
       "settings": {}
-    },
-    "testimonials_dKBhcg": {
-      "type": "testimonials",
-      "blocks": {
-        "video_XWQPY9": {
-          "type": "video",
-          "disabled": true,
-          "settings": {
-            "video_url": "",
-            "alt": ""
-          }
-        },
-        "video_eKc6FW": {
-          "type": "video",
-          "disabled": true,
-          "settings": {
-            "video_url": "",
-            "alt": ""
-          }
-        },
-        "video_Ct4BiT": {
-          "type": "video",
-          "disabled": true,
-          "settings": {
-            "video_url": "",
-            "alt": ""
-          }
-        },
-        "video_NGGN8H": {
-          "type": "video",
-          "disabled": true,
-          "settings": {
-            "video_url": "",
-            "alt": ""
-          }
-        }
-      },
-      "block_order": [
-        "video_XWQPY9",
-        "video_eKc6FW",
-        "video_Ct4BiT",
-        "video_NGGN8H"
-      ],
-      "name": "Testimonials",
-      "settings": {
-        "title": "Our Customer Testimonials",
-        "subtitle": "Trusted and praised for excellence",
-        "padding_top": 60,
-        "padding_bottom": 60
-      }
     },
     "stores_NYzLxX": {
       "type": "stores",
@@ -575,8 +575,8 @@
     "brand_marquee_aQFqpK",
     "product_carousel_zpTxYK",
     "about_ANVEQm",
-    "17753772276ca8c352",
     "testimonials_dKBhcg",
+    "17753772276ca8c352",
     "stores_NYzLxX"
   ]
 }
