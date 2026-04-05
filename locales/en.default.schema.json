@@ -219,13 +219,6 @@
       "name": "Testimonials",
       "title": "Title",
       "subtitle": "Subtitle",
-      "judgeme_header": "Judge.me reviews",
-      "min_rating": "Minimum rating",
-      "min_rating_info": "Only show reviews with this rating or higher",
-      "max_reviews": "Maximum reviews",
-      "max_reviews_info": "Number of reviews to display in the marquee",
-      "product_filter": "Product handle",
-      "product_filter_info": "Leave blank to show all shop reviews, or enter a product handle to filter",
       "spacing_header": "Spacing",
       "padding_top": "Padding top",
       "padding_bottom": "Padding bottom",
@@ -238,6 +231,13 @@
           "thumbnail": "Custom thumbnail image",
           "thumbnail_info": "Optional — overrides auto-generated thumbnail",
           "alt": "Image alt text"
+        },
+        "review": {
+          "name": "Review",
+          "reviewer_name": "Reviewer name",
+          "reviewer_date": "Date",
+          "rating": "Rating",
+          "review_text": "Review text"
         }
       }
     }
