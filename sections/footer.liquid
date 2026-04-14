@@ -26,7 +26,7 @@
 
     {%- comment -%} Column 2: Quick Links {%- endcomment -%}
     <div class="footer__col footer__col--nav" data-accordion>
-      <button class="footer__nav-heading footer__accordion-toggle" aria-expanded="false" aria-controls="footer-quick-links">
+      <button class="footer__nav-heading footer__section-heading footer__accordion-toggle" aria-expanded="false" aria-controls="footer-quick-links">
         {{ 'footer.quick_links' | t }}
         <span class="footer__chevron" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -37,7 +37,7 @@
       <ul class="footer__nav-list" id="footer-quick-links">
         {%- for link in section.settings.quick_links_menu.links -%}
           <li class="footer__nav-item">
-            <a class="footer__nav-link" href="{{ link.url }}">{{ link.title }}</a>
+            <a class="footer__nav-link" href="{{ link.url }}"{% if link.type == 'http' %} target="_blank" rel="noopener"{% endif %}>{{ link.title }}</a>
           </li>
         {%- endfor -%}
       </ul>
@@ -45,7 +45,7 @@
 
     {%- comment -%} Column 3: Policies & Guidelines {%- endcomment -%}
     <div class="footer__col footer__col--nav" data-accordion>
-      <button class="footer__nav-heading footer__accordion-toggle" aria-expanded="false" aria-controls="footer-policies">
+      <button class="footer__nav-heading footer__section-heading footer__accordion-toggle" aria-expanded="false" aria-controls="footer-policies">
         {{ 'footer.policies_guidelines' | t }}
         <span class="footer__chevron" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -56,7 +56,7 @@
       <ul class="footer__nav-list" id="footer-policies">
         {%- for link in section.settings.policies_menu.links -%}
           <li class="footer__nav-item">
-            <a class="footer__nav-link" href="{{ link.url }}">{{ link.title }}</a>
+            <a class="footer__nav-link" href="{{ link.url }}"{% if link.type == 'http' %} target="_blank" rel="noopener"{% endif %}>{{ link.title }}</a>
           </li>
         {%- endfor -%}
       </ul>
@@ -384,10 +384,11 @@
     text-decoration: none;
     line-height: 1.6;
     display: block;
+    transition: color 0.2s ease;
   }
 
   .footer__nav-link:hover {
-    color: #2e1f1f;
+    color: var(--color-primary);
   }
 
   .footer__col--social {
