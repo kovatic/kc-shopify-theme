@@ -45,6 +45,8 @@
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'cart-drawer.css' | asset_url | stylesheet_tag }}
 
+    <link rel="icon" type="image/x-icon" href="{{ 'favicon.ico' | asset_url }}">
+
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
