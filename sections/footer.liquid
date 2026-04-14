@@ -66,12 +66,11 @@
     <div class="footer__trust-mobile">
       <div class="footer__trust-item">
         <svg class="footer__trust-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M2 8h18v13H2V8z" stroke="#494949" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M20 12h4l4 5v4h-8V12z" stroke="#494949" stroke-width="1.5" stroke-linejoin="round"/>
-          <circle cx="8" cy="23" r="2" stroke="#494949" stroke-width="1.5"/>
-          <circle cx="24" cy="23" r="2" stroke="#494949" stroke-width="1.5"/>
+          <path d="M4 4h24v4H4z" stroke="#494949" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M6 8v16h20V8" stroke="#494949" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M13 14h6M13 19h4" stroke="#494949" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-        <span>{{ section.settings.trust_free_shipping | escape }}</span>
+        <a class="footer__trust-link" href="mailto:help@kchinniaduraiandco.com">help@kchinniaduraiandco.com</a>
       </div>
       <div class="footer__trust-item">
         <svg class="footer__trust-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -82,10 +81,9 @@
       </div>
       <div class="footer__trust-item">
         <svg class="footer__trust-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M16 4a8 8 0 018 8v1h2a2 2 0 012 2v3a2 2 0 01-2 2h-2a8 8 0 01-16 0h-2a2 2 0 01-2-2v-3a2 2 0 012-2h2v-1a8 8 0 018-8z" stroke="#494949" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M13 18.5s1 1.5 3 1.5 3-1.5 3-1.5" stroke="#494949" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" stroke="#494949" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span>{{ section.settings.trust_customer_support | escape }}</span>
+        <span>{{ 'footer.whatsapp_label' | t }}: <a class="footer__trust-link" href="https://wa.me/919488202320" target="_blank" rel="noopener">+91 94882 02320</a></span>
       </div>
       <div class="footer__trust-item">
         <svg class="footer__trust-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -99,7 +97,7 @@
     {%- comment -%} Column 4: Social Media + Store Location {%- endcomment -%}
     <div class="footer__col footer__col--social">
       <div class="footer__social">
-        <p class="footer__section-heading">{{ 'footer.social_media' | t }}</p>
+        <h3 class="footer__section-heading">{{ 'footer.social_media' | t }}</h3>
         <div class="footer__social-icons">
           {%- if section.settings.facebook_url != blank -%}
             <a class="footer__social-link" href="{{ section.settings.facebook_url }}" target="_blank" rel="noopener" aria-label="{{ 'footer.social_facebook' | t }}">
@@ -155,12 +153,11 @@
       <div class="footer__trust">
         <div class="footer__trust-item">
           <svg class="footer__trust-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M2 8h18v13H2V8z" stroke="#494949" stroke-width="1.5" stroke-linejoin="round"/>
-            <path d="M20 12h4l4 5v4h-8V12z" stroke="#494949" stroke-width="1.5" stroke-linejoin="round"/>
-            <circle cx="8" cy="23" r="2" stroke="#494949" stroke-width="1.5"/>
-            <circle cx="24" cy="23" r="2" stroke="#494949" stroke-width="1.5"/>
+            <path d="M4 4h24v4H4z" stroke="#494949" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M6 8v16h20V8" stroke="#494949" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M13 14h6M13 19h4" stroke="#494949" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
-          <span>{{ section.settings.trust_free_shipping | escape }}</span>
+          <a class="footer__trust-link" href="mailto:help@kchinniaduraiandco.com">help@kchinniaduraiandco.com</a>
         </div>
         <div class="footer__trust-item">
           <svg class="footer__trust-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -171,10 +168,9 @@
         </div>
         <div class="footer__trust-item">
           <svg class="footer__trust-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M16 4a8 8 0 018 8v1h2a2 2 0 012 2v3a2 2 0 01-2 2h-2a8 8 0 01-16 0h-2a2 2 0 01-2-2v-3a2 2 0 012-2h2v-1a8 8 0 018-8z" stroke="#494949" stroke-width="1.5" stroke-linejoin="round"/>
-            <path d="M13 18.5s1 1.5 3 1.5 3-1.5 3-1.5" stroke="#494949" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" stroke="#494949" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <span>{{ section.settings.trust_customer_support | escape }}</span>
+          <span>{{ 'footer.whatsapp_label' | t }}: <a class="footer__trust-link" href="https://wa.me/919488202320" target="_blank" rel="noopener">+91 94882 02320</a></span>
         </div>
         <div class="footer__trust-item">
           <svg class="footer__trust-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -299,7 +295,7 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 0;
     padding: 20px;
-    align-items: end;
+    align-items: start;
     width: 100%;
   }
 
@@ -403,11 +399,25 @@
 
   .footer__section-heading {
     font-family: 'Playfair Display', serif;
-    font-weight: 600;
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 17px;
     color: #2e1f1f;
     line-height: 21.6px;
     margin: 0 0 9.6px;
+  }
+
+  .footer__trust-link {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #494949;
+    text-decoration: none;
+    word-break: break-all;
+  }
+
+  .footer__trust-link:hover {
+    color: #2e1f1f;
+    text-decoration: underline;
   }
 
   .footer__social-icons {
