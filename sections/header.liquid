@@ -69,9 +69,15 @@
       </button>
 
       {% if shop.customer_accounts_enabled %}
-        <a href="{{ routes.account_url }}" class="header-icon-btn header-icon-btn--account-desktop" aria-label="{{ 'header.account_label' | t }}">
-          {{ 'icon-account.svg' | inline_asset_content }}
-        </a>
+        {% if customer %}
+          <a href="{{ routes.account_url }}" class="header-icon-btn header-icon-btn--account-desktop" aria-label="{{ 'header.account_label' | t }}">
+            {{ 'icon-account.svg' | inline_asset_content }}
+          </a>
+        {% else %}
+          <a href="{{ routes.account_login_url }}" class="header-login-btn" aria-label="{{ 'header.login_label' | t }}">
+            {{ 'header.login_label' | t }}
+          </a>
+        {% endif %}
       {% endif %}
 
       <a href="/pages/wishlist" class="header-icon-btn header-icon-btn--wishlist" aria-label="{{ 'header.wishlist_label' | t }}">
@@ -438,6 +444,28 @@
     gap: 8px;
     flex: 0 0 auto;
   }
+  .header-login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 16px;
+    background-color: var(--color-primary);
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .header-login-btn:hover {
+    opacity: 0.88;
+  }
+
   .header-icon-btn {
     display: flex;
     align-items: center;
@@ -1120,6 +1148,7 @@
     .header-icon-btn { width: 36px; height: 36px; background: none; }
     .header-icon-btn:hover { background: none; color: var(--color-primary); }
     .header-icon-btn--account-desktop { display: none; }
+    .header-login-btn { display: none; }
     .header-icon-btn--wishlist { display: flex; }
     .header-main__icons .header-icon-btn--search { display: none; }
     .header-main__icons { gap: 4px; }
