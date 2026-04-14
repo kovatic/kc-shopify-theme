@@ -445,6 +445,10 @@
     color: var(--color-foreground, #262626);
     margin: 0;
     line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .tab-product-list__price {
     font-family: var(--font-body-family, 'Montserrat', sans-serif);
@@ -504,10 +508,7 @@
     }
     .tab-product-list__name {
       font-size: 0.875rem;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      -webkit-line-clamp: 2;
     }
     .tab-product-list__price {
       font-size: 1.125rem !important;
