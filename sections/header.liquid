@@ -10,7 +10,7 @@
   <div class="header-topbar__inner">
     <nav class="header-topbar__nav" aria-label="{{ 'header.top_nav_label' | t }}">
       {% for link in section.settings.top_menu.links %}
-        <a href="{{ link.url }}" class="header-topbar__link">{{ link.title }}</a>
+        <a href="{{ link.url }}" class="header-topbar__link"{% if link.type == 'http' %} target="_blank" rel="noopener"{% endif %}>{{ link.title }}</a>
       {% endfor %}
     </nav>
     <p class="header-topbar__contact">
@@ -114,11 +114,11 @@
               </button>
               <ul class="mobile-nav-drawer__sub">
                 {% for child_link in link.links %}
-                  <li><a href="{{ child_link.url }}" class="mobile-nav-drawer__sub-link">{{ child_link.title }}</a></li>
+                  <li><a href="{{ child_link.url }}" class="mobile-nav-drawer__sub-link"{% if child_link.type == 'http' %} target="_blank" rel="noopener"{% endif %}>{{ child_link.title }}</a></li>
                 {% endfor %}
               </ul>
             {% else %}
-              <a href="{{ link.url }}" class="mobile-nav-drawer__link">{{- link.title -}}</a>
+              <a href="{{ link.url }}" class="mobile-nav-drawer__link"{% if link.type == 'http' %} target="_blank" rel="noopener"{% endif %}>{{- link.title -}}</a>
             {% endif %}
           </li>
         {% endfor %}
@@ -139,7 +139,7 @@
       {%- endfor -%}
 
       <li class="header-nav__item{% if mega or link.links.size > 0 %} header-nav__item--has-dropdown{% if mega %} header-nav__item--mega{% endif %}{% endif %}">
-        <a href="{{ link.url }}" class="header-nav__link">
+        <a href="{{ link.url }}" class="header-nav__link"{% if link.type == 'http' %} target="_blank" rel="noopener"{% endif %}>
           {{- link.title -}}
           {% if mega or link.links.size > 0 %}
             <svg class="header-nav__chevron" aria-hidden="true" width="10" height="10" viewBox="0 0 10 10" fill="none">
@@ -162,7 +162,7 @@
                     <ul class="mega-menu__links">
                       {% for item in linklists[mega.settings.col1_menu].links %}
                         <li>
-                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}">
+                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}"{% if item.type == 'http' %} target="_blank" rel="noopener"{% endif %}>
                             {{ item.title }}
                           </a>
                         </li>
@@ -179,7 +179,7 @@
                     <ul class="mega-menu__links">
                       {% for item in linklists[mega.settings.col2_menu].links %}
                         <li>
-                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}">
+                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}"{% if item.type == 'http' %} target="_blank" rel="noopener"{% endif %}>
                             {{ item.title }}
                           </a>
                         </li>
@@ -196,7 +196,7 @@
                     <ul class="mega-menu__links">
                       {% for item in linklists[mega.settings.col3_menu].links %}
                         <li>
-                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}">
+                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}"{% if item.type == 'http' %} target="_blank" rel="noopener"{% endif %}>
                             {{ item.title }}
                           </a>
                         </li>
@@ -246,7 +246,7 @@
           <ul class="header-nav__dropdown">
             {% for child_link in link.links %}
               <li>
-                <a href="{{ child_link.url }}" class="header-nav__dropdown-link">{{ child_link.title }}</a>
+                <a href="{{ child_link.url }}" class="header-nav__dropdown-link"{% if child_link.type == 'http' %} target="_blank" rel="noopener"{% endif %}>{{ child_link.title }}</a>
               </li>
             {% endfor %}
           </ul>

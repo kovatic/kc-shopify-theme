@@ -1,0 +1,408 @@
+<div class="contact-page">
+  <div class="contact-page__inner">
+
+    <div class="contact-page__header">
+      <h1 class="contact-page__title">{{ 'contact.title' | t }}</h1>
+      <p class="contact-page__subtitle">{{ 'contact.subtitle' | t }}</p>
+    </div>
+
+    <div class="contact-page__grid">
+
+      {%- comment -%} Left: Info {%- endcomment -%}
+      <div class="contact-page__info">
+        {%- if section.settings.show_email -%}
+          <div class="contact-info-item">
+            <div class="contact-info-item__icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M2 7l10 7 10-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="contact-info-item__body">
+              <p class="contact-info-item__label">{{ 'contact.email_label' | t }}</p>
+              <a class="contact-info-item__value" href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.show_whatsapp -%}
+          <div class="contact-info-item">
+            <div class="contact-info-item__icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="contact-info-item__body">
+              <p class="contact-info-item__label">{{ 'contact.whatsapp_label' | t }}</p>
+              <a class="contact-info-item__value" href="https://wa.me/{{ section.settings.whatsapp | remove: '+' | remove: '-' | remove: ' ' }}" target="_blank" rel="noopener">{{ section.settings.whatsapp }}</a>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.show_address -%}
+          <div class="contact-info-item">
+            <div class="contact-info-item__icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <circle cx="12" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div class="contact-info-item__body">
+              <p class="contact-info-item__label">{{ 'contact.address_label' | t }}</p>
+              <p class="contact-info-item__value">{{ section.settings.address }}</p>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Right: Form {%- endcomment -%}
+      <div class="contact-page__form-wrap">
+        {%- form 'contact' -%}
+          {%- if form.posted_successfully? -%}
+            <div class="contact-form__success">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <p>{{ 'contact.success_message' | t }}</p>
+            </div>
+          {%- endif -%}
+
+          {%- if form.errors -%}
+            <div class="contact-form__errors">
+              {{ form.errors | default_errors }}
+            </div>
+          {%- endif -%}
+
+          <div class="contact-form__row">
+            <div class="contact-form__field">
+              <label class="contact-form__label" for="ContactFormName">{{ 'contact.name_label' | t }}</label>
+              <input
+                class="contact-form__input"
+                type="text"
+                id="ContactFormName"
+                name="contact[name]"
+                value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+                autocomplete="name"
+                placeholder="{{ 'contact.name_placeholder' | t }}"
+              >
+            </div>
+            <div class="contact-form__field">
+              <label class="contact-form__label" for="ContactFormEmail">{{ 'contact.email_label' | t }} <span aria-hidden="true">*</span></label>
+              <input
+                class="contact-form__input"
+                type="email"
+                id="ContactFormEmail"
+                name="contact[email]"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                autocomplete="email"
+                autocorrect="off"
+                autocapitalize="off"
+                required
+                placeholder="{{ 'contact.email_placeholder' | t }}"
+              >
+            </div>
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="ContactFormPhone">{{ 'contact.phone_label' | t }}</label>
+            <input
+              class="contact-form__input"
+              type="tel"
+              id="ContactFormPhone"
+              name="contact[phone]"
+              value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.default_address.phone }}{% endif %}"
+              autocomplete="tel"
+              placeholder="{{ 'contact.phone_placeholder' | t }}"
+            >
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="ContactFormMessage">{{ 'contact.message_label' | t }} <span aria-hidden="true">*</span></label>
+            <textarea
+              class="contact-form__input contact-form__textarea"
+              id="ContactFormMessage"
+              name="contact[body]"
+              rows="6"
+              required
+              placeholder="{{ 'contact.message_placeholder' | t }}"
+            >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+          </div>
+
+          <button type="submit" class="contact-form__submit">
+            {{ 'contact.submit_label' | t }}
+          </button>
+        {%- endform -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .contact-page {
+    background-color: var(--color-background);
+    padding: 60px 20px;
+  }
+
+  .contact-page__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .contact-page__header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .contact-page__title {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #2e1f1f;
+    margin: 0 0 12px;
+  }
+
+  .contact-page__subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    color: #494949;
+    margin: 0;
+  }
+
+  .contact-page__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  /* Info column */
+  .contact-page__info {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .contact-info-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .contact-info-item__icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: #f0e7db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+  }
+
+  .contact-info-item__icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .contact-info-item__label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #888;
+    margin: 0 0 4px;
+  }
+
+  .contact-info-item__value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    color: #2e1f1f;
+    text-decoration: none;
+    line-height: 1.5;
+    display: block;
+  }
+
+  a.contact-info-item__value:hover {
+    color: var(--color-primary);
+  }
+
+  /* Form */
+  .contact-page__form-wrap {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 36px;
+    box-shadow: 0 2px 16px rgba(46, 31, 31, 0.07);
+  }
+
+  .contact-form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .contact-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .contact-form__label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2e1f1f;
+  }
+
+  .contact-form__input {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #2e1f1f;
+    border: 1.5px solid rgba(46, 31, 31, 0.2);
+    border-radius: 4px;
+    padding: 10px 14px;
+    background-color: #faf8f5;
+    outline: none;
+    transition: border-color 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .contact-form__input:focus {
+    border-color: var(--color-primary);
+  }
+
+  .contact-form__textarea {
+    resize: vertical;
+    min-height: 140px;
+  }
+
+  .contact-form__submit {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #fff;
+    background-color: var(--color-primary);
+    border: none;
+    border-radius: 4px;
+    padding: 12px 32px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    width: 100%;
+  }
+
+  .contact-form__submit:hover {
+    opacity: 0.88;
+  }
+
+  .contact-form__success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #edf7ed;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #2d6a2d;
+  }
+
+  .contact-form__success svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .contact-form__success p {
+    margin: 0;
+    color: #2d6a2d;
+  }
+
+  .contact-form__errors {
+    background-color: #fdecea;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #b71c1c;
+  }
+
+  @media screen and (max-width: 767px) {
+    .contact-page {
+      padding: 40px 16px;
+    }
+
+    .contact-page__title {
+      font-size: 28px;
+    }
+
+    .contact-page__grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .contact-form__row {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-page__form-wrap {
+      padding: 24px 16px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.contact_form.name",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_email",
+      "label": "t:labels.show_email",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "t:labels.email",
+      "default": "help@kchinniaduraiandco.com"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_whatsapp",
+      "label": "t:labels.show_whatsapp",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "whatsapp",
+      "label": "t:labels.whatsapp",
+      "default": "+91 94882 02320"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_address",
+      "label": "t:labels.show_address",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "t:labels.address",
+      "default": "Tharathin Thayagam, ERAL, Tiruchendur Thoothukudi, Chennai, Tirunelveli"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.contact_form.name"
+    }
+  ]
+}
+{% endschema %}

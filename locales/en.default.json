@@ -80,6 +80,9 @@
     "results_for_html": "{{ count }} results found for {{ terms }}"
   },
   "sections": {
+    "contact_form": {
+      "name": "Contact form"
+    },
     "tab_product_list": {
       "name": "Tab product list",
       "wishlist_label": "Add to wishlist",
@@ -209,6 +212,22 @@
       "customer_support": "Customer support",
       "secure_payments": "100% secure payments"
     }
+  },
+  "contact": {
+    "title": "Contact us",
+    "subtitle": "We'd love to hear from you. Send us a message and we'll get back to you as soon as possible.",
+    "email_label": "Email",
+    "whatsapp_label": "WhatsApp",
+    "address_label": "Address",
+    "name_label": "Name",
+    "name_placeholder": "Your name",
+    "email_placeholder": "your@email.com",
+    "phone_label": "Phone (optional)",
+    "phone_placeholder": "+91 00000 00000",
+    "message_label": "Message",
+    "message_placeholder": "How can we help you?",
+    "submit_label": "Send message",
+    "success_message": "Thanks for reaching out! We'll get back to you shortly."
   },
   "general": {
     "breadcrumb": {
