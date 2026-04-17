@@ -41,19 +41,23 @@
     <div class="header-main__logo{% if section.settings.logo_mobile %} has-mobile-logo{% endif %}">
       {%- if section.settings.logo_mobile -%}
         <a href="{{ routes.root_url }}" class="header-main__logo-link--mobile">
-          {{- section.settings.logo_mobile | image_url: width: section.settings.logo_mobile.width | image_tag:
+          {{- section.settings.logo_mobile | image_url: width: 320 | image_tag:
               alt: shop.name,
               class: 'header-main__logo-img',
-              loading: 'eager'
+              loading: 'eager',
+              width: nil,
+              height: nil
           -}}
         </a>
       {%- endif -%}
       {%- if section.settings.logo -%}
         <a href="{{ routes.root_url }}" class="header-main__logo-link--desktop">
-          {{- section.settings.logo | image_url: width: section.settings.logo.width | image_tag:
+          {{- section.settings.logo | image_url: width: 440 | image_tag:
               alt: shop.name,
               class: 'header-main__logo-img',
-              loading: 'eager'
+              loading: 'eager',
+              width: nil,
+              height: nil
           -}}
         </a>
       {%- else -%}
