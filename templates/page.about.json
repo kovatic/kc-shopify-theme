@@ -62,7 +62,7 @@
     "founder": {
       "type": "about-founder",
       "custom_css": [
-        "about-founder {background-color: transparent;}"
+        ".about-founder {background-color: transparent;}"
       ],
       "settings": {
         "image": "shopify://shop_images/12x18_kc_jpg.webp",
