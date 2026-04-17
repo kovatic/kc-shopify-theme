@@ -1,0 +1,431 @@
+<div
+  class="about-founder"
+  style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="about-founder__container">
+
+    {%- comment -%} Photo column {%- endcomment -%}
+    <div class="about-founder__media-wrap">
+      {%- if section.settings.image != blank -%}
+        <div class="about-founder__media">
+          {{ section.settings.image | image_url: width: 800 | image_tag:
+            class: 'about-founder__photo',
+            loading: 'lazy',
+            alt: section.settings.name | escape
+          }}
+          <div class="about-founder__media-badge" aria-hidden="true">
+            <span class="about-founder__badge-year">{{ section.settings.founded_year | default: '1968' | escape }}</span>
+            <span class="about-founder__badge-label">{{ 'sections.about_founder.founded_label' | t }}</span>
+          </div>
+        </div>
+      {%- else -%}
+        <div class="about-founder__media about-founder__media--placeholder">
+          {{ 'image' | placeholder_svg_tag: 'about-founder__photo about-founder__photo--placeholder' }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Text column {%- endcomment -%}
+    <div class="about-founder__body">
+
+      <div class="about-founder__eyebrow">
+        <span class="about-founder__eyebrow-line" aria-hidden="true"></span>
+        <span class="about-founder__eyebrow-text">{{ 'sections.about_founder.eyebrow' | t }}</span>
+      </div>
+
+      {%- if section.settings.name != blank -%}
+        <h2 class="about-founder__name">{{ section.settings.name | escape }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.role != blank -%}
+        <p class="about-founder__role">{{ section.settings.role | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.quote != blank -%}
+        <blockquote class="about-founder__quote">
+          <span class="about-founder__quote-mark" aria-hidden="true">"</span>
+          {{ section.settings.quote | escape }}
+        </blockquote>
+      {%- endif -%}
+
+      {%- if section.settings.bio != blank -%}
+        <div class="about-founder__bio">{{ section.settings.bio }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.show_stats -%}
+        <div class="about-founder__stats">
+          {%- if section.settings.stat_1_value != blank -%}
+            <div class="about-founder__stat">
+              <span class="about-founder__stat-value">{{ section.settings.stat_1_value | escape }}</span>
+              <span class="about-founder__stat-label">{{ section.settings.stat_1_label | escape }}</span>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.stat_2_value != blank -%}
+            <div class="about-founder__stat">
+              <span class="about-founder__stat-value">{{ section.settings.stat_2_value | escape }}</span>
+              <span class="about-founder__stat-label">{{ section.settings.stat_2_label | escape }}</span>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.stat_3_value != blank -%}
+            <div class="about-founder__stat">
+              <span class="about-founder__stat-value">{{ section.settings.stat_3_value | escape }}</span>
+              <span class="about-founder__stat-label">{{ section.settings.stat_3_label | escape }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .about-founder {
+    width: 100%;
+    padding-top: var(--padding-top, 80px);
+    padding-bottom: var(--padding-bottom, 80px);
+    background-color: #ffffff;
+  }
+
+  .about-founder__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 52px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  /* Media */
+  .about-founder__media-wrap {
+    position: relative;
+  }
+
+  .about-founder__media {
+    position: relative;
+    overflow: visible;
+  }
+
+  .about-founder__media::before {
+    content: '';
+    position: absolute;
+    inset: -20px -20px 20px 20px;
+    border: 2px solid #c69239;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .about-founder__photo {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  .about-founder__photo--placeholder {
+    aspect-ratio: 3 / 4;
+    background: #f0e8d8;
+    z-index: 1;
+  }
+
+  .about-founder__media-badge {
+    position: absolute;
+    bottom: -24px;
+    right: -24px;
+    z-index: 2;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d99d26 0%, #dbb870 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    box-shadow: 0 4px 20px rgba(198, 146, 57, 0.35);
+  }
+
+  .about-founder__badge-year {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: #1f1414;
+    line-height: 1;
+  }
+
+  .about-founder__badge-label {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: #1f1414;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  /* Body */
+  .about-founder__body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .about-founder__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .about-founder__eyebrow-line {
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: #c69239;
+    flex-shrink: 0;
+  }
+
+  .about-founder__eyebrow-text {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #c69239;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .about-founder__name {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2e1f1f;
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .about-founder__role {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #7e6767;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+  }
+
+  .about-founder__quote {
+    margin: 0;
+    padding: 0 0 0 20px;
+    border-left: 3px solid #c69239;
+    position: relative;
+  }
+
+  .about-founder__quote-mark {
+    position: absolute;
+    top: -10px;
+    left: -4px;
+    font-family: Georgia, serif;
+    font-size: 4rem;
+    color: #c69239;
+    opacity: 0.25;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .about-founder__quote {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 1.125rem;
+    font-style: italic;
+    color: #2e1f1f;
+    line-height: 1.7;
+  }
+
+  .about-founder__bio {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: #494949;
+    line-height: 1.75;
+  }
+
+  .about-founder__bio p {
+    margin: 0 0 1em;
+  }
+
+  .about-founder__bio p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Stats row */
+  .about-founder__stats {
+    display: flex;
+    gap: 32px;
+    padding-top: 8px;
+    border-top: 1px solid #e8ddd0;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+
+  .about-founder__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .about-founder__stat-value {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c69239;
+    line-height: 1;
+  }
+
+  .about-founder__stat-label {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #7e6767;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* Mobile */
+  @media screen and (max-width: 900px) {
+    .about-founder__container {
+      grid-template-columns: 1fr;
+      gap: 60px;
+      padding: 0 20px;
+    }
+
+    .about-founder__media-wrap {
+      max-width: 360px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .about-founder__name {
+      font-size: 1.875rem;
+    }
+
+    .about-founder__stats {
+      gap: 20px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.about_founder.name",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "text",
+      "id": "founded_year",
+      "label": "t:sections.about_founder.founded_year",
+      "default": "1968"
+    },
+    {
+      "type": "text",
+      "id": "name",
+      "label": "t:sections.about_founder.founder_name",
+      "default": "Mr. K. Chinnadurai"
+    },
+    {
+      "type": "text",
+      "id": "role",
+      "label": "t:sections.about_founder.founder_role",
+      "default": "Founder & Chairman"
+    },
+    {
+      "type": "text",
+      "id": "quote",
+      "label": "t:sections.about_founder.quote",
+      "default": "Every saree we sell carries the soul of its weaver and the love of its wearer."
+    },
+    {
+      "type": "richtext",
+      "id": "bio",
+      "label": "t:sections.about_founder.bio"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.about_founder.stats_header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stats",
+      "label": "t:sections.about_founder.show_stats",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "stat_1_value",
+      "label": "t:sections.about_founder.stat_value",
+      "default": "56+"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "label": "t:sections.about_founder.stat_label",
+      "default": "Years of heritage"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_value",
+      "label": "t:sections.about_founder.stat_value",
+      "default": "10k+"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "label": "t:sections.about_founder.stat_label",
+      "default": "Sarees sold"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_value",
+      "label": "t:sections.about_founder.stat_value",
+      "default": "4"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "label": "t:sections.about_founder.stat_label",
+      "default": "Store locations"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.about_founder.name"
+    }
+  ]
+}
+{% endschema %}

@@ -131,10 +131,55 @@
     "about": {
       "name": "About"
     },
+    "about_founder": {
+      "name": "About — founder",
+      "eyebrow": "Our founder",
+      "founded_label": "Est.",
+      "founded_year": "Founded year",
+      "founder_name": "Founder name",
+      "founder_role": "Founder role",
+      "quote": "Quote",
+      "bio": "Biography",
+      "stats_header": "Key stats",
+      "show_stats": "Show stats",
+      "stat_value": "Stat value",
+      "stat_label": "Stat label"
+    },
+    "about_timeline": {
+      "name": "About — timeline",
+      "blocks": {
+        "milestone": {
+          "name": "Milestone",
+          "year": "Year"
+        }
+      }
+    },
+    "about_team": {
+      "name": "About — team",
+      "columns": "Columns on desktop",
+      "blocks": {
+        "member": {
+          "name": "Team member",
+          "name_label": "Name",
+          "role": "Role",
+          "bio": "Short bio"
+        }
+      }
+    },
     "stores": {
       "name": "Stores",
       "call": "Call",
-      "map": "Map"
+      "map": "Map",
+      "store_type": "Store type",
+      "address": "Address",
+      "phone": "Phone",
+      "map_url": "Map link",
+      "store_url": "Store page link",
+      "blocks": {
+        "store": {
+          "name": "Store"
+        }
+      }
     },
     "store_detail": {
       "breadcrumb_label": "Breadcrumb",
@@ -202,6 +247,7 @@
     "social_media": "Social media",
     "store_location": "Store location",
     "all_rights_reserved": "All rights reserved.",
+    "copyright": "Copyrights \u00a9\ufe0f 2026 All Rights Reserved by K.Chinnadurai & Co. Established in 1970",
     "social_facebook": "Facebook",
     "social_youtube": "YouTube",
     "social_instagram": "Instagram",

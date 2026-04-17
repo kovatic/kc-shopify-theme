@@ -1,0 +1,131 @@
+{
+  "sections": {
+    "about_hero": {
+      "type": "about",
+      "settings": {
+        "founder_name": "Mr. K. Chinnadurai",
+        "heading": "56 years of timeless excellence, where every saree is truly unique",
+        "brand_label": "Our brand",
+        "padding_top": 8,
+        "padding_bottom": 80
+      },
+      "blocks": {
+        "brand_logo_1": { "type": "brand_logo" },
+        "brand_logo_2": { "type": "brand_logo" },
+        "brand_logo_3": { "type": "brand_logo" },
+        "brand_logo_4": { "type": "brand_logo" }
+      },
+      "blocks_order": ["brand_logo_1", "brand_logo_2", "brand_logo_3", "brand_logo_4"]
+    },
+    "founder": {
+      "type": "about-founder",
+      "settings": {
+        "founded_year": "1968",
+        "name": "Mr. K. Chinnadurai",
+        "role": "Founder & Chairman",
+        "quote": "Every saree we sell carries the soul of its weaver and the love of its wearer.",
+        "show_stats": true,
+        "stat_1_value": "56+",
+        "stat_1_label": "Years of heritage",
+        "stat_2_value": "10k+",
+        "stat_2_label": "Sarees sold",
+        "stat_3_value": "4",
+        "stat_3_label": "Store locations",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "timeline": {
+      "type": "about-timeline",
+      "settings": {
+        "heading": "Our story",
+        "subheading": "Five decades of craftsmanship, heritage, and community.",
+        "padding_top": 60,
+        "padding_bottom": 60
+      },
+      "blocks": {
+        "milestone_1": {
+          "type": "milestone",
+          "settings": {
+            "year": "1968",
+            "title": "The beginning",
+            "description": "K. Chinnadurai & Co. was founded with a single store in Thoothukudi, dedicated to bringing the finest handloom sarees to discerning customers."
+          }
+        },
+        "milestone_2": {
+          "type": "milestone",
+          "settings": {
+            "year": "1980",
+            "title": "Expanding our roots",
+            "description": "A second location opened in Tirunelveli, bringing our curated collection to a wider community of saree enthusiasts."
+          }
+        },
+        "milestone_3": {
+          "type": "milestone",
+          "settings": {
+            "year": "1995",
+            "title": "A legacy of weaving",
+            "description": "We established direct partnerships with master weavers in Kanchipuram and Madurai, ensuring authenticity in every thread."
+          }
+        },
+        "milestone_4": {
+          "type": "milestone",
+          "settings": {
+            "year": "2010",
+            "title": "The next generation",
+            "description": "The second generation of the Chinnadurai family joined the business, blending heritage with a modern vision."
+          }
+        },
+        "milestone_5": {
+          "type": "milestone",
+          "settings": {
+            "year": "2024",
+            "title": "56 years & beyond",
+            "description": "Now spanning multiple stores across Tamil Nadu, K. Chinnadurai & Co. continues to honour tradition while embracing the future."
+          }
+        }
+      },
+      "blocks_order": ["milestone_1", "milestone_2", "milestone_3", "milestone_4", "milestone_5"]
+    },
+    "team": {
+      "type": "about-team",
+      "settings": {
+        "heading": "Meet the team",
+        "subheading": "The people who bring K. Chinnadurai & Co. to life every day.",
+        "columns": "4",
+        "padding_top": 60,
+        "padding_bottom": 60
+      },
+      "blocks": {
+        "member_1": { "type": "member", "settings": { "name": "Team member", "role": "Role" } },
+        "member_2": { "type": "member", "settings": { "name": "Team member", "role": "Role" } },
+        "member_3": { "type": "member", "settings": { "name": "Team member", "role": "Role" } },
+        "member_4": { "type": "member", "settings": { "name": "Team member", "role": "Role" } }
+      },
+      "blocks_order": ["member_1", "member_2", "member_3", "member_4"]
+    },
+    "stores": {
+      "type": "stores",
+      "settings": {
+        "title": "Visit our stores",
+        "subtitle": "4 locations across Tamil Nadu & Chennai",
+        "padding_top": 60,
+        "padding_bottom": 60
+      },
+      "blocks": {
+        "store_1": { "type": "store", "settings": { "store_type": "Flagship store", "store_name": "Store name", "address": "Store address" } },
+        "store_2": { "type": "store", "settings": { "store_type": "Flagship store", "store_name": "Store name", "address": "Store address" } },
+        "store_3": { "type": "store", "settings": { "store_type": "Flagship store", "store_name": "Store name", "address": "Store address" } },
+        "store_4": { "type": "store", "settings": { "store_type": "Flagship store", "store_name": "Store name", "address": "Store address" } }
+      },
+      "blocks_order": ["store_1", "store_2", "store_3", "store_4"]
+    }
+  },
+  "order": [
+    "about_hero",
+    "founder",
+    "timeline",
+    "team",
+    "stores"
+  ]
+}

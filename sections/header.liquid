@@ -68,18 +68,6 @@
         {{ 'icon-search.svg' | inline_asset_content }}
       </button>
 
-      {% if shop.customer_accounts_enabled %}
-        {% if customer %}
-          <a href="{{ routes.account_url }}" class="header-icon-btn header-icon-btn--account-desktop" aria-label="{{ 'header.account_label' | t }}">
-            {{ 'icon-account.svg' | inline_asset_content }}
-          </a>
-        {% else %}
-          <a href="{{ routes.account_login_url }}" class="header-login-btn" aria-label="{{ 'header.login_label' | t }}">
-            {{ 'header.login_label' | t }}
-          </a>
-        {% endif %}
-      {% endif %}
-
       <a href="/pages/wishlist" class="header-icon-btn header-icon-btn--wishlist" aria-label="{{ 'header.wishlist_label' | t }}">
         {{ 'icon-wishlist.svg' | inline_asset_content }}
         {% if cart.item_count > 0 %}
@@ -93,6 +81,18 @@
           <span class="header-cart-count">{{ cart.item_count }}</span>
         {% endif %}
       </a>
+
+      {% if shop.customer_accounts_enabled %}
+        {% if customer %}
+          <a href="{{ routes.account_url }}" class="header-icon-btn header-icon-btn--account-desktop" aria-label="{{ 'header.account_label' | t }}">
+            {{ 'icon-account.svg' | inline_asset_content }}
+          </a>
+        {% else %}
+          <a href="{{ routes.account_login_url }}" class="header-login-btn" aria-label="{{ 'header.login_label' | t }}">
+            {{ 'header.login_label' | t }}
+          </a>
+        {% endif %}
+      {% endif %}
     </div>
 
   </div>
@@ -448,7 +448,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 36px;
+    height: 40px;
     padding: 0 16px;
     background-color: var(--color-primary);
     color: #fff;
