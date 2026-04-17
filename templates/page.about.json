@@ -9,17 +9,6 @@
  */
 {
   "sections": {
-    "about_hero": {
-      "type": "about",
-      "settings": {
-        "founder_name": "Mr. K. Chinnadurai",
-        "heading": "56 years of timeless excellence, where every saree is truly unique",
-        "description": "",
-        "brand_label": "Our brand",
-        "padding_top": 8,
-        "padding_bottom": 80
-      }
-    },
     "founder": {
       "type": "about-founder",
       "settings": {
@@ -143,7 +132,6 @@
     }
   },
   "order": [
-    "about_hero",
     "founder",
     "timeline",
     "team",
