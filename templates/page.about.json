@@ -61,7 +61,9 @@
     },
     "founder": {
       "type": "about-founder",
-      "custom_css": [],
+      "custom_css": [
+        "about-founder {background-color: transparent;}"
+      ],
       "settings": {
         "image": "shopify://shop_images/12x18_kc_jpg.webp",
         "founded_year": "1968",
