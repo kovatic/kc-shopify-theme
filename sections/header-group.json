@@ -154,7 +154,12 @@
         "top_menu": "",
         "menu": "main-menu",
         "whatsapp_number": "+91-9488202320",
-        "promo_text": "Free Shipping on Orders Above ₹1,999"
+        "promo_text": "Free Shipping on Orders Above ₹1,999",
+        "highlight_nav_item": "KC Gold House",
+        "highlight_nav_style": "button",
+        "highlight_nav_icon": "shopify://shop_images/Group_3.png",
+        "highlight_btn_color": "#144c49",
+        "highlight_btn_hover_color": "#144c49"
       }
     }
   },
