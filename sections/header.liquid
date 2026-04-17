@@ -41,22 +41,26 @@
     <div class="header-main__logo{% if section.settings.logo_mobile %} has-mobile-logo{% endif %}">
       {%- if section.settings.logo_mobile -%}
         <a href="{{ routes.root_url }}" class="header-main__logo-link--mobile">
-          {{- section.settings.logo_mobile | image_url: width: 320 | image_tag:
-              alt: shop.name,
-              class: 'header-main__logo-img',
-              widths: '160, 320',
-              sizes: '160px'
-          -}}
+          <img
+            src="{{ section.settings.logo_mobile.src }}"
+            alt="{{ shop.name }}"
+            class="header-main__logo-img"
+            width="{{ section.settings.logo_mobile.width }}"
+            height="{{ section.settings.logo_mobile.height }}"
+            loading="eager"
+          >
         </a>
       {%- endif -%}
       {%- if section.settings.logo -%}
         <a href="{{ routes.root_url }}" class="header-main__logo-link--desktop">
-          {{- section.settings.logo | image_url: width: 440 | image_tag:
-              alt: shop.name,
-              class: 'header-main__logo-img',
-              widths: '220, 440, 660',
-              sizes: '220px'
-          -}}
+          <img
+            src="{{ section.settings.logo.src }}"
+            alt="{{ shop.name }}"
+            class="header-main__logo-img"
+            width="{{ section.settings.logo.width }}"
+            height="{{ section.settings.logo.height }}"
+            loading="eager"
+          >
         </a>
       {%- else -%}
         <a href="{{ routes.root_url }}" class="header-main__shop-name header-main__logo-link--desktop">{{ shop.name }}</a>
@@ -144,9 +148,25 @@
         {%- endif -%}
       {%- endfor -%}
 
+      {%- assign is_highlight = false -%}
+      {%- if section.settings.highlight_nav_item != blank and link.title == section.settings.highlight_nav_item -%}
+        {%- assign is_highlight = true -%}
+      {%- endif -%}
       <li class="header-nav__item{% if mega or link.links.size > 0 %} header-nav__item--has-dropdown{% if mega %} header-nav__item--mega{% endif %}{% endif %}">
-        <a href="{{ link.url }}" class="header-nav__link"{% if link.type == 'url' %} target="_blank" rel="noopener"{% endif %}>
-          {{- link.title -}}
+        <a href="{{ link.url }}" class="header-nav__link{% if is_highlight %} header-nav__link--highlight header-nav__link--highlight-{{ section.settings.highlight_nav_style }}{% endif %}"{% if link.type == 'url' %} target="_blank" rel="noopener"{% endif %}{% if is_highlight and section.settings.highlight_nav_style == 'button' %} style="--btn-color: {{ section.settings.highlight_btn_color }}; --btn-hover-color: {{ section.settings.highlight_btn_hover_color }};"{% endif %}>
+          {%- if is_highlight and section.settings.highlight_nav_style == 'image' and section.settings.highlight_nav_image -%}
+            {{- section.settings.highlight_nav_image | image_url: width: 120 | image_tag: class: 'header-nav__highlight-img', alt: link.title -}}
+          {%- else -%}
+            {%- if is_highlight and section.settings.highlight_nav_style == 'button' and section.settings.highlight_nav_icon -%}
+              {{- section.settings.highlight_nav_icon | image_url: width: section.settings.highlight_nav_icon.width | image_tag:
+                  class: 'header-nav__highlight-icon',
+                  alt: '',
+                  aria-hidden: 'true',
+                  loading: 'eager'
+              -}}
+            {%- endif -%}
+            {{- link.title -}}
+          {%- endif -%}
           {% if mega or link.links.size > 0 %}
             <svg class="header-nav__chevron" aria-hidden="true" width="10" height="10" viewBox="0 0 10 10" fill="none">
               <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
@@ -541,6 +561,43 @@
     transition: color 0.2s ease;
   }
   .header-nav__link:hover { color: var(--color-primary); }
+
+  .header-nav__link--highlight-button {
+    background-color: transparent;
+    color: var(--btn-color, var(--color-primary));
+    border: 1.5px solid var(--btn-color, var(--color-primary));
+    border-radius: 5px;
+    padding: 6px 16px;
+    font-weight: 600;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .header-nav__link--highlight-button:hover {
+    background-color: var(--btn-hover-color, var(--btn-color, var(--color-primary)));
+    border-color: var(--btn-hover-color, var(--btn-color, var(--color-primary)));
+    color: #fff;
+    opacity: 1;
+  }
+  .header-nav__highlight-icon {
+    display: block;
+    height: 24px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .header-nav__link--highlight-image {
+    padding: 0;
+    background: none;
+  }
+  .header-nav__link--highlight-image:hover {
+    background: none;
+  }
+  .header-nav__highlight-img {
+    display: block;
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+  }
   .header-nav__chevron {
     width: 10px;
     height: 10px;
@@ -1577,6 +1634,50 @@
       "id": "promo_text",
       "label": "t:labels.promo_text",
       "default": "Free Shipping on Orders Above ₹2,999 | Use Code: SILK20"
+    },
+    {
+      "type": "header",
+      "content": "Highlight nav item"
+    },
+    {
+      "type": "text",
+      "id": "highlight_nav_item",
+      "label": "Nav item title",
+      "info": "Enter the exact menu item title to highlight (e.g. \"Sale\")"
+    },
+    {
+      "type": "select",
+      "id": "highlight_nav_style",
+      "label": "Highlight style",
+      "options": [
+        { "value": "button", "label": "Button" },
+        { "value": "image", "label": "Image" }
+      ],
+      "default": "button"
+    },
+    {
+      "type": "image_picker",
+      "id": "highlight_nav_icon",
+      "label": "Button icon",
+      "info": "Optional icon shown before the button label (used when style is \"Button\")"
+    },
+    {
+      "type": "color",
+      "id": "highlight_btn_color",
+      "label": "Button color",
+      "default": "#e50e7e"
+    },
+    {
+      "type": "color",
+      "id": "highlight_btn_hover_color",
+      "label": "Button hover color",
+      "default": "#c3134e"
+    },
+    {
+      "type": "image_picker",
+      "id": "highlight_nav_image",
+      "label": "Highlight image",
+      "info": "Used when style is set to \"Image\""
     }
   ]
 }
