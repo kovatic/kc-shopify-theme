@@ -132,39 +132,8 @@
       "name": "About"
     },
     "about_founder": {
-      "name": "About — founder",
       "eyebrow": "Our founder",
-      "founded_label": "Est.",
-      "founded_year": "Founded year",
-      "founder_name": "Founder name",
-      "founder_role": "Founder role",
-      "quote": "Quote",
-      "bio": "Biography",
-      "stats_header": "Key stats",
-      "show_stats": "Show stats",
-      "stat_value": "Stat value",
-      "stat_label": "Stat label"
-    },
-    "about_timeline": {
-      "name": "About — timeline",
-      "blocks": {
-        "milestone": {
-          "name": "Milestone",
-          "year": "Year"
-        }
-      }
-    },
-    "about_team": {
-      "name": "About — team",
-      "columns": "Columns on desktop",
-      "blocks": {
-        "member": {
-          "name": "Team member",
-          "name_label": "Name",
-          "role": "Role",
-          "bio": "Short bio"
-        }
-      }
+      "founded_label": "Est."
     },
     "stores": {
       "name": "Stores",
