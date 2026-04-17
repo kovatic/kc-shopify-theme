@@ -9,8 +9,59 @@
  */
 {
   "sections": {
+    "about_RNzweb": {
+      "type": "about",
+      "blocks": {
+        "brand_logo_WFYNbf": {
+          "type": "brand_logo",
+          "settings": {
+            "logo": "shopify://shop_images/KC_Logo_1_fc729608-ffe0-4100-986e-48624fe4f316.webp",
+            "name": "Brand name",
+            "url": ""
+          }
+        },
+        "brand_logo_Wp6Xk3": {
+          "type": "brand_logo",
+          "settings": {
+            "name": "Brand name",
+            "url": ""
+          }
+        },
+        "brand_logo_wmMdhY": {
+          "type": "brand_logo",
+          "settings": {
+            "name": "Brand name",
+            "url": ""
+          }
+        },
+        "brand_logo_kciTAt": {
+          "type": "brand_logo",
+          "settings": {
+            "name": "Brand name",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "brand_logo_WFYNbf",
+        "brand_logo_Wp6Xk3",
+        "brand_logo_wmMdhY",
+        "brand_logo_kciTAt"
+      ],
+      "name": "t:sections.about.name",
+      "settings": {
+        "founder_image": "shopify://shop_images/image_50.avif",
+        "founder_name": "Mr. K. Chinnadurai",
+        "heading": "56 Years of Timeless Excellence, Where Every Saree Is Truly Unique",
+        "description": "<p>Mr. K. Chinnadurai, a visionary who believed that simple work philosophies could create great ventures, founded K. Chinnadurai & Co. in<strong>1970</strong>during his teenage years in Tuticorin District. Starting with a small showroom and direct customer sales, the business quickly gained a reputation for outstanding service and high-quality garments.</p>",
+        "brand_label": "",
+        "padding_top": 8,
+        "padding_bottom": 80
+      }
+    },
     "founder": {
       "type": "about-founder",
+      "custom_css": [],
       "settings": {
         "image": "shopify://shop_images/12x18_kc_jpg.webp",
         "founded_year": "1968",
@@ -25,7 +76,7 @@
         "stat_2_label": "Sarees sold",
         "stat_3_value": "4",
         "stat_3_label": "Store locations",
-        "padding_top": 80,
+        "padding_top": 120,
         "padding_bottom": 80
       }
     },
@@ -186,6 +237,7 @@
     }
   },
   "order": [
+    "about_RNzweb",
     "founder",
     "timeline",
     "team",
