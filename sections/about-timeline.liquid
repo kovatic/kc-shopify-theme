@@ -126,31 +126,29 @@
     max-width: 680px;
   }
 
-  /* Track */
+  /* Track — 3-column grid: left | spine | right */
   .about-timeline__track {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
+    display: grid;
+    grid-template-columns: 1fr 18px 1fr;
+    row-gap: 0;
   }
 
-  /* Vertical spine */
+  /* Vertical spine — spans all rows in the centre column */
   .about-timeline__spine {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
+    grid-column: 2;
+    grid-row: 1 / -1;
+    justify-self: center;
     width: 2px;
-    background: linear-gradient(to bottom, transparent 0%, #c69239 8%, #c69239 92%, transparent 100%);
-    transform: translateX(-50%);
+    background: linear-gradient(to bottom, transparent 0%, #c69239 4%, #c69239 96%, transparent 100%);
   }
 
-  /* Each milestone row */
+  /* Each milestone row occupies all 3 columns */
   .about-timeline__item {
-    position: relative;
-    display: flex;
-    align-items: flex-start;
-    gap: 0;
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 18px 1fr;
+    align-items: start;
     padding-bottom: 52px;
   }
 
@@ -158,44 +156,11 @@
     padding-bottom: 0;
   }
 
-  /* Left item: card on left, node on right half */
-  .about-timeline__item--left {
-    flex-direction: row;
-  }
-
-  .about-timeline__item--left .about-timeline__card {
-    order: 1;
-    text-align: right;
-    align-items: flex-end;
-    margin-right: 48px;
-  }
-
-  .about-timeline__item--left .about-timeline__node {
-    order: 2;
-  }
-
-  /* Right item: node on left half, card on right */
-  .about-timeline__item--right {
-    flex-direction: row;
-  }
-
-  .about-timeline__item--right .about-timeline__node {
-    order: 1;
-  }
-
-  .about-timeline__item--right .about-timeline__card {
-    order: 2;
-    text-align: left;
-    align-items: flex-start;
-    margin-left: 48px;
-  }
-
-  /* Node (sits on the spine) */
+  /* Node — always in centre column */
   .about-timeline__node {
-    position: absolute;
-    left: 50%;
-    top: 6px;
-    transform: translateX(-50%);
+    grid-column: 2;
+    justify-self: center;
+    margin-top: 6px;
     width: 18px;
     height: 18px;
     display: flex;
@@ -203,6 +168,7 @@
     justify-content: center;
     flex-shrink: 0;
     z-index: 1;
+    position: relative;
   }
 
   .about-timeline__node-ring {
@@ -222,20 +188,34 @@
     z-index: 1;
   }
 
-  /* Card */
+  /* Card — left items go in column 1, right in column 3 */
   .about-timeline__card {
-    width: calc(50% - 36px);
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
 
   .about-timeline__item--left .about-timeline__card {
-    width: calc(50% - 60px);
+    grid-column: 1;
+    text-align: right;
+    align-items: flex-end;
+    padding-right: 36px;
+  }
+
+  .about-timeline__item--left .about-timeline__node {
+    grid-column: 2;
+  }
+
+  /* Push right-item card to column 3 */
+  .about-timeline__item--right .about-timeline__node {
+    grid-column: 2;
   }
 
   .about-timeline__item--right .about-timeline__card {
-    width: calc(50% - 60px);
+    grid-column: 3;
+    text-align: left;
+    align-items: flex-start;
+    padding-left: 36px;
   }
 
   .about-timeline__year {
@@ -294,29 +274,33 @@
       font-size: 0.9rem;
     }
 
+    .about-timeline__track {
+      grid-template-columns: 18px 1fr;
+    }
+
     .about-timeline__spine {
-      left: 18px;
-      transform: none;
+      grid-column: 1;
+      grid-row: 1 / -1;
     }
 
     .about-timeline__item--left,
     .about-timeline__item--right {
-      flex-direction: column;
-      padding-left: 48px;
+      grid-template-columns: 18px 1fr;
       padding-bottom: 40px;
     }
 
-    .about-timeline__node {
-      left: 9px;
-      transform: none;
+    .about-timeline__item--left .about-timeline__node,
+    .about-timeline__item--right .about-timeline__node {
+      grid-column: 1;
     }
 
     .about-timeline__item--left .about-timeline__card,
     .about-timeline__item--right .about-timeline__card {
-      width: 100%;
-      margin: 0;
+      grid-column: 2;
       text-align: left;
       align-items: flex-start;
+      padding-left: 24px;
+      padding-right: 0;
     }
 
     .about-timeline__card-media {
