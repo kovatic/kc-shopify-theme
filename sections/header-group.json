@@ -130,13 +130,13 @@
             "col3_menu": "",
             "card1_image": "shopify://shop_images/kc-erall.jpg",
             "card1_label": "",
-            "card1_url": "",
+            "card1_url": "shopify://metaobjects/store/eral",
             "card2_image": "shopify://shop_images/DSC02226.jpg",
             "card2_label": "",
-            "card2_url": "",
+            "card2_url": "shopify://metaobjects/store/thiruchendur",
             "card3_image": "shopify://shop_images/RKL_1940_JPG.jpg",
             "card3_label": "",
-            "card3_url": ""
+            "card3_url": "shopify://metaobjects/store/chennai"
           }
         }
       },
