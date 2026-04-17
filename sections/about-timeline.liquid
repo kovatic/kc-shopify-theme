@@ -20,7 +20,6 @@
 
     {%- if section.blocks.size > 0 -%}
       <div class="about-timeline__track">
-        <div class="about-timeline__spine" aria-hidden="true"></div>
 
         {%- for block in section.blocks -%}
           <div
@@ -126,7 +125,7 @@
     max-width: 680px;
   }
 
-  /* Track — 3-column grid: left | spine | right */
+  /* Track — 3-column grid: left | node-column | right */
   .about-timeline__track {
     position: relative;
     display: grid;
@@ -134,13 +133,16 @@
     row-gap: 0;
   }
 
-  /* Vertical spine — spans all rows in the centre column */
-  .about-timeline__spine {
-    grid-column: 2;
-    grid-row: 1 / -1;
-    justify-self: center;
+  /* Vertical spine — absolute line down the centre of the node column */
+  .about-timeline__track::before {
+    content: '';
+    position: absolute;
+    left: calc(50% - 1px);
+    top: 0;
+    bottom: 0;
     width: 2px;
     background: linear-gradient(to bottom, transparent 0%, #c69239 4%, #c69239 96%, transparent 100%);
+    pointer-events: none;
   }
 
   /* Each milestone row occupies all 3 columns */
@@ -278,9 +280,8 @@
       grid-template-columns: 18px 1fr;
     }
 
-    .about-timeline__spine {
-      grid-column: 1;
-      grid-row: 1 / -1;
+    .about-timeline__track::before {
+      left: 9px;
     }
 
     .about-timeline__item--left,
