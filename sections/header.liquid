@@ -41,26 +41,20 @@
     <div class="header-main__logo{% if section.settings.logo_mobile %} has-mobile-logo{% endif %}">
       {%- if section.settings.logo_mobile -%}
         <a href="{{ routes.root_url }}" class="header-main__logo-link--mobile">
-          <img
-            src="{{ section.settings.logo_mobile.src }}"
-            alt="{{ shop.name }}"
-            class="header-main__logo-img"
-            width="{{ section.settings.logo_mobile.width }}"
-            height="{{ section.settings.logo_mobile.height }}"
-            loading="eager"
-          >
+          {{- section.settings.logo_mobile | image_url: width: section.settings.logo_mobile.width | image_tag:
+              alt: shop.name,
+              class: 'header-main__logo-img',
+              loading: 'eager'
+          -}}
         </a>
       {%- endif -%}
       {%- if section.settings.logo -%}
         <a href="{{ routes.root_url }}" class="header-main__logo-link--desktop">
-          <img
-            src="{{ section.settings.logo.src }}"
-            alt="{{ shop.name }}"
-            class="header-main__logo-img"
-            width="{{ section.settings.logo.width }}"
-            height="{{ section.settings.logo.height }}"
-            loading="eager"
-          >
+          {{- section.settings.logo | image_url: width: section.settings.logo.width | image_tag:
+              alt: shop.name,
+              class: 'header-main__logo-img',
+              loading: 'eager'
+          -}}
         </a>
       {%- else -%}
         <a href="{{ routes.root_url }}" class="header-main__shop-name header-main__logo-link--desktop">{{ shop.name }}</a>
