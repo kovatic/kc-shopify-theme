@@ -56,7 +56,7 @@
           "settings": {
             "nav_link": "Kora Cotton Sarees",
             "col1_heading": "",
-            "col1_menu": "",
+            "col1_menu": "kora-cotton-sarees-menu",
             "col2_heading": "",
             "col2_menu": "",
             "col3_heading": "",
@@ -77,15 +77,18 @@
           "settings": {
             "nav_link": "Banarasi Silk Sarees",
             "col1_heading": "",
-            "col1_menu": "",
+            "col1_menu": "banarasi-silk-sarees-menu",
             "col2_heading": "",
             "col2_menu": "",
             "col3_heading": "",
             "col3_menu": "",
+            "card1_image": "shopify://shop_images/DSC07787.webp",
             "card1_label": "Red Banarasi Saree",
             "card1_url": "shopify://products/red-banarasi-saree",
+            "card2_image": "shopify://shop_images/DSC07810.jpg",
             "card2_label": "Yellow Banarasi Saree",
             "card2_url": "shopify://products/yellow-banarasi-saree",
+            "card3_image": "shopify://shop_images/DSC07840_1.jpg",
             "card3_label": "Green Banarasi Saree",
             "card3_url": "shopify://products/green-banarasi-saree"
           }
