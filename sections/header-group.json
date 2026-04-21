@@ -98,15 +98,18 @@
           "settings": {
             "nav_link": "Geogrette Sarees",
             "col1_heading": "",
-            "col1_menu": "",
+            "col1_menu": "geogrette-sarees",
             "col2_heading": "",
             "col2_menu": "",
             "col3_heading": "",
             "col3_menu": "",
+            "card1_image": "shopify://shop_images/DSC08256.webp",
             "card1_label": "Coral Red Georgette Saree",
             "card1_url": "shopify://products/magenta-georgette-saree",
+            "card2_image": "shopify://shop_images/DSC08240_1.webp",
             "card2_label": "Emerald Charm Georgette Saree",
             "card2_url": "shopify://products/emerald-charm-georgette-saree",
+            "card3_image": "shopify://shop_images/DSC08272.webp",
             "card3_label": "Magenta Georgette Saree",
             "card3_url": "shopify://products/magenta-georgette-saree-1"
           }
