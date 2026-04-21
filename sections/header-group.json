@@ -140,7 +140,7 @@
           "settings": {
             "nav_link": "🛒 Our Stores",
             "col1_heading": "Locations",
-            "col1_menu": "",
+            "col1_menu": "stores-menu",
             "col2_heading": "",
             "col2_menu": "",
             "col3_heading": "",
