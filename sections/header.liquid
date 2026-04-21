@@ -10,12 +10,12 @@
   <div class="header-topbar__inner">
     <nav class="header-topbar__nav" aria-label="{{ 'header.top_nav_label' | t }}">
       {% for link in section.settings.top_menu.links %}
-        <a href="{{ link.url }}" class="header-topbar__link"{% if link.type == 'url' %} target="_blank" rel="noopener"{% endif %}>{{ link.title }}</a>
+        <a href="{{ link.url }}" class="header-topbar__link"{% if link.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>{{ link.title }}</a>
       {% endfor %}
     </nav>
     <p class="header-topbar__contact">
       {{ 'header.whatsapp_text' | t }}
-      <a href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: '-' | remove: ' ' }}" class="header-topbar__phone">{{ section.settings.whatsapp_number }}</a>
+      <a href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: '-' | remove: ' ' }}" class="header-topbar__phone" target="_blank" rel="noopener">{{ section.settings.whatsapp_number }}</a>
     </p>
   </div>
 </div>
@@ -122,11 +122,11 @@
               </button>
               <ul class="mobile-nav-drawer__sub">
                 {% for child_link in link.links %}
-                  <li><a href="{{ child_link.url }}" class="mobile-nav-drawer__sub-link"{% if child_link.type == 'url' %} target="_blank" rel="noopener"{% endif %}>{{ child_link.title }}</a></li>
+                  <li><a href="{{ child_link.url }}" class="mobile-nav-drawer__sub-link"{% if child_link.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>{{ child_link.title }}</a></li>
                 {% endfor %}
               </ul>
             {% else %}
-              <a href="{{ link.url }}" class="mobile-nav-drawer__link"{% if link.type == 'url' %} target="_blank" rel="noopener"{% endif %}>{{- link.title -}}</a>
+              <a href="{{ link.url }}" class="mobile-nav-drawer__link"{% if link.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>{{- link.title -}}</a>
             {% endif %}
           </li>
         {% endfor %}
@@ -151,7 +151,7 @@
         {%- assign is_highlight = true -%}
       {%- endif -%}
       <li class="header-nav__item{% if mega or link.links.size > 0 %} header-nav__item--has-dropdown{% if mega %} header-nav__item--mega{% endif %}{% endif %}">
-        <a href="{{ link.url }}" class="header-nav__link{% if is_highlight %} header-nav__link--highlight header-nav__link--highlight-{{ section.settings.highlight_nav_style }}{% endif %}"{% if link.type == 'url' %} target="_blank" rel="noopener"{% endif %}{% if is_highlight and section.settings.highlight_nav_style == 'button' %} style="--btn-color: {{ section.settings.highlight_btn_color }}; --btn-hover-color: {{ section.settings.highlight_btn_hover_color }};"{% endif %}>
+        <a href="{{ link.url }}" class="header-nav__link{% if is_highlight %} header-nav__link--highlight header-nav__link--highlight-{{ section.settings.highlight_nav_style }}{% endif %}"{% if link.url contains 'http' %} target="_blank" rel="noopener"{% endif %}{% if is_highlight and section.settings.highlight_nav_style == 'button' %} style="--btn-color: {{ section.settings.highlight_btn_color }}; --btn-hover-color: {{ section.settings.highlight_btn_hover_color }};"{% endif %}>
           {%- if is_highlight and section.settings.highlight_nav_style == 'image' and section.settings.highlight_nav_image -%}
             {{- section.settings.highlight_nav_image | image_url: width: 120 | image_tag: class: 'header-nav__highlight-img', alt: link.title -}}
           {%- else -%}
@@ -186,7 +186,7 @@
                     <ul class="mega-menu__links">
                       {% for item in linklists[mega.settings.col1_menu].links %}
                         <li>
-                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}"{% if item.type == 'url' %} target="_blank" rel="noopener"{% endif %}>
+                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}"{% if item.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>
                             {{ item.title }}
                           </a>
                         </li>
@@ -203,7 +203,7 @@
                     <ul class="mega-menu__links">
                       {% for item in linklists[mega.settings.col2_menu].links %}
                         <li>
-                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}"{% if item.type == 'url' %} target="_blank" rel="noopener"{% endif %}>
+                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}"{% if item.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>
                             {{ item.title }}
                           </a>
                         </li>
@@ -220,7 +220,7 @@
                     <ul class="mega-menu__links">
                       {% for item in linklists[mega.settings.col3_menu].links %}
                         <li>
-                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}"{% if item.type == 'url' %} target="_blank" rel="noopener"{% endif %}>
+                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}"{% if item.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>
                             {{ item.title }}
                           </a>
                         </li>
@@ -234,7 +234,7 @@
               {% if mega.settings.card1_image or mega.settings.card2_image or mega.settings.card3_image %}
                 <div class="mega-menu__cards">
                   {% if mega.settings.card1_image %}
-                    <a href="{{ mega.settings.card1_url | default: '#' }}" class="mega-menu__card">
+                    <a href="{{ mega.settings.card1_url | default: '#' }}" class="mega-menu__card"{% if mega.settings.card1_url != blank %} target="_blank" rel="noopener"{% endif %}>
                       {{ mega.settings.card1_image | image_url: width: 600 | image_tag: class: 'mega-menu__card-img', alt: mega.settings.card1_label | escape }}
                       <div class="mega-menu__card-gradient"></div>
                       {% if mega.settings.card1_label != blank %}
@@ -243,7 +243,7 @@
                     </a>
                   {% endif %}
                   {% if mega.settings.card2_image %}
-                    <a href="{{ mega.settings.card2_url | default: '#' }}" class="mega-menu__card">
+                    <a href="{{ mega.settings.card2_url | default: '#' }}" class="mega-menu__card"{% if mega.settings.card2_url != blank %} target="_blank" rel="noopener"{% endif %}>
                       {{ mega.settings.card2_image | image_url: width: 600 | image_tag: class: 'mega-menu__card-img', alt: mega.settings.card2_label | escape }}
                       <div class="mega-menu__card-gradient"></div>
                       {% if mega.settings.card2_label != blank %}
@@ -252,7 +252,7 @@
                     </a>
                   {% endif %}
                   {% if mega.settings.card3_image %}
-                    <a href="{{ mega.settings.card3_url | default: '#' }}" class="mega-menu__card">
+                    <a href="{{ mega.settings.card3_url | default: '#' }}" class="mega-menu__card"{% if mega.settings.card3_url != blank %} target="_blank" rel="noopener"{% endif %}>
                       {{ mega.settings.card3_image | image_url: width: 600 | image_tag: class: 'mega-menu__card-img', alt: mega.settings.card3_label | escape }}
                       <div class="mega-menu__card-gradient"></div>
                       {% if mega.settings.card3_label != blank %}
@@ -270,7 +270,7 @@
           <ul class="header-nav__dropdown">
             {% for child_link in link.links %}
               <li>
-                <a href="{{ child_link.url }}" class="header-nav__dropdown-link"{% if child_link.type == 'url' %} target="_blank" rel="noopener"{% endif %}>{{ child_link.title }}</a>
+                <a href="{{ child_link.url }}" class="header-nav__dropdown-link"{% if child_link.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>{{ child_link.title }}</a>
               </li>
             {% endfor %}
           </ul>
