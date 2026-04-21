@@ -212,6 +212,7 @@
           "type": "image",
           "name": "t:general.image",
           "settings": {
+            "image": "shopify://shop_images/center.jpg",
             "url": "https://kcgoldhouse.com/"
           },
           "blocks": {}
@@ -220,7 +221,6 @@
       "block_order": [
         "image_LUFpc7"
       ],
-      "disabled": true,
       "custom_css": [],
       "name": "t:general.custom_section",
       "settings": {}
@@ -391,7 +391,7 @@
             "video_url": "",
             "alt": ""
           }
-        },
+        }
       },
       "block_order": [
         "video_XWQPY9",
@@ -404,8 +404,48 @@
         "title": "Our Customer Testimonials",
         "subtitle": "Trusted and praised for excellence",
         "padding_top": 60,
-        "padding_bottom": 60
+        "padding_bottom": 0
       }
+    },
+    "17753772276ca8c352": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_cards_carousel_a9TQzX": {
+          "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "show_sample_reviews": true,
+            "reviews_selection": "store_reviews",
+            "products": [],
+            "star_rating": "4_to_5_star",
+            "show_review_media": true,
+            "display_order": "most_recent",
+            "no_image_fallback": "review_text_only",
+            "max_reviews": 20,
+            "review_length": "medium",
+            "text_size": "small",
+            "image_ratio": "1",
+            "reviews_shown": 3,
+            "show_reviewer_name": true,
+            "show_product_name": true,
+            "hide_arrows_mobile": false,
+            "arrows_position": "bottom",
+            "max_width": 1600,
+            "corner_styling": "square",
+            "header_text_color": "#2e1f1f",
+            "text_color": "#2e1f1f",
+            "card_color": "#f9f9f9",
+            "stars_color": "",
+            "arrows_color": "#000000",
+            "transition_speed": 5,
+            "header_text": "",
+            "show_average_rating": false
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_cards_carousel_a9TQzX"
+      ],
+      "settings": {}
     },
     "stores_NYzLxX": {
       "type": "stores",
@@ -506,6 +546,7 @@
     "product_carousel_zpTxYK",
     "about_ANVEQm",
     "testimonials_dKBhcg",
+    "17753772276ca8c352",
     "stores_NYzLxX"
   ]
 }
