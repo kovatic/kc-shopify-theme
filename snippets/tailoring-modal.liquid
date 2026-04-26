@@ -252,6 +252,16 @@
     margin: 0;
     text-align: center;
   }
+  .tailoring-modal__subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    color: #ce0570;
+    font-weight: 600;
+    text-align: center;
+    margin: 4px 0 0;
+    letter-spacing: 0.02em;
+  }
+
   .tailoring-modal__close {
     position: absolute;
     right: 16px;
@@ -567,9 +577,15 @@
       return required;
     }
 
+    /* ── add-unit mode state ── */
+    var addUnitContext = null; /* { mainKey, addonKey, currentAddonQty, mainNewQty, currentSelections } */
+
     /* ── open / close ── */
     function openModal() {
-      /* reset to step 1 every time modal opens */
+      addUnitContext = null;
+      modal.removeAttribute('data-add-unit');
+      var subtitle = modal.querySelector('.tailoring-modal__subtitle');
+      if (subtitle) subtitle.remove();
       step1.classList.remove('tailoring-modal__step--hidden');
       step2.classList.add('tailoring-modal__step--hidden');
       updateTotal();
@@ -577,9 +593,51 @@
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
     }
+
+    function openModalForAddUnit(context) {
+      /* context: { mainKey, addonKey, addonPerUnit, mainNewQty, currentSelections } */
+      addUnitContext = context;
+      modal.setAttribute('data-add-unit', '1');
+
+      /* Reset all inputs then pre-select current options */
+      modal.querySelectorAll('.tailoring-modal__input').forEach(function(inp) {
+        inp.checked = false;
+      });
+      if (context.currentSelections) {
+        Object.keys(context.currentSelections).forEach(function(groupLabel) {
+          var values = context.currentSelections[groupLabel].split(', ');
+          values.forEach(function(val) {
+            modal.querySelectorAll('.tailoring-modal__input').forEach(function(inp) {
+              if (inp.dataset.groupLabel === groupLabel && inp.value === val) inp.checked = true;
+            });
+          });
+        });
+      }
+
+      /* Show subtitle */
+      var existing = modal.querySelector('.tailoring-modal__subtitle');
+      if (existing) existing.remove();
+      var title = modal.querySelector('.tailoring-modal__title');
+      if (title) {
+        var sub = document.createElement('p');
+        sub.className = 'tailoring-modal__subtitle';
+        sub.textContent = 'Select stitching for the additional unit';
+        title.insertAdjacentElement('afterend', sub);
+      }
+
+      step1.classList.remove('tailoring-modal__step--hidden');
+      step2.classList.add('tailoring-modal__step--hidden');
+      updateTotal();
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
     function closeModal() {
       modal.classList.remove('is-open');
       modal.setAttribute('aria-hidden', 'true');
+      modal.removeAttribute('data-add-unit');
+      addUnitContext = null;
       document.body.style.overflow = '';
       document.dispatchEvent(new CustomEvent('tailoring:total-change', { detail: { rupees: getTotalRupees() } }));
     }
@@ -690,6 +748,72 @@
 
     /* ── add to cart ── */
     function doAddToCart(btn, originalLabel) {
+      btn.textContent = '...';
+      btn.disabled = true;
+
+      /* ── ADD UNIT MODE: triggered from cart qty prompt ── */
+      if (addUnitContext) {
+        var ctx          = addUnitContext;
+        var addonVariantId = parseInt(modal.dataset.addonVariantId, 10) || 0;
+        var extraRupees    = Math.round(getTotalRupees());
+        var newProps       = buildProperties();
+
+        /* Check if same options as existing addon by comparing group selections */
+        var newSelections = {};
+        modal.querySelectorAll('.tailoring-modal__input:checked').forEach(function(inp) {
+          var g = inp.dataset.groupLabel || 'Tailoring';
+          if (!newSelections[g]) newSelections[g] = [];
+          newSelections[g].push(inp.value);
+        });
+        Object.keys(newSelections).forEach(function(k) { newSelections[k] = newSelections[k].join(', '); });
+
+        var sameOptions = JSON.stringify(newSelections) === JSON.stringify(ctx.currentSelections);
+
+        /* Step 1: increase main item qty */
+        var p = fetch('/cart/update.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ updates: { [ctx.mainKey]: ctx.mainNewQty } })
+        }).then(function(r) { return r.json(); });
+
+        if (extraRupees > 0 && addonVariantId) {
+          if (sameOptions) {
+            /* Same options → bump existing addon qty by one unit's worth */
+            p = p.then(function() {
+              return fetch('/cart/update.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ updates: { [ctx.addonKey]: ctx.currentAddonQty + extraRupees } })
+              }).then(function(r) { return r.json(); });
+            });
+          } else {
+            /* Different options → add a new addon line item linked to same main key */
+            p = p.then(function() {
+              return fetch('/cart/add.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ items: [{ id: addonVariantId, quantity: extraRupees, properties: { '_linked_item': String(ctx.mainKey) } }] })
+              }).then(function(r) { return r.json(); });
+            });
+          }
+        }
+
+        p.then(function() {
+          closeModal();
+          return fetch('/cart.js').then(function(r) { return r.json(); });
+        }).then(function(cart) {
+          document.dispatchEvent(new CustomEvent('cart:open', { detail: { cart: cart } }));
+        }).catch(function(err) {
+          console.error('Tailoring ATC error', err);
+          alert('Could not update cart. Please try again.');
+        }).finally(function() {
+          btn.disabled = false;
+          btn.textContent = originalLabel;
+        });
+        return;
+      }
+
+      /* ── NORMAL MODE: fresh add from product page ── */
       var variantInput = document.getElementById('variant-id-input') ||
                          document.getElementById('variant-id-input-mobile');
       var variantId = variantInput ? parseInt(variantInput.value, 10) : null;
@@ -698,9 +822,6 @@
       var addonVariantId = parseInt(modal.dataset.addonVariantId, 10) || 0;
       var extraRupees    = Math.round(getTotalRupees());
       var props          = buildProperties();
-
-      btn.textContent = '...';
-      btn.disabled = true;
 
       /* Step 1: add main product first to get its unique cart line key */
       fetch('/cart/add.js', {
@@ -756,6 +877,7 @@
 
     /* ── expose open to product page buttons ── */
     window.openTailoringModal = openModal;
+    window.openTailoringModalForAddUnit = openModalForAddUnit;
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();

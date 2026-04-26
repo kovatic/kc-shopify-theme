@@ -26,18 +26,98 @@ class CartDrawer extends HTMLElement {
 
   onBodyClick(e) {
     const removeBtn = e.target.closest('.cart-drawer__item-remove');
-    const qtyBtn = e.target.closest('.cart-drawer__qty-btn');
+    const qtyBtn    = e.target.closest('.cart-drawer__qty-btn');
+    const stitchYes = e.target.closest('.cart-drawer__stitch-yes');
+    const stitchNo  = e.target.closest('.cart-drawer__stitch-no');
 
     if (removeBtn) {
       const updates = { [removeBtn.dataset.key]: 0 };
       if (removeBtn.dataset.addonKey) updates[removeBtn.dataset.addonKey] = 0;
       this.updateItems(updates);
-    } else if (qtyBtn) {
-      const item = qtyBtn.closest('.cart-drawer__item');
+
+    } else if (stitchYes) {
+      /* "Select stitching" — open tailoring modal in add-unit mode */
+      const item       = stitchYes.closest('.cart-drawer__item');
+      const addonRow   = item.querySelector('.cart-drawer__addon-row');
+      const addonKey   = addonRow ? addonRow.dataset.key : '';
+      const addonPerUnit = addonRow ? parseInt(addonRow.dataset.addonQty || 0, 10) : 0;
       const currentQty = parseInt(item.querySelector('.cart-drawer__qty-value').textContent);
-      const newQty = qtyBtn.dataset.action === 'increase' ? currentQty + 1 : currentQty - 1;
-      this.updateItem(qtyBtn.dataset.key, newQty);
+      const currentAddonQty = addonPerUnit * currentQty;
+      const newQty     = parseInt(stitchYes.dataset.newQty, 10);
+
+      /* Collect current selections from item properties */
+      const currentSelections = {};
+      item.querySelectorAll('.cart-drawer__tailoring-props li').forEach(function(li) {
+        const key = li.querySelector('.cart-drawer__prop-key');
+        if (key) {
+          const k = key.textContent.replace(/:$/, '').trim();
+          const v = li.textContent.replace(key.textContent, '').trim();
+          currentSelections[k] = v;
+        }
+      });
+
+      this.dismissStitchPrompt(item);
+
+      if (typeof window.openTailoringModalForAddUnit === 'function') {
+        window.openTailoringModalForAddUnit({
+          mainKey:          item.dataset.key,
+          addonKey:         addonKey,
+          addonPerUnit:     addonPerUnit,
+          currentAddonQty:  currentAddonQty,
+          mainNewQty:       newQty,
+          currentSelections: currentSelections
+        });
+      }
+
+    } else if (stitchNo) {
+      const item    = stitchNo.closest('.cart-drawer__item');
+      const newQty  = parseInt(stitchNo.dataset.newQty, 10);
+      this.dismissStitchPrompt(item);
+      this.updateItems({ [item.dataset.key]: newQty });
+
+    } else if (qtyBtn) {
+      const item       = qtyBtn.closest('.cart-drawer__item');
+      const currentQty = parseInt(item.querySelector('.cart-drawer__qty-value').textContent);
+      const newQty     = qtyBtn.dataset.action === 'increase' ? currentQty + 1 : currentQty - 1;
+      const addonRow   = item.querySelector('.cart-drawer__addon-row');
+
+      /* If increasing and item has an addon, ask whether to add stitching for new unit */
+      if (qtyBtn.dataset.action === 'increase' && addonRow) {
+        const addonKey      = addonRow.dataset.key;
+        const currentAddonQty = parseInt(item.querySelector('.cart-drawer__qty-value').textContent);
+        this.showStitchPrompt(item, qtyBtn.dataset.key, addonKey, newQty, currentQty);
+      } else {
+        this.updateItem(qtyBtn.dataset.key, newQty);
+      }
     }
+  }
+
+  showStitchPrompt(item, key, addonKey, newQty, currentQty) {
+    const qtyRow = item.querySelector('.cart-drawer__item-qty');
+    if (!qtyRow || item.querySelector('.cart-drawer__stitch-prompt')) return;
+    qtyRow.style.display = 'none';
+    const addonRow = item.querySelector('.cart-drawer__addon-row');
+    /* data-addon-qty = rupees per unit of the main product */
+    const pricePerUnit = addonRow ? parseInt(addonRow.dataset.addonQty || 0, 10) : 0;
+    /* new total addon quantity = current addon qty + one more unit's worth */
+    const currentAddonTotal = pricePerUnit * currentQty;
+    const newAddonTotal = pricePerUnit * newQty;
+    const prompt = document.createElement('div');
+    prompt.className = 'cart-drawer__stitch-prompt';
+    prompt.innerHTML = `
+      <span class="cart-drawer__stitch-prompt-text">Add stitching for the new unit?</span>
+      <div class="cart-drawer__stitch-prompt-btns">
+        <button class="cart-drawer__stitch-yes" data-new-qty="${newQty}">Select stitching</button>
+        <button class="cart-drawer__stitch-no" data-new-qty="${newQty}">Skip</button>
+      </div>`;
+    qtyRow.insertAdjacentElement('afterend', prompt);
+  }
+
+  dismissStitchPrompt(item) {
+    const prompt = item.querySelector('.cart-drawer__stitch-prompt');
+    if (prompt) prompt.remove();
+    const qtyRow = item.querySelector('.cart-drawer__item-qty');
+    if (qtyRow) qtyRow.style.display = '';
   }
 
   updateItem(key, quantity) {
@@ -117,8 +197,10 @@ class CartDrawer extends HTMLElement {
       }</ul>` : '';
 
       const addon = addonByKey[item.key];
+      /* addon.quantity = rupees (since product is ₹1/unit), so per-unit cost = quantity / item.quantity */
+      const addonPerUnit = addon ? Math.round(addon.quantity / item.quantity) : 0;
       const addonHtml = addon ? `
-        <div class="cart-drawer__addon-row" data-key="${addon.key}">
+        <div class="cart-drawer__addon-row" data-key="${addon.key}" data-addon-qty="${addonPerUnit}">
           <span class="cart-drawer__addon-label">${this.escHtml(addon.product_title)}</span>
           <span class="cart-drawer__addon-price">${this.formatMoney(addon.final_line_price)}</span>
         </div>` : '';
