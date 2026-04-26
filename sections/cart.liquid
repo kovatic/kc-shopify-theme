@@ -39,14 +39,12 @@
               {%- endfor -%}
               {%- unless is_addon_item -%}
 
-              {%- comment -%} Find paired addon {%- endcomment -%}
+              {%- comment -%} Find paired addon by unique cart line key {%- endcomment -%}
               {%- assign paired_addon_item = nil -%}
               {%- for other in cart.items -%}
                 {%- for prop in other.properties -%}
                   {%- if prop.first == '_linked_item' -%}
-                    {%- assign prop_str = prop.last | append: '' -%}
-                    {%- assign vid_str  = item.variant_id | append: '' -%}
-                    {%- if prop_str == vid_str -%}
+                    {%- if prop.last == item.key -%}
                       {%- assign paired_addon_item = other -%}
                     {%- endif -%}
                   {%- endif -%}

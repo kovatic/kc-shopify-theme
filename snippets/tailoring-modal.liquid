@@ -699,32 +699,36 @@
       var extraRupees    = Math.round(getTotalRupees());
       var props          = buildProperties();
 
-      console.log('[Tailoring] addonVariantId:', addonVariantId, '| extraRupees:', extraRupees, '| variantId:', variantId);
-
-      /* Build items array — main product always first */
-      var items = [{ id: variantId, quantity: 1, properties: props }];
-
-      /* If there are add-on rupees and a valid addon variant, add a second line item.
-         The addon product is priced at ₹1 per unit, so quantity = rupee amount. */
-      if (addonVariantId && extraRupees > 0) {
-        /* _linked_item is hidden from storefront (underscore prefix) but visible in admin */
-        var addonProps = { '_linked_item': String(variantId) };
-        items.push({ id: addonVariantId, quantity: extraRupees, properties: addonProps });
-      }
-
-      console.log('[Tailoring] items being sent to cart:', JSON.stringify(items));
-
       btn.textContent = '...';
       btn.disabled = true;
 
+      /* Step 1: add main product first to get its unique cart line key */
       fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ items: items })
+        body: JSON.stringify({ items: [{ id: variantId, quantity: 1, properties: props }] })
       })
       .then(function (r) {
         if (!r.ok) throw new Error('Cart error ' + r.status);
         return r.json();
+      })
+      .then(function (added) {
+        /* If no addon needed, skip step 2 */
+        if (!addonVariantId || extraRupees <= 0) return Promise.resolve();
+
+        /* Get the unique key of the just-added main line item */
+        var mainKey = added.items && added.items[0] && added.items[0].key;
+
+        /* Step 2: add addon with _linked_item = main line key (unique, not just variant id) */
+        var addonProps = { '_linked_item': String(mainKey || variantId) };
+        return fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ items: [{ id: addonVariantId, quantity: extraRupees, properties: addonProps }] })
+        }).then(function (r) {
+          if (!r.ok) throw new Error('Cart error ' + r.status);
+          return r.json();
+        });
       })
       .then(function () {
         closeModal();

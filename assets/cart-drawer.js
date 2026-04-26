@@ -78,11 +78,11 @@ class CartDrawer extends HTMLElement {
     this.classList.remove('is-empty');
     if (!body) return;
 
-    /* Index addon items by their _linked_item variant id */
-    const addonByVariantId = {};
+    /* Index addon items by their _linked_item cart line key */
+    const addonByKey = {};
     cart.items.forEach(item => {
       const linked = (item.properties || {})['_linked_item'];
-      if (linked) addonByVariantId[linked] = item;
+      if (linked) addonByKey[linked] = item;
     });
 
     let html = '<div class="cart-drawer__items" id="CartDrawer-Items">';
@@ -100,7 +100,7 @@ class CartDrawer extends HTMLElement {
         visibleKeys.map(k => `<li><span class="cart-drawer__prop-key">${this.escHtml(k)}:</span> ${this.escHtml(String(props[k]))}</li>`).join('')
       }</ul>` : '';
 
-      const addon = addonByVariantId[String(item.variant_id)];
+      const addon = addonByKey[item.key];
       const addonHtml = addon ? `
         <div class="cart-drawer__addon-row" data-key="${addon.key}">
           <span class="cart-drawer__addon-label">${this.escHtml(addon.product_title)}</span>
