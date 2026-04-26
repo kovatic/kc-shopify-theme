@@ -14,6 +14,24 @@
     "header": {
       "type": "header",
       "blocks": {
+        "mega_menu_MzfM6K": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_link": "Women",
+            "col1_heading": "",
+            "col1_menu": "",
+            "col2_heading": "",
+            "col2_menu": "",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_label": "",
+            "card1_url": "",
+            "card2_label": "",
+            "card2_url": "",
+            "card3_label": "",
+            "card3_url": ""
+          }
+        },
         "mega_menu_BtrgXR": {
           "type": "mega_menu",
           "disabled": true,
@@ -116,15 +134,18 @@
             "col3_heading": "",
             "col3_menu": "",
             "card1_label": "",
-            "card1_url": "",
+            "card1_url": "shopify://metaobjects/store/eral",
+            "card2_image": "shopify://shop_images/DSC02226.jpg",
             "card2_label": "",
-            "card2_url": "",
+            "card2_url": "shopify://metaobjects/store/thiruchendur",
+            "card3_image": "shopify://shop_images/RKL_1940_JPG.jpg",
             "card3_label": "",
-            "card3_url": ""
+            "card3_url": "shopify://metaobjects/store/chennai"
           }
         }
       },
       "block_order": [
+        "mega_menu_MzfM6K",
         "mega_menu_BtrgXR",
         "mega_menu_R8gjQt",
         "mega_menu_NkwY3L",
@@ -138,10 +159,11 @@
         "menu": "main-menu",
         "whatsapp_number": "+91-9488202320",
         "promo_text": "Free Shipping on Orders Above ₹1,999",
-        "highlight_nav_item": "Mens",
+        "highlight_nav_item": "KC Gold House",
         "highlight_nav_style": "button",
-        "highlight_btn_color": "#e50e7e",
-        "highlight_btn_hover_color": "#c3134e"
+        "highlight_nav_icon": "shopify://shop_images/Group_3.png",
+        "highlight_btn_color": "#144c49",
+        "highlight_btn_hover_color": "#144c49"
       }
     }
   },

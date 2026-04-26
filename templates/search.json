@@ -12,9 +12,25 @@
     "main": {
       "type": "search",
       "settings": {}
+    },
+    "product_list_49VfjW": {
+      "type": "product-list",
+      "name": "t:sections.product_list.name",
+      "settings": {
+        "title": "You might also like",
+        "subtitle": "Discover what's new this season.",
+        "collection": "geogrette-saree",
+        "layout_type_desktop": "wrap",
+        "layout_type_mobile": "scroll",
+        "products_count": 4,
+        "view_all_url": "",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "product_list_49VfjW"
   ]
 }
