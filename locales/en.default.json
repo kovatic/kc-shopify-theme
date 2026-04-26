@@ -259,5 +259,24 @@
     "category_item": {
       "name": "Category item"
     }
+  },
+  "tailoring": {
+    "stitching_btn": "Stitching",
+    "title": "Tailoring Details",
+    "close": "Close",
+    "back": "Back",
+    "total_extras": "Total Extras",
+    "next": "Next",
+    "add_to_cart": "Add to Cart",
+    "blouse_title": "Blouse Measurements",
+    "blouse_note": "Please provide your measurements in inches for accurate stitching.",
+    "blouse_chest": "Chest",
+    "blouse_waist": "Waist",
+    "blouse_length": "Blouse length",
+    "blouse_sleeve": "Sleeve length",
+    "blouse_notes": "Special instructions",
+    "blouse_notes_placeholder": "Any special notes for the tailor...",
+    "unit_inches": "inches",
+    "price_includes_stitching": "incl. stitching"
   }
 }

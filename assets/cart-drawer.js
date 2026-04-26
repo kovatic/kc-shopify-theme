@@ -29,7 +29,9 @@ class CartDrawer extends HTMLElement {
     const qtyBtn = e.target.closest('.cart-drawer__qty-btn');
 
     if (removeBtn) {
-      this.updateItem(removeBtn.dataset.key, 0);
+      const updates = { [removeBtn.dataset.key]: 0 };
+      if (removeBtn.dataset.addonKey) updates[removeBtn.dataset.addonKey] = 0;
+      this.updateItems(updates);
     } else if (qtyBtn) {
       const item = qtyBtn.closest('.cart-drawer__item');
       const currentQty = parseInt(item.querySelector('.cart-drawer__qty-value').textContent);
@@ -39,10 +41,14 @@ class CartDrawer extends HTMLElement {
   }
 
   updateItem(key, quantity) {
-    fetch('/cart/change.js', {
+    this.updateItems({ [key]: quantity });
+  }
+
+  updateItems(updates) {
+    fetch('/cart/update.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ id: key, quantity })
+      body: JSON.stringify({ updates })
     })
       .then(r => r.json())
       .then(cart => this.renderCart(cart));
@@ -72,25 +78,52 @@ class CartDrawer extends HTMLElement {
     this.classList.remove('is-empty');
     if (!body) return;
 
+    /* Index addon items by their _linked_item variant id */
+    const addonByVariantId = {};
+    cart.items.forEach(item => {
+      const linked = (item.properties || {})['_linked_item'];
+      if (linked) addonByVariantId[linked] = item;
+    });
+
     let html = '<div class="cart-drawer__items" id="CartDrawer-Items">';
     cart.items.forEach(item => {
+      /* Skip addon line items — they render under their parent */
+      if ((item.properties || {})['_linked_item']) return;
+
       const img = item.image ? `<img src="${item.image.replace(/(\.\w+)$/, '_120x$1')}" alt="${this.escHtml(item.title)}" width="60" height="75" loading="lazy">` : '';
       const variant = (item.variant_title && item.variant_title !== 'Default Title')
         ? `<p class="cart-drawer__item-variant">${this.escHtml(item.variant_title)}</p>` : '';
+
+      const props = item.properties || {};
+      const visibleKeys = Object.keys(props).filter(k => k !== 'Tailoring Extras' && !k.startsWith('_') && props[k] !== '');
+      const propsHtml = visibleKeys.length ? `<ul class="cart-drawer__tailoring-props">${
+        visibleKeys.map(k => `<li><span class="cart-drawer__prop-key">${this.escHtml(k)}:</span> ${this.escHtml(String(props[k]))}</li>`).join('')
+      }</ul>` : '';
+
+      const addon = addonByVariantId[String(item.variant_id)];
+      const addonHtml = addon ? `
+        <div class="cart-drawer__addon-row" data-key="${addon.key}">
+          <span class="cart-drawer__addon-label">${this.escHtml(addon.product_title)}</span>
+          <span class="cart-drawer__addon-price">${this.formatMoney(addon.final_line_price)}</span>
+        </div>` : '';
+      const addonKeyAttr = addon ? ` data-addon-key="${addon.key}"` : '';
+
       html += `
         <div class="cart-drawer__item" data-key="${item.key}">
           <a href="${item.url}" class="cart-drawer__item-image">${img}</a>
           <div class="cart-drawer__item-info">
             <a href="${item.url}" class="cart-drawer__item-title">${this.escHtml(item.product_title)}</a>
             ${variant}
+            ${propsHtml}
             <p class="cart-drawer__item-price">${this.formatMoney(item.final_line_price)}</p>
+            ${addonHtml}
             <div class="cart-drawer__item-qty">
               <button type="button" class="cart-drawer__qty-btn" data-action="decrease" data-key="${item.key}">−</button>
               <span class="cart-drawer__qty-value">${item.quantity}</span>
               <button type="button" class="cart-drawer__qty-btn" data-action="increase" data-key="${item.key}">+</button>
             </div>
           </div>
-          <button type="button" class="cart-drawer__item-remove" data-key="${item.key}" aria-label="Remove">
+          <button type="button" class="cart-drawer__item-remove" data-key="${item.key}"${addonKeyAttr} aria-label="Remove">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
             </svg>
@@ -166,9 +199,21 @@ document.addEventListener('DOMContentLoaded', function() {
   if (cartIcon && drawer) {
     cartIcon.addEventListener('click', function(e) {
       e.preventDefault();
-      drawer.open();
+      fetch('/cart.js').then(r => r.json()).then(cart => {
+        drawer.renderCart(cart);
+        drawer.open();
+      });
     });
   }
+
+  document.addEventListener('cart:open', function() {
+    const d = document.querySelector('cart-drawer');
+    if (!d) return;
+    fetch('/cart.js').then(r => r.json()).then(cart => {
+      d.renderCart(cart);
+      d.open();
+    });
+  });
 
   window.cartStrings = window.cartStrings || {
     empty: 'Your cart is empty',

@@ -1,0 +1,760 @@
+{% doc %}
+  Renders a two-step tailoring add-ons modal for products with tailoring enabled.
+
+  Step 1: Option groups (checkboxes / radios) read from metaobject references.
+  Step 2: Blouse measurements form (shown only if blouse stitching = Required).
+
+  Metaobject structure:
+    tailoring_group:
+      label   → single_line_text
+      type    → choice list ("checkbox" or "radio")
+      options → list of tailoring_group_options references
+
+    tailoring_group_options:
+      label → single_line_text
+      price → decimal
+
+  Product metafield:
+    custom.tailoring_groups → list of tailoring_group metaobject references
+
+  @param {number} [tailoring_addon_variant_id] - Variant ID of the "Tailoring Add-on" product (priced at ₹1 each)
+
+  @example
+  {% render 'tailoring-modal', product: product %}
+{% enddoc %}
+
+{%- assign tailoring_groups = product.metafields.custom.tailoring_groups.value -%}
+
+<div class="tailoring-modal" id="tailoring-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="tailoring-modal-title"
+  data-addon-variant-id="{{ tailoring_addon_variant_id }}"
+>
+  <div class="tailoring-modal__backdrop"></div>
+  <div class="tailoring-modal__panel">
+
+    {%- comment -%} ── STEP 1: tailoring options ── {%- endcomment -%}
+    <div class="tailoring-modal__step" id="tailoring-step-1">
+      <div class="tailoring-modal__header">
+        <h2 class="tailoring-modal__title" id="tailoring-modal-title">
+          {{ 'tailoring.title' | t }}
+        </h2>
+        <button class="tailoring-modal__close" aria-label="{{ 'tailoring.close' | t }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="tailoring-modal__body">
+        <div class="tailoring-modal__groups">
+
+          {%- for group in tailoring_groups -%}
+            {%- assign g_label   = group.label.value -%}
+            {%- assign g_type    = group.type.value | default: 'radio' -%}
+            {%- assign g_options = group.options.value -%}
+            {%- assign g_index   = forloop.index -%}
+
+            {%- if g_label != blank -%}
+              {%- assign is_blouse = false -%}
+              {%- if g_label contains 'Blouse' or g_label contains 'blouse' -%}
+                {%- assign is_blouse = true -%}
+              {%- endif -%}
+
+              <div class="tailoring-modal__group"{% if is_blouse %} data-blouse-group="true"{% endif %}>
+                <p class="tailoring-modal__group-label">{{ g_label }}</p>
+                <div class="tailoring-modal__options">
+
+                  {%- for option in g_options -%}
+                    {%- assign o_label = option.label.value -%}
+                    {%- assign o_price = option.price.value | plus: 0 -%}
+                    {%- assign input_id   = 'tailoring-g' | append: g_index | append: '-o' | append: forloop.index -%}
+                    {%- assign input_name = 'tailoring_group_' | append: g_index -%}
+
+                    {%- if o_label != blank -%}
+                      <label class="tailoring-modal__option" for="{{ input_id }}">
+                        <input
+                          class="tailoring-modal__input"
+                          type="{{ g_type }}"
+                          id="{{ input_id }}"
+                          name="{{ input_name }}"
+                          value="{{ o_label | escape }}"
+                          data-price="{{ o_price }}"
+                          data-group-label="{{ g_label | escape }}"
+                          {% if is_blouse %}data-blouse-option="true"{% endif %}
+                        >
+                        <span class="tailoring-modal__option-text">
+                          {{ o_label }}
+                          {%- if o_price > 0 -%}
+                            <span class="tailoring-modal__option-price">+ {{ o_price | money_without_trailing_zeros }}</span>
+                          {%- endif -%}
+                        </span>
+                      </label>
+                    {%- endif -%}
+                  {%- endfor -%}
+
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+
+        </div>
+      </div>
+
+      <div class="tailoring-modal__footer">
+        <div class="tailoring-modal__total">
+          <span class="tailoring-modal__total-label">{{ 'tailoring.total_extras' | t }}</span>
+          <span class="tailoring-modal__total-value" id="tailoring-total">{{ 0 | money }}</span>
+        </div>
+        <button class="tailoring-modal__next-btn" id="tailoring-next-btn" type="button">
+          {{ 'tailoring.next' | t }}
+        </button>
+      </div>
+    </div>
+
+    {%- comment -%} ── STEP 2: blouse measurements ── {%- endcomment -%}
+    <div class="tailoring-modal__step tailoring-modal__step--hidden" id="tailoring-step-2">
+      <div class="tailoring-modal__header">
+        <button class="tailoring-modal__back" id="tailoring-back-btn" aria-label="{{ 'tailoring.back' | t }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M13 4L7 10L13 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <h2 class="tailoring-modal__title">{{ 'tailoring.blouse_title' | t }}</h2>
+        <button class="tailoring-modal__close" aria-label="{{ 'tailoring.close' | t }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="tailoring-modal__body">
+        <p class="tailoring-modal__blouse-note">{{ 'tailoring.blouse_note' | t }}</p>
+        <div class="tailoring-modal__measurements">
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="blouse-chest">{{ 'tailoring.blouse_chest' | t }} <span aria-hidden="true">*</span></label>
+            <div class="tailoring-modal__field-input-wrap">
+              <input class="tailoring-modal__field-input" type="number" id="blouse-chest" name="blouse_chest" min="28" max="60" placeholder="e.g. 38" inputmode="numeric">
+              <span class="tailoring-modal__field-unit">{{ 'tailoring.unit_inches' | t }}</span>
+            </div>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="blouse-waist">{{ 'tailoring.blouse_waist' | t }} <span aria-hidden="true">*</span></label>
+            <div class="tailoring-modal__field-input-wrap">
+              <input class="tailoring-modal__field-input" type="number" id="blouse-waist" name="blouse_waist" min="24" max="56" placeholder="e.g. 32" inputmode="numeric">
+              <span class="tailoring-modal__field-unit">{{ 'tailoring.unit_inches' | t }}</span>
+            </div>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="blouse-length">{{ 'tailoring.blouse_length' | t }} <span aria-hidden="true">*</span></label>
+            <div class="tailoring-modal__field-input-wrap">
+              <input class="tailoring-modal__field-input" type="number" id="blouse-length" name="blouse_length" min="12" max="24" placeholder="e.g. 16" inputmode="numeric">
+              <span class="tailoring-modal__field-unit">{{ 'tailoring.unit_inches' | t }}</span>
+            </div>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="blouse-sleeve">{{ 'tailoring.blouse_sleeve' | t }}</label>
+            <div class="tailoring-modal__field-input-wrap">
+              <input class="tailoring-modal__field-input" type="number" id="blouse-sleeve" name="blouse_sleeve" min="0" max="24" placeholder="e.g. 8" inputmode="numeric">
+              <span class="tailoring-modal__field-unit">{{ 'tailoring.unit_inches' | t }}</span>
+            </div>
+          </div>
+
+          <div class="tailoring-modal__field tailoring-modal__field--full">
+            <label class="tailoring-modal__field-label" for="blouse-notes">{{ 'tailoring.blouse_notes' | t }}</label>
+            <textarea class="tailoring-modal__field-textarea" id="blouse-notes" name="blouse_notes" rows="3" placeholder="{{ 'tailoring.blouse_notes_placeholder' | t }}"></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="tailoring-modal__footer">
+        <div class="tailoring-modal__total">
+          <span class="tailoring-modal__total-label">{{ 'tailoring.total_extras' | t }}</span>
+          <span class="tailoring-modal__total-value" id="tailoring-total-2">{{ 0 | money }}</span>
+        </div>
+        <button class="tailoring-modal__confirm-btn" id="tailoring-confirm-btn" type="button">
+          {{ 'tailoring.add_to_cart' | t }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .tailoring-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .tailoring-modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .tailoring-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+  }
+  .tailoring-modal__panel {
+    position: relative;
+    background: #faf8f4;
+    border-radius: 8px;
+    width: 92%;
+    max-width: 760px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(10px);
+    transition: transform 0.25s ease;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  }
+  .tailoring-modal.is-open .tailoring-modal__panel {
+    transform: translateY(0);
+  }
+
+  /* Steps */
+  .tailoring-modal__step {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+  .tailoring-modal__step--hidden {
+    display: none;
+  }
+
+  /* Header */
+  .tailoring-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #e8e2d9;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .tailoring-modal__title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #2e1f1f;
+    margin: 0;
+    text-align: center;
+  }
+  .tailoring-modal__close {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: color 0.15s;
+  }
+  .tailoring-modal__close:hover { color: #2e1f1f; }
+  .tailoring-modal__back {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: color 0.15s;
+  }
+  .tailoring-modal__back:hover { color: #2e1f1f; }
+
+  /* Body */
+  .tailoring-modal__body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 24px;
+  }
+
+  /* Groups grid */
+  .tailoring-modal__groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 24px 32px;
+  }
+  .tailoring-modal__group-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #2e1f1f;
+    margin: 0 0 12px;
+  }
+  .tailoring-modal__options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tailoring-modal__option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .tailoring-modal__input {
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: var(--color-primary, #2e1f1f);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+  .tailoring-modal__option-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    color: #42464b;
+    line-height: 1.4;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .tailoring-modal__option-price {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #ce0570;
+  }
+
+  /* Blouse measurements */
+  .tailoring-modal__blouse-note {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0 0 20px;
+    line-height: 1.5;
+  }
+  .tailoring-modal__measurements {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 24px;
+  }
+  .tailoring-modal__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .tailoring-modal__field--full {
+    grid-column: 1 / -1;
+  }
+  .tailoring-modal__field-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #2e1f1f;
+    letter-spacing: 0.02em;
+  }
+  .tailoring-modal__field-label span {
+    color: #ce0570;
+  }
+  .tailoring-modal__field-input-wrap {
+    display: flex;
+    align-items: center;
+    border: 1px solid #d4cdc4;
+    border-radius: 5px;
+    overflow: hidden;
+    background: #fff;
+    transition: border-color 0.15s;
+  }
+  .tailoring-modal__field-input-wrap:focus-within {
+    border-color: #2e1f1f;
+  }
+  .tailoring-modal__field-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    color: #2e1f1f;
+    background: transparent;
+    min-width: 0;
+  }
+  .tailoring-modal__field-input::placeholder { color: #aaa; }
+  .tailoring-modal__field-unit {
+    padding: 0 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    color: #888;
+    border-left: 1px solid #e0dfd9;
+    background: #f5f4f0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .tailoring-modal__field-textarea {
+    border: 1px solid #d4cdc4;
+    border-radius: 5px;
+    padding: 10px 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    color: #2e1f1f;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.15s;
+    background: #fff;
+  }
+  .tailoring-modal__field-textarea:focus { border-color: #2e1f1f; }
+  .tailoring-modal__field-textarea::placeholder { color: #aaa; }
+
+  /* Footer */
+  .tailoring-modal__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-top: 1px solid #e8e2d9;
+    flex-shrink: 0;
+    background: #faf8f4;
+  }
+  .tailoring-modal__total {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .tailoring-modal__total-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #888;
+  }
+  .tailoring-modal__total-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2e1f1f;
+  }
+  .tailoring-modal__next-btn,
+  .tailoring-modal__confirm-btn {
+    height: 44px;
+    padding: 0 28px;
+    background: var(--color-primary, #2e1f1f);
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .tailoring-modal__next-btn:hover,
+  .tailoring-modal__confirm-btn:hover { opacity: 0.88; }
+  .tailoring-modal__confirm-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Field error state */
+  .tailoring-modal__field-input.is-error {
+    border-color: #ce0570;
+  }
+  .tailoring-modal__field-error {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    color: #ce0570;
+    margin-top: 2px;
+  }
+
+  @media screen and (max-width: 600px) {
+    .tailoring-modal__panel {
+      width: 100%;
+      max-width: 100%;
+      max-height: 95vh;
+      border-radius: 12px 12px 0 0;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    .tailoring-modal {
+      align-items: flex-end;
+    }
+    .tailoring-modal__panel {
+      transform: translateY(20px);
+    }
+    .tailoring-modal.is-open .tailoring-modal__panel {
+      transform: translateY(0);
+    }
+    .tailoring-modal__groups {
+      grid-template-columns: 1fr 1fr;
+    }
+    .tailoring-modal__measurements {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    var modal      = document.getElementById('tailoring-modal');
+    if (!modal) return;
+
+    var step1      = document.getElementById('tailoring-step-1');
+    var step2      = document.getElementById('tailoring-step-2');
+    var totalEl    = document.getElementById('tailoring-total');
+    var total2El   = document.getElementById('tailoring-total-2');
+    var nextBtn    = document.getElementById('tailoring-next-btn');
+    var backBtn    = document.getElementById('tailoring-back-btn');
+    var confirmBtn = document.getElementById('tailoring-confirm-btn');
+
+    /* ── helpers ── */
+    function formatMoney(rupees) {
+      var fmt = window.shopMoneyFormat || 'Rs. {{amount}}';
+      var amt    = Math.round(rupees).toLocaleString('en-IN');
+      var amtDec = parseFloat(rupees).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return fmt
+        .replace(/\{\{\s*amount_no_decimals_with_comma_separator\s*\}\}/, amt)
+        .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, amtDec)
+        .replace(/\{\{\s*amount_no_decimals\s*\}\}/, amt)
+        .replace(/\{\{\s*amount\s*\}\}/, amtDec);
+    }
+
+    /* data-price stores rupees directly (from decimal metafield, e.g. "263.0") */
+    function getTotalRupees() {
+      var total = 0;
+      modal.querySelectorAll('.tailoring-modal__input:checked').forEach(function (inp) {
+        total += parseFloat(inp.dataset.price || 0);
+      });
+      return total;
+    }
+
+    function updateTotal() {
+      var rupees = getTotalRupees();
+      var formatted = rupees > 0 ? formatMoney(rupees) : '₹0';
+      if (totalEl)  totalEl.textContent  = formatted;
+      if (total2El) total2El.textContent = formatted;
+      document.dispatchEvent(new CustomEvent('tailoring:total-change', { detail: { rupees: rupees } }));
+    }
+
+    function isBlouseRequired() {
+      var checked = modal.querySelectorAll('[data-blouse-option="true"]:checked');
+      var required = false;
+      checked.forEach(function (inp) {
+        if (inp.value.toLowerCase().indexOf('not') === -1) required = true;
+      });
+      return required;
+    }
+
+    /* ── open / close ── */
+    function openModal() {
+      /* reset to step 1 every time modal opens */
+      step1.classList.remove('tailoring-modal__step--hidden');
+      step2.classList.add('tailoring-modal__step--hidden');
+      updateTotal();
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      document.dispatchEvent(new CustomEvent('tailoring:total-change', { detail: { rupees: getTotalRupees() } }));
+    }
+
+    modal.querySelectorAll('.tailoring-modal__close').forEach(function (btn) {
+      btn.addEventListener('click', closeModal);
+    });
+    modal.querySelector('.tailoring-modal__backdrop').addEventListener('click', closeModal);
+
+    /* ── step navigation ── */
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function () {
+        if (isBlouseRequired()) {
+          step1.classList.add('tailoring-modal__step--hidden');
+          step2.classList.remove('tailoring-modal__step--hidden');
+          updateTotal();
+        } else {
+          doAddToCart(nextBtn, 'Next');
+        }
+      });
+    }
+
+    if (backBtn) {
+      backBtn.addEventListener('click', function () {
+        step2.classList.add('tailoring-modal__step--hidden');
+        step1.classList.remove('tailoring-modal__step--hidden');
+      });
+    }
+
+    if (confirmBtn) {
+      confirmBtn.addEventListener('click', function () {
+        if (!validateBlouse()) return;
+        doAddToCart(confirmBtn, 'Add to Cart');
+      });
+    }
+
+    /* ── live total ── */
+    modal.addEventListener('change', updateTotal);
+
+    /* ── blouse validation ── */
+    function validateBlouse() {
+      var requiredIds = ['blouse-chest', 'blouse-waist', 'blouse-length'];
+      var valid = true;
+      requiredIds.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        var fieldEl = el.closest('.tailoring-modal__field');
+        var errEl = fieldEl && fieldEl.querySelector('.tailoring-modal__field-error');
+        if (!el.value.trim()) {
+          el.classList.add('is-error');
+          if (fieldEl && !errEl) {
+            var err = document.createElement('span');
+            err.className = 'tailoring-modal__field-error';
+            err.textContent = 'This field is required';
+            fieldEl.appendChild(err);
+          }
+          valid = false;
+        } else {
+          el.classList.remove('is-error');
+          if (errEl) errEl.remove();
+        }
+      });
+      return valid;
+    }
+
+    modal.querySelectorAll('.tailoring-modal__field-input').forEach(function (inp) {
+      inp.addEventListener('input', function () {
+        this.classList.remove('is-error');
+        var fieldEl = this.closest('.tailoring-modal__field');
+        var errEl = fieldEl && fieldEl.querySelector('.tailoring-modal__field-error');
+        if (errEl) errEl.remove();
+      });
+    });
+
+    /* ── collect line item properties ── */
+    function buildProperties() {
+      var props = {};
+
+      /* one property per group label, value = selected option label(s) */
+      var groupMap = {};
+      modal.querySelectorAll('.tailoring-modal__input:checked').forEach(function (inp) {
+        var gLabel = inp.dataset.groupLabel || 'Tailoring';
+        if (!groupMap[gLabel]) groupMap[gLabel] = [];
+        groupMap[gLabel].push(inp.value);
+      });
+      Object.keys(groupMap).forEach(function (key) {
+        props[key] = groupMap[key].join(', ');
+      });
+
+      /* blouse measurements */
+      var chest  = document.getElementById('blouse-chest');
+      var waist  = document.getElementById('blouse-waist');
+      var length = document.getElementById('blouse-length');
+      var sleeve = document.getElementById('blouse-sleeve');
+      var notes  = document.getElementById('blouse-notes');
+      if (chest  && chest.value)  props['Blouse - Chest']  = chest.value + ' inches';
+      if (waist  && waist.value)  props['Blouse - Waist']  = waist.value + ' inches';
+      if (length && length.value) props['Blouse - Length'] = length.value + ' inches';
+      if (sleeve && sleeve.value) props['Blouse - Sleeve'] = sleeve.value + ' inches';
+      if (notes  && notes.value)  props['Blouse - Notes']  = notes.value;
+
+      /* tailoring extras total */
+      var total = getTotalRupees();
+      if (total > 0) props['Tailoring Extras'] = formatMoney(total);
+
+      return props;
+    }
+
+    /* ── add to cart ── */
+    function doAddToCart(btn, originalLabel) {
+      var variantInput = document.getElementById('variant-id-input') ||
+                         document.getElementById('variant-id-input-mobile');
+      var variantId = variantInput ? parseInt(variantInput.value, 10) : null;
+      if (!variantId) return;
+
+      var addonVariantId = parseInt(modal.dataset.addonVariantId, 10) || 0;
+      var extraRupees    = Math.round(getTotalRupees());
+      var props          = buildProperties();
+
+      console.log('[Tailoring] addonVariantId:', addonVariantId, '| extraRupees:', extraRupees, '| variantId:', variantId);
+
+      /* Build items array — main product always first */
+      var items = [{ id: variantId, quantity: 1, properties: props }];
+
+      /* If there are add-on rupees and a valid addon variant, add a second line item.
+         The addon product is priced at ₹1 per unit, so quantity = rupee amount. */
+      if (addonVariantId && extraRupees > 0) {
+        /* _linked_item is hidden from storefront (underscore prefix) but visible in admin */
+        var addonProps = { '_linked_item': String(variantId) };
+        items.push({ id: addonVariantId, quantity: extraRupees, properties: addonProps });
+      }
+
+      console.log('[Tailoring] items being sent to cart:', JSON.stringify(items));
+
+      btn.textContent = '...';
+      btn.disabled = true;
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ items: items })
+      })
+      .then(function (r) {
+        if (!r.ok) throw new Error('Cart error ' + r.status);
+        return r.json();
+      })
+      .then(function () {
+        closeModal();
+        return fetch('/cart.js');
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (cart) {
+        /* update header cart badge */
+        document.querySelectorAll('.header-cart-count').forEach(function (b) {
+          b.textContent = cart.item_count;
+          b.style.display = '';
+        });
+        /* open cart drawer */
+        document.dispatchEvent(new CustomEvent('cart:open'));
+      })
+      .catch(function (err) {
+        console.error('Tailoring ATC error', err);
+        alert('Could not add to cart. Please try again.');
+      })
+      .finally(function () {
+        btn.disabled = false;
+        btn.textContent = originalLabel;
+      });
+    }
+
+    /* ── expose open to product page buttons ── */
+    window.openTailoringModal = openModal;
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+    });
+  })();
+{% endjavascript %}

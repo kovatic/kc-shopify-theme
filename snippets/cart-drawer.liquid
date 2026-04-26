@@ -27,30 +27,91 @@
       {%- else -%}
         <div class="cart-drawer__items" id="CartDrawer-Items">
           {%- for item in cart.items -%}
-            <div class="cart-drawer__item" data-key="{{ item.key }}">
-              <a href="{{ item.url }}" class="cart-drawer__item-image">
-                {%- if item.image -%}
-                  {{ item.image | image_url: width: 120 | image_tag: loading: 'lazy', alt: item.title }}
-                {%- endif -%}
-              </a>
-              <div class="cart-drawer__item-info">
-                <a href="{{ item.url }}" class="cart-drawer__item-title">{{ item.product.title }}</a>
-                {%- unless item.variant.title == 'Default Title' -%}
-                  <p class="cart-drawer__item-variant">{{ item.variant.title }}</p>
-                {%- endunless -%}
-                <p class="cart-drawer__item-price">{{ item.final_line_price | money }}</p>
-                <div class="cart-drawer__item-qty">
-                  <button type="button" class="cart-drawer__qty-btn" data-action="decrease" data-key="{{ item.key }}">−</button>
-                  <span class="cart-drawer__qty-value">{{ item.quantity }}</span>
-                  <button type="button" class="cart-drawer__qty-btn" data-action="increase" data-key="{{ item.key }}">+</button>
+            {%- comment -%} Skip addon line items — they render as part of their parent {%- endcomment -%}
+            {%- assign is_addon = false -%}
+            {%- for property in item.properties -%}
+              {%- if property.first == '_linked_item' -%}
+                {%- assign is_addon = true -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- unless is_addon -%}
+
+              {%- comment -%} Find the addon line item paired to this item {%- endcomment -%}
+              {%- assign paired_addon = nil -%}
+              {%- for other in cart.items -%}
+                {%- for prop in other.properties -%}
+                  {%- if prop.first == '_linked_item' -%}
+                    {%- assign prop_val_str = prop.last | append: '' -%}
+                    {%- assign item_id_str = item.variant_id | append: '' -%}
+                    {%- if prop_val_str == item_id_str -%}
+                      {%- assign paired_addon = other -%}
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endfor -%}
+
+              <div class="cart-drawer__item" data-key="{{ item.key }}">
+                <a href="{{ item.url }}" class="cart-drawer__item-image">
+                  {%- if item.image -%}
+                    {{ item.image | image_url: width: 120 | image_tag: loading: 'lazy', alt: item.title }}
+                  {%- endif -%}
+                </a>
+                <div class="cart-drawer__item-info">
+                  <a href="{{ item.url }}" class="cart-drawer__item-title">{{ item.product.title }}</a>
+                  {%- unless item.variant.title == 'Default Title' -%}
+                    <p class="cart-drawer__item-variant">{{ item.variant.title }}</p>
+                  {%- endunless -%}
+
+                  {%- comment -%} Show tailoring selections (hide keys starting with _ and Tailoring Extras) {%- endcomment -%}
+                  {%- assign has_tailoring_props = false -%}
+                  {%- for property in item.properties -%}
+                    {%- assign prop_key_first_char = property.first | slice: 0 -%}
+                    {%- unless property.first == 'Tailoring Extras' -%}
+                      {%- unless prop_key_first_char == '_' -%}
+                        {%- unless property.last == blank -%}
+                          {%- assign has_tailoring_props = true -%}
+                        {%- endunless -%}
+                      {%- endunless -%}
+                    {%- endunless -%}
+                  {%- endfor -%}
+                  {%- if has_tailoring_props -%}
+                    <ul class="cart-drawer__tailoring-props">
+                      {%- for property in item.properties -%}
+                        {%- assign prop_key_first_char = property.first | slice: 0 -%}
+                        {%- unless property.first == 'Tailoring Extras' -%}
+                          {%- unless prop_key_first_char == '_' -%}
+                            {%- unless property.last == blank -%}
+                              <li><span class="cart-drawer__prop-key">{{ property.first }}:</span> {{ property.last }}</li>
+                            {%- endunless -%}
+                          {%- endunless -%}
+                        {%- endunless -%}
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+
+                  <p class="cart-drawer__item-price">{{ item.final_line_price | money }}</p>
+
+                  {%- comment -%} Addon sub-row {%- endcomment -%}
+                  {%- if paired_addon -%}
+                    <div class="cart-drawer__addon-row" data-key="{{ paired_addon.key }}">
+                      <span class="cart-drawer__addon-label">{{ paired_addon.product.title }}</span>
+                      <span class="cart-drawer__addon-price">{{ paired_addon.final_line_price | money }}</span>
+                    </div>
+                  {%- endif -%}
+
+                  <div class="cart-drawer__item-qty">
+                    <button type="button" class="cart-drawer__qty-btn" data-action="decrease" data-key="{{ item.key }}">−</button>
+                    <span class="cart-drawer__qty-value">{{ item.quantity }}</span>
+                    <button type="button" class="cart-drawer__qty-btn" data-action="increase" data-key="{{ item.key }}">+</button>
+                  </div>
                 </div>
+                <button type="button" class="cart-drawer__item-remove" data-key="{{ item.key }}"{% if paired_addon %} data-addon-key="{{ paired_addon.key }}"{% endif %} aria-label="Remove {{ item.title }}">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
               </div>
-              <button type="button" class="cart-drawer__item-remove" data-key="{{ item.key }}" aria-label="Remove {{ item.title }}">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-              </button>
-            </div>
+            {%- endunless -%}
           {%- endfor -%}
         </div>
       {%- endif -%}
