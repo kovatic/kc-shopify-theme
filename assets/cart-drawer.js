@@ -60,20 +60,25 @@ class CartDrawer extends HTMLElement {
 
       if (typeof window.openTailoringModalForAddUnit === 'function') {
         window.openTailoringModalForAddUnit({
-          mainKey:          item.dataset.key,
-          addonKey:         addonKey,
-          addonPerUnit:     addonPerUnit,
-          currentAddonQty:  currentAddonQty,
-          mainNewQty:       newQty,
+          variantId:         parseInt(item.dataset.variantId, 10),
           currentSelections: currentSelections
         });
       }
 
     } else if (stitchNo) {
-      const item    = stitchNo.closest('.cart-drawer__item');
-      const newQty  = parseInt(stitchNo.dataset.newQty, 10);
+      /* Skip stitching — add main product as a new separate line item, no addon */
+      const item      = stitchNo.closest('.cart-drawer__item');
+      const variantId = parseInt(stitchNo.dataset.variantId, 10);
       this.dismissStitchPrompt(item);
-      this.updateItems({ [item.dataset.key]: newQty });
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] })
+      })
+      .then(r => r.json())
+      .then(() => fetch('/cart.js').then(r => r.json()))
+      .then(cart => { this.removeOrphanedAddons(cart).then(c => this.renderCart(c)); })
+      .catch(err => console.error('Cart error', err));
 
     } else if (qtyBtn) {
       const item       = qtyBtn.closest('.cart-drawer__item');
@@ -96,19 +101,14 @@ class CartDrawer extends HTMLElement {
     const qtyRow = item.querySelector('.cart-drawer__item-qty');
     if (!qtyRow || item.querySelector('.cart-drawer__stitch-prompt')) return;
     qtyRow.style.display = 'none';
-    const addonRow = item.querySelector('.cart-drawer__addon-row');
-    /* data-addon-qty = rupees per unit of the main product */
-    const pricePerUnit = addonRow ? parseInt(addonRow.dataset.addonQty || 0, 10) : 0;
-    /* new total addon quantity = current addon qty + one more unit's worth */
-    const currentAddonTotal = pricePerUnit * currentQty;
-    const newAddonTotal = pricePerUnit * newQty;
+    const variantId = item.dataset.variantId || '';
     const prompt = document.createElement('div');
     prompt.className = 'cart-drawer__stitch-prompt';
     prompt.innerHTML = `
       <span class="cart-drawer__stitch-prompt-text">Add stitching for the new unit?</span>
       <div class="cart-drawer__stitch-prompt-btns">
         <button class="cart-drawer__stitch-yes" data-new-qty="${newQty}">Select stitching</button>
-        <button class="cart-drawer__stitch-no" data-new-qty="${newQty}">Skip</button>
+        <button class="cart-drawer__stitch-no" data-variant-id="${variantId}" data-new-qty="${newQty}">Skip</button>
       </div>`;
     qtyRow.insertAdjacentElement('afterend', prompt);
   }
@@ -207,7 +207,7 @@ class CartDrawer extends HTMLElement {
       const addonKeyAttr = addon ? ` data-addon-key="${addon.key}"` : '';
 
       html += `
-        <div class="cart-drawer__item" data-key="${item.key}">
+        <div class="cart-drawer__item" data-key="${item.key}" data-variant-id="${item.variant_id}">
           <a href="${item.url}" class="cart-drawer__item-image">${img}</a>
           <div class="cart-drawer__item-info">
             <a href="${item.url}" class="cart-drawer__item-title">${this.escHtml(item.product_title)}</a>

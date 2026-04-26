@@ -595,7 +595,7 @@
     }
 
     function openModalForAddUnit(context) {
-      /* context: { mainKey, addonKey, addonPerUnit, mainNewQty, currentSelections } */
+      /* context: { variantId, currentSelections } */
       addUnitContext = context;
       modal.setAttribute('data-add-unit', '1');
 
@@ -753,60 +753,39 @@
 
       /* ── ADD UNIT MODE: triggered from cart qty prompt ── */
       if (addUnitContext) {
-        var ctx          = addUnitContext;
+        var ctx            = addUnitContext;
         var addonVariantId = parseInt(modal.dataset.addonVariantId, 10) || 0;
         var extraRupees    = Math.round(getTotalRupees());
-        var newProps       = buildProperties();
+        var props          = buildProperties();
 
-        /* Check if same options as existing addon by comparing group selections */
-        var newSelections = {};
-        modal.querySelectorAll('.tailoring-modal__input:checked').forEach(function(inp) {
-          var g = inp.dataset.groupLabel || 'Tailoring';
-          if (!newSelections[g]) newSelections[g] = [];
-          newSelections[g].push(inp.value);
-        });
-        Object.keys(newSelections).forEach(function(k) { newSelections[k] = newSelections[k].join(', '); });
-
-        var sameOptions = JSON.stringify(newSelections) === JSON.stringify(ctx.currentSelections);
-
-        /* Step 1: increase main item qty */
-        var p = fetch('/cart/update.js', {
+        /* Always add a new separate line for this unit + its own addon */
+        fetch('/cart/add.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ updates: { [ctx.mainKey]: ctx.mainNewQty } })
-        }).then(function(r) { return r.json(); });
-
-        if (extraRupees > 0 && addonVariantId) {
-          if (sameOptions) {
-            /* Same options → bump existing addon qty by one unit's worth */
-            p = p.then(function() {
-              return fetch('/cart/update.js', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({ updates: { [ctx.addonKey]: ctx.currentAddonQty + extraRupees } })
-              }).then(function(r) { return r.json(); });
-            });
-          } else {
-            /* Different options → add a new addon line item linked to same main key */
-            p = p.then(function() {
-              return fetch('/cart/add.js', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({ items: [{ id: addonVariantId, quantity: extraRupees, properties: { '_linked_item': String(ctx.mainKey) } }] })
-              }).then(function(r) { return r.json(); });
-            });
-          }
-        }
-
-        p.then(function() {
+          body: JSON.stringify({ items: [{ id: ctx.variantId, quantity: 1, properties: props }] })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(added) {
+          if (!addonVariantId || extraRupees <= 0) return Promise.resolve();
+          var mainKey = added.items && added.items[0] && added.items[0].key;
+          return fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ items: [{ id: addonVariantId, quantity: extraRupees, properties: { '_linked_item': String(mainKey) } }] })
+          }).then(function(r) { return r.json(); });
+        })
+        .then(function() {
           closeModal();
           return fetch('/cart.js').then(function(r) { return r.json(); });
-        }).then(function(cart) {
-          document.dispatchEvent(new CustomEvent('cart:open', { detail: { cart: cart } }));
-        }).catch(function(err) {
+        })
+        .then(function(cart) {
+          document.dispatchEvent(new CustomEvent('cart:open'));
+        })
+        .catch(function(err) {
           console.error('Tailoring ATC error', err);
           alert('Could not update cart. Please try again.');
-        }).finally(function() {
+        })
+        .finally(function() {
           btn.disabled = false;
           btn.textContent = originalLabel;
         });
