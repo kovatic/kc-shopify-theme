@@ -51,7 +51,23 @@ class CartDrawer extends HTMLElement {
       body: JSON.stringify({ updates })
     })
       .then(r => r.json())
+      .then(cart => this.removeOrphanedAddons(cart))
       .then(cart => this.renderCart(cart));
+  }
+
+  removeOrphanedAddons(cart) {
+    const allKeys = new Set(cart.items.map(i => i.key));
+    const orphans = {};
+    cart.items.forEach(item => {
+      const linked = (item.properties || {})['_linked_item'];
+      if (linked && !allKeys.has(linked)) orphans[item.key] = 0;
+    });
+    if (!Object.keys(orphans).length) return Promise.resolve(cart);
+    return fetch('/cart/update.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ updates: orphans })
+    }).then(r => r.json());
   }
 
   renderCart(cart) {

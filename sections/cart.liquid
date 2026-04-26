@@ -635,6 +635,22 @@
       }).then(function (r) { return r.json(); });
     }
 
+    function removeOrphanedAddons(cart) {
+      var allKeys = {};
+      cart.items.forEach(function(i) { allKeys[i.key] = true; });
+      var orphans = {};
+      cart.items.forEach(function(item) {
+        var linked = (item.properties || {})['_linked_item'];
+        if (linked && !allKeys[linked]) orphans[item.key] = 0;
+      });
+      if (!Object.keys(orphans).length) return Promise.resolve(cart);
+      return fetch('/cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ updates: orphans })
+      }).then(function(r) { return r.json(); });
+    }
+
     function updateCart(key, quantity) {
       var itemEl = document.querySelector('.cart-item[data-key="' + key + '"]');
       if (itemEl) itemEl.classList.add('is-loading');
@@ -647,6 +663,7 @@
       if (quantity === 0 && addonKey) updates[addonKey] = 0;
 
       updateItems(updates)
+        .then(function(cart) { return removeOrphanedAddons(cart); })
         .then(function (cart) {
           var subtotalEl = document.getElementById('cart-subtotal');
           if (subtotalEl) subtotalEl.textContent = formatMoney(cart.total_price);
