@@ -289,6 +289,7 @@
 {%- if product.metafields.custom.tailoring_groups != blank -%}
   {%- assign tailoring_addon_product = all_products['tailoring-add-on'] -%}
   {%- assign tailoring_addon_variant_id = tailoring_addon_product.variants.first.id -%}
+  <!-- debug: addon_product={{ tailoring_addon_product.title }} variant={{ tailoring_addon_variant_id }} -->
   {% render 'tailoring-modal', product: product, tailoring_addon_variant_id: tailoring_addon_variant_id %}
 {%- endif -%}
 
