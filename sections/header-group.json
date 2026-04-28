@@ -14,10 +14,28 @@
     "header": {
       "type": "header",
       "blocks": {
-        "mega_menu_MzfM6K": {
+        "mega_menu_axEnd6": {
           "type": "mega_menu",
           "settings": {
-            "nav_link": "Women",
+            "nav_link": "Womens",
+            "col1_heading": "Drees Meterial",
+            "col1_menu": "",
+            "col2_heading": "",
+            "col2_menu": "",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_label": "",
+            "card1_url": "",
+            "card2_label": "",
+            "card2_url": "",
+            "card3_label": "",
+            "card3_url": ""
+          }
+        },
+        "mega_menu_rgyCtx": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_link": "",
             "col1_heading": "",
             "col1_menu": "",
             "col2_heading": "",
@@ -30,6 +48,27 @@
             "card2_url": "",
             "card3_label": "",
             "card3_url": ""
+          }
+        },
+        "mega_menu_MzfM6K": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_link": "Women",
+            "col1_heading": "Womens",
+            "col1_menu": "womens",
+            "col2_heading": "",
+            "col2_menu": "",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_image": "shopify://shop_images/Ivory_Elegance_Chudi_Material_Set.png",
+            "card1_label": "Ivory Elegance Chudi Material Set",
+            "card1_url": "shopify://products/ivory-elegance-chudi-material-set-a-graceful-ivory-chudi-set-featuring-soft-tones-and-delicate-detailing-crafted-from-rich-fabric-that-offers-a-refined-finish-perfect-for-achieving-a-timeless-elegant-and-sophisticated-traditional-look",
+            "card2_image": "shopify://shop_images/Gemini_Generated_Image_ni63ltni63ltni63.png",
+            "card2_label": "Aqua Gold Floral Grace Chudi Material Set",
+            "card2_url": "shopify://products/aqua-gold-floral-grace-chudi-material-set-a-refreshing-aqua-gold-chudi-material-set-featuring-elegant-floral-patterns-enhanced-with-subtle-detailing-the-soft-fabric-and-graceful-finish-create-a-refined-look-perfect-for-stylish-and-comfortable-wear",
+            "card3_image": "shopify://shop_images/Pink_Gold_Classic_Grace_Chudi_Material_Set.png",
+            "card3_label": "Pink Gold Classic Grace Chudi Material Set ",
+            "card3_url": "shopify://products/pink-gold-classic-grace-chudi-material-set-a-charming-pink-and-gold-chudi-material-set-featuring-elegant-tones-and-subtle-detailing-crafted-from-rich-fabric-that-offers-a-graceful-festive-look-perfectly-paired-with-a-complementing-dupatta"
           }
         },
         "mega_menu_BtrgXR": {
@@ -70,6 +109,24 @@
             "card3_image": "shopify://shop_images/DSC07968_1_1.jpg",
             "card3_label": "Oceanic Kora Cotton",
             "card3_url": "shopify://products/oceanic-kora-cotton"
+          }
+        },
+        "mega_menu_LLrnMA": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_link": "",
+            "col1_heading": "",
+            "col1_menu": "",
+            "col2_heading": "",
+            "col2_menu": "",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_label": "",
+            "card1_url": "",
+            "card2_label": "",
+            "card2_url": "",
+            "card3_label": "",
+            "card3_url": ""
           }
         },
         "mega_menu_NkwY3L": {
@@ -157,9 +214,12 @@
         }
       },
       "block_order": [
+        "mega_menu_axEnd6",
+        "mega_menu_rgyCtx",
         "mega_menu_MzfM6K",
         "mega_menu_BtrgXR",
         "mega_menu_R8gjQt",
+        "mega_menu_LLrnMA",
         "mega_menu_NkwY3L",
         "mega_menu_zWUDDb",
         "mega_menu_794wpC",
