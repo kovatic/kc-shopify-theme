@@ -3,7 +3,24 @@
   Mobile: swipe carousel + sticky ATC bar. Desktop: 2x2 image grid + info panel.
 {% endcomment %}
 
-{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign current_variant = product.selected_variant -%}
+{%- unless current_variant -%}
+  {%- assign lowest_price = nil -%}
+  {%- for v in product.variants -%}
+    {%- if v.available -%}
+      {%- if lowest_price == nil -%}
+        {%- assign current_variant = v -%}
+        {%- assign lowest_price = v.price -%}
+      {%- elsif v.price < lowest_price -%}
+        {%- assign current_variant = v -%}
+        {%- assign lowest_price = v.price -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- unless current_variant -%}
+    {%- assign current_variant = product.variants | first -%}
+  {%- endunless -%}
+{%- endunless -%}
 
 <div class="product-page">
 
@@ -90,11 +107,6 @@
           <a href="{{ product.vendor | url_for_vendor }}" class="product-page__vendor">{{ product.vendor }}</a>
         {%- endif -%}
 
-        <!-- Start of Judge.me code -->
-        <div style='{{ jm_style }}' class='jdgm-widget jdgm-preview-badge' data-id='{{ product.id }}' data-auto-install='false'>
-          {{ product.metafields.judgeme.badge }}
-        </div>
-        <!-- End of Judge.me code -->
 
         <div class="product-page__price-row">
           <span class="product-page__price">
@@ -112,11 +124,12 @@
             <div class="product-page__variants">
               {%- for option in product.options_with_values -%}
                 {%- assign option_index = forloop.index0 -%}
+                {%- assign current_option_value = current_variant.options[option_index] -%}
                 <div class="product-page__option">
                   <label class="product-page__option-label">{{ option.name }}</label>
                   <div class="product-page__option-values">
                     {%- for value in option.values -%}
-                      <button type="button" class="product-page__option-btn{% if option.selected_value == value %} is-selected{% endif %}" data-option-index="{{ option_index }}" data-value="{{ value }}">{{ value }}</button>
+                      <button type="button" class="product-page__option-btn{% if current_option_value == value %} is-selected{% endif %}" data-option-index="{{ option_index }}" data-value="{{ value }}">{{ value }}</button>
                     {%- endfor -%}
                   </div>
                 </div>
@@ -392,7 +405,7 @@
                       </div>
                       <div class="product-list__info">
                         <span class="product-list__name">{{ p.title | escape }}</span>
-                        <span class="product-list__price">{{ p.price | money }}</span>
+                        <span class="product-list__price">{{ p.price_min | money }}</span>
                       </div>
                     </a>
                     {%- if is_available -%}
@@ -448,35 +461,6 @@
   </div>
 </div>
 
-{%- comment -%} Judge.me review widget — below all product lists {%- endcomment -%}
-<div class="product-page__reviews">
-  <!-- Start of Judge.me code -->
-  {%- assign has_legacy = false -%}
-  {%- if product.metafields.judgeme.widget.size > 20 -%}
-    {%- assign has_legacy = true -%}
-  {%- endif -%}
-  <div style="clear:both"></div>
-  <div
-    id="judgeme_product_reviews"
-    class="jdgm-widget jdgm-review-widget"
-    data-product-title="{{ product.title | escape }}"
-    data-id="{{ product.id }}"
-    data-product-id="{{ product.id }}"
-    data-widget="review"
-    data-auto-install="false"
-    data-shop-reviews-count="{{ shop.metafields.judgeme.shop_reviews_count | default: 0 | escape }}"
-    data-entry-point="review_widget.js"
-    data-entry-key="review-widget/main.js"
-  >
-    {%- if has_legacy -%}
-      <div class="jdgm-legacy-widget-content" style="display:none;">{{ product.metafields.judgeme.widget }}</div>
-    {%- endif -%}
-  </div>
-  {%- if product.metafields.judgeme.review_widget_data -%}
-    <script>jdgm.data ||= {}; jdgm.data.reviewWidget ||= {}; jdgm.data.reviewWidget[{{ product.id }}] = {{ product.metafields.judgeme.review_widget_data }}</script>
-  {%- endif -%}
-  <!-- End of Judge.me code -->
-</div>
 
 <script id="product-json-{{ section.id }}" type="application/json">
   {{ product | json }}
@@ -516,6 +500,18 @@
   var atcBtns       = document.querySelectorAll('.js-atc-btn');
   var priceEl       = page.querySelector('.product-page__price');
 
+  function formatMoney(cents) {
+    var fmt = window.shopMoneyFormat || 'Rs. {{amount}}';
+    var val = cents / 100;
+    var amt   = val.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    var amtNd = Math.floor(val).toLocaleString('en-IN');
+    return fmt
+      .replace(/\{\{\s*amount_no_decimals_with_comma_separator\s*\}\}/, amtNd)
+      .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, amt)
+      .replace(/\{\{\s*amount_no_decimals\s*\}\}/, amtNd)
+      .replace(/\{\{\s*amount\s*\}\}/, amt);
+  }
+
   function getSelectedOptions() {
     var groups = {};
     optionBtns.forEach(function(btn) {
@@ -548,13 +544,13 @@
       url.searchParams.set('variant', variant.id);
       history.replaceState({}, '', url.toString());
     }
-    // Update price using Shopify money format
-    if (priceEl && window.Shopify && Shopify.formatMoney) {
+    // Update price
+    if (priceEl) {
       var html = '';
       if (variant.compare_at_price > variant.price) {
-        html += '<span class="product-page__price-compare">' + Shopify.formatMoney(variant.compare_at_price) + '</span> ';
+        html += '<span class="product-page__price-compare">' + formatMoney(variant.compare_at_price) + '</span> ';
       }
-      html += Shopify.formatMoney(variant.price);
+      html += formatMoney(variant.price);
       priceEl.innerHTML = html;
     }
     // Update ATC buttons availability
@@ -931,7 +927,7 @@
       + '</div>'
       + '<div class="product-list__info">'
       + '<span class="product-list__name">' + escHtml(p.title) + '</span>'
-      + '<span class="product-list__price">' + formatMoney(fv ? fv.price : 0) + '</span>'
+      + '<span class="product-list__price">' + formatMoney(p.price_min || (fv ? fv.price : 0)) + '</span>'
       + '</div></a>'
       + hiddenForm
       + '</div>';
@@ -1428,6 +1424,7 @@
       position: relative;
       width: 100%;
       overflow: hidden;
+      padding-top: 20px;
     }
     .product-page__carousel-track {
       display: flex;
@@ -1445,8 +1442,7 @@
     .product-page__carousel-slide img,
     .product-page__carousel-slide svg {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       display: block;
     }
 

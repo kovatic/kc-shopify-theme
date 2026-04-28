@@ -14,6 +14,7 @@
     "whatsapp_text": "For enquiries & Orders, Whatsapp us at",
     "search_label": "Search",
     "account_label": "Account",
+    "login_label": "Login/Register",
     "wishlist_label": "Wishlist",
     "cart_label": "Cart",
     "menu_label": "Menu",
@@ -22,8 +23,10 @@
   },
   "404": {
     "title": "404",
-    "not_found": "Page not found.",
-    "back_to_shopping": "Back to shopping"
+    "heading": "Oops! Page not found",
+    "not_found": "The page you're looking for doesn't exist or has been moved.",
+    "back_to_shopping": "Back to shopping",
+    "go_home": "Go to homepage"
   },
   "blog": {
     "article_comments": "Comments",
@@ -80,6 +83,9 @@
     "results_for_html": "{{ count }} results found for {{ terms }}"
   },
   "sections": {
+    "contact_form": {
+      "name": "Contact form"
+    },
     "tab_product_list": {
       "name": "Tab product list",
       "wishlist_label": "Add to wishlist",
@@ -125,10 +131,24 @@
     "about": {
       "name": "About"
     },
+    "about_founder": {
+      "eyebrow": "Our founder",
+      "founded_label": "Est."
+    },
     "stores": {
       "name": "Stores",
       "call": "Call",
-      "map": "Map"
+      "map": "Map",
+      "store_type": "Store type",
+      "address": "Address",
+      "phone": "Phone",
+      "map_url": "Map link",
+      "store_url": "Store page link",
+      "blocks": {
+        "store": {
+          "name": "Store"
+        }
+      }
     },
     "store_detail": {
       "breadcrumb_label": "Breadcrumb",
@@ -159,6 +179,9 @@
       "next": "Next slide",
       "product_placeholder": "Product name",
       "collection_placeholder": "Collection name"
+    },
+    "testimonials": {
+      "loading": "Loading reviews…"
     },
     "product": {
       "description": "Product description",
@@ -193,18 +216,36 @@
     "social_media": "Social media",
     "store_location": "Store location",
     "all_rights_reserved": "All rights reserved.",
+    "copyright": "Copyrights \u00a9\ufe0f 2026 All Rights Reserved by K.Chinnadurai & Co. Established in 1970",
     "social_facebook": "Facebook",
     "social_youtube": "YouTube",
     "social_instagram": "Instagram",
     "social_whatsapp": "WhatsApp",
     "social_pinterest": "Pinterest",
     "social_twitter": "X (Twitter)",
+    "whatsapp_label": "Whatsapp",
     "trust": {
       "free_shipping": "Free shipping on orders above ₹ 2000",
       "easy_returns": "Easy returns within 7 days",
       "customer_support": "Customer support",
       "secure_payments": "100% secure payments"
     }
+  },
+  "contact": {
+    "title": "Contact us",
+    "subtitle": "We'd love to hear from you. Send us a message and we'll get back to you as soon as possible.",
+    "email_label": "Email",
+    "whatsapp_label": "WhatsApp",
+    "address_label": "Address",
+    "name_label": "Name",
+    "name_placeholder": "Your name",
+    "email_placeholder": "your@email.com",
+    "phone_label": "Phone (optional)",
+    "phone_placeholder": "+91 00000 00000",
+    "message_label": "Message",
+    "message_placeholder": "How can we help you?",
+    "submit_label": "Send message",
+    "success_message": "Thanks for reaching out! We'll get back to you shortly."
   },
   "general": {
     "breadcrumb": {

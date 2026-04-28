@@ -1,6 +1,8 @@
 <div class="wishlist-page">
   <div class="wishlist-page__container">
 
+    <h1 class="wishlist-page__title">{{ page.title }}</h1>
+
     <div class="wishlist-page__content">
       {{ page.content }}
     </div>
@@ -23,10 +25,19 @@
     padding: 50px 50px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 2.5rem;
     width: 100%;
     box-sizing: border-box;
+  }
+
+  .wishlist-page__title {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2e1f1f;
+    text-align: center;
+    margin: 0;
   }
 
   /* ── Header ── */
@@ -207,7 +218,7 @@
   .xb-wishlist-product__style-2-link {
     display: block !important;
     overflow: hidden !important;
-    aspect-ratio: 3 / 3.5 !important;
+    aspect-ratio: 3 / 5 !important;
     background-color: #e8e0d5 !important;
     width: 100% !important;
   }

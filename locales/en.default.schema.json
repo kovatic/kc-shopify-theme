@@ -88,6 +88,11 @@
     "page_margin": "Page margin",
     "page_width": "Page width",
     "show_payment_icons": "Show payment icons",
+    "trust_bar": "Trust bar",
+    "trust_free_shipping": "Free shipping text",
+    "trust_easy_returns": "Easy returns text",
+    "trust_customer_support": "Customer support text",
+    "trust_secure_payments": "Secure payments text",
     "brand_name": "Brand name",
     "address": "Address",
     "mobile_description": "Mobile description",
@@ -163,6 +168,7 @@
       "address": "Address",
       "phone": "Phone number",
       "map_url": "Map link URL",
+      "store_url": "Store page link",
       "blocks": {
         "store": {
           "name": "Store"
@@ -183,12 +189,47 @@
         }
       }
     },
+    "about_founder": {
+      "name": "About — founder",
+      "founded_year": "Founded year",
+      "founder_name": "Founder name",
+      "founder_role": "Founder role",
+      "quote": "Quote",
+      "bio": "Biography",
+      "stats_header": "Key stats",
+      "show_stats": "Show stats",
+      "stat_value": "Stat value",
+      "stat_label": "Stat label"
+    },
+    "about_timeline": {
+      "name": "About — timeline",
+      "blocks": {
+        "milestone": {
+          "name": "Milestone",
+          "year": "Year"
+        }
+      }
+    },
+    "about_team": {
+      "name": "About — team",
+      "columns": "Columns on desktop",
+      "blocks": {
+        "member": {
+          "name": "Team member",
+          "name_label": "Name",
+          "role": "Role",
+          "bio": "Short bio"
+        }
+      }
+    },
     "product_carousel": {
       "name": "Product carousel",
       "data_source": "Data source",
       "data_source_single": "Single collection (products)",
       "data_source_multiple": "Multiple collections",
-      "products_count": "Number of products"
+      "products_count": "Number of products",
+      "enable_reel_video": "Show reel videos",
+      "enable_reel_video_info": "Uses the reel video from each collection's metafield (custom.reels). Only the center card plays."
     },
     "privacy_policy": {
       "name": "Privacy policy"
@@ -204,6 +245,32 @@
           "name": "FAQ item",
           "question": "Question",
           "answer": "Answer"
+        }
+      }
+    },
+    "testimonials": {
+      "name": "Testimonials",
+      "title": "Title",
+      "subtitle": "Subtitle",
+      "spacing_header": "Spacing",
+      "padding_top": "Padding top",
+      "padding_bottom": "Padding bottom",
+      "blocks": {
+        "video": {
+          "name": "Video testimonial",
+          "video": "Video",
+          "video_url": "Or paste video URL (YouTube / Vimeo)",
+          "video_url_info": "Used if no video is uploaded above",
+          "thumbnail": "Custom thumbnail image",
+          "thumbnail_info": "Optional — overrides auto-generated thumbnail",
+          "alt": "Image alt text"
+        },
+        "review": {
+          "name": "Review",
+          "reviewer_name": "Reviewer name",
+          "reviewer_date": "Date",
+          "rating": "Rating",
+          "review_text": "Review text"
         }
       }
     }

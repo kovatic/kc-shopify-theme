@@ -18,7 +18,7 @@
         "brand_name": "Tharathin Thayagam",
         "address": "ERAL, TIRUCHENDUR\nTHOOTHUKUDI, CHENNAI,\nTIRUNELVELI",
         "mobile_description": "ERAL, TIRUCHENDUR\nTHOOTHUKUDI, CHENNAI,\nTIRUNELVELI",
-        "quick_links_menu": "footer",
+        "quick_links_menu": "main-menu",
         "policies_menu": "policy",
         "facebook_url": "https://www.facebook.com/KCHINNADURAIANDCO/",
         "youtube_url": "https://www.youtube.com/@k.chinnadurai_co",
@@ -26,7 +26,11 @@
         "whatsapp_url": "",
         "pinterest_url": "",
         "twitter_url": "",
-        "show_payment_icons": true
+        "show_payment_icons": true,
+        "trust_free_shipping": "Free shipping",
+        "trust_easy_returns": "Easy returns upto 7 Days",
+        "trust_customer_support": "Whatsapp: +91 94882 02320",
+        "trust_secure_payments": "100% Secure payments"
       }
     }
   },

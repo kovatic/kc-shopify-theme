@@ -1,0 +1,197 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "founder": {
+      "type": "about-founder",
+      "custom_css": [
+        ".about-founder {background-color: transparent;}"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/12x18_kc_jpg.webp",
+        "founded_year": "1968",
+        "name": "Mr. K. Chinnadurai",
+        "role": "Founder & Chairman",
+        "quote": "Every saree we sell carries the soul of its weaver and the love of its wearer.",
+        "bio": "",
+        "show_stats": true,
+        "stat_1_value": "56+",
+        "stat_1_label": "Years of heritage",
+        "stat_2_value": "10k+",
+        "stat_2_label": "Sarees sold",
+        "stat_3_value": "4",
+        "stat_3_label": "Store locations",
+        "padding_top": 120,
+        "padding_bottom": 80
+      }
+    },
+    "timeline": {
+      "type": "about-timeline",
+      "blocks": {
+        "milestone_iN9eCn": {
+          "type": "milestone",
+          "settings": {
+            "year": "1968",
+            "title": "The beginning",
+            "description": "K. Chinnadurai & Co. was founded with a single store in Thoothukudi, dedicated to bringing the finest handloom sarees to discerning customers."
+          }
+        },
+        "milestone_rfqqkq": {
+          "type": "milestone",
+          "settings": {
+            "year": "1979",
+            "title": "Next beginning",
+            "description": "K. Chinnadurai & Co. was founded with a single store in Thoothukudi, dedicated to bringing the finest handloom sarees to discerning customers."
+          }
+        }
+      },
+      "block_order": [
+        "milestone_iN9eCn",
+        "milestone_rfqqkq"
+      ],
+      "settings": {
+        "heading": "Our story",
+        "subheading": "Five decades of craftsmanship, heritage, and community.",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "team": {
+      "type": "about-team",
+      "blocks": {
+        "member_jH7fEc": {
+          "type": "member",
+          "settings": {
+            "name": "Team member",
+            "role": "Role",
+            "bio": ""
+          }
+        },
+        "member_cLKM3c": {
+          "type": "member",
+          "settings": {
+            "name": "Team member",
+            "role": "Role",
+            "bio": ""
+          }
+        },
+        "member_RAFgxA": {
+          "type": "member",
+          "settings": {
+            "name": "Team member",
+            "role": "Role",
+            "bio": ""
+          }
+        }
+      },
+      "block_order": [
+        "member_jH7fEc",
+        "member_cLKM3c",
+        "member_RAFgxA"
+      ],
+      "settings": {
+        "heading": "Meet the team",
+        "subheading": "The people who bring K. Chinnadurai & Co. to life every day.",
+        "columns": "4",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "stores": {
+      "type": "stores",
+      "blocks": {
+        "store_HY98FV": {
+          "type": "store",
+          "source": "{{ metaobjects.store.eral }}",
+          "settings": {
+            "image": "{{ metaobjects.store.eral.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.eral.store_type.value }}",
+            "store_name": "{{ metaobjects.store.eral.store_name.value }}",
+            "address": "{{ metaobjects.store.eral.address.value }}",
+            "phone": "{{ metaobjects.store.eral.phone.value }}",
+            "map_url": "{{ metaobjects.store.eral.map_url.value }}",
+            "store_url": "{{ metaobjects.store.eral.system.url }}"
+          }
+        },
+        "store_gzByjJ": {
+          "type": "store",
+          "source": "{{ metaobjects.store.thiruchendur }}",
+          "settings": {
+            "image": "{{ metaobjects.store.thiruchendur.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.thiruchendur.store_type.value }}",
+            "store_name": "{{ metaobjects.store.thiruchendur.store_name.value }}",
+            "address": "{{ metaobjects.store.thiruchendur.address.value }}",
+            "phone": "{{ metaobjects.store.thiruchendur.phone.value }}",
+            "map_url": "{{ metaobjects.store.thiruchendur.map_url.value }}",
+            "store_url": "{{ metaobjects.store.thiruchendur.system.url }}"
+          }
+        },
+        "store_9H6tX7": {
+          "type": "store",
+          "source": "{{ metaobjects.store.thoothukudi }}",
+          "settings": {
+            "image": "{{ metaobjects.store.thoothukudi.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.thoothukudi.store_type.value }}",
+            "store_name": "{{ metaobjects.store.thoothukudi.store_name.value }}",
+            "address": "{{ metaobjects.store.thoothukudi.address.value }}",
+            "phone": "{{ metaobjects.store.thoothukudi.phone.value }}",
+            "map_url": "{{ metaobjects.store.thoothukudi.map_url.value }}",
+            "store_url": "{{ metaobjects.store.thoothukudi.system.url }}"
+          }
+        },
+        "store_LqdfEG": {
+          "type": "store",
+          "source": "{{ metaobjects.store.chennai }}",
+          "settings": {
+            "image": "{{ metaobjects.store.chennai.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.chennai.store_type.value }}",
+            "store_name": "{{ metaobjects.store.chennai.store_name.value }}",
+            "address": "{{ metaobjects.store.chennai.address.value }}",
+            "phone": "{{ metaobjects.store.chennai.phone.value }}",
+            "map_url": "{{ metaobjects.store.chennai.map_url.value }}",
+            "store_url": "{{ metaobjects.store.chennai.system.url }}"
+          }
+        },
+        "store_datMgW": {
+          "type": "store",
+          "source": "{{ metaobjects.store.tirunelveli }}",
+          "settings": {
+            "image": "{{ metaobjects.store.tirunelveli.hero_image.value }}",
+            "store_type": "{{ metaobjects.store.tirunelveli.store_type.value }}",
+            "store_name": "{{ metaobjects.store.tirunelveli.store_name.value }}",
+            "address": "{{ metaobjects.store.tirunelveli.address.value }}",
+            "phone": "{{ metaobjects.store.tirunelveli.phone.value }}",
+            "map_url": "{{ metaobjects.store.tirunelveli.map_url.value }}",
+            "store_url": "{{ metaobjects.store.tirunelveli.system.url }}"
+          }
+        }
+      },
+      "block_order": [
+        "store_HY98FV",
+        "store_gzByjJ",
+        "store_9H6tX7",
+        "store_LqdfEG",
+        "store_datMgW"
+      ],
+      "settings": {
+        "title": "Visit our stores",
+        "subtitle": "4 locations across Tamil Nadu & Chennai",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    }
+  },
+  "order": [
+    "founder",
+    "timeline",
+    "team",
+    "stores"
+  ]
+}

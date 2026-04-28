@@ -224,7 +224,7 @@
 
                   <div class="product-list__info">
                     <span class="product-list__name">{{ product.title | escape }}</span>
-                    <span class="product-list__price">{{ product.price | money }}</span>
+                    <span class="product-list__price">{{ product.price_min | money }}</span>
                   </div>
                 </a>
 
@@ -365,7 +365,7 @@
     line-height: 1.714;
     margin: 0 0 4px;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -748,6 +748,10 @@
     font-weight: 400;
     color: var(--color-foreground, #262626);
     line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .product-list__price {
@@ -763,6 +767,41 @@
     display: flex;
     justify-content: center;
     padding-top: 3rem;
+    padding-bottom: 1rem;
+  }
+
+  .collection-page__pagination .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .collection-page__pagination .pagination .page a,
+  .collection-page__pagination .pagination .page span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    padding: 0 0.5rem;
+    border: 1px solid #d8cec4;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #2e1f1f;
+    text-decoration: none;
+    background: #fff;
+  }
+
+  .collection-page__pagination .pagination .page.current span {
+    background: #2e1f1f;
+    color: #fff;
+    border-color: #2e1f1f;
   }
 
   /* ── Mobile sticky bar ── */
@@ -800,10 +839,7 @@
 
     .product-list__name {
       font-size: 0.875rem;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      -webkit-line-clamp: 1;
     }
 
     .product-list__price { font-size: 1rem; }
@@ -970,6 +1006,24 @@
 
     .collection-drawer__filters {
       padding: 0.5rem 1.25rem 1.5rem;
+    }
+
+    /* Pagination mobile */
+    .collection-page__pagination {
+      padding-top: 1.5rem;
+      padding-bottom: 4rem;
+    }
+
+    .collection-page__pagination .pagination {
+      gap: 0.3rem;
+    }
+
+    .collection-page__pagination .pagination .page a,
+    .collection-page__pagination .pagination .page span {
+      min-width: 2rem;
+      height: 2rem;
+      font-size: 0.75rem;
+      padding: 0 0.4rem;
     }
   }
 {% endstylesheet %}

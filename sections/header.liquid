@@ -10,12 +10,12 @@
   <div class="header-topbar__inner">
     <nav class="header-topbar__nav" aria-label="{{ 'header.top_nav_label' | t }}">
       {% for link in section.settings.top_menu.links %}
-        <a href="{{ link.url }}" class="header-topbar__link">{{ link.title }}</a>
+        <a href="{{ link.url }}" class="header-topbar__link"{% if link.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>{{ link.title }}</a>
       {% endfor %}
     </nav>
     <p class="header-topbar__contact">
       {{ 'header.whatsapp_text' | t }}
-      <a href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: '-' | remove: ' ' }}" class="header-topbar__phone">{{ section.settings.whatsapp_number }}</a>
+      <a href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: '-' | remove: ' ' }}" class="header-topbar__phone" target="_blank" rel="noopener">{{ section.settings.whatsapp_number }}</a>
     </p>
   </div>
 </div>
@@ -44,8 +44,9 @@
           {{- section.settings.logo_mobile | image_url: width: 320 | image_tag:
               alt: shop.name,
               class: 'header-main__logo-img',
-              widths: '160, 320',
-              sizes: '160px'
+              loading: 'eager',
+              width: nil,
+              height: nil
           -}}
         </a>
       {%- endif -%}
@@ -54,8 +55,9 @@
           {{- section.settings.logo | image_url: width: 440 | image_tag:
               alt: shop.name,
               class: 'header-main__logo-img',
-              widths: '220, 440, 660',
-              sizes: '220px'
+              loading: 'eager',
+              width: nil,
+              height: nil
           -}}
         </a>
       {%- else -%}
@@ -67,12 +69,6 @@
       <button class="header-icon-btn header-icon-btn--search" aria-label="{{ 'header.search_label' | t }}">
         {{ 'icon-search.svg' | inline_asset_content }}
       </button>
-
-      {% if shop.customer_accounts_enabled %}
-        <a href="{{ routes.account_url }}" class="header-icon-btn header-icon-btn--account-desktop" aria-label="{{ 'header.account_label' | t }}">
-          {{ 'icon-account.svg' | inline_asset_content }}
-        </a>
-      {% endif %}
 
       <a href="/pages/wishlist" class="header-icon-btn header-icon-btn--wishlist" aria-label="{{ 'header.wishlist_label' | t }}">
         {{ 'icon-wishlist.svg' | inline_asset_content }}
@@ -87,6 +83,18 @@
           <span class="header-cart-count">{{ cart.item_count }}</span>
         {% endif %}
       </a>
+
+      {% if shop.customer_accounts_enabled %}
+        {% if customer %}
+          <a href="{{ routes.account_url }}" class="header-icon-btn header-icon-btn--account-desktop" aria-label="{{ 'header.account_label' | t }}">
+            {{ 'icon-account.svg' | inline_asset_content }}
+          </a>
+        {% else %}
+          <a href="{{ routes.account_login_url }}" class="header-login-btn" aria-label="{{ 'header.login_label' | t }}">
+            {{ 'header.login_label' | t }}
+          </a>
+        {% endif %}
+      {% endif %}
     </div>
 
   </div>
@@ -114,11 +122,11 @@
               </button>
               <ul class="mobile-nav-drawer__sub">
                 {% for child_link in link.links %}
-                  <li><a href="{{ child_link.url }}" class="mobile-nav-drawer__sub-link">{{ child_link.title }}</a></li>
+                  <li><a href="{{ child_link.url }}" class="mobile-nav-drawer__sub-link"{% if child_link.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>{{ child_link.title }}</a></li>
                 {% endfor %}
               </ul>
             {% else %}
-              <a href="{{ link.url }}" class="mobile-nav-drawer__link">{{- link.title -}}</a>
+              <a href="{{ link.url }}" class="mobile-nav-drawer__link"{% if link.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>{{- link.title -}}</a>
             {% endif %}
           </li>
         {% endfor %}
@@ -138,9 +146,25 @@
         {%- endif -%}
       {%- endfor -%}
 
+      {%- assign is_highlight = false -%}
+      {%- if section.settings.highlight_nav_item != blank and link.title == section.settings.highlight_nav_item -%}
+        {%- assign is_highlight = true -%}
+      {%- endif -%}
       <li class="header-nav__item{% if mega or link.links.size > 0 %} header-nav__item--has-dropdown{% if mega %} header-nav__item--mega{% endif %}{% endif %}">
-        <a href="{{ link.url }}" class="header-nav__link">
-          {{- link.title -}}
+        <a href="{{ link.url }}" class="header-nav__link{% if is_highlight %} header-nav__link--highlight header-nav__link--highlight-{{ section.settings.highlight_nav_style }}{% endif %}"{% if link.url contains 'http' %} target="_blank" rel="noopener"{% endif %}{% if is_highlight and section.settings.highlight_nav_style == 'button' %} style="--btn-color: {{ section.settings.highlight_btn_color }}; --btn-hover-color: {{ section.settings.highlight_btn_hover_color }};"{% endif %}>
+          {%- if is_highlight and section.settings.highlight_nav_style == 'image' and section.settings.highlight_nav_image -%}
+            {{- section.settings.highlight_nav_image | image_url: width: 120 | image_tag: class: 'header-nav__highlight-img', alt: link.title -}}
+          {%- else -%}
+            {%- if is_highlight and section.settings.highlight_nav_style == 'button' and section.settings.highlight_nav_icon -%}
+              {{- section.settings.highlight_nav_icon | image_url: width: section.settings.highlight_nav_icon.width | image_tag:
+                  class: 'header-nav__highlight-icon',
+                  alt: '',
+                  aria-hidden: 'true',
+                  loading: 'eager'
+              -}}
+            {%- endif -%}
+            {{- link.title -}}
+          {%- endif -%}
           {% if mega or link.links.size > 0 %}
             <svg class="header-nav__chevron" aria-hidden="true" width="10" height="10" viewBox="0 0 10 10" fill="none">
               <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
@@ -162,7 +186,7 @@
                     <ul class="mega-menu__links">
                       {% for item in linklists[mega.settings.col1_menu].links %}
                         <li>
-                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}">
+                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}"{% if item.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>
                             {{ item.title }}
                           </a>
                         </li>
@@ -179,7 +203,7 @@
                     <ul class="mega-menu__links">
                       {% for item in linklists[mega.settings.col2_menu].links %}
                         <li>
-                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}">
+                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}"{% if item.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>
                             {{ item.title }}
                           </a>
                         </li>
@@ -196,7 +220,7 @@
                     <ul class="mega-menu__links">
                       {% for item in linklists[mega.settings.col3_menu].links %}
                         <li>
-                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}">
+                          <a href="{{ item.url }}" class="mega-menu__link{% if item.title contains '₹' %} mega-menu__link--promo{% endif %}"{% if item.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>
                             {{ item.title }}
                           </a>
                         </li>
@@ -210,7 +234,7 @@
               {% if mega.settings.card1_image or mega.settings.card2_image or mega.settings.card3_image %}
                 <div class="mega-menu__cards">
                   {% if mega.settings.card1_image %}
-                    <a href="{{ mega.settings.card1_url | default: '#' }}" class="mega-menu__card">
+                    <a href="{{ mega.settings.card1_url | default: '#' }}" class="mega-menu__card"{% if mega.settings.card1_url != blank %} target="_blank" rel="noopener"{% endif %}>
                       {{ mega.settings.card1_image | image_url: width: 600 | image_tag: class: 'mega-menu__card-img', alt: mega.settings.card1_label | escape }}
                       <div class="mega-menu__card-gradient"></div>
                       {% if mega.settings.card1_label != blank %}
@@ -219,7 +243,7 @@
                     </a>
                   {% endif %}
                   {% if mega.settings.card2_image %}
-                    <a href="{{ mega.settings.card2_url | default: '#' }}" class="mega-menu__card">
+                    <a href="{{ mega.settings.card2_url | default: '#' }}" class="mega-menu__card"{% if mega.settings.card2_url != blank %} target="_blank" rel="noopener"{% endif %}>
                       {{ mega.settings.card2_image | image_url: width: 600 | image_tag: class: 'mega-menu__card-img', alt: mega.settings.card2_label | escape }}
                       <div class="mega-menu__card-gradient"></div>
                       {% if mega.settings.card2_label != blank %}
@@ -228,7 +252,7 @@
                     </a>
                   {% endif %}
                   {% if mega.settings.card3_image %}
-                    <a href="{{ mega.settings.card3_url | default: '#' }}" class="mega-menu__card">
+                    <a href="{{ mega.settings.card3_url | default: '#' }}" class="mega-menu__card"{% if mega.settings.card3_url != blank %} target="_blank" rel="noopener"{% endif %}>
                       {{ mega.settings.card3_image | image_url: width: 600 | image_tag: class: 'mega-menu__card-img', alt: mega.settings.card3_label | escape }}
                       <div class="mega-menu__card-gradient"></div>
                       {% if mega.settings.card3_label != blank %}
@@ -246,7 +270,7 @@
           <ul class="header-nav__dropdown">
             {% for child_link in link.links %}
               <li>
-                <a href="{{ child_link.url }}" class="header-nav__dropdown-link">{{ child_link.title }}</a>
+                <a href="{{ child_link.url }}" class="header-nav__dropdown-link"{% if child_link.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>{{ child_link.title }}</a>
               </li>
             {% endfor %}
           </ul>
@@ -285,6 +309,11 @@
           Clear
         </button>
       </div>
+      <button class="header-search-overlay__close" type="button" id="header-search-close" aria-label="Close search">
+        <svg viewBox="0 0 24 24" fill="none" width="24" height="24" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
     </div>
 
     {% comment %} Predictive results {% endcomment %}
@@ -415,7 +444,7 @@
     align-items: center;
   }
   .header-main__logo-img {
-    max-height: 72px;
+    max-height: 56px;
     width: auto;
     height: auto;
     display: block;
@@ -433,6 +462,28 @@
     gap: 8px;
     flex: 0 0 auto;
   }
+  .header-login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 16px;
+    background-color: var(--color-primary);
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .header-login-btn:hover {
+    opacity: 0.88;
+  }
+
   .header-icon-btn {
     display: flex;
     align-items: center;
@@ -508,6 +559,43 @@
     transition: color 0.2s ease;
   }
   .header-nav__link:hover { color: var(--color-primary); }
+
+  .header-nav__link--highlight-button {
+    background-color: transparent;
+    color: var(--btn-color, var(--color-primary));
+    border: 1.5px solid var(--btn-color, var(--color-primary));
+    border-radius: 5px;
+    padding: 6px 16px;
+    font-weight: 600;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .header-nav__link--highlight-button:hover {
+    background-color: var(--btn-hover-color, var(--btn-color, var(--color-primary)));
+    border-color: var(--btn-hover-color, var(--btn-color, var(--color-primary)));
+    color: #fff;
+    opacity: 1;
+  }
+  .header-nav__highlight-icon {
+    display: block;
+    height: 24px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .header-nav__link--highlight-image {
+    padding: 0;
+    background: none;
+  }
+  .header-nav__link--highlight-image:hover {
+    background: none;
+  }
+  .header-nav__highlight-img {
+    display: block;
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+  }
   .header-nav__chevron {
     width: 10px;
     height: 10px;
@@ -644,6 +732,8 @@
     text-decoration: none;
   }
   .mega-menu__card-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -840,15 +930,19 @@
 
   /* Input bar — note: top padding is set by JS to clear the fixed header */
   .header-search-overlay__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     padding: 4rem 1.5rem;
     border-bottom: 1px solid #e0dfd9;
+    max-width: var(--page-width, 1900px);
+    margin: 0 auto;
   }
 
   .header-search-overlay__form-wrap {
     display: flex;
     align-items: center;
-    max-width: var(--page-width, 1900px);
-    margin: 0 auto;
+    flex: 1;
     background: #e8e8e6;
     border-radius: 6px;
     padding: 0 1rem;
@@ -892,6 +986,25 @@
   }
 
   .header-search-overlay__clear:hover { color: #2e1f1f; }
+
+  .header-search-overlay__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    border-radius: 50%;
+    transition: color 0.15s, background-color 0.15s;
+  }
+  .header-search-overlay__close:hover {
+    color: #2e1f1f;
+    background-color: #e8e8e6;
+  }
 
   /* Results panel */
   .header-search-results {
@@ -1086,10 +1199,11 @@
     .has-mobile-logo .header-main__logo-link--desktop { display: none; }
     .header-main__spacer { display: none; }
     .header-main__logo { flex: 1; justify-content: center; }
-    .header-main__logo-img { max-height: 56px; }
+    .header-main__logo-img { max-height: 44px; }
     .header-icon-btn { width: 36px; height: 36px; background: none; }
     .header-icon-btn:hover { background: none; color: var(--color-primary); }
     .header-icon-btn--account-desktop { display: none; }
+    .header-login-btn { display: none; }
     .header-icon-btn--wishlist { display: flex; }
     .header-main__icons .header-icon-btn--search { display: none; }
     .header-main__icons { gap: 4px; }
@@ -1285,7 +1399,8 @@
         var imgHtml = p.featured_image && p.featured_image.url
           ? '<img class="header-search-product__img" src="' + p.featured_image.url + '&width=144" alt="' + escHtml(p.title) + '" width="72" height="88" loading="lazy">'
           : '<div class="header-search-product__img--placeholder"></div>';
-        var price = p.price_min ? formatMoney(p.price_min) : '';
+        var priceRaw = p.price_min ? parseFloat(p.price_min) : 0;
+        var price = priceRaw ? formatMoney(priceRaw * 100) : '';
         a.innerHTML = imgHtml +
           '<div class="header-search-product__info">' +
             (p.vendor ? '<span class="header-search-product__vendor">' + escHtml(p.vendor) + '</span>' : '') +
@@ -1297,8 +1412,15 @@
     }
 
     function formatMoney(cents) {
-      var amount = (cents / 100).toFixed(2);
-      return (window.Shopify && window.Shopify.currency && window.Shopify.currency.active === 'INR' ? '₹' : 'Rs. ') + parseFloat(amount).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+      var fmt = window.shopMoneyFormat || 'Rs. {{amount}}';
+      var val = cents / 100;
+      var amt   = val.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      var amtNd = Math.floor(val).toLocaleString('en-IN');
+      return fmt
+        .replace(/\{\{\s*amount_no_decimals_with_comma_separator\s*\}\}/, amtNd)
+        .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, amt)
+        .replace(/\{\{\s*amount_no_decimals\s*\}\}/, amtNd)
+        .replace(/\{\{\s*amount\s*\}\}/, amt);
     }
 
     function escHtml(str) {
@@ -1349,6 +1471,8 @@
 
     searchBtns.forEach(function(btn) { btn.addEventListener('click', openSearch); });
     if (searchBackdrop) searchBackdrop.addEventListener('click', closeSearch);
+    var searchCloseBtn = document.getElementById('header-search-close');
+    if (searchCloseBtn) searchCloseBtn.addEventListener('click', closeSearch);
 
     window.addEventListener('resize', positionPanel);
 
@@ -1508,6 +1632,50 @@
       "id": "promo_text",
       "label": "t:labels.promo_text",
       "default": "Free Shipping on Orders Above ₹2,999 | Use Code: SILK20"
+    },
+    {
+      "type": "header",
+      "content": "Highlight nav item"
+    },
+    {
+      "type": "text",
+      "id": "highlight_nav_item",
+      "label": "Nav item title",
+      "info": "Enter the exact menu item title to highlight (e.g. \"Sale\")"
+    },
+    {
+      "type": "select",
+      "id": "highlight_nav_style",
+      "label": "Highlight style",
+      "options": [
+        { "value": "button", "label": "Button" },
+        { "value": "image", "label": "Image" }
+      ],
+      "default": "button"
+    },
+    {
+      "type": "image_picker",
+      "id": "highlight_nav_icon",
+      "label": "Button icon",
+      "info": "Optional icon shown before the button label (used when style is \"Button\")"
+    },
+    {
+      "type": "color",
+      "id": "highlight_btn_color",
+      "label": "Button color",
+      "default": "#e50e7e"
+    },
+    {
+      "type": "color",
+      "id": "highlight_btn_hover_color",
+      "label": "Button hover color",
+      "default": "#c3134e"
+    },
+    {
+      "type": "image_picker",
+      "id": "highlight_nav_image",
+      "label": "Highlight image",
+      "info": "Used when style is set to \"Image\""
     }
   ]
 }
