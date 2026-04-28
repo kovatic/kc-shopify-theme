@@ -1,29 +1,52 @@
 {% doc %}
-  Renders a two-step tailoring add-ons modal for products with tailoring enabled.
+  Renders a multi-step tailoring modal driven entirely by metaobjects.
 
-  Step 1: Option groups (checkboxes / radios) read from metaobject references.
-  Step 2: Blouse measurements form (shown only if blouse stitching = Required).
-
-  Metaobject structure:
-    tailoring_group:
-      label   → single_line_text
-      type    → choice list ("checkbox" or "radio")
-      options → list of tailoring_group_options references
-
-    tailoring_group_options:
-      label → single_line_text
-      price → decimal
+  Metaobject structure (tailoring_group):
+    label   → single_line_text
+    type    → choice list ("checkbox" or "radio")
+    options → list of tailoring_group_options references (label, price, image)
 
   Product metafield:
-    custom.tailoring_groups → list of tailoring_group metaobject references
+    custom.tailoring_groups → list of tailoring_group references
 
-  @param {number} [tailoring_addon_variant_id] - Variant ID of the "Tailoring Add-on" product (priced at ₹1 each)
+  Groups are routed to steps by label (case-insensitive contains match):
+    label contains "Blouse Stitching Type" or "Blouse Type" → Step 2 (type image cards)
+    label contains "Blouse Stitching"                        → Step 1 (Required / Not Required)
+    label contains "Pad"                                     → Step 3 (pad options)
+    anything else                                            → Step 1 general options
+
+  Image filenames are derived from the option label via handleize (e.g. "Katori Blouse" → katori-blouse.png).
+  Upload matching images to Shopify assets for them to appear on the type cards.
+
+  @param {number} [tailoring_addon_variant_id] - Variant ID of the "Tailoring Add-on" product
 
   @example
-  {% render 'tailoring-modal', product: product %}
+  {% render 'tailoring-modal', product: product, tailoring_addon_variant_id: tailoring_addon_variant_id %}
 {% enddoc %}
 
 {%- assign tailoring_groups = product.metafields.custom.tailoring_groups.value -%}
+
+{%- comment -%} Pre-classify groups by label so each step can render from metaobjects {%- endcomment -%}
+{%- assign blouse_stitching_group = nil -%}
+{%- assign blouse_type_group      = nil -%}
+{%- assign neck_group             = nil -%}
+{%- assign sleeve_group           = nil -%}
+{%- assign pad_group              = nil -%}
+
+{%- for group in tailoring_groups -%}
+  {%- assign g_label_lower = group.label.value | downcase -%}
+  {%- if g_label_lower contains 'blouse stitching type' or g_label_lower contains 'blouse type' -%}
+    {%- assign blouse_type_group = group -%}
+  {%- elsif g_label_lower contains 'blouse stitching' -%}
+    {%- assign blouse_stitching_group = group -%}
+  {%- elsif g_label_lower contains 'neck' -%}
+    {%- assign neck_group = group -%}
+  {%- elsif g_label_lower contains 'sleeve' -%}
+    {%- assign sleeve_group = group -%}
+  {%- elsif g_label_lower contains 'pad' -%}
+    {%- assign pad_group = group -%}
+  {%- endif -%}
+{%- endfor -%}
 
 <div class="tailoring-modal" id="tailoring-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="tailoring-modal-title"
   data-addon-variant-id="{{ tailoring_addon_variant_id }}"
@@ -47,28 +70,62 @@
       <div class="tailoring-modal__body">
         <div class="tailoring-modal__groups">
 
+          {%- comment -%} Blouse Stitching group from metaobject {%- endcomment -%}
+          {%- if blouse_stitching_group != nil -%}
+            {%- assign bs_label   = blouse_stitching_group.label.value -%}
+            {%- assign bs_type    = blouse_stitching_group.type.value | default: 'radio' -%}
+            {%- assign bs_options = blouse_stitching_group.options.value -%}
+            <div class="tailoring-modal__group" data-blouse-group="true">
+              <p class="tailoring-modal__group-label">{{ bs_label }}</p>
+              <div class="tailoring-modal__options">
+                {%- for option in bs_options -%}
+                  {%- assign o_label = option.label.value -%}
+                  {%- assign o_price = option.price.value | plus: 0 -%}
+                  {%- assign input_id = 'bs-o' | append: forloop.index -%}
+                  {%- if o_label != blank -%}
+                    <label class="tailoring-modal__option" for="{{ input_id }}">
+                      <input
+                        class="tailoring-modal__input"
+                        type="{{ bs_type }}"
+                        id="{{ input_id }}"
+                        name="tailoring_blouse_stitching"
+                        value="{{ o_label | escape }}"
+                        data-price="{{ o_price }}"
+                        data-group-label="{{ bs_label | escape }}"
+                        data-blouse-option="true"
+                      >
+                      <span class="tailoring-modal__option-text">
+                        {{ o_label }}
+                        {%- if o_price > 0 -%}
+                          <span class="tailoring-modal__option-price">+ &#8377;{{ o_price | floor }}</span>
+                        {%- endif -%}
+                      </span>
+                    </label>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} All other general groups (not blouse stitching / type / pad) {%- endcomment -%}
           {%- for group in tailoring_groups -%}
+            {%- assign g_label_lower = group.label.value | downcase -%}
+            {%- if g_label_lower contains 'blouse stitching' or g_label_lower contains 'blouse type' or g_label_lower contains 'blouse stitching type' or g_label_lower contains 'neck' or g_label_lower contains 'sleeve' or g_label_lower contains 'pad' -%}
+              {%- continue -%}
+            {%- endif -%}
             {%- assign g_label   = group.label.value -%}
             {%- assign g_type    = group.type.value | default: 'radio' -%}
             {%- assign g_options = group.options.value -%}
             {%- assign g_index   = forloop.index -%}
-
             {%- if g_label != blank -%}
-              {%- assign is_blouse = false -%}
-              {%- if g_label contains 'Blouse' or g_label contains 'blouse' -%}
-                {%- assign is_blouse = true -%}
-              {%- endif -%}
-
-              <div class="tailoring-modal__group"{% if is_blouse %} data-blouse-group="true"{% endif %}>
+              <div class="tailoring-modal__group">
                 <p class="tailoring-modal__group-label">{{ g_label }}</p>
                 <div class="tailoring-modal__options">
-
                   {%- for option in g_options -%}
                     {%- assign o_label = option.label.value -%}
                     {%- assign o_price = option.price.value | plus: 0 -%}
                     {%- assign input_id   = 'tailoring-g' | append: g_index | append: '-o' | append: forloop.index -%}
                     {%- assign input_name = 'tailoring_group_' | append: g_index -%}
-
                     {%- if o_label != blank -%}
                       <label class="tailoring-modal__option" for="{{ input_id }}">
                         <input
@@ -79,18 +136,16 @@
                           value="{{ o_label | escape }}"
                           data-price="{{ o_price }}"
                           data-group-label="{{ g_label | escape }}"
-                          {% if is_blouse %}data-blouse-option="true"{% endif %}
                         >
                         <span class="tailoring-modal__option-text">
                           {{ o_label }}
                           {%- if o_price > 0 -%}
-                            <span class="tailoring-modal__option-price">+ {{ o_price | money_without_trailing_zeros }}</span>
+                            <span class="tailoring-modal__option-price">+ &#8377;{{ o_price | floor }}</span>
                           {%- endif -%}
                         </span>
                       </label>
                     {%- endif -%}
                   {%- endfor -%}
-
                 </div>
               </div>
             {%- endif -%}
@@ -102,7 +157,7 @@
       <div class="tailoring-modal__footer">
         <div class="tailoring-modal__total">
           <span class="tailoring-modal__total-label">{{ 'tailoring.total_extras' | t }}</span>
-          <span class="tailoring-modal__total-value" id="tailoring-total">{{ 0 | money }}</span>
+          <span class="tailoring-modal__total-value" id="tailoring-total">&#8377;0</span>
         </div>
         <button class="tailoring-modal__next-btn" id="tailoring-next-btn" type="button">
           {{ 'tailoring.next' | t }}
@@ -110,7 +165,7 @@
       </div>
     </div>
 
-    {%- comment -%} ── STEP 2: blouse measurements ── {%- endcomment -%}
+    {%- comment -%} ── BLOUSE STEP 1: Select Blouse Type ── {%- endcomment -%}
     <div class="tailoring-modal__step tailoring-modal__step--hidden" id="tailoring-step-2">
       <div class="tailoring-modal__header">
         <button class="tailoring-modal__back" id="tailoring-back-btn" aria-label="{{ 'tailoring.back' | t }}">
@@ -118,7 +173,10 @@
             <path d="M13 4L7 10L13 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        <h2 class="tailoring-modal__title">{{ 'tailoring.blouse_title' | t }}</h2>
+        <div>
+          <h2 class="tailoring-modal__title">{{ 'tailoring.title' | t }}</h2>
+          <p class="tailoring-modal__step-subtitle">{{ 'tailoring.blouse_step1_label' | t }}</p>
+        </div>
         <button class="tailoring-modal__close" aria-label="{{ 'tailoring.close' | t }}">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
@@ -127,44 +185,361 @@
       </div>
 
       <div class="tailoring-modal__body">
-        <p class="tailoring-modal__blouse-note">{{ 'tailoring.blouse_note' | t }}</p>
-        <div class="tailoring-modal__measurements">
+        {%- if blouse_type_group != nil -%}
+          {%- assign bt_label   = blouse_type_group.label.value -%}
+          {%- assign bt_type    = blouse_type_group.type.value | default: 'radio' -%}
+          {%- assign bt_options = blouse_type_group.options.value -%}
+
+          <p class="tailoring-modal__group-label">{{ bt_label }}</p>
+
+          <div class="tailoring-modal__blouse-type-list">
+            {%- for option in bt_options -%}
+              {%- assign o_label = option.label.value -%}
+              {%- assign o_price = option.price.value | plus: 0 -%}
+              {%- assign input_id = 'blouse-type-' | append: forloop.index -%}
+              {%- if o_label != blank -%}
+                <label class="tailoring-modal__blouse-type-row" for="{{ input_id }}">
+                  <input
+                    class="tailoring-modal__blouse-type-radio"
+                    type="{{ bt_type }}"
+                    id="{{ input_id }}"
+                    name="blouse_type"
+                    value="{{ o_label | escape }}"
+                    data-price="{{ o_price }}"
+                    data-group-label="{{ bt_label | escape }}"
+                  >
+                  <span class="tailoring-modal__blouse-type-text">
+                    {{ o_label }}
+                    {%- if o_price > 0 -%}
+                      <span class="tailoring-modal__option-price">&#8377;{{ o_price | floor }}</span>
+                    {%- endif -%}
+                  </span>
+                </label>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+          <div class="tailoring-modal__blouse-type-cards">
+            {%- for option in bt_options -%}
+              {%- assign o_label = option.label.value -%}
+              {%- assign o_image = option.image.value -%}
+              {%- assign input_id = 'blouse-type-' | append: forloop.index -%}
+              {%- if o_label != blank -%}
+                <label class="tailoring-modal__blouse-card" for="{{ input_id }}">
+                  <div class="tailoring-modal__blouse-card-img">
+                    {%- if o_image != blank -%}
+                      {{ o_image | image_url: width: 160 | image_tag: alt: o_label, loading: 'lazy' }}
+                    {%- else -%}
+                      <div class="tailoring-modal__blouse-card-placeholder"></div>
+                    {%- endif -%}
+                  </div>
+                  <span class="tailoring-modal__blouse-card-label">{{ o_label }}</span>
+                </label>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="tailoring-modal__footer">
+        <div class="tailoring-modal__total">
+          <span class="tailoring-modal__total-label">{{ 'tailoring.total_extras' | t }}</span>
+          <span class="tailoring-modal__total-value" id="tailoring-total-2">&#8377;0</span>
+        </div>
+        <button class="tailoring-modal__next-btn" id="tailoring-blouse-type-next" type="button">{{ 'tailoring.next' | t }}</button>
+      </div>
+    </div>
+
+    {%- comment -%} ── BLOUSE STEP 2: Neck, Sleeve, Pad ── {%- endcomment -%}
+    <div class="tailoring-modal__step tailoring-modal__step--hidden" id="tailoring-step-3">
+      <div class="tailoring-modal__header">
+        <button class="tailoring-modal__back" id="tailoring-back-btn-3" aria-label="{{ 'tailoring.back' | t }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M13 4L7 10L13 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div>
+          <h2 class="tailoring-modal__title">{{ 'tailoring.title' | t }}</h2>
+          <p class="tailoring-modal__step-subtitle">{{ 'tailoring.blouse_step2_label' | t }}</p>
+        </div>
+        <button class="tailoring-modal__close" aria-label="{{ 'tailoring.close' | t }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="tailoring-modal__body">
+        <div class="tailoring-modal__step3-layout">
+
+          <div class="tailoring-modal__step3-selects">
+
+            <div class="tailoring-modal__field">
+              <label class="tailoring-modal__field-label" for="blouse-neck">
+                {%- if neck_group != nil -%}{{ neck_group.label.value }}{%- else -%}{{ 'tailoring.neck' | t }}{%- endif -%}
+              </label>
+              <select class="tailoring-modal__select" id="blouse-neck" name="blouse_neck">
+                <option value="">{{ 'tailoring.choose_neck' | t }}</option>
+                {%- if neck_group != nil -%}
+                  {%- for option in neck_group.options.value -%}
+                    {%- if option.label.value != blank -%}
+                      <option value="{{ option.label.value | escape }}">{{ option.label.value }}</option>
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  <option value="Round Neck">{{ 'tailoring.neck_round' | t }}</option>
+                  <option value="Square Neck">{{ 'tailoring.neck_square' | t }}</option>
+                  <option value="V Neck">{{ 'tailoring.neck_v' | t }}</option>
+                  <option value="Sweetheart Neck">{{ 'tailoring.neck_sweetheart' | t }}</option>
+                  <option value="Leaf Neck">{{ 'tailoring.neck_leaf' | t }}</option>
+                {%- endif -%}
+              </select>
+            </div>
+
+            <div class="tailoring-modal__field">
+              <label class="tailoring-modal__field-label" for="blouse-sleeves">
+                {%- if sleeve_group != nil -%}{{ sleeve_group.label.value }}{%- else -%}{{ 'tailoring.sleeves' | t }}{%- endif -%}
+              </label>
+              <select class="tailoring-modal__select" id="blouse-sleeves" name="blouse_sleeves">
+                <option value="">{{ 'tailoring.choose_sleeves' | t }}</option>
+                {%- if sleeve_group != nil -%}
+                  {%- for option in sleeve_group.options.value -%}
+                    {%- if option.label.value != blank -%}
+                      <option value="{{ option.label.value | escape }}">{{ option.label.value }}</option>
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  <option value="Sleeveless">{{ 'tailoring.sleeve_sleeveless' | t }}</option>
+                  <option value="Regular Sleeves">{{ 'tailoring.sleeve_regular' | t }}</option>
+                {%- endif -%}
+              </select>
+            </div>
+
+            {%- if pad_group != nil -%}
+              {%- assign pd_label   = pad_group.label.value -%}
+              {%- assign pd_type    = pad_group.type.value | default: 'radio' -%}
+              {%- assign pd_options = pad_group.options.value -%}
+              <div class="tailoring-modal__field">
+                <p class="tailoring-modal__field-label" style="margin:0 0 8px">{{ pd_label }}</p>
+                {%- for option in pd_options -%}
+                  {%- assign o_label = option.label.value -%}
+                  {%- assign o_price = option.price.value | plus: 0 -%}
+                  {%- assign input_id = 'pad-o' | append: forloop.index -%}
+                  {%- if o_label != blank -%}
+                    <label class="tailoring-modal__option" for="{{ input_id }}"{% unless forloop.first %} style="margin-top:8px"{% endunless %}>
+                      <input
+                        class="tailoring-modal__input"
+                        type="{{ pd_type }}"
+                        id="{{ input_id }}"
+                        name="blouse_pad"
+                        value="{{ o_label | escape }}"
+                        data-price="{{ o_price }}"
+                        data-group-label="{{ pd_label | escape }}"
+                      >
+                      <span class="tailoring-modal__option-text">
+                        {{ o_label }}
+                        {%- if o_price > 0 -%}
+                          <span class="tailoring-modal__option-price">+ &#8377;{{ o_price | floor }}</span>
+                        {%- endif -%}
+                      </span>
+                    </label>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+
+          </div>
+
+          <div class="tailoring-modal__step3-visuals">
+
+            {%- comment -%} Neck visual cards — from metaobject if available, else hardcoded {%- endcomment -%}
+            <div class="tailoring-modal__visual-group">
+              <p class="tailoring-modal__visual-heading">{{ 'tailoring.neck_types' | t }}</p>
+              <div class="tailoring-modal__visual-cards">
+                {%- if neck_group != nil -%}
+                  {%- for option in neck_group.options.value -%}
+                    {%- assign o_label = option.label.value -%}
+                    {%- assign o_image = option.image.value -%}
+                    {%- if o_label != blank -%}
+                      <button type="button" class="tailoring-modal__visual-card" data-select="blouse-neck" data-value="{{ o_label | escape }}">
+                        <div class="tailoring-modal__visual-img">
+                          {%- if o_image != blank -%}
+                            {{ o_image | image_url: width: 120 | image_tag: alt: o_label, loading: 'lazy' }}
+                          {%- endif -%}
+                        </div>
+                        <span class="tailoring-modal__visual-label">{{ o_label }}</span>
+                      </button>
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  {%- assign neck_values = 'Round Neck,Square Neck,V Neck,Sweetheart Neck,Leaf Neck' | split: ',' -%}
+                  {%- for neck in neck_values -%}
+                    <button type="button" class="tailoring-modal__visual-card" data-select="blouse-neck" data-value="{{ neck }}">
+                      <div class="tailoring-modal__visual-img"></div>
+                      <span class="tailoring-modal__visual-label">{{ neck }}</span>
+                    </button>
+                  {%- endfor -%}
+                {%- endif -%}
+              </div>
+            </div>
+
+            {%- comment -%} Sleeve visual cards — from metaobject if available, else hardcoded {%- endcomment -%}
+            <div class="tailoring-modal__visual-group">
+              <p class="tailoring-modal__visual-heading">{{ 'tailoring.sleeve_types' | t }}</p>
+              <div class="tailoring-modal__visual-cards">
+                {%- if sleeve_group != nil -%}
+                  {%- for option in sleeve_group.options.value -%}
+                    {%- assign o_label = option.label.value -%}
+                    {%- assign o_image = option.image.value -%}
+                    {%- if o_label != blank -%}
+                      <button type="button" class="tailoring-modal__visual-card" data-select="blouse-sleeves" data-value="{{ o_label | escape }}">
+                        <div class="tailoring-modal__visual-img">
+                          {%- if o_image != blank -%}
+                            {{ o_image | image_url: width: 120 | image_tag: alt: o_label, loading: 'lazy' }}
+                          {%- endif -%}
+                        </div>
+                        <span class="tailoring-modal__visual-label">{{ o_label }}</span>
+                      </button>
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  {%- assign sleeve_values = 'Sleeveless,Regular Sleeves' | split: ',' -%}
+                  {%- for sleeve in sleeve_values -%}
+                    <button type="button" class="tailoring-modal__visual-card" data-select="blouse-sleeves" data-value="{{ sleeve }}">
+                      <div class="tailoring-modal__visual-img"></div>
+                      <span class="tailoring-modal__visual-label">{{ sleeve }}</span>
+                    </button>
+                  {%- endfor -%}
+                {%- endif -%}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="tailoring-modal__footer">
+        <div class="tailoring-modal__total">
+          <span class="tailoring-modal__total-label">{{ 'tailoring.total_extras' | t }}</span>
+          <span class="tailoring-modal__total-value" id="tailoring-total-3">&#8377;0</span>
+        </div>
+        <button class="tailoring-modal__next-btn" id="tailoring-neck-sleeve-next" type="button">{{ 'tailoring.next' | t }}</button>
+      </div>
+    </div>
+
+    {%- comment -%} ── BLOUSE STEP 3: Measurements ── {%- endcomment -%}
+    <div class="tailoring-modal__step tailoring-modal__step--hidden" id="tailoring-step-4">
+      <div class="tailoring-modal__header">
+        <button class="tailoring-modal__back" id="tailoring-back-btn-4" aria-label="{{ 'tailoring.back' | t }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M13 4L7 10L13 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div>
+          <h2 class="tailoring-modal__title">{{ 'tailoring.title' | t }}</h2>
+          <p class="tailoring-modal__step-subtitle">{{ 'tailoring.blouse_step3_label' | t }}</p>
+        </div>
+        <button class="tailoring-modal__close" aria-label="{{ 'tailoring.close' | t }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="tailoring-modal__body">
+        <div class="tailoring-modal__measurements tailoring-modal__measurements--4col">
 
           <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="blouse-chest">{{ 'tailoring.blouse_chest' | t }} <span aria-hidden="true">*</span></label>
-            <div class="tailoring-modal__field-input-wrap">
-              <input class="tailoring-modal__field-input" type="number" id="blouse-chest" name="blouse_chest" min="28" max="60" placeholder="e.g. 38" inputmode="numeric">
-              <span class="tailoring-modal__field-unit">{{ 'tailoring.unit_inches' | t }}</span>
-            </div>
+            <label class="tailoring-modal__field-label" for="meas-blouse-length">{{ 'tailoring.blouse_length' | t }}</label>
+            <select class="tailoring-modal__select" id="meas-blouse-length" name="blouse_length">
+              <option value="">{{ 'tailoring.choose' | t }}</option>
+              {%- for i in (1..29) -%}<option value="{{ i | plus: 9 | append: ' Inches' }}">{{ i | plus: 9 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+            </select>
           </div>
 
           <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="blouse-waist">{{ 'tailoring.blouse_waist' | t }} <span aria-hidden="true">*</span></label>
-            <div class="tailoring-modal__field-input-wrap">
-              <input class="tailoring-modal__field-input" type="number" id="blouse-waist" name="blouse_waist" min="24" max="56" placeholder="e.g. 32" inputmode="numeric">
-              <span class="tailoring-modal__field-unit">{{ 'tailoring.unit_inches' | t }}</span>
-            </div>
+            <label class="tailoring-modal__field-label" for="meas-shoulder">{{ 'tailoring.shoulder_to_shoulder' | t }}</label>
+            <select class="tailoring-modal__select" id="meas-shoulder" name="shoulder_to_shoulder">
+              <option value="">{{ 'tailoring.choose' | t }}</option>
+              {%- for i in (1..21) -%}<option value="{{ i | plus: 9 | append: ' Inches' }}">{{ i | plus: 9 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+            </select>
           </div>
 
           <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="blouse-length">{{ 'tailoring.blouse_length' | t }} <span aria-hidden="true">*</span></label>
-            <div class="tailoring-modal__field-input-wrap">
-              <input class="tailoring-modal__field-input" type="number" id="blouse-length" name="blouse_length" min="12" max="24" placeholder="e.g. 16" inputmode="numeric">
-              <span class="tailoring-modal__field-unit">{{ 'tailoring.unit_inches' | t }}</span>
-            </div>
+            <label class="tailoring-modal__field-label" for="meas-sleeve-length">{{ 'tailoring.blouse_sleeve' | t }}</label>
+            <select class="tailoring-modal__select" id="meas-sleeve-length" name="sleeve_length">
+              <option value="">{{ 'tailoring.choose' | t }}</option>
+              {%- for i in (1..25) -%}<option value="{{ i | append: ' Inches' }}">{{ i }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+            </select>
           </div>
 
           <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="blouse-sleeve">{{ 'tailoring.blouse_sleeve' | t }}</label>
-            <div class="tailoring-modal__field-input-wrap">
-              <input class="tailoring-modal__field-input" type="number" id="blouse-sleeve" name="blouse_sleeve" min="0" max="24" placeholder="e.g. 8" inputmode="numeric">
-              <span class="tailoring-modal__field-unit">{{ 'tailoring.unit_inches' | t }}</span>
-            </div>
+            <label class="tailoring-modal__field-label" for="meas-sleeve-around">{{ 'tailoring.sleeve_around' | t }}</label>
+            <select class="tailoring-modal__select" id="meas-sleeve-around" name="sleeve_around">
+              <option value="">{{ 'tailoring.choose' | t }}</option>
+              {%- for i in (1..21) -%}<option value="{{ i | plus: 7 | append: ' Inches' }}">{{ i | plus: 7 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+            </select>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="meas-armhole">{{ 'tailoring.armhole' | t }}</label>
+            <select class="tailoring-modal__select" id="meas-armhole" name="armhole">
+              <option value="">{{ 'tailoring.choose' | t }}</option>
+              {%- for i in (1..21) -%}<option value="{{ i | plus: 11 | append: ' Inches' }}">{{ i | plus: 11 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+            </select>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="meas-chest">{{ 'tailoring.blouse_chest' | t }}</label>
+            <select class="tailoring-modal__select" id="meas-chest" name="chest">
+              <option value="">{{ 'tailoring.choose' | t }}</option>
+              {%- for i in (1..29) -%}<option value="{{ i | plus: 27 | append: ' Inches' }}">{{ i | plus: 27 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+            </select>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="meas-breast">{{ 'tailoring.breast' | t }}</label>
+            <select class="tailoring-modal__select" id="meas-breast" name="breast">
+              <option value="">{{ 'tailoring.choose' | t }}</option>
+              {%- for i in (1..29) -%}<option value="{{ i | plus: 27 | append: ' Inches' }}">{{ i | plus: 27 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+            </select>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="meas-waist">{{ 'tailoring.blouse_waist' | t }}</label>
+            <select class="tailoring-modal__select" id="meas-waist" name="waist">
+              <option value="">{{ 'tailoring.choose' | t }}</option>
+              {%- for i in (1..33) -%}<option value="{{ i | plus: 23 | append: ' Inches' }}">{{ i | plus: 23 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+            </select>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="meas-front-neck">{{ 'tailoring.front_neck_depth' | t }}</label>
+            <select class="tailoring-modal__select" id="meas-front-neck" name="front_neck_depth">
+              <option value="">{{ 'tailoring.choose' | t }}</option>
+              {%- for i in (1..13) -%}<option value="{{ i | plus: 3 | append: ' Inches' }}">{{ i | plus: 3 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+            </select>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="meas-back-neck">{{ 'tailoring.back_neck_depth' | t }}</label>
+            <select class="tailoring-modal__select" id="meas-back-neck" name="back_neck_depth">
+              <option value="">{{ 'tailoring.choose' | t }}</option>
+              {%- for i in (1..11) -%}<option value="{{ i | plus: 2 | append: ' Inches' }}">{{ i | plus: 2 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+            </select>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="meas-shoulder-point">{{ 'tailoring.shoulder_to_point' | t }}</label>
+            <select class="tailoring-modal__select" id="meas-shoulder-point" name="shoulder_to_point">
+              <option value="">{{ 'tailoring.choose' | t }}</option>
+              {%- for i in (1..15) -%}<option value="{{ i | plus: 5 | append: ' Inches' }}">{{ i | plus: 5 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+            </select>
           </div>
 
           <div class="tailoring-modal__field tailoring-modal__field--full">
             <label class="tailoring-modal__field-label" for="blouse-notes">{{ 'tailoring.blouse_notes' | t }}</label>
-            <textarea class="tailoring-modal__field-textarea" id="blouse-notes" name="blouse_notes" rows="3" placeholder="{{ 'tailoring.blouse_notes_placeholder' | t }}"></textarea>
+            <textarea class="tailoring-modal__field-textarea" id="blouse-notes" name="blouse_notes" rows="2" placeholder="{{ 'tailoring.blouse_notes_placeholder' | t }}"></textarea>
           </div>
 
         </div>
@@ -173,7 +548,39 @@
       <div class="tailoring-modal__footer">
         <div class="tailoring-modal__total">
           <span class="tailoring-modal__total-label">{{ 'tailoring.total_extras' | t }}</span>
-          <span class="tailoring-modal__total-value" id="tailoring-total-2">{{ 0 | money }}</span>
+          <span class="tailoring-modal__total-value" id="tailoring-total-4">&#8377;0</span>
+        </div>
+        <button class="tailoring-modal__next-btn" id="tailoring-measurements-next" type="button">{{ 'tailoring.next' | t }}</button>
+      </div>
+    </div>
+
+    {%- comment -%} ── BLOUSE STEP 4: Summary ── {%- endcomment -%}
+    <div class="tailoring-modal__step tailoring-modal__step--hidden" id="tailoring-step-5">
+      <div class="tailoring-modal__header">
+        <button class="tailoring-modal__back" id="tailoring-back-btn-5" aria-label="{{ 'tailoring.back' | t }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M13 4L7 10L13 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div>
+          <h2 class="tailoring-modal__title">{{ 'tailoring.title' | t }}</h2>
+          <p class="tailoring-modal__step-subtitle">{{ 'tailoring.blouse_step4_label' | t }}</p>
+        </div>
+        <button class="tailoring-modal__close" aria-label="{{ 'tailoring.close' | t }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="tailoring-modal__body">
+        <div class="tailoring-modal__summary" id="tailoring-summary"></div>
+      </div>
+
+      <div class="tailoring-modal__footer">
+        <div class="tailoring-modal__total">
+          <span class="tailoring-modal__total-label">{{ 'tailoring.total_extras' | t }}</span>
+          <span class="tailoring-modal__total-value" id="tailoring-total-5">&#8377;0</span>
         </div>
         <button class="tailoring-modal__confirm-btn" id="tailoring-confirm-btn" type="button">
           {{ 'tailoring.add_to_cart' | t }}
@@ -210,8 +617,8 @@
     background: #faf8f4;
     border-radius: 8px;
     width: 92%;
-    max-width: 760px;
-    max-height: 90vh;
+    max-width: 960px;
+    max-height: 92vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -497,6 +904,222 @@
     margin-top: 2px;
   }
 
+  /* ── Step subtitle (blouse steps) ── */
+  .tailoring-modal__step-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #ce0570;
+    letter-spacing: 0.04em;
+    margin: 3px 0 0;
+    text-align: center;
+  }
+
+  /* ── Blouse type step ── */
+  .tailoring-modal__blouse-type-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .tailoring-modal__blouse-type-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .tailoring-modal__blouse-type-radio {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-primary, #2e1f1f);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .tailoring-modal__blouse-type-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    color: #42464b;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .tailoring-modal__blouse-type-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .tailoring-modal__blouse-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    border: 2px solid #e8e2d9;
+    border-radius: 8px;
+    padding: 8px 6px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .tailoring-modal__blouse-card-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #f0ebe3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tailoring-modal__blouse-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .tailoring-modal__blouse-card-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #e8e2d9;
+  }
+  .tailoring-modal__blouse-card-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #2e1f1f;
+    text-align: center;
+    line-height: 1.3;
+  }
+  /* Highlight card when its radio is checked (JS adds class; CSS :has is a progressive enhancement) */
+  .tailoring-modal__blouse-card--selected {
+    border-color: #2e1f1f;
+    background: #f0ebe3;
+  }
+
+  /* ── Neck/Sleeve step ── */
+  .tailoring-modal__step3-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 28px;
+  }
+  .tailoring-modal__step3-selects .tailoring-modal__field {
+    margin-bottom: 18px;
+  }
+  .tailoring-modal__step3-selects .tailoring-modal__field:last-child {
+    margin-bottom: 0;
+  }
+  .tailoring-modal__select {
+    width: 100%;
+    border: 1px solid #d4cdc4;
+    border-radius: 5px;
+    padding: 10px 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    color: #2e1f1f;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .tailoring-modal__select:focus { border-color: #2e1f1f; }
+  .tailoring-modal__select.is-error { border-color: #ce0570; }
+
+  /* Visual cards for neck/sleeve */
+  .tailoring-modal__visual-group { margin-bottom: 20px; }
+  .tailoring-modal__visual-group:last-child { margin-bottom: 0; }
+  .tailoring-modal__visual-heading {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #2e1f1f;
+    margin: 0 0 10px;
+  }
+  .tailoring-modal__visual-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tailoring-modal__visual-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    border: 2px solid #e8e2d9;
+    border-radius: 8px;
+    padding: 6px 8px;
+    background: #fff;
+    transition: border-color 0.15s;
+    min-width: 68px;
+  }
+  .tailoring-modal__visual-card.is-selected {
+    border-color: #2e1f1f;
+    background: #f0ebe3;
+  }
+  .tailoring-modal__visual-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #f0ebe3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tailoring-modal__visual-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .tailoring-modal__visual-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #2e1f1f;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  /* ── Measurements step ── */
+  .tailoring-modal__measurements--4col {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px 16px;
+  }
+  .tailoring-modal__measurements--4col .tailoring-modal__field {
+    margin-bottom: 0;
+  }
+  .tailoring-modal__measurements--4col .tailoring-modal__field--full {
+    grid-column: 1 / -1;
+  }
+
+  /* ── Summary step ── */
+  .tailoring-modal__summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid #e8e2d9;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .tailoring-modal__summary-key,
+  .tailoring-modal__summary-val {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    padding: 9px 14px;
+    border-bottom: 1px solid #f0ebe3;
+  }
+  .tailoring-modal__summary-key {
+    font-weight: 700;
+    color: #2e1f1f;
+    background: #faf8f4;
+  }
+  .tailoring-modal__summary-val {
+    color: #42464b;
+    background: #fff;
+  }
+
   @media screen and (max-width: 600px) {
     .tailoring-modal__panel {
       width: 100%;
@@ -523,6 +1146,25 @@
     .tailoring-modal__measurements {
       grid-template-columns: 1fr;
     }
+    .tailoring-modal__blouse-type-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .tailoring-modal__step3-layout {
+      grid-template-columns: 1fr;
+    }
+    .tailoring-modal__measurements--4col {
+      grid-template-columns: 1fr 1fr;
+    }
+    .tailoring-modal__summary {
+      grid-template-columns: 1fr;
+    }
+    .tailoring-modal__summary-key {
+      border-bottom: none;
+      padding-bottom: 2px;
+    }
+    .tailoring-modal__summary-val {
+      padding-top: 2px;
+    }
   }
 {% endstylesheet %}
 
@@ -533,30 +1175,43 @@
 
     var step1      = document.getElementById('tailoring-step-1');
     var step2      = document.getElementById('tailoring-step-2');
+    var step3      = document.getElementById('tailoring-step-3');
+    var step4      = document.getElementById('tailoring-step-4');
+    var step5      = document.getElementById('tailoring-step-5');
+
     var totalEl    = document.getElementById('tailoring-total');
     var total2El   = document.getElementById('tailoring-total-2');
-    var nextBtn    = document.getElementById('tailoring-next-btn');
-    var backBtn    = document.getElementById('tailoring-back-btn');
-    var confirmBtn = document.getElementById('tailoring-confirm-btn');
+    var total3El   = document.getElementById('tailoring-total-3');
+    var total4El   = document.getElementById('tailoring-total-4');
+    var total5El   = document.getElementById('tailoring-total-5');
+
+    var nextBtn             = document.getElementById('tailoring-next-btn');         /* Step 1 Next */
+    var backBtn             = document.getElementById('tailoring-back-btn');         /* Back on blouse step 1 */
+    var blouseTypeNext      = document.getElementById('tailoring-blouse-type-next'); /* Blouse type Next */
+    var backBtn3            = document.getElementById('tailoring-back-btn-3');
+    var neckSleeveNext      = document.getElementById('tailoring-neck-sleeve-next'); /* Neck/sleeve Next */
+    var backBtn4            = document.getElementById('tailoring-back-btn-4');
+    var measurementsNext    = document.getElementById('tailoring-measurements-next');/* Measurements Next */
+    var backBtn5            = document.getElementById('tailoring-back-btn-5');
+    var confirmBtn          = document.getElementById('tailoring-confirm-btn');
 
     /* ── helpers ── */
+    /* data-price stores rupees (e.g. 735). Format as ₹735 without going through
+       Shopify's money format (which expects paise and would output ₹7.35). */
     function formatMoney(rupees) {
-      var fmt = window.shopMoneyFormat || 'Rs. {{amount}}';
-      var amt    = Math.round(rupees).toLocaleString('en-IN');
-      var amtDec = parseFloat(rupees).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      return fmt
-        .replace(/\{\{\s*amount_no_decimals_with_comma_separator\s*\}\}/, amt)
-        .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, amtDec)
-        .replace(/\{\{\s*amount_no_decimals\s*\}\}/, amt)
-        .replace(/\{\{\s*amount\s*\}\}/, amtDec);
+      return '₹' + Math.round(rupees).toLocaleString('en-IN');
     }
 
-    /* data-price stores rupees directly (from decimal metafield, e.g. "263.0") */
+    /* data-price: step-1 metaobject options + pad radio in step 3 + blouse type radio in step 2 */
     function getTotalRupees() {
       var total = 0;
+      /* step-1 tailoring options (metaobject checkboxes/radios) */
       modal.querySelectorAll('.tailoring-modal__input:checked').forEach(function (inp) {
         total += parseFloat(inp.dataset.price || 0);
       });
+      /* blouse type radio */
+      var typeRadio = modal.querySelector('input[name="blouse_type"]:checked');
+      if (typeRadio) total += parseFloat(typeRadio.dataset.price || 0);
       return total;
     }
 
@@ -565,6 +1220,9 @@
       var formatted = rupees > 0 ? formatMoney(rupees) : '₹0';
       if (totalEl)  totalEl.textContent  = formatted;
       if (total2El) total2El.textContent = formatted;
+      if (total3El) total3El.textContent = formatted;
+      if (total4El) total4El.textContent = formatted;
+      if (total5El) total5El.textContent = formatted;
       document.dispatchEvent(new CustomEvent('tailoring:total-change', { detail: { rupees: rupees } }));
     }
 
@@ -577,8 +1235,15 @@
       return required;
     }
 
+    function showOnly(stepEl) {
+      [step1, step2, step3, step4, step5].forEach(function(s) {
+        if (s) s.classList.toggle('tailoring-modal__step--hidden', s !== stepEl);
+      });
+      updateTotal();
+    }
+
     /* ── add-unit mode state ── */
-    var addUnitContext = null; /* { mainKey, addonKey, currentAddonQty, mainNewQty, currentSelections } */
+    var addUnitContext = null;
 
     /* ── open / close ── */
     function openModal() {
@@ -586,16 +1251,13 @@
       modal.removeAttribute('data-add-unit');
       var subtitle = modal.querySelector('.tailoring-modal__subtitle');
       if (subtitle) subtitle.remove();
-      step1.classList.remove('tailoring-modal__step--hidden');
-      step2.classList.add('tailoring-modal__step--hidden');
-      updateTotal();
+      showOnly(step1);
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
     }
 
     function openModalForAddUnit(context) {
-      /* context: { variantId, currentSelections } */
       addUnitContext = context;
       modal.setAttribute('data-add-unit', '1');
 
@@ -625,9 +1287,7 @@
         title.insertAdjacentElement('afterend', sub);
       }
 
-      step1.classList.remove('tailoring-modal__step--hidden');
-      step2.classList.add('tailoring-modal__step--hidden');
-      updateTotal();
+      showOnly(step1);
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
@@ -647,118 +1307,295 @@
     });
     modal.querySelector('.tailoring-modal__backdrop').addEventListener('click', closeModal);
 
-    /* ── step navigation ── */
+    /* ── Validation helpers ── */
+    function showFieldError(el, msg) {
+      el.classList.add('is-error');
+      var field = el.closest('.tailoring-modal__field') || el.closest('.tailoring-modal__group');
+      if (field && !field.querySelector('.tailoring-modal__field-error')) {
+        var err = document.createElement('span');
+        err.className = 'tailoring-modal__field-error';
+        err.textContent = msg || 'This field is required';
+        field.appendChild(err);
+      }
+    }
+    function clearFieldError(el) {
+      el.classList.remove('is-error');
+      var field = el.closest('.tailoring-modal__field') || el.closest('.tailoring-modal__group');
+      if (field) { var e = field.querySelector('.tailoring-modal__field-error'); if (e) e.remove(); }
+    }
+    modal.addEventListener('change', function (e) {
+      if (e.target) clearFieldError(e.target);
+    });
+
+    /* Validate Step 1: blouse stitching radio must be selected */
+    function validateStep1() {
+      var sel = modal.querySelector('input[name="tailoring_blouse_stitching"]:checked');
+      if (!sel) {
+        var group = modal.querySelector('[data-blouse-group="true"]');
+        if (group && !group.querySelector('.tailoring-modal__field-error')) {
+          var err = document.createElement('span');
+          err.className = 'tailoring-modal__field-error';
+          err.textContent = 'Please select an option';
+          group.appendChild(err);
+        }
+        return false;
+      }
+      return true;
+    }
+
+    /* Validate Step 2: blouse type radio must be selected */
+    function validateStep2() {
+      var sel = modal.querySelector('input[name="blouse_type"]:checked');
+      if (!sel) {
+        var list = modal.querySelector('.tailoring-modal__blouse-type-list');
+        if (list && !list.querySelector('.tailoring-modal__field-error')) {
+          var err = document.createElement('span');
+          err.className = 'tailoring-modal__field-error';
+          err.textContent = 'Please select a blouse type';
+          list.appendChild(err);
+        }
+        return false;
+      }
+      return true;
+    }
+
+    /* Validate Step 3: neck, sleeves, and pad must all be selected */
+    function validateStep3() {
+      var valid = true;
+      var neck    = document.getElementById('blouse-neck');
+      var sleeves = document.getElementById('blouse-sleeves');
+      var pad     = modal.querySelector('input[name="blouse_pad"]:checked');
+
+      if (neck && !neck.value) { showFieldError(neck, 'Please select neck type'); valid = false; }
+      if (sleeves && !sleeves.value) { showFieldError(sleeves, 'Please select sleeve type'); valid = false; }
+      if (!pad) {
+        var padField = modal.querySelector('input[name="blouse_pad"]');
+        if (padField) showFieldError(padField, 'Please select pad option');
+        valid = false;
+      }
+      return valid;
+    }
+
+    /* Validate Step 4: all measurement selects must be selected */
+    function validateStep4() {
+      var valid = true;
+      var measIds = [
+        'meas-blouse-length', 'meas-shoulder', 'meas-sleeve-length',
+        'meas-sleeve-around', 'meas-armhole', 'meas-chest',
+        'meas-breast', 'meas-waist', 'meas-front-neck',
+        'meas-back-neck', 'meas-shoulder-point'
+      ];
+      measIds.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el && !el.value) { showFieldError(el, 'Required'); valid = false; }
+      });
+      return valid;
+    }
+
+    /* ── Step 1 Next: blouse stitching must be selected ── */
     if (nextBtn) {
       nextBtn.addEventListener('click', function () {
+        if (!validateStep1()) return;
         if (isBlouseRequired()) {
-          step1.classList.add('tailoring-modal__step--hidden');
-          step2.classList.remove('tailoring-modal__step--hidden');
-          updateTotal();
+          showOnly(step2);
         } else {
           doAddToCart(nextBtn, 'Next');
         }
       });
     }
 
+    /* ── Blouse step 1 back → step 1 ── */
     if (backBtn) {
-      backBtn.addEventListener('click', function () {
-        step2.classList.add('tailoring-modal__step--hidden');
-        step1.classList.remove('tailoring-modal__step--hidden');
+      backBtn.addEventListener('click', function () { showOnly(step1); });
+    }
+
+    /* ── Blouse step 1 next → blouse step 2 ── */
+    if (blouseTypeNext) {
+      blouseTypeNext.addEventListener('click', function () {
+        if (!validateStep2()) return;
+        syncBlouseCards();
+        showOnly(step3);
       });
     }
 
+    /* ── Blouse step 2 back → blouse step 1 ── */
+    if (backBtn3) {
+      backBtn3.addEventListener('click', function () { showOnly(step2); });
+    }
+
+    /* ── Blouse step 2 next → blouse step 3 ── */
+    if (neckSleeveNext) {
+      neckSleeveNext.addEventListener('click', function () {
+        if (!validateStep3()) return;
+        showOnly(step4);
+      });
+    }
+
+    /* ── Blouse step 3 back → blouse step 2 ── */
+    if (backBtn4) {
+      backBtn4.addEventListener('click', function () { showOnly(step3); });
+    }
+
+    /* ── Blouse step 3 next → summary ── */
+    if (measurementsNext) {
+      measurementsNext.addEventListener('click', function () {
+        if (!validateStep4()) return;
+        buildSummary();
+        showOnly(step5);
+      });
+    }
+
+    /* ── Blouse step 4 (summary) back → blouse step 3 ── */
+    if (backBtn5) {
+      backBtn5.addEventListener('click', function () { showOnly(step4); });
+    }
+
+    /* ── Confirm: add to cart ── */
     if (confirmBtn) {
       confirmBtn.addEventListener('click', function () {
-        if (!validateBlouse()) return;
         doAddToCart(confirmBtn, 'Add to Cart');
       });
     }
 
-    /* ── live total ── */
+    /* ── Live total ── */
     modal.addEventListener('change', updateTotal);
 
-    /* ── blouse validation ── */
-    function validateBlouse() {
-      var requiredIds = ['blouse-chest', 'blouse-waist', 'blouse-length'];
-      var valid = true;
-      requiredIds.forEach(function (id) {
-        var el = document.getElementById(id);
-        if (!el) return;
-        var fieldEl = el.closest('.tailoring-modal__field');
-        var errEl = fieldEl && fieldEl.querySelector('.tailoring-modal__field-error');
-        if (!el.value.trim()) {
-          el.classList.add('is-error');
-          if (fieldEl && !errEl) {
-            var err = document.createElement('span');
-            err.className = 'tailoring-modal__field-error';
-            err.textContent = 'This field is required';
-            fieldEl.appendChild(err);
-          }
-          valid = false;
-        } else {
-          el.classList.remove('is-error');
-          if (errEl) errEl.remove();
-        }
-      });
-      return valid;
-    }
-
-    modal.querySelectorAll('.tailoring-modal__field-input').forEach(function (inp) {
-      inp.addEventListener('input', function () {
-        this.classList.remove('is-error');
-        var fieldEl = this.closest('.tailoring-modal__field');
-        var errEl = fieldEl && fieldEl.querySelector('.tailoring-modal__field-error');
-        if (errEl) errEl.remove();
+    /* ── Visual cards (neck / sleeve) sync with select ── */
+    modal.querySelectorAll('.tailoring-modal__visual-card').forEach(function (card) {
+      card.addEventListener('click', function () {
+        var selectId = card.dataset.select;
+        var value    = card.dataset.value;
+        var sel = document.getElementById(selectId);
+        if (sel) sel.value = value;
+        /* highlight siblings */
+        modal.querySelectorAll('.tailoring-modal__visual-card[data-select="' + selectId + '"]').forEach(function (c) {
+          c.classList.toggle('is-selected', c === card);
+        });
+        updateTotal();
       });
     });
 
-    /* ── collect line item properties ── */
-    function buildProperties() {
-      var props = {};
+    /* Sync select change → visual card highlight */
+    ['blouse-neck', 'blouse-sleeves'].forEach(function (id) {
+      var sel = document.getElementById(id);
+      if (!sel) return;
+      sel.addEventListener('change', function () {
+        modal.querySelectorAll('.tailoring-modal__visual-card[data-select="' + id + '"]').forEach(function (c) {
+          c.classList.toggle('is-selected', c.dataset.value === sel.value);
+        });
+        updateTotal();
+      });
+    });
 
-      /* one property per group label, value = selected option label(s) */
+    /* ── Blouse type card highlight (driven by radio) ── */
+    function syncBlouseCards() {
+      var checked = modal.querySelector('input[name="blouse_type"]:checked');
+      modal.querySelectorAll('.tailoring-modal__blouse-card').forEach(function (card) {
+        var forId = card.getAttribute('for');
+        card.classList.toggle('tailoring-modal__blouse-card--selected',
+          checked != null && forId === checked.id);
+      });
+    }
+    modal.addEventListener('change', function (e) {
+      if (e.target && e.target.name === 'blouse_type') { syncBlouseCards(); updateTotal(); }
+    });
+    /* clicking a card also triggers its radio via the label for= */
+
+    /* ── Build summary ── */
+    function buildSummary() {
+      var container = document.getElementById('tailoring-summary');
+      if (!container) return;
+
+      var rows = collectSummaryRows();
+      var html = '';
+      rows.forEach(function (row) {
+        if (!row.value) return;
+        html += '<div class="tailoring-modal__summary-key">' + esc(row.label) + ':</div>' +
+                '<div class="tailoring-modal__summary-val">' + esc(row.value) + '</div>';
+      });
+      container.innerHTML = html;
+    }
+
+    function esc(str) {
+      return String(str)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function collectSummaryRows() {
+      var rows = [];
+
+      /* Step-1 tailoring options */
       var groupMap = {};
       modal.querySelectorAll('.tailoring-modal__input:checked').forEach(function (inp) {
-        var gLabel = inp.dataset.groupLabel || 'Tailoring';
-        if (!groupMap[gLabel]) groupMap[gLabel] = [];
-        groupMap[gLabel].push(inp.value);
+        var g = inp.dataset.groupLabel || 'Tailoring';
+        if (!groupMap[g]) groupMap[g] = [];
+        groupMap[g].push(inp.value);
       });
       Object.keys(groupMap).forEach(function (key) {
-        props[key] = groupMap[key].join(', ');
+        rows.push({ label: key, value: groupMap[key].join(', ') });
       });
 
-      /* blouse measurements */
-      var chest  = document.getElementById('blouse-chest');
-      var waist  = document.getElementById('blouse-waist');
-      var length = document.getElementById('blouse-length');
-      var sleeve = document.getElementById('blouse-sleeve');
-      var notes  = document.getElementById('blouse-notes');
-      if (chest  && chest.value)  props['Blouse - Chest']  = chest.value + ' inches';
-      if (waist  && waist.value)  props['Blouse - Waist']  = waist.value + ' inches';
-      if (length && length.value) props['Blouse - Length'] = length.value + ' inches';
-      if (sleeve && sleeve.value) props['Blouse - Sleeve'] = sleeve.value + ' inches';
-      if (notes  && notes.value)  props['Blouse - Notes']  = notes.value;
+      /* Blouse type */
+      var typeRadio = modal.querySelector('input[name="blouse_type"]:checked');
+      if (typeRadio) rows.push({ label: typeRadio.dataset.groupLabel || 'Blouse Stitching Type', value: typeRadio.value });
 
-      /* tailoring extras total */
+      /* Neck / sleeve / pad */
+      var neck    = document.getElementById('blouse-neck');
+      var sleeves = document.getElementById('blouse-sleeves');
+      var pad     = modal.querySelector('input[name="blouse_pad"]:checked');
+      if (neck    && neck.value)    rows.push({ label: 'Neck',    value: neck.value });
+      if (sleeves && sleeves.value) rows.push({ label: 'Sleeves', value: sleeves.value });
+      if (pad)                      rows.push({ label: 'Pad',     value: pad.value });
+
+      /* Measurements */
+      var measMap = {
+        'meas-blouse-length':  'Blouse Length',
+        'meas-shoulder':       'Shoulder to Shoulder',
+        'meas-sleeve-length':  'Sleeve Length',
+        'meas-sleeve-around':  'Sleeve Around',
+        'meas-armhole':        'Armhole',
+        'meas-chest':          'Chest',
+        'meas-breast':         'Breast',
+        'meas-waist':          'Waist',
+        'meas-front-neck':     'Front Neck Depth',
+        'meas-back-neck':      'Back Neck Depth',
+        'meas-shoulder-point': 'Shoulder to Point'
+      };
+      Object.keys(measMap).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el && el.value) rows.push({ label: measMap[id], value: el.value });
+      });
+
+      /* Notes */
+      var notes = document.getElementById('blouse-notes');
+      if (notes && notes.value.trim()) rows.push({ label: 'Additional Notes', value: notes.value.trim() });
+
+      return rows;
+    }
+
+    /* ── Build line item properties (same data, flat object) ── */
+    function buildProperties() {
+      var props = {};
+      collectSummaryRows().forEach(function (row) {
+        if (row.value) props[row.label] = row.value;
+      });
       var total = getTotalRupees();
       if (total > 0) props['Tailoring Extras'] = formatMoney(total);
-
       return props;
     }
 
-    /* ── add to cart ── */
+    /* ── Add to cart ── */
     function doAddToCart(btn, originalLabel) {
       btn.textContent = '...';
       btn.disabled = true;
 
-      /* ── ADD UNIT MODE: triggered from cart qty prompt ── */
+      /* ADD UNIT MODE */
       if (addUnitContext) {
         var ctx            = addUnitContext;
         var addonVariantId = parseInt(modal.dataset.addonVariantId, 10) || 0;
         var extraRupees    = Math.round(getTotalRupees());
         var props          = buildProperties();
 
-        /* Always add a new separate line for this unit + its own addon */
         fetch('/cart/add.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -778,7 +1615,7 @@
           closeModal();
           return fetch('/cart.js').then(function(r) { return r.json(); });
         })
-        .then(function(cart) {
+        .then(function() {
           document.dispatchEvent(new CustomEvent('cart:open'));
         })
         .catch(function(err) {
@@ -792,17 +1629,16 @@
         return;
       }
 
-      /* ── NORMAL MODE: fresh add from product page ── */
+      /* NORMAL MODE */
       var variantInput = document.getElementById('variant-id-input') ||
                          document.getElementById('variant-id-input-mobile');
       var variantId = variantInput ? parseInt(variantInput.value, 10) : null;
-      if (!variantId) return;
+      if (!variantId) { btn.disabled = false; btn.textContent = originalLabel; return; }
 
       var addonVariantId = parseInt(modal.dataset.addonVariantId, 10) || 0;
       var extraRupees    = Math.round(getTotalRupees());
       var props          = buildProperties();
 
-      /* Step 1: add main product first to get its unique cart line key */
       fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -813,18 +1649,12 @@
         return r.json();
       })
       .then(function (added) {
-        /* If no addon needed, skip step 2 */
         if (!addonVariantId || extraRupees <= 0) return Promise.resolve();
-
-        /* Get the unique key of the just-added main line item */
         var mainKey = added.items && added.items[0] && added.items[0].key;
-
-        /* Step 2: add addon with _linked_item = main line key (unique, not just variant id) */
-        var addonProps = { '_linked_item': String(mainKey || variantId) };
         return fetch('/cart/add.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ items: [{ id: addonVariantId, quantity: extraRupees, properties: addonProps }] })
+          body: JSON.stringify({ items: [{ id: addonVariantId, quantity: extraRupees, properties: { '_linked_item': String(mainKey || variantId) } }] })
         }).then(function (r) {
           if (!r.ok) throw new Error('Cart error ' + r.status);
           return r.json();
@@ -836,12 +1666,10 @@
       })
       .then(function (r) { return r.json(); })
       .then(function (cart) {
-        /* update header cart badge */
         document.querySelectorAll('.header-cart-count').forEach(function (b) {
           b.textContent = cart.item_count;
           b.style.display = '';
         });
-        /* open cart drawer */
         document.dispatchEvent(new CustomEvent('cart:open'));
       })
       .catch(function (err) {
