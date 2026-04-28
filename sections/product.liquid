@@ -611,7 +611,7 @@
   });
 
   // ── Share dropdown ───────────────────────────────────────────
-  page.querySelectorAll('.product-page__share-dropdown').forEach(function(dropdown) {
+  document.querySelectorAll('.product-page__share-dropdown').forEach(function(dropdown) {
     var btn = dropdown.querySelector('.product-page__share-icon-btn');
     if (!btn) return;
     btn.addEventListener('click', function(e) {
@@ -620,7 +620,7 @@
     });
   });
   document.addEventListener('click', function() {
-    page.querySelectorAll('.product-page__share-dropdown').forEach(function(d) {
+    document.querySelectorAll('.product-page__share-dropdown').forEach(function(d) {
       d.classList.remove('is-open');
     });
   });
