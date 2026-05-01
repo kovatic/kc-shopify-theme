@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "careers_form": {
+      "type": "careers-form",
+      "settings": {
+        "roles_metaobject_type": "job_role",
+        "store_locations": "Eral, Tirunelveli, Chennai, Thoothukudi"
+      }
+    }
+  },
+  "order": [
+    "careers_form"
+  ]
+}

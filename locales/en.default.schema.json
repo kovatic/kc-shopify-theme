@@ -120,6 +120,14 @@
     "share_image": "Social share image"
   },
   "sections": {
+    "careers_form": {
+      "name": "Careers form",
+      "metaobject_note": "Roles are loaded from a metaobject. Store locations fall back to the text list below if no store_location metaobject exists.",
+      "roles_metaobject_type_label": "Roles metaobject type",
+      "roles_metaobject_type_info": "Enter the metaobject type handle for job roles (e.g. job_role). Each entry must have a field with key \"title\".",
+      "store_locations_label": "Fallback store locations",
+      "store_locations_info": "Comma-separated list used when no store_location metaobject is found."
+    },
     "tab_product_list": {
       "name": "Tab product list",
       "blocks": {
