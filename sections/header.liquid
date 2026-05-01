@@ -67,7 +67,7 @@
 
     <div class="header-main__icons">
       {%- if section.settings.shop_live_url != blank -%}
-        <a href="{{ section.settings.shop_live_url }}" class="header-shop-live-btn" target="_blank" rel="noopener">
+        <a href="{{ section.settings.shop_live_url }}" class="header-shop-live-btn">
           <span class="header-shop-live-btn__dot" aria-hidden="true"></span>
           {{ section.settings.shop_live_label | default: 'Shop Live' }}
         </a>
