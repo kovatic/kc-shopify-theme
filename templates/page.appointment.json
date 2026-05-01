@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "appointment": {
+      "type": "appointment",
+      "settings": {
+        "title": "Book an appointment",
+        "subtitle": "Schedule a visit at your preferred store location.",
+        "calendar_url": "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3_byvECutiwY1wgBTBo4A89AEDlqFVEGtjoniNu4MqnaCbS5uMsLTEdn1iilgI4iJD7p0JCNZZ?gv=true",
+        "height": 600
+      }
+    }
+  },
+  "order": [
+    "appointment"
+  ]
+}
