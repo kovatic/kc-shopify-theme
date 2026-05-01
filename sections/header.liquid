@@ -66,6 +66,13 @@
     </div>
 
     <div class="header-main__icons">
+      {%- if section.settings.shop_live_url != blank -%}
+        <a href="{{ section.settings.shop_live_url }}" class="header-shop-live-btn" target="_blank" rel="noopener">
+          <span class="header-shop-live-btn__dot" aria-hidden="true"></span>
+          {{ section.settings.shop_live_label | default: 'Shop Live' }}
+        </a>
+      {%- endif -%}
+
       <button class="header-icon-btn header-icon-btn--search" aria-label="{{ 'header.search_label' | t }}">
         {{ 'icon-search.svg' | inline_asset_content }}
       </button>
@@ -462,6 +469,37 @@
     gap: 8px;
     flex: 0 0 auto;
   }
+  .header-shop-live-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 40px;
+    padding: 0 16px;
+    background-color: #ce0570;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+  }
+  .header-shop-live-btn:hover { opacity: 0.88; }
+  .header-shop-live-btn__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #fff;
+    flex-shrink: 0;
+    animation: live-pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes live-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.75); }
+  }
+
   .header-login-btn {
     display: flex;
     align-items: center;
@@ -1203,6 +1241,7 @@
     .header-icon-btn { width: 36px; height: 36px; background: none; }
     .header-icon-btn:hover { background: none; color: var(--color-primary); }
     .header-icon-btn--account-desktop { display: none; }
+    .header-shop-live-btn { display: none; }
     .header-login-btn { display: none; }
     .header-icon-btn--wishlist { display: flex; }
     .header-main__icons .header-icon-btn--search { display: none; }
@@ -1632,6 +1671,22 @@
       "id": "promo_text",
       "label": "t:labels.promo_text",
       "default": "Free Shipping on Orders Above ₹2,999 | Use Code: SILK20"
+    },
+    {
+      "type": "header",
+      "content": "Shop Live"
+    },
+    {
+      "type": "url",
+      "id": "shop_live_url",
+      "label": "Shop Live URL",
+      "info": "Link to your live shopping page. Leave blank to hide the button."
+    },
+    {
+      "type": "text",
+      "id": "shop_live_label",
+      "label": "Shop Live button label",
+      "default": "Shop Live"
     },
     {
       "type": "header",
