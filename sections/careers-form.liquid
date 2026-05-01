@@ -92,7 +92,7 @@
               {%- assign job_roles = metaobjects.job_role.values -%}
               {%- if job_roles != blank -%}
                 {%- for role in job_roles -%}
-                  {%- assign role_name = role.fields.name.value | default: role.fields.title.value -%}
+                  {%- assign role_name = role.fields.title.value -%}
                   {%- if role_name != blank -%}
                     <option value="{{ role_name | escape }}">{{ role_name | escape }}</option>
                   {%- endif -%}
