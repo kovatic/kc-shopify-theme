@@ -89,13 +89,23 @@
               required
             >
               <option value="">{{ 'careers.role_placeholder' | t }}</option>
-              {%- assign role_list = section.settings.job_roles | split: ',' -%}
-              {%- for role in role_list -%}
-                {%- assign role_trimmed = role | strip -%}
-                {%- if role_trimmed != blank -%}
-                  <option value="{{ role_trimmed | escape }}">{{ role_trimmed | escape }}</option>
-                {%- endif -%}
-              {%- endfor -%}
+              {%- assign job_roles = metaobjects.job_role.values -%}
+              {%- if job_roles != blank -%}
+                {%- for role in job_roles -%}
+                  {%- assign role_name = role.fields.name.value | default: role.fields.title.value -%}
+                  {%- if role_name != blank -%}
+                    <option value="{{ role_name | escape }}">{{ role_name | escape }}</option>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- else -%}
+                {%- assign role_list = section.settings.job_roles | split: ',' -%}
+                {%- for role in role_list -%}
+                  {%- assign role_trimmed = role | strip -%}
+                  {%- if role_trimmed != blank -%}
+                    <option value="{{ role_trimmed | escape }}">{{ role_trimmed | escape }}</option>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
             </select>
           </div>
         </div>
