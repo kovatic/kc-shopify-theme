@@ -26,12 +26,6 @@
   <div class="header-main__inner">
 
     <div class="header-main__left">
-      {%- if section.settings.shop_live_url != blank -%}
-        <a href="{{ section.settings.shop_live_url }}" class="header-shop-live-btn" target="_blank" rel="noopener">
-          <span class="header-shop-live-btn__dot" aria-hidden="true"></span>
-          {{ section.settings.shop_live_label | default: 'Shop Live' }}
-        </a>
-      {%- endif -%}
       <button class="header-hamburger" aria-label="{{ 'header.menu_label' | t }}" aria-expanded="false" aria-controls="mobile-nav-drawer">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M2.5 5H17.5M2.5 10H17.5M2.5 15H17.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
@@ -72,6 +66,13 @@
     </div>
 
     <div class="header-main__icons">
+      {%- if section.settings.shop_live_url != blank -%}
+        <a href="{{ section.settings.shop_live_url }}" class="header-shop-live-btn" target="_blank" rel="noopener">
+          <span class="header-shop-live-btn__dot" aria-hidden="true"></span>
+          {{ section.settings.shop_live_label | default: 'Shop Live' }}
+        </a>
+      {%- endif -%}
+
       <button class="header-icon-btn header-icon-btn--search" aria-label="{{ 'header.search_label' | t }}">
         {{ 'icon-search.svg' | inline_asset_content }}
       </button>
@@ -838,11 +839,11 @@
     line-height: 1.4;
   }
 
-  /* ── Left group (shop live + hamburger + mobile search) ── */
+  /* ── Left group (hamburger + mobile search) ── */
   .header-main__left {
-    display: flex;
+    display: none;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
   }
   .header-icon-btn--search-mobile { display: none; }
 
@@ -1266,6 +1267,7 @@
     .header-icon-btn { width: 36px; height: 36px; background: none; }
     .header-icon-btn:hover { background: none; color: var(--color-primary); }
     .header-icon-btn--account-desktop { display: none; }
+    .header-shop-live-btn { display: none; }
     .header-login-btn { display: none; }
     .header-icon-btn--wishlist { display: flex; }
     .header-main__icons .header-icon-btn--search { display: none; }
