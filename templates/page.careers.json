@@ -3,7 +3,7 @@
     "careers_form": {
       "type": "careers-form",
       "settings": {
-        "roles_metaobject_type": "job_role",
+        "job_roles": "Sales Associate, Store Manager, Tailor, Customer Service, Warehouse Staff, Other",
         "store_locations": "Eral, Tirunelveli, Chennai, Thoothukudi"
       }
     }

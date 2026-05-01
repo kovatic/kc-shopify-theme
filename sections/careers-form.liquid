@@ -8,6 +8,7 @@
 
     <div class="careers-page__form-wrap">
       {%- form 'contact' -%}
+        <input type="hidden" name="contact[subject]" value="Job Application – K.Chinnadurai & Co.">
 
         {%- if form.posted_successfully? -%}
           <div class="careers-form__success">
@@ -88,20 +89,13 @@
               required
             >
               <option value="">{{ 'careers.role_placeholder' | t }}</option>
-              {%- assign role_metaobject = metaobjects[section.settings.roles_metaobject_type] -%}
-              {%- if role_metaobject != blank -%}
-                {%- for role in role_metaobject.values -%}
-                  <option value="{{ role.fields.title.value | escape }}">{{ role.fields.title.value | escape }}</option>
-                {%- endfor -%}
-              {%- else -%}
-                {%- comment -%} Fallback hardcoded roles if no metaobject configured {%- endcomment -%}
-                <option value="Sales Associate">Sales associate</option>
-                <option value="Store Manager">Store manager</option>
-                <option value="Tailor">Tailor</option>
-                <option value="Customer Service">Customer service</option>
-                <option value="Warehouse Staff">Warehouse staff</option>
-                <option value="Other">Other</option>
-              {%- endif -%}
+              {%- assign role_list = section.settings.job_roles | split: ',' -%}
+              {%- for role in role_list -%}
+                {%- assign role_trimmed = role | strip -%}
+                {%- if role_trimmed != blank -%}
+                  <option value="{{ role_trimmed | escape }}">{{ role_trimmed | escape }}</option>
+                {%- endif -%}
+              {%- endfor -%}
             </select>
           </div>
         </div>
@@ -357,15 +351,11 @@
   "name": "t:sections.careers_form.name",
   "settings": [
     {
-      "type": "paragraph",
-      "content": "t:sections.careers_form.metaobject_note"
-    },
-    {
-      "type": "text",
-      "id": "roles_metaobject_type",
-      "label": "t:sections.careers_form.roles_metaobject_type_label",
-      "info": "t:sections.careers_form.roles_metaobject_type_info",
-      "default": "job_role"
+      "type": "textarea",
+      "id": "job_roles",
+      "label": "t:sections.careers_form.job_roles_label",
+      "info": "t:sections.careers_form.job_roles_info",
+      "default": "Sales Associate, Store Manager, Tailor, Customer Service, Warehouse Staff, Other"
     },
     {
       "type": "textarea",
