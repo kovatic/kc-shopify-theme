@@ -11,7 +11,7 @@
     <div class="appointment-page__calendar">
       <iframe
         src="{{ section.settings.calendar_url }}"
-        style="border: 0"
+        style="border: 0; background-color: #ffffff;"
         width="100%"
         height="{{ section.settings.height }}"
         frameborder="0"
@@ -57,6 +57,12 @@
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 16px rgba(46, 31, 31, 0.07);
+    background-color: #ffffff;
+  }
+
+  .appointment-page__calendar iframe {
+    display: block;
+    background-color: #ffffff;
   }
 
   @media screen and (max-width: 767px) {
