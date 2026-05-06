@@ -14,7 +14,6 @@
       "blocks": {
         "slide_jniLDz": {
           "type": "slide",
-          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/KC_website_banner_Jpg.jpg",
             "mobile_image": "shopify://shop_images/KC_website_baneer_Jpg.jpg",
@@ -25,7 +24,7 @@
             "button_url": "shopify://collections/lehenga",
             "text_position": "middle-left",
             "show_overlay": true,
-            "overlay_opacity": 30
+            "overlay_opacity": 0
           }
         },
         "slide_krfQVT": {
