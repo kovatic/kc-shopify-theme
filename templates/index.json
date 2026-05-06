@@ -12,6 +12,21 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
+        "slide_NrYCxJ": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/KC_website_banner_Jpg.jpg",
+            "mobile_image": "shopify://shop_images/KC_website_baneer_Jpg.jpg",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "shopify://collections/lehenga",
+            "text_position": "middle-left",
+            "show_overlay": true,
+            "overlay_opacity": 30
+          }
+        },
         "slide_krfQVT": {
           "type": "slide",
           "settings": {
@@ -74,6 +89,7 @@
         }
       },
       "block_order": [
+        "slide_NrYCxJ",
         "slide_krfQVT",
         "slide_WeH4zi",
         "slide_FGrRqi",
