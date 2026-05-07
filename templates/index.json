@@ -12,6 +12,21 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
+        "slide_RHchTJ": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/kc_banner_for_website.png",
+            "mobile_image": "shopify://shop_images/kc_PNG.png",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "shopify://collections/lehenga",
+            "text_position": "middle-left",
+            "show_overlay": true,
+            "overlay_opacity": 0
+          }
+        },
         "slide_krfQVT": {
           "type": "slide",
           "settings": {
@@ -57,6 +72,19 @@
             "overlay_opacity": 80
           }
         },
+        "slide_ARgcKR": {
+          "type": "slide",
+          "settings": {
+            "subheading": "New Collection",
+            "heading": "Elegance in Every Thread",
+            "text": "Discover our curated collection of handcrafted sarees.",
+            "button_label": "Shop Now",
+            "button_url": "",
+            "text_position": "middle-left",
+            "show_overlay": true,
+            "overlay_opacity": 30
+          }
+        },
         "slide_aPXt94": {
           "type": "slide",
           "settings": {
@@ -74,9 +102,11 @@
         }
       },
       "block_order": [
+        "slide_RHchTJ",
         "slide_krfQVT",
         "slide_WeH4zi",
         "slide_FGrRqi",
+        "slide_ARgcKR",
         "slide_aPXt94"
       ],
       "name": "t:sections.banner.name",
