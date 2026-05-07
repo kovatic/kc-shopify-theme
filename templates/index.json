@@ -15,8 +15,8 @@
         "slide_krfQVT": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Website_Launch_Desktop.jpg",
-            "mobile_image": "shopify://shop_images/Website_Launch_Mobile.jpg",
+            "image": "shopify://shop_images/Hero-banner1.webp",
+            "mobile_image": "shopify://shop_images/Hero_banner1_Mob.webp",
             "subheading": "",
             "heading": "",
             "text": "",
@@ -25,59 +25,11 @@
             "text_position": "middle-left",
             "show_overlay": false,
             "overlay_opacity": 30
-          }
-        },
-        "slide_WeH4zi": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/Coupon_Web.jpg",
-            "mobile_image": "shopify://shop_images/Coupon_Mobile.jpg",
-            "subheading": "",
-            "heading": "",
-            "text": "",
-            "button_label": "",
-            "button_url": "",
-            "text_position": "middle-left",
-            "show_overlay": false,
-            "overlay_opacity": 30
-          }
-        },
-        "slide_FGrRqi": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/Jewels_web.jpg",
-            "mobile_image": "shopify://shop_images/Jewels_mobile.jpg",
-            "subheading": "",
-            "heading": "",
-            "text": "",
-            "button_label": "",
-            "button_url": "",
-            "text_position": "middle-left",
-            "show_overlay": false,
-            "overlay_opacity": 80
-          }
-        },
-        "slide_aPXt94": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/final_1.jpg",
-            "mobile_image": "shopify://shop_images/final_mobile_a071476e-bced-4b6c-b852-984e8fa2504c.jpg",
-            "subheading": "",
-            "heading": "",
-            "text": "",
-            "button_label": "",
-            "button_url": "shopify://collections/banarasi-silk-saree",
-            "text_position": "middle-left",
-            "show_overlay": true,
-            "overlay_opacity": 0
           }
         }
       },
       "block_order": [
-        "slide_krfQVT",
-        "slide_WeH4zi",
-        "slide_FGrRqi",
-        "slide_aPXt94"
+        "slide_krfQVT"
       ],
       "name": "t:sections.banner.name",
       "settings": {
@@ -212,7 +164,6 @@
           "type": "image",
           "name": "t:general.image",
           "settings": {
-            "image": "shopify://shop_images/center.jpg",
             "url": "https://kcgoldhouse.com/"
           },
           "blocks": {}
@@ -310,7 +261,6 @@
         "brand_logo_7iQD8t": {
           "type": "brand_logo",
           "settings": {
-            "logo": "shopify://shop_images/KC_Logo_1_fc729608-ffe0-4100-986e-48624fe4f316.webp",
             "name": "Brand name",
             "url": ""
           }
@@ -318,7 +268,6 @@
         "brand_logo_HEKGBE": {
           "type": "brand_logo",
           "settings": {
-            "logo": "shopify://shop_images/image_52.webp",
             "name": "Brand name",
             "url": ""
           }
@@ -326,7 +275,6 @@
         "brand_logo_9ycq9P": {
           "type": "brand_logo",
           "settings": {
-            "logo": "shopify://shop_images/image_53.avif",
             "name": "Brand name",
             "url": ""
           }
@@ -334,7 +282,6 @@
         "brand_logo_MXrGiT": {
           "type": "brand_logo",
           "settings": {
-            "logo": "shopify://shop_images/image_54.avif",
             "name": "Brand name",
             "url": ""
           }
@@ -348,7 +295,6 @@
       ],
       "name": "t:sections.about.name",
       "settings": {
-        "founder_image": "shopify://shop_images/image_50.avif",
         "founder_name": "Mr. K. Chinnadurai",
         "heading": "56 Years of Timeless Excellence, Where Every Saree Is Truly Unique",
         "description": "<p>Mr. K. Chinnadurai, a visionary who believed that simple work philosophies could create great ventures, founded K. Chinnadurai & Co. in<strong> 1970</strong> during his teenage years in Tuticorin District. Starting with a small showroom and direct customer sales, the business quickly gained a reputation for outstanding service and high-quality garments.</p>",
