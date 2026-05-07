@@ -72,19 +72,6 @@
             "overlay_opacity": 80
           }
         },
-        "slide_ARgcKR": {
-          "type": "slide",
-          "settings": {
-            "subheading": "New Collection",
-            "heading": "Elegance in Every Thread",
-            "text": "Discover our curated collection of handcrafted sarees.",
-            "button_label": "Shop Now",
-            "button_url": "",
-            "text_position": "middle-left",
-            "show_overlay": true,
-            "overlay_opacity": 30
-          }
-        },
         "slide_aPXt94": {
           "type": "slide",
           "settings": {
@@ -106,7 +93,6 @@
         "slide_krfQVT",
         "slide_WeH4zi",
         "slide_FGrRqi",
-        "slide_ARgcKR",
         "slide_aPXt94"
       ],
       "name": "t:sections.banner.name",
