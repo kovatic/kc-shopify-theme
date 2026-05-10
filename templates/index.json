@@ -41,21 +41,6 @@
             "show_overlay": false,
             "overlay_opacity": 30
           }
-        },
-        "slide_WeH4zi": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/Coupon_Web.jpg",
-            "mobile_image": "shopify://shop_images/Coupon_Mobile.jpg",
-            "subheading": "",
-            "heading": "",
-            "text": "",
-            "button_label": "",
-            "button_url": "",
-            "text_position": "middle-left",
-            "show_overlay": false,
-            "overlay_opacity": 30
-          }
         }
       },
       "block_order": [
@@ -195,6 +180,7 @@
           "type": "image",
           "name": "t:general.image",
           "settings": {
+            "image": "shopify://shop_images/center.jpg",
             "url": "https://kcgoldhouse.com/"
           },
           "blocks": {}
