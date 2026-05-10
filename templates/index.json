@@ -12,11 +12,41 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
+        "slide_RHchTJ": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/kc_banner_for_website.png",
+            "mobile_image": "shopify://shop_images/kc_PNG.png",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "shopify://collections/lehenga",
+            "text_position": "middle-left",
+            "show_overlay": true,
+            "overlay_opacity": 0
+          }
+        },
         "slide_krfQVT": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Hero-banner1.webp",
-            "mobile_image": "shopify://shop_images/Hero_banner1_Mob_1.webp",
+            "image": "shopify://shop_images/Website_Launch_Desktop.jpg",
+            "mobile_image": "shopify://shop_images/Website_Launch_Mobile.jpg",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "",
+            "text_position": "middle-left",
+            "show_overlay": false,
+            "overlay_opacity": 30
+          }
+        },
+        "slide_WeH4zi": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Coupon_Web.jpg",
+            "mobile_image": "shopify://shop_images/Coupon_Mobile.jpg",
             "subheading": "",
             "heading": "",
             "text": "",
@@ -29,6 +59,7 @@
         }
       },
       "block_order": [
+        "slide_RHchTJ",
         "slide_krfQVT"
       ],
       "name": "t:sections.banner.name",

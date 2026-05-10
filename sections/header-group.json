@@ -14,10 +14,28 @@
     "header": {
       "type": "header",
       "blocks": {
-        "mega_menu_MzfM6K": {
+        "mega_menu_axEnd6": {
           "type": "mega_menu",
           "settings": {
-            "nav_link": "Women",
+            "nav_link": "Womens",
+            "col1_heading": "Drees Meterial",
+            "col1_menu": "",
+            "col2_heading": "",
+            "col2_menu": "",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_label": "",
+            "card1_url": "",
+            "card2_label": "",
+            "card2_url": "",
+            "card3_label": "",
+            "card3_url": ""
+          }
+        },
+        "mega_menu_rgyCtx": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_link": "",
             "col1_heading": "",
             "col1_menu": "",
             "col2_heading": "",
@@ -30,6 +48,27 @@
             "card2_url": "",
             "card3_label": "",
             "card3_url": ""
+          }
+        },
+        "mega_menu_MzfM6K": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_link": "Womens",
+            "col1_heading": "Womens",
+            "col1_menu": "womens",
+            "col2_heading": "",
+            "col2_menu": "",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_image": "shopify://shop_images/Rani_Pink_Saffron_Orange_Lehenga_Choli.jpg",
+            "card1_label": "Rani Pink Saffron Orange Lehenga Choli",
+            "card1_url": "shopify://products/rani-pink-saffron-orange-lehenga-choli-featuring-vibrant-banarasi-weave-intricate-paisley-floral-motifs-multicolor-zari-work-decorative-waistband-dupatta-with-gold-bootis-rich-scalloped-border-perfect-for-bridal-festive-wear",
+            "card2_image": "shopify://shop_images/Dark_Beige_Cotton_Maxi_Set.png",
+            "card2_label": "Dark Beige Cotton Maxi Set",
+            "card2_url": "shopify://products/dark-beige-cotton-maxi-set-a-graceful-cotton-maxi-set-in-a-rich-dark-beige-tone-designed-for-comfort-and-effortless-elegance-with-a-soft-breathable-feel",
+            "card3_image": "shopify://shop_images/Pink_Gold_Classic_Grace_Chudi_Material_Set.png",
+            "card3_label": "Pink Gold Classic Grace Chudi Material Set ",
+            "card3_url": "shopify://products/pink-gold-classic-grace-chudi-material-set-a-charming-pink-and-gold-chudi-material-set-featuring-elegant-tones-and-subtle-detailing-crafted-from-rich-fabric-that-offers-a-graceful-festive-look-perfectly-paired-with-a-complementing-dupatta"
           }
         },
         "mega_menu_BtrgXR": {
@@ -55,16 +94,19 @@
           "type": "mega_menu",
           "settings": {
             "nav_link": "Kora Cotton Sarees",
-            "col1_heading": "",
-            "col1_menu": "",
+            "col1_heading": "Kora Cotton Sarees",
+            "col1_menu": "kora-cotton-sarees-menu",
             "col2_heading": "",
             "col2_menu": "",
             "col3_heading": "",
             "col3_menu": "",
+            "card1_image": "shopify://shop_images/DSC07964_1.webp",
             "card1_label": "Rose Carbon Kora Saree",
             "card1_url": "shopify://products/rose-carbon-kora-saree",
-            "card2_label": "Mulberry Mist Saree",
+            "card2_image": "shopify://shop_images/DSC07945.jpg",
+            "card2_label": "Plum Kora Cotton",
             "card2_url": "shopify://products/mulberry-mist-saree",
+            "card3_image": "shopify://shop_images/DSC07968_1_1.jpg",
             "card3_label": "Oceanic Kora Cotton",
             "card3_url": "shopify://products/oceanic-kora-cotton"
           }
@@ -73,16 +115,19 @@
           "type": "mega_menu",
           "settings": {
             "nav_link": "Banarasi Silk Sarees",
-            "col1_heading": "",
-            "col1_menu": "",
+            "col1_heading": "Banarasi Silk Sarees",
+            "col1_menu": "banarasi-silk-sarees-menu",
             "col2_heading": "",
             "col2_menu": "",
             "col3_heading": "",
             "col3_menu": "",
+            "card1_image": "shopify://shop_images/DSC07787.webp",
             "card1_label": "Red Banarasi Saree",
             "card1_url": "shopify://products/red-banarasi-saree",
+            "card2_image": "shopify://shop_images/DSC07810.jpg",
             "card2_label": "Yellow Banarasi Saree",
             "card2_url": "shopify://products/yellow-banarasi-saree",
+            "card3_image": "shopify://shop_images/DSC07840_1.jpg",
             "card3_label": "Green Banarasi Saree",
             "card3_url": "shopify://products/green-banarasi-saree"
           }
@@ -91,16 +136,19 @@
           "type": "mega_menu",
           "settings": {
             "nav_link": "Geogrette Sarees",
-            "col1_heading": "",
-            "col1_menu": "",
+            "col1_heading": "Geogrette Sarees",
+            "col1_menu": "geogrette-sarees",
             "col2_heading": "",
             "col2_menu": "",
             "col3_heading": "",
             "col3_menu": "",
+            "card1_image": "shopify://shop_images/DSC08256.webp",
             "card1_label": "Coral Red Georgette Saree",
             "card1_url": "shopify://products/magenta-georgette-saree",
+            "card2_image": "shopify://shop_images/DSC08240_1.webp",
             "card2_label": "Emerald Charm Georgette Saree",
             "card2_url": "shopify://products/emerald-charm-georgette-saree",
+            "card3_image": "shopify://shop_images/DSC08272.webp",
             "card3_label": "Magenta Georgette Saree",
             "card3_url": "shopify://products/magenta-georgette-saree-1"
           }
@@ -109,16 +157,19 @@
           "type": "mega_menu",
           "settings": {
             "nav_link": "Soft Silk Sarees",
-            "col1_heading": "",
-            "col1_menu": "",
+            "col1_heading": "Soft Silk Sarees",
+            "col1_menu": "soft-silk-sarees",
             "col2_heading": "",
             "col2_menu": "",
             "col3_heading": "",
             "col3_menu": "",
+            "card1_image": "shopify://shop_images/DSC08119.webp",
             "card1_label": "Gopuram Silk Saree",
             "card1_url": "shopify://products/gopuram-silk-saree",
+            "card2_image": "shopify://shop_images/DSC08173.jpg",
             "card2_label": "Aurelin Silk Saree",
             "card2_url": "shopify://products/aurelin-silk-saree",
+            "card3_image": "shopify://shop_images/DSC08214.jpg",
             "card3_label": "Varnika Silk Saree",
             "card3_url": "shopify://products/varnika-silk-saree"
           }
@@ -128,7 +179,7 @@
           "settings": {
             "nav_link": "🛒 Our Stores",
             "col1_heading": "Locations",
-            "col1_menu": "",
+            "col1_menu": "stores-menu",
             "col2_heading": "",
             "col2_menu": "",
             "col3_heading": "",
@@ -143,6 +194,8 @@
         }
       },
       "block_order": [
+        "mega_menu_axEnd6",
+        "mega_menu_rgyCtx",
         "mega_menu_MzfM6K",
         "mega_menu_BtrgXR",
         "mega_menu_R8gjQt",
@@ -152,6 +205,7 @@
         "mega_menu_UxxNjG"
       ],
       "settings": {
+        "logo": "shopify://shop_images/eng_logo_9e0bdf3f-7512-42d8-9fbd-3bded5607b88.webp",
         "logo_mobile": "shopify://shop_images/eng_logo.png",
         "top_menu": "",
         "menu": "main-menu",
