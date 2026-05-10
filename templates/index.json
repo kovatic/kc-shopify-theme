@@ -12,21 +12,6 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
-        "slide_48gw4q": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/hero_banner2_1.webp",
-            "mobile_image": "shopify://shop_images/hero_banner2-mob.webp",
-            "subheading": "",
-            "heading": "",
-            "text": "",
-            "button_label": "",
-            "button_url": "",
-            "text_position": "middle-left",
-            "show_overlay": false,
-            "overlay_opacity": 30
-          }
-        },
         "slide_RHchTJ": {
           "type": "slide",
           "settings": {
@@ -56,12 +41,27 @@
             "show_overlay": false,
             "overlay_opacity": 30
           }
+        },
+        "slide_48gw4q": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/hero_banner2_1.webp",
+            "mobile_image": "shopify://shop_images/hero_banner2-mob.webp",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "",
+            "text_position": "middle-left",
+            "show_overlay": false,
+            "overlay_opacity": 30
+          }
         }
       },
       "block_order": [
-        "slide_48gw4q",
         "slide_RHchTJ",
-        "slide_krfQVT"
+        "slide_krfQVT",
+        "slide_48gw4q"
       ],
       "name": "t:sections.banner.name",
       "settings": {
