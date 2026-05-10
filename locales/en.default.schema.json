@@ -120,6 +120,13 @@
     "share_image": "Social share image"
   },
   "sections": {
+    "careers_form": {
+      "name": "Careers form",
+      "job_roles_label": "Job roles",
+      "job_roles_info": "Comma-separated list of roles shown in the dropdown (e.g. Tailor, Store Manager, Other).",
+      "store_locations_label": "Store locations",
+      "store_locations_info": "Comma-separated list of store locations shown in the dropdown."
+    },
     "tab_product_list": {
       "name": "Tab product list",
       "blocks": {

@@ -186,10 +186,8 @@
             "col3_menu": "",
             "card1_label": "",
             "card1_url": "shopify://metaobjects/store/eral",
-            "card2_image": "shopify://shop_images/DSC02226.jpg",
             "card2_label": "",
             "card2_url": "shopify://metaobjects/store/thiruchendur",
-            "card3_image": "shopify://shop_images/RKL_1940_JPG.jpg",
             "card3_label": "",
             "card3_url": "shopify://metaobjects/store/chennai"
           }
@@ -213,6 +211,8 @@
         "menu": "main-menu",
         "whatsapp_number": "+91-9488202320",
         "promo_text": "Free Shipping on Orders Above ₹1,999",
+        "shop_live_url": "shopify://pages/shop-by-video-call",
+        "shop_live_label": "Shop Live",
         "highlight_nav_item": "KC Gold House",
         "highlight_nav_style": "button",
         "highlight_nav_icon": "shopify://shop_images/Group_3.png",

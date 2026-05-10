@@ -66,6 +66,13 @@
     </div>
 
     <div class="header-main__icons">
+      {%- if section.settings.shop_live_url != blank -%}
+        <a href="{{ section.settings.shop_live_url }}" class="header-shop-live-btn">
+          <span class="header-shop-live-btn__dot" aria-hidden="true"></span>
+          {{ section.settings.shop_live_label | default: 'Shop Live' }}
+        </a>
+      {%- endif -%}
+
       <button class="header-icon-btn header-icon-btn--search" aria-label="{{ 'header.search_label' | t }}">
         {{ 'icon-search.svg' | inline_asset_content }}
       </button>
@@ -462,6 +469,62 @@
     gap: 8px;
     flex: 0 0 auto;
   }
+  .header-shop-live-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    height: 36px;
+    padding: 0 14px 0 10px;
+    background: linear-gradient(135deg, #e8005a 0%, #ff4e8a 100%);
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    border-radius: 20px;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(232, 0, 90, 0.35);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .header-shop-live-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  .header-shop-live-btn:hover {
+    box-shadow: 0 4px 16px rgba(232, 0, 90, 0.5);
+    transform: translateY(-1px);
+  }
+  .header-shop-live-btn__dot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+  }
+  .header-shop-live-btn__dot::before,
+  .header-shop-live-btn__dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background-color: #fff;
+  }
+  .header-shop-live-btn__dot::after {
+    animation: live-ripple 1.4s ease-out infinite;
+    background-color: rgba(255,255,255,0.6);
+  }
+  @keyframes live-ripple {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(2.6); opacity: 0; }
+  }
+
   .header-login-btn {
     display: flex;
     align-items: center;
@@ -787,6 +850,7 @@
   /* ── Hamburger (mobile only) ── */
   .header-hamburger {
     display: none;
+
     align-items: center;
     justify-content: center;
     width: 36px;
@@ -1203,6 +1267,7 @@
     .header-icon-btn { width: 36px; height: 36px; background: none; }
     .header-icon-btn:hover { background: none; color: var(--color-primary); }
     .header-icon-btn--account-desktop { display: none; }
+    .header-shop-live-btn { display: none; }
     .header-login-btn { display: none; }
     .header-icon-btn--wishlist { display: flex; }
     .header-main__icons .header-icon-btn--search { display: none; }
@@ -1632,6 +1697,22 @@
       "id": "promo_text",
       "label": "t:labels.promo_text",
       "default": "Free Shipping on Orders Above ₹2,999 | Use Code: SILK20"
+    },
+    {
+      "type": "header",
+      "content": "Shop Live"
+    },
+    {
+      "type": "url",
+      "id": "shop_live_url",
+      "label": "Shop Live URL",
+      "info": "Link to your live shopping page. Leave blank to hide the button."
+    },
+    {
+      "type": "text",
+      "id": "shop_live_label",
+      "label": "Shop Live button label",
+      "default": "Shop Live"
     },
     {
       "type": "header",

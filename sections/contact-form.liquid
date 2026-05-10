@@ -58,6 +58,7 @@
       {%- comment -%} Right: Form {%- endcomment -%}
       <div class="contact-page__form-wrap">
         {%- form 'contact' -%}
+          <input type="hidden" name="contact[subject]" value="Customer Enquiry – K.Chinnadurai & Co.">
           {%- if form.posted_successfully? -%}
             <div class="contact-form__success">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

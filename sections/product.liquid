@@ -137,6 +137,21 @@
             </div>
           {%- endif -%}
 
+          {%- comment -%} Stitching button (only for tailoring-enabled products) {%- endcomment -%}
+          {%- if product.metafields.custom.tailoring_groups != blank -%}
+            <button type="button" class="product-page__stitching-btn js-tailoring-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 17l4-4 4 4 4-8 4 4"/>
+                <circle cx="3" cy="17" r="1.5" fill="currentColor" stroke="none"/>
+                <circle cx="7" cy="13" r="1.5" fill="currentColor" stroke="none"/>
+                <circle cx="11" cy="17" r="1.5" fill="currentColor" stroke="none"/>
+                <circle cx="15" cy="9" r="1.5" fill="currentColor" stroke="none"/>
+                <circle cx="19" cy="13" r="1.5" fill="currentColor" stroke="none"/>
+              </svg>
+              {{ 'tailoring.stitching_btn' | t }}
+            </button>
+          {%- endif -%}
+
           {%- comment -%} ATC + Wishlist + Share row {%- endcomment -%}
           <div class="product-page__action-row">
             <button
@@ -271,9 +286,28 @@
 
 </div>
 
+{%- if product.metafields.custom.tailoring_groups != blank -%}
+  {%- assign tailoring_addon_product = all_products['tailoring-add-on'] -%}
+  {%- assign tailoring_addon_variant_id = tailoring_addon_product.variants.first.id -%}
+  {% render 'tailoring-modal', product: product, tailoring_addon_variant_id: tailoring_addon_variant_id %}
+{%- endif -%}
+
 {%- comment -%} Mobile sticky ATC bar {%- endcomment -%}
 <div class="product-page__sticky-atc" id="sticky-atc">
   <input type="hidden" name="id" value="{{ current_variant.id }}" id="variant-id-input-mobile">
+  {%- if product.metafields.custom.tailoring_groups != blank -%}
+    <button type="button" class="product-page__stitching-btn product-page__stitching-btn--mobile js-tailoring-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 17l4-4 4 4 4-8 4 4"/>
+        <circle cx="3" cy="17" r="1.5" fill="currentColor" stroke="none"/>
+        <circle cx="7" cy="13" r="1.5" fill="currentColor" stroke="none"/>
+        <circle cx="11" cy="17" r="1.5" fill="currentColor" stroke="none"/>
+        <circle cx="15" cy="9" r="1.5" fill="currentColor" stroke="none"/>
+        <circle cx="19" cy="13" r="1.5" fill="currentColor" stroke="none"/>
+      </svg>
+      {{ 'tailoring.stitching_btn' | t }}
+    </button>
+  {%- endif -%}
   <button
     type="button"
     class="product-page__atc-btn js-atc-btn"
@@ -534,6 +568,22 @@
     });
   }
 
+  var tailoringExtraRupees = 0;
+
+  function renderPrice(variant) {
+    if (!priceEl || !variant) return;
+    var html = '';
+    if (variant.compare_at_price > variant.price) {
+      html += '<span class="product-page__price-compare">' + formatMoney(variant.compare_at_price) + '</span> ';
+    }
+    var displayPrice = variant.price + Math.round(tailoringExtraRupees * 100);
+    html += formatMoney(displayPrice);
+    if (tailoringExtraRupees > 0) {
+      html += ' <span class="product-page__price-tailoring-note">{{ "tailoring.price_includes_stitching" | t }}</span>';
+    }
+    priceEl.innerHTML = html;
+  }
+
   function updateVariant(variant) {
     if (!variant) return;
     // Update hidden id inputs in both forms
@@ -544,15 +594,7 @@
       url.searchParams.set('variant', variant.id);
       history.replaceState({}, '', url.toString());
     }
-    // Update price
-    if (priceEl) {
-      var html = '';
-      if (variant.compare_at_price > variant.price) {
-        html += '<span class="product-page__price-compare">' + formatMoney(variant.compare_at_price) + '</span> ';
-      }
-      html += formatMoney(variant.price);
-      priceEl.innerHTML = html;
-    }
+    renderPrice(variant);
     // Update ATC buttons availability
     var available = variant.available;
     var addLabel  = '{{ "sections.product_list.add_to_cart" | t }}';
@@ -562,6 +604,18 @@
       btn.textContent = available ? addLabel : soldLabel;
     });
   }
+
+  document.addEventListener('tailoring:total-change', function(e) {
+    tailoringExtraRupees = e.detail.rupees;
+    var opts = getSelectedOptions();
+    var variant = findVariant(opts);
+    if (!variant) {
+      /* fall back to the currently selected variant id */
+      var currentId = parseInt(document.getElementById('variant-id-input').value, 10);
+      variant = product.variants.find(function(v) { return v.id === currentId; });
+    }
+    renderPrice(variant);
+  });
 
   // ── AJAX Add to Cart (batched) ────────────────────────────────
   var atcPending = 0;
@@ -986,6 +1040,13 @@
   } else {
     init();
   }
+
+  /* ── Tailoring modal trigger ── */
+  document.querySelectorAll('.js-tailoring-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (window.openTailoringModal) window.openTailoringModal();
+    });
+  });
 })();
 </script>
 
@@ -1120,6 +1181,12 @@
     color: #999;
     text-decoration: line-through;
   }
+  .product-page__price-tailoring-note {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #ce0570;
+    letter-spacing: 0.02em;
+  }
 
   /* Action row: ATC + Wishlist + Share */
 .product-page__action-row {
@@ -1129,6 +1196,31 @@
   }
   .product-page__atc-btn--desktop {
     flex: 1;
+  }
+
+  /* Stitching button */
+  .product-page__stitching-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 48px;
+    margin-bottom: 10px;
+    background: #fff;
+    color: var(--color-primary, #2e1f1f);
+    border: 1.5px solid var(--color-primary, #2e1f1f);
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .product-page__stitching-btn:hover {
+    background: var(--color-primary, #2e1f1f);
+    color: #fff;
   }
   .product-page__wishlist-icon-btn {
     flex-shrink: 0;
@@ -1522,6 +1614,14 @@
     .product-page__sticky-atc .product-page__atc-btn {
       flex: 1;
       border-radius: 4px;
+    }
+    .product-page__stitching-btn--mobile {
+      width: auto;
+      flex-shrink: 0;
+      height: 48px;
+      margin-bottom: 0;
+      padding: 0 16px;
+      font-size: 0.8rem;
     }
     .product-page__sticky-wishlist {
       flex-shrink: 0;
