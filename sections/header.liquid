@@ -434,21 +434,24 @@
   .header-main__inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: 0 var(--page-margin, 24px);
     max-width: var(--page-width, 1900px);
     margin: 0 auto;
     height: 80px;
+    position: relative;
   }
   .header-main__spacer {
-    flex: 0 0 auto;
-    width: 188px;
+    display: none;
   }
   .header-main__logo {
-    flex: 1;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: auto;
   }
   .header-main__logo-img {
     max-height: 56px;
@@ -466,8 +469,8 @@
   .header-main__icons {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 8px;
-    flex: 0 0 auto;
   }
   .header-shop-live-btn {
     display: flex;
@@ -1262,7 +1265,7 @@
     .header-main__logo-link--mobile { display: block; }
     .has-mobile-logo .header-main__logo-link--desktop { display: none; }
     .header-main__spacer { display: none; }
-    .header-main__logo { flex: 1; justify-content: center; }
+    .header-main__logo { position: absolute; left: 50%; transform: translateX(-50%); }
     .header-main__logo-img { max-height: 44px; }
     .header-icon-btn { width: 36px; height: 36px; background: none; }
     .header-icon-btn:hover { background: none; color: var(--color-primary); }
