@@ -242,7 +242,11 @@
           </div>
 
           {%- if paginate.next -%}
-            <div class="collection-page__infinite-sentinel js-infinite-sentinel" data-next-url="{{ paginate.next.url }}"></div>
+            <div class="collection-page__load-more">
+              <button class="collection-page__load-more-btn js-load-more" data-next-url="{{ paginate.next.url }}" data-label="{{ 'collection.load_more' | t }}">
+                {{ 'collection.load_more' | t }}
+              </button>
+            </div>
           {%- endif -%}
 
         </div>
@@ -762,10 +766,36 @@
     line-height: 1.2;
   }
 
-  /* Infinite scroll sentinel */
-  .collection-page__infinite-sentinel {
-    height: 1px;
-    margin-top: 2rem;
+  /* Load more */
+  .collection-page__load-more {
+    display: flex;
+    justify-content: center;
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+  }
+
+  .collection-page__load-more-btn {
+    padding: 0.75rem 3rem;
+    border: 1.5px solid #2e1f1f;
+    background: transparent;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #2e1f1f;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .collection-page__load-more-btn:hover:not(:disabled) {
+    background: #2e1f1f;
+    color: #fff;
+  }
+
+  .collection-page__load-more-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   /* ── Mobile sticky bar ── */
@@ -1081,44 +1111,48 @@
     document.addEventListener('cart:refresh', syncCartState);
     syncCartState();
 
-    // ── Infinite scroll ──
-    var sentinel = document.querySelector('.js-infinite-sentinel');
+    // ── Load more ──
+    var loadMoreWrap = document.querySelector('.collection-page__load-more');
+    var loadMoreBtn = document.querySelector('.js-load-more');
     var productGrid = document.querySelector('.collection-page__grid');
-    var isFetching = false;
-    var scrollObserver;
 
-    function fetchNextPage() {
-      if (!sentinel || !productGrid || isFetching) return;
-      var nextUrl = sentinel.dataset.nextUrl;
-      if (!nextUrl) return;
-      isFetching = true;
-      fetch(nextUrl + '&section_id={{ section.id }}')
-        .then(function(r) { return r.text(); })
-        .then(function(html) {
-          var parser = new DOMParser();
-          var doc = parser.parseFromString(html, 'text/html');
-          var newItems = doc.querySelectorAll('.product-list__item');
-          newItems.forEach(function(item) { productGrid.appendChild(item); });
-          var nextSentinel = doc.querySelector('.js-infinite-sentinel');
-          if (nextSentinel && nextSentinel.dataset.nextUrl) {
-            sentinel.dataset.nextUrl = nextSentinel.dataset.nextUrl;
-          } else {
-            sentinel.removeAttribute('data-next-url');
-            if (scrollObserver) scrollObserver.unobserve(sentinel);
-          }
-          isFetching = false;
-          syncCartState();
-        })
-        .catch(function() {
-          isFetching = false;
-        });
-    }
+    if (loadMoreBtn && productGrid) {
+      var loadMoreLabel = loadMoreBtn.dataset.label || loadMoreBtn.textContent.trim();
 
-    if (sentinel && productGrid && 'IntersectionObserver' in window) {
-      scrollObserver = new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting) fetchNextPage();
-      }, { rootMargin: '400px' });
-      scrollObserver.observe(sentinel);
+      loadMoreBtn.addEventListener('click', function() {
+        var nextUrl = loadMoreBtn.dataset.nextUrl;
+        if (!nextUrl || loadMoreBtn.disabled) return;
+
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.textContent = '...';
+
+        fetch(nextUrl + '&section_id={{ section.id }}')
+          .then(function(r) { return r.text(); })
+          .then(function(html) {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(html, 'text/html');
+
+            var newItems = doc.querySelectorAll('.product-list__item');
+            newItems.forEach(function(item) {
+              productGrid.appendChild(item);
+            });
+
+            var nextBtn = doc.querySelector('.js-load-more');
+            if (nextBtn && nextBtn.dataset.nextUrl) {
+              loadMoreBtn.dataset.nextUrl = nextBtn.dataset.nextUrl;
+              loadMoreBtn.disabled = false;
+              loadMoreBtn.textContent = loadMoreLabel;
+            } else {
+              if (loadMoreWrap) loadMoreWrap.style.display = 'none';
+            }
+
+            syncCartState();
+          })
+          .catch(function() {
+            loadMoreBtn.disabled = false;
+            loadMoreBtn.textContent = loadMoreLabel;
+          });
+      });
     }
 
     // ── Mobile sort/filter drawers ──
