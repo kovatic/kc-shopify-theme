@@ -232,19 +232,6 @@
           {%- endif -%}
           <details class="product-page__accordion">
             <summary class="product-page__accordion-header">
-              {{ 'sections.product.product_details' | t }}
-              <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
-            </summary>
-            <div class="product-page__accordion-body">
-              {%- if product.metafields.custom.product_details != blank -%}
-                {{ product.metafields.custom.product_details }}
-              {%- else -%}
-                <p>{{ product.title }}</p>
-              {%- endif -%}
-            </div>
-          </details>
-          <details class="product-page__accordion">
-            <summary class="product-page__accordion-header">
               {{ 'sections.product.delivery' | t }}
               <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
             </summary>
