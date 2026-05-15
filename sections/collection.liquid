@@ -1083,46 +1083,42 @@
 
     // ── Infinite scroll ──
     var sentinel = document.querySelector('.js-infinite-sentinel');
+    var productGrid = document.querySelector('.collection-page__grid');
     var isFetching = false;
+    var scrollObserver;
 
     function fetchNextPage() {
-      if (!sentinel || isFetching) return;
+      if (!sentinel || !productGrid || isFetching) return;
       var nextUrl = sentinel.dataset.nextUrl;
       if (!nextUrl) return;
       isFetching = true;
-      sentinel.classList.add('is-loading');
       fetch(nextUrl + '&section_id={{ section.id }}')
         .then(function(r) { return r.text(); })
         .then(function(html) {
           var parser = new DOMParser();
           var doc = parser.parseFromString(html, 'text/html');
           var newItems = doc.querySelectorAll('.product-list__item');
-          var productList = document.querySelector('.product-list');
-          if (productList && newItems.length) {
-            newItems.forEach(function(item) { productList.appendChild(item); });
-          }
+          newItems.forEach(function(item) { productGrid.appendChild(item); });
           var nextSentinel = doc.querySelector('.js-infinite-sentinel');
-          if (nextSentinel) {
+          if (nextSentinel && nextSentinel.dataset.nextUrl) {
             sentinel.dataset.nextUrl = nextSentinel.dataset.nextUrl;
           } else {
             sentinel.removeAttribute('data-next-url');
-            observer.unobserve(sentinel);
+            if (scrollObserver) scrollObserver.unobserve(sentinel);
           }
           isFetching = false;
-          sentinel.classList.remove('is-loading');
           syncCartState();
         })
         .catch(function() {
           isFetching = false;
-          sentinel.classList.remove('is-loading');
         });
     }
 
-    if (sentinel && 'IntersectionObserver' in window) {
-      var observer = new IntersectionObserver(function(entries) {
+    if (sentinel && productGrid && 'IntersectionObserver' in window) {
+      scrollObserver = new IntersectionObserver(function(entries) {
         if (entries[0].isIntersecting) fetchNextPage();
-      }, { rootMargin: '200px' });
-      observer.observe(sentinel);
+      }, { rootMargin: '400px' });
+      scrollObserver.observe(sentinel);
     }
 
     // ── Mobile sort/filter drawers ──
