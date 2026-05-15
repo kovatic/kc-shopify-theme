@@ -242,11 +242,7 @@
           </div>
 
           {%- if paginate.next -%}
-            <div class="collection-page__load-more">
-              <button class="collection-page__load-more-btn js-load-more" data-next-url="{{ paginate.next.url }}">
-                {{ 'collection.load_more' | t }}
-              </button>
-            </div>
+            <div class="collection-page__infinite-sentinel js-infinite-sentinel" data-next-url="{{ paginate.next.url }}"></div>
           {%- endif -%}
 
         </div>
@@ -766,38 +762,10 @@
     line-height: 1.2;
   }
 
-  /* Load more */
-  .collection-page__load-more {
-    display: flex;
-    justify-content: center;
-    padding-top: 3rem;
-    padding-bottom: 1rem;
-  }
-
-  .collection-page__load-more-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 2.5rem;
-    border: 1.5px solid #2e1f1f;
-    background: transparent;
-    font-family: var(--font-body-family, 'Montserrat', sans-serif);
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #2e1f1f;
-    letter-spacing: 0.04em;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-  }
-
-  .collection-page__load-more-btn:hover {
-    background: #2e1f1f;
-    color: #fff;
-  }
-
-  .collection-page__load-more-btn.is-loading {
-    opacity: 0.6;
-    cursor: not-allowed;
+  /* Infinite scroll sentinel */
+  .collection-page__infinite-sentinel {
+    height: 1px;
+    margin-top: 2rem;
   }
 
   /* ── Mobile sticky bar ── */
@@ -1004,10 +972,6 @@
       padding: 0.5rem 1.25rem 1.5rem;
     }
 
-    .collection-page__load-more {
-      padding-top: 1.5rem;
-      padding-bottom: 4rem;
-    }
   }
 {% endstylesheet %}
 
@@ -1117,40 +1081,48 @@
     document.addEventListener('cart:refresh', syncCartState);
     syncCartState();
 
-    // ── Load more ──
-    var loadMoreBtn = document.querySelector('.js-load-more');
-    if (loadMoreBtn) {
-      loadMoreBtn.addEventListener('click', function() {
-        var nextUrl = loadMoreBtn.dataset.nextUrl;
-        if (!nextUrl || loadMoreBtn.classList.contains('is-loading')) return;
-        loadMoreBtn.classList.add('is-loading');
-        var originalText = loadMoreBtn.textContent;
-        loadMoreBtn.textContent = '...';
-        fetch(nextUrl + '&section_id={{ section.id }}')
-          .then(function(r) { return r.text(); })
-          .then(function(html) {
-            var parser = new DOMParser();
-            var doc = parser.parseFromString(html, 'text/html');
-            var newItems = doc.querySelectorAll('.product-list__item');
-            var productList = document.querySelector('.product-list');
-            if (productList && newItems.length) {
-              newItems.forEach(function(item) { productList.appendChild(item); });
-            }
-            var nextLoadBtn = doc.querySelector('.js-load-more');
-            if (nextLoadBtn) {
-              loadMoreBtn.dataset.nextUrl = nextLoadBtn.dataset.nextUrl;
-              loadMoreBtn.classList.remove('is-loading');
-              loadMoreBtn.textContent = originalText;
-            } else {
-              loadMoreBtn.closest('.collection-page__load-more').style.display = 'none';
-            }
-            syncCartState();
-          })
-          .catch(function() {
-            loadMoreBtn.classList.remove('is-loading');
-            loadMoreBtn.textContent = originalText;
-          });
-      });
+    // ── Infinite scroll ──
+    var sentinel = document.querySelector('.js-infinite-sentinel');
+    var isFetching = false;
+
+    function fetchNextPage() {
+      if (!sentinel || isFetching) return;
+      var nextUrl = sentinel.dataset.nextUrl;
+      if (!nextUrl) return;
+      isFetching = true;
+      sentinel.classList.add('is-loading');
+      fetch(nextUrl + '&section_id={{ section.id }}')
+        .then(function(r) { return r.text(); })
+        .then(function(html) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(html, 'text/html');
+          var newItems = doc.querySelectorAll('.product-list__item');
+          var productList = document.querySelector('.product-list');
+          if (productList && newItems.length) {
+            newItems.forEach(function(item) { productList.appendChild(item); });
+          }
+          var nextSentinel = doc.querySelector('.js-infinite-sentinel');
+          if (nextSentinel) {
+            sentinel.dataset.nextUrl = nextSentinel.dataset.nextUrl;
+          } else {
+            sentinel.removeAttribute('data-next-url');
+            observer.unobserve(sentinel);
+          }
+          isFetching = false;
+          sentinel.classList.remove('is-loading');
+          syncCartState();
+        })
+        .catch(function() {
+          isFetching = false;
+          sentinel.classList.remove('is-loading');
+        });
+    }
+
+    if (sentinel && 'IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) fetchNextPage();
+      }, { rootMargin: '200px' });
+      observer.observe(sentinel);
     }
 
     // ── Mobile sort/filter drawers ──
