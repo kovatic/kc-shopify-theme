@@ -447,93 +447,126 @@
       </div>
 
       <div class="tailoring-modal__body">
+
+        <div class="tailoring-modal__size-row">
+          <p class="tailoring-modal__field-label">Size <span style="color:#888;font-weight:400;font-size:0.72rem;">(auto-fills measurements)</span></p>
+          <input type="hidden" id="meas-size" name="blouse_size" value="">
+          <div class="tailoring-modal__size-chips">
+            <button type="button" class="tailoring-modal__size-chip" data-size="28 (XXS)"><span class="tailoring-modal__size-chip-num">28</span><span class="tailoring-modal__size-chip-label">XXS</span></button>
+            <button type="button" class="tailoring-modal__size-chip" data-size="30 (XXS)"><span class="tailoring-modal__size-chip-num">30</span><span class="tailoring-modal__size-chip-label">XXS</span></button>
+            <button type="button" class="tailoring-modal__size-chip" data-size="32 (XS)"><span class="tailoring-modal__size-chip-num">32</span><span class="tailoring-modal__size-chip-label">XS</span></button>
+            <button type="button" class="tailoring-modal__size-chip" data-size="34 (S)"><span class="tailoring-modal__size-chip-num">34</span><span class="tailoring-modal__size-chip-label">S</span></button>
+            <button type="button" class="tailoring-modal__size-chip" data-size="36 (M)"><span class="tailoring-modal__size-chip-num">36</span><span class="tailoring-modal__size-chip-label">M</span></button>
+            <button type="button" class="tailoring-modal__size-chip" data-size="38 (L)"><span class="tailoring-modal__size-chip-num">38</span><span class="tailoring-modal__size-chip-label">L</span></button>
+            <button type="button" class="tailoring-modal__size-chip" data-size="40 (XL)"><span class="tailoring-modal__size-chip-num">40</span><span class="tailoring-modal__size-chip-label">XL</span></button>
+            <button type="button" class="tailoring-modal__size-chip" data-size="42 (2XL)"><span class="tailoring-modal__size-chip-num">42</span><span class="tailoring-modal__size-chip-label">2XL</span></button>
+            <button type="button" class="tailoring-modal__size-chip" data-size="44 (3XL)"><span class="tailoring-modal__size-chip-num">44</span><span class="tailoring-modal__size-chip-label">3XL</span></button>
+            <button type="button" class="tailoring-modal__size-chip" data-size="46 (4XL)"><span class="tailoring-modal__size-chip-num">46</span><span class="tailoring-modal__size-chip-label">4XL</span></button>
+            <button type="button" class="tailoring-modal__size-chip" data-size="48 (5XL)"><span class="tailoring-modal__size-chip-num">48</span><span class="tailoring-modal__size-chip-label">5XL</span></button>
+          </div>
+        </div>
+
         <div class="tailoring-modal__measurements tailoring-modal__measurements--4col">
 
           <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="meas-blouse-length">{{ 'tailoring.blouse_length' | t }}</label>
+            <label class="tailoring-modal__field-label" for="meas-blouse-length">Blouse Length</label>
             <select class="tailoring-modal__select" id="meas-blouse-length" name="blouse_length">
-              <option value="">{{ 'tailoring.choose' | t }}</option>
-              {%- for i in (1..29) -%}<option value="{{ i | plus: 9 | append: ' Inches' }}">{{ i | plus: 9 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+              <option value="">Choose</option>
+              {%- for i in (10..28) -%}<option value="{{ i }}&quot;">{{ i }}"</option>{%- endfor -%}
             </select>
           </div>
 
           <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="meas-shoulder">{{ 'tailoring.shoulder_to_shoulder' | t }}</label>
-            <select class="tailoring-modal__select" id="meas-shoulder" name="shoulder_to_shoulder">
-              <option value="">{{ 'tailoring.choose' | t }}</option>
-              {%- for i in (1..21) -%}<option value="{{ i | plus: 9 | append: ' Inches' }}">{{ i | plus: 9 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
-            </select>
-          </div>
-
-          <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="meas-sleeve-length">{{ 'tailoring.blouse_sleeve' | t }}</label>
-            <select class="tailoring-modal__select" id="meas-sleeve-length" name="sleeve_length">
-              <option value="">{{ 'tailoring.choose' | t }}</option>
-              {%- for i in (1..25) -%}<option value="{{ i | append: ' Inches' }}">{{ i }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
-            </select>
-          </div>
-
-          <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="meas-sleeve-around">{{ 'tailoring.sleeve_around' | t }}</label>
-            <select class="tailoring-modal__select" id="meas-sleeve-around" name="sleeve_around">
-              <option value="">{{ 'tailoring.choose' | t }}</option>
-              {%- for i in (1..21) -%}<option value="{{ i | plus: 7 | append: ' Inches' }}">{{ i | plus: 7 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
-            </select>
-          </div>
-
-          <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="meas-armhole">{{ 'tailoring.armhole' | t }}</label>
-            <select class="tailoring-modal__select" id="meas-armhole" name="armhole">
-              <option value="">{{ 'tailoring.choose' | t }}</option>
-              {%- for i in (1..21) -%}<option value="{{ i | plus: 11 | append: ' Inches' }}">{{ i | plus: 11 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
-            </select>
-          </div>
-
-          <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="meas-chest">{{ 'tailoring.blouse_chest' | t }}</label>
+            <label class="tailoring-modal__field-label" for="meas-chest">Chest / Bust</label>
             <select class="tailoring-modal__select" id="meas-chest" name="chest">
-              <option value="">{{ 'tailoring.choose' | t }}</option>
-              {%- for i in (1..29) -%}<option value="{{ i | plus: 27 | append: ' Inches' }}">{{ i | plus: 27 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+              <option value="">Choose</option>
+              {%- for i in (26..56) -%}<option value="{{ i }}&quot;">{{ i }}"</option>{%- endfor -%}
             </select>
           </div>
 
           <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="meas-breast">{{ 'tailoring.breast' | t }}</label>
-            <select class="tailoring-modal__select" id="meas-breast" name="breast">
-              <option value="">{{ 'tailoring.choose' | t }}</option>
-              {%- for i in (1..29) -%}<option value="{{ i | plus: 27 | append: ' Inches' }}">{{ i | plus: 27 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
-            </select>
-          </div>
-
-          <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="meas-waist">{{ 'tailoring.blouse_waist' | t }}</label>
+            <label class="tailoring-modal__field-label" for="meas-waist">Waist</label>
             <select class="tailoring-modal__select" id="meas-waist" name="waist">
-              <option value="">{{ 'tailoring.choose' | t }}</option>
-              {%- for i in (1..33) -%}<option value="{{ i | plus: 23 | append: ' Inches' }}">{{ i | plus: 23 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+              <option value="">Choose</option>
+              {%- for i in (24..54) -%}<option value="{{ i }}&quot;">{{ i }}"</option>{%- endfor -%}
             </select>
           </div>
 
           <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="meas-front-neck">{{ 'tailoring.front_neck_depth' | t }}</label>
-            <select class="tailoring-modal__select" id="meas-front-neck" name="front_neck_depth">
-              <option value="">{{ 'tailoring.choose' | t }}</option>
-              {%- for i in (1..13) -%}<option value="{{ i | plus: 3 | append: ' Inches' }}">{{ i | plus: 3 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+            <label class="tailoring-modal__field-label" for="meas-shoulder">Shoulder</label>
+            <select class="tailoring-modal__select" id="meas-shoulder" name="shoulder">
+              <option value="">Choose</option>
+              {%- for i in (12..22) -%}<option value="{{ i }}&quot;">{{ i }}"</option>{%- endfor -%}
             </select>
           </div>
 
           <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="meas-back-neck">{{ 'tailoring.back_neck_depth' | t }}</label>
-            <select class="tailoring-modal__select" id="meas-back-neck" name="back_neck_depth">
-              <option value="">{{ 'tailoring.choose' | t }}</option>
-              {%- for i in (1..11) -%}<option value="{{ i | plus: 2 | append: ' Inches' }}">{{ i | plus: 2 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+            <label class="tailoring-modal__field-label" for="meas-armhole">Armhole</label>
+            <select class="tailoring-modal__select" id="meas-armhole" name="armhole">
+              <option value="">Choose</option>
+              {%- for i in (13..28) -%}<option value="{{ i }}&quot;">{{ i }}"</option>{%- endfor -%}
             </select>
           </div>
 
           <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="meas-shoulder-point">{{ 'tailoring.shoulder_to_point' | t }}</label>
-            <select class="tailoring-modal__select" id="meas-shoulder-point" name="shoulder_to_point">
-              <option value="">{{ 'tailoring.choose' | t }}</option>
-              {%- for i in (1..15) -%}<option value="{{ i | plus: 5 | append: ' Inches' }}">{{ i | plus: 5 }} {{ 'tailoring.unit_inches' | t }}</option>{%- endfor -%}
+            <label class="tailoring-modal__field-label" for="meas-sleeve-length">Sleeve Length</label>
+            <select class="tailoring-modal__select" id="meas-sleeve-length" name="sleeve_length">
+              <option value="">Choose</option>
+              {%- for i in (4..14) -%}<option value="{{ i }}&quot;">{{ i }}"</option>{%- endfor -%}
+            </select>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="meas-sleeve-around">Sleeve Round</label>
+            <select class="tailoring-modal__select" id="meas-sleeve-around" name="sleeve_round">
+              <option value="">Choose</option>
+              {%- for i in (8..24) -%}<option value="{{ i }}&quot;">{{ i }}"</option>{%- endfor -%}
+            </select>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="meas-front-neck">Front Neck</label>
+            <select class="tailoring-modal__select" id="meas-front-neck" name="front_neck">
+              <option value="">Choose</option>
+              {%- for i in (5..14) -%}<option value="{{ i }}&quot;">{{ i }}"</option>{%- endfor -%}
+            </select>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="meas-back-neck">Back Neck</label>
+            <select class="tailoring-modal__select" id="meas-back-neck" name="back_neck">
+              <option value="">Choose</option>
+              {%- for i in (6..14) -%}<option value="{{ i }}&quot;">{{ i }}"</option>{%- endfor -%}
+            </select>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="meas-height">Height (cm)</label>
+            <select class="tailoring-modal__select" id="meas-height" name="height_cm">
+              <option value="">Choose</option>
+              <option value="130-135 cm">130 – 135</option>
+              <option value="135-140 cm">135 – 140</option>
+              <option value="140-145 cm">140 – 145</option>
+              <option value="145-150 cm">145 – 150</option>
+              <option value="150-155 cm">150 – 155</option>
+              <option value="155-160 cm">155 – 160</option>
+              <option value="160-165 cm">160 – 165</option>
+              <option value="165-170 cm">165 – 170</option>
+              <option value="170-175 cm">170 – 175</option>
+              <option value="175-180 cm">175 – 180</option>
+            </select>
+          </div>
+
+          <div class="tailoring-modal__field">
+            <label class="tailoring-modal__field-label" for="meas-shoulder-pleat">Shoulder Pleat</label>
+            <select class="tailoring-modal__select" id="meas-shoulder-pleat" name="shoulder_pleat">
+              <option value="">Choose</option>
+              <option value="1 Pleat (Minimal Look)">1 Pleat — Minimal Look</option>
+              <option value="4 Pleats (Simple)">4 Pleats — Simple</option>
+              <option value="5 Pleats (Standard)">5 Pleats — Standard</option>
+              <option value="6 Pleats (Elegant)">6 Pleats — Elegant</option>
+              <option value="7 Pleat (Royal)">7 Pleat — Royal</option>
+              <option value="8 Pleats (Grand Bridal Look)">8 Pleats — Grand Bridal Look</option>
             </select>
           </div>
 
@@ -1082,6 +1115,76 @@
     line-height: 1.3;
   }
 
+  /* ── Size chips ── */
+  .tailoring-modal__size-row {
+    margin-bottom: 20px;
+  }
+  .tailoring-modal__size-row .tailoring-modal__field-label {
+    margin: 0 0 10px;
+  }
+  .tailoring-modal__size-chips {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: #d4cdc4 transparent;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tailoring-modal__size-chips::-webkit-scrollbar {
+    height: 4px;
+  }
+  .tailoring-modal__size-chips::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .tailoring-modal__size-chips::-webkit-scrollbar-thumb {
+    background: #d4cdc4;
+    border-radius: 2px;
+  }
+  .tailoring-modal__size-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-width: 58px;
+    padding: 10px 14px;
+    border: 1.5px solid #d4cdc4;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    gap: 3px;
+  }
+  .tailoring-modal__size-chip:hover {
+    border-color: #2e1f1f;
+    background: #f5f2ee;
+  }
+  .tailoring-modal__size-chip.is-selected {
+    border-color: #2e1f1f;
+    background: #2e1f1f;
+  }
+  .tailoring-modal__size-chip.is-selected .tailoring-modal__size-chip-num,
+  .tailoring-modal__size-chip.is-selected .tailoring-modal__size-chip-label {
+    color: #fff;
+  }
+  .tailoring-modal__size-chip-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2e1f1f;
+    line-height: 1;
+  }
+  .tailoring-modal__size-chip-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #888;
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+
   /* ── Measurements step ── */
   .tailoring-modal__measurements--4col {
     display: grid;
@@ -1380,10 +1483,10 @@
     function validateStep4() {
       var valid = true;
       var measIds = [
-        'meas-blouse-length', 'meas-shoulder', 'meas-sleeve-length',
-        'meas-sleeve-around', 'meas-armhole', 'meas-chest',
-        'meas-breast', 'meas-waist', 'meas-front-neck',
-        'meas-back-neck', 'meas-shoulder-point'
+        'meas-blouse-length', 'meas-chest', 'meas-waist',
+        'meas-shoulder', 'meas-armhole', 'meas-sleeve-length',
+        'meas-sleeve-around', 'meas-front-neck', 'meas-back-neck',
+        'meas-height', 'meas-shoulder-pleat'
       ];
       measIds.forEach(function (id) {
         var el = document.getElementById(id);
@@ -1501,6 +1604,52 @@
     });
     /* clicking a card also triggers its radio via the label for= */
 
+    /* ── Size chart auto-populate ── */
+    var sizeChart = {
+      '28 (XXS)': { 'meas-blouse-length': 15, 'meas-chest': 28, 'meas-waist': 26, 'meas-shoulder': 14,   'meas-armhole': 15, 'meas-sleeve-length': 6, 'meas-sleeve-around': 10, 'meas-front-neck': 7,  'meas-back-neck': 8  },
+      '30 (XXS)': { 'meas-blouse-length': 15, 'meas-chest': 30, 'meas-waist': 28, 'meas-shoulder': 14.5, 'meas-armhole': 16, 'meas-sleeve-length': 6, 'meas-sleeve-around': 11, 'meas-front-neck': 7,  'meas-back-neck': 8  },
+      '32 (XS)':  { 'meas-blouse-length': 15, 'meas-chest': 32, 'meas-waist': 30, 'meas-shoulder': 15,   'meas-armhole': 17, 'meas-sleeve-length': 6, 'meas-sleeve-around': 12, 'meas-front-neck': 7.5,'meas-back-neck': 9  },
+      '34 (S)':   { 'meas-blouse-length': 15, 'meas-chest': 34, 'meas-waist': 32, 'meas-shoulder': 15.5, 'meas-armhole': 18, 'meas-sleeve-length': 7, 'meas-sleeve-around': 13, 'meas-front-neck': 7.5,'meas-back-neck': 9  },
+      '36 (M)':   { 'meas-blouse-length': 15, 'meas-chest': 36, 'meas-waist': 34, 'meas-shoulder': 16,   'meas-armhole': 19, 'meas-sleeve-length': 7, 'meas-sleeve-around': 14, 'meas-front-neck': 8,  'meas-back-neck': 10 },
+      '38 (L)':   { 'meas-blouse-length': 15, 'meas-chest': 38, 'meas-waist': 36, 'meas-shoulder': 16.5, 'meas-armhole': 20, 'meas-sleeve-length': 7, 'meas-sleeve-around': 15, 'meas-front-neck': 8.5,'meas-back-neck': 10 },
+      '40 (XL)':  { 'meas-blouse-length': 15, 'meas-chest': 40, 'meas-waist': 38, 'meas-shoulder': 17,   'meas-armhole': 21, 'meas-sleeve-length': 8, 'meas-sleeve-around': 16, 'meas-front-neck': 9,  'meas-back-neck': 11 },
+      '42 (2XL)': { 'meas-blouse-length': 15, 'meas-chest': 42, 'meas-waist': 40, 'meas-shoulder': 17.5, 'meas-armhole': 22, 'meas-sleeve-length': 8, 'meas-sleeve-around': 17, 'meas-front-neck': 9,  'meas-back-neck': 11 },
+      '44 (3XL)': { 'meas-blouse-length': 15, 'meas-chest': 44, 'meas-waist': 42, 'meas-shoulder': 18,   'meas-armhole': 23, 'meas-sleeve-length': 8, 'meas-sleeve-around': 18, 'meas-front-neck': 10, 'meas-back-neck': 11 },
+      '46 (4XL)': { 'meas-blouse-length': 15, 'meas-chest': 46, 'meas-waist': 44, 'meas-shoulder': 18.5, 'meas-armhole': 24, 'meas-sleeve-length': 8, 'meas-sleeve-around': 19, 'meas-front-neck': 10, 'meas-back-neck': 11 },
+      '48 (5XL)': { 'meas-blouse-length': 15, 'meas-chest': 48, 'meas-waist': 46, 'meas-shoulder': 18.5, 'meas-armhole': 25, 'meas-sleeve-length': 8, 'meas-sleeve-around': 20, 'meas-front-neck': 10, 'meas-back-neck': 11 }
+    };
+
+    var sizeHidden = document.getElementById('meas-size');
+
+    function applySize(sizeValue) {
+      if (sizeHidden) sizeHidden.value = sizeValue;
+      /* highlight chip */
+      modal.querySelectorAll('.tailoring-modal__size-chip').forEach(function (chip) {
+        chip.classList.toggle('is-selected', chip.dataset.size === sizeValue);
+      });
+      var measurements = sizeChart[sizeValue];
+      if (!measurements) return;
+      Object.keys(measurements).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        var val = measurements[id];
+        var target = Math.round(val);
+        for (var i = 0; i < el.options.length; i++) {
+          if (parseInt(el.options[i].value, 10) === target) {
+            el.selectedIndex = i;
+            clearFieldError(el);
+            break;
+          }
+        }
+      });
+    }
+
+    modal.querySelectorAll('.tailoring-modal__size-chip').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        applySize(chip.dataset.size);
+      });
+    });
+
     /* ── Build summary ── */
     function buildSummary() {
       var container = document.getElementById('tailoring-summary');
@@ -1549,17 +1698,18 @@
 
       /* Measurements */
       var measMap = {
-        'meas-blouse-length':  'Blouse Length',
-        'meas-shoulder':       'Shoulder to Shoulder',
-        'meas-sleeve-length':  'Sleeve Length',
-        'meas-sleeve-around':  'Sleeve Around',
-        'meas-armhole':        'Armhole',
-        'meas-chest':          'Chest',
-        'meas-breast':         'Breast',
-        'meas-waist':          'Waist',
-        'meas-front-neck':     'Front Neck Depth',
-        'meas-back-neck':      'Back Neck Depth',
-        'meas-shoulder-point': 'Shoulder to Point'
+        'meas-size':          'Size',
+        'meas-blouse-length': 'Blouse Length',
+        'meas-chest':         'Chest / Bust',
+        'meas-waist':         'Waist',
+        'meas-shoulder':      'Shoulder',
+        'meas-armhole':       'Armhole',
+        'meas-sleeve-length': 'Sleeve Length',
+        'meas-sleeve-around': 'Sleeve Round',
+        'meas-front-neck':      'Front Neck',
+        'meas-back-neck':       'Back Neck',
+        'meas-height':          'Height',
+        'meas-shoulder-pleat':  'Shoulder Pleat'
       };
       Object.keys(measMap).forEach(function (id) {
         var el = document.getElementById(id);

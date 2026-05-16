@@ -140,15 +140,17 @@
           {%- comment -%} Stitching button (only for tailoring-enabled products) {%- endcomment -%}
           {%- if product.metafields.custom.tailoring_groups != blank -%}
             <button type="button" class="product-page__stitching-btn js-tailoring-btn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M3 17l4-4 4 4 4-8 4 4"/>
-                <circle cx="3" cy="17" r="1.5" fill="currentColor" stroke="none"/>
-                <circle cx="7" cy="13" r="1.5" fill="currentColor" stroke="none"/>
-                <circle cx="11" cy="17" r="1.5" fill="currentColor" stroke="none"/>
-                <circle cx="15" cy="9" r="1.5" fill="currentColor" stroke="none"/>
-                <circle cx="19" cy="13" r="1.5" fill="currentColor" stroke="none"/>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
+                <line x1="20" y1="4" x2="8.12" y2="15.88"/>
+                <line x1="14.47" y1="14.48" x2="20" y2="20"/>
+                <line x1="8.12" y1="8.12" x2="12" y2="12"/>
               </svg>
-              {{ 'tailoring.stitching_btn' | t }}
+              <span class="product-page__stitching-btn-text">
+                <span class="product-page__stitching-btn-title">{{ 'tailoring.stitching_btn' | t }}</span>
+                <span class="product-page__stitching-btn-sub">Add tailoring</span>
+              </span>
+              <span class="product-page__stitching-btn-badge">Customise</span>
             </button>
           {%- endif -%}
 
@@ -288,12 +290,10 @@
   {%- if product.metafields.custom.tailoring_groups != blank -%}
     <button type="button" class="product-page__stitching-btn product-page__stitching-btn--mobile js-tailoring-btn">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M3 17l4-4 4 4 4-8 4 4"/>
-        <circle cx="3" cy="17" r="1.5" fill="currentColor" stroke="none"/>
-        <circle cx="7" cy="13" r="1.5" fill="currentColor" stroke="none"/>
-        <circle cx="11" cy="17" r="1.5" fill="currentColor" stroke="none"/>
-        <circle cx="15" cy="9" r="1.5" fill="currentColor" stroke="none"/>
-        <circle cx="19" cy="13" r="1.5" fill="currentColor" stroke="none"/>
+        <circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
+        <line x1="20" y1="4" x2="8.12" y2="15.88"/>
+        <line x1="14.47" y1="14.48" x2="20" y2="20"/>
+        <line x1="8.12" y1="8.12" x2="12" y2="12"/>
       </svg>
       {{ 'tailoring.stitching_btn' | t }}
     </button>
@@ -1210,25 +1210,63 @@
   .product-page__stitching-btn {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
+    gap: 10px;
     width: 100%;
-    height: 48px;
+    min-height: 56px;
     margin-bottom: 10px;
-    background: #fff;
+    padding: 0 16px;
+    background: linear-gradient(135deg, #fdf6ee 0%, #f9ede0 100%);
     color: var(--color-primary, #2e1f1f);
-    border: 1.5px solid var(--color-primary, #2e1f1f);
-    border-radius: 4px;
+    border: 1.5px solid #d4a97a;
+    border-radius: 8px;
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
     cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
   }
   .product-page__stitching-btn:hover {
-    background: var(--color-primary, #2e1f1f);
+    border-color: #ce0570;
+    box-shadow: 0 2px 12px rgba(206,5,112,0.15);
+    background: linear-gradient(135deg, #fff5fb 0%, #fde8f4 100%);
+  }
+  .product-page__stitching-btn svg {
+    flex-shrink: 0;
+    color: #ce0570;
+  }
+  .product-page__stitching-btn-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+  }
+  .product-page__stitching-btn-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: #2e1f1f;
+    line-height: 1.2;
+  }
+  .product-page__stitching-btn-sub {
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: #888;
+    letter-spacing: 0.02em;
+  }
+  .product-page__stitching-btn-badge {
+    flex-shrink: 0;
+    background: #ce0570;
     color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+  .product-page__stitching-btn:hover .product-page__stitching-btn-badge {
+    background: #a8045c;
   }
   .product-page__wishlist-icon-btn {
     flex-shrink: 0;
