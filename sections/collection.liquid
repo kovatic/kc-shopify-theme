@@ -1096,17 +1096,21 @@
     });
 
     /* Mobile ATC button — submits the hidden form outside the <a> */
-    document.querySelectorAll('.collection-page .product-list__item').forEach(function(card) {
-      var mobileAtcBtn = card.querySelector('.js-mobile-atc');
-      if (!mobileAtcBtn) return;
-      mobileAtcBtn.dataset.label = mobileAtcBtn.textContent.trim();
-      mobileAtcBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var hiddenForm = card.querySelector('.product-card-atc-form--mobile');
-        if (hiddenForm) hiddenForm.querySelector('[type="submit"]').click();
+    function bindMobileAtc(root) {
+      root.querySelectorAll('.product-list__item').forEach(function(card) {
+        var mobileAtcBtn = card.querySelector('.js-mobile-atc');
+        if (!mobileAtcBtn || mobileAtcBtn.dataset.bound) return;
+        mobileAtcBtn.dataset.bound = '1';
+        mobileAtcBtn.dataset.label = mobileAtcBtn.textContent.trim();
+        mobileAtcBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var hiddenForm = card.querySelector('.product-card-atc-form--mobile');
+          if (hiddenForm) hiddenForm.querySelector('[type="submit"]').click();
+        });
       });
-    });
+    }
+    bindMobileAtc(document);
 
     document.addEventListener('cart:refresh', syncCartState);
     syncCartState();
@@ -1136,6 +1140,7 @@
             newItems.forEach(function(item) {
               productGrid.appendChild(item);
             });
+            bindMobileAtc(productGrid);
 
             var nextBtn = doc.querySelector('.js-load-more');
             if (nextBtn && nextBtn.dataset.nextUrl) {
