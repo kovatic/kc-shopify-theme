@@ -1,0 +1,1470 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "cart_lifecycle_flow",
+        "label": "Cart Add-to-Cart Lifecycle",
+        "nodes": [
+          "assets_cart_drawer_submithandler",
+          "assets_cart_drawer_rendercart",
+          "assets_cart_drawer_open"
+        ],
+        "relation": "participate_in",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "assets/cart-drawer.js"
+      },
+      {
+        "id": "addon_stitch_flow",
+        "label": "Stitching Addon Decision Flow",
+        "nodes": [
+          "assets_cart_drawer_onbodyclick",
+          "assets_cart_drawer_showstitchprompt",
+          "assets_cart_drawer_dismissstitchprompt",
+          "assets_cart_drawer_tailoringmodal"
+        ],
+        "relation": "participate_in",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "assets/cart-drawer.js"
+      },
+      {
+        "id": "theme_doc_governance",
+        "label": "Theme Architecture Governance Documents",
+        "nodes": [
+          "agents_md_theme_arch",
+          "readme_project",
+          "contributing_md",
+          "code_of_conduct_md"
+        ],
+        "relation": "form",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
+        "source_file": "README.md"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "label": "cart-drawer.js",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L1",
+      "id": "cart_drawer_js",
+      "community": 3,
+      "norm_label": "cart-drawer.js"
+    },
+    {
+      "label": "CartDrawer",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L1",
+      "id": "assets_cart_drawer_cartdrawer",
+      "community": 2,
+      "norm_label": "cartdrawer"
+    },
+    {
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L2",
+      "id": "assets_cart_drawer_cartdrawer_constructor",
+      "community": 2,
+      "norm_label": ".constructor()"
+    },
+    {
+      "label": ".open()",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L16",
+      "id": "assets_cart_drawer_cartdrawer_open",
+      "community": 2,
+      "norm_label": ".open()"
+    },
+    {
+      "label": ".close()",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L22",
+      "id": "assets_cart_drawer_cartdrawer_close",
+      "community": 2,
+      "norm_label": ".close()"
+    },
+    {
+      "label": ".onBodyClick()",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L27",
+      "id": "assets_cart_drawer_cartdrawer_onbodyclick",
+      "community": 5,
+      "norm_label": ".onbodyclick()"
+    },
+    {
+      "label": ".showStitchPrompt()",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L100",
+      "id": "assets_cart_drawer_cartdrawer_showstitchprompt",
+      "community": 5,
+      "norm_label": ".showstitchprompt()"
+    },
+    {
+      "label": ".dismissStitchPrompt()",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L116",
+      "id": "assets_cart_drawer_cartdrawer_dismissstitchprompt",
+      "community": 5,
+      "norm_label": ".dismissstitchprompt()"
+    },
+    {
+      "label": ".updateItem()",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L123",
+      "id": "assets_cart_drawer_cartdrawer_updateitem",
+      "community": 5,
+      "norm_label": ".updateitem()"
+    },
+    {
+      "label": ".updateItems()",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L127",
+      "id": "assets_cart_drawer_cartdrawer_updateitems",
+      "community": 5,
+      "norm_label": ".updateitems()"
+    },
+    {
+      "label": ".removeOrphanedAddons()",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L138",
+      "id": "assets_cart_drawer_cartdrawer_removeorphanedaddons",
+      "community": 2,
+      "norm_label": ".removeorphanedaddons()"
+    },
+    {
+      "label": ".renderCart()",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L153",
+      "id": "assets_cart_drawer_cartdrawer_rendercart",
+      "community": 2,
+      "norm_label": ".rendercart()"
+    },
+    {
+      "label": ".formatMoney()",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L235",
+      "id": "assets_cart_drawer_cartdrawer_formatmoney",
+      "community": 2,
+      "norm_label": ".formatmoney()"
+    },
+    {
+      "label": ".escHtml()",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L247",
+      "id": "assets_cart_drawer_cartdrawer_eschtml",
+      "community": 2,
+      "norm_label": ".eschtml()"
+    },
+    {
+      "label": "form",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L256",
+      "id": "assets_cart_drawer_form",
+      "community": 3,
+      "norm_label": "form"
+    },
+    {
+      "label": "action",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L258",
+      "id": "assets_cart_drawer_action",
+      "community": 3,
+      "norm_label": "action"
+    },
+    {
+      "label": "drawer",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L261",
+      "id": "assets_cart_drawer_drawer",
+      "community": 3,
+      "norm_label": "drawer"
+    },
+    {
+      "label": "btn",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L266",
+      "id": "assets_cart_drawer_btn",
+      "community": 3,
+      "norm_label": "btn"
+    },
+    {
+      "label": "formData",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L272",
+      "id": "assets_cart_drawer_formdata",
+      "community": 3,
+      "norm_label": "formdata"
+    },
+    {
+      "label": "cartIcon",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L295",
+      "id": "assets_cart_drawer_carticon",
+      "community": 3,
+      "norm_label": "carticon"
+    },
+    {
+      "label": "d",
+      "file_type": "code",
+      "source_file": "cart-drawer.js",
+      "source_location": "L308",
+      "id": "assets_cart_drawer_d",
+      "community": 3,
+      "norm_label": "d"
+    },
+    {
+      "label": "CartDrawer.open",
+      "file_type": "code",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "16",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_open",
+      "community": 4,
+      "norm_label": "cartdrawer.open"
+    },
+    {
+      "label": "CartDrawer.close",
+      "file_type": "code",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "22",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_close",
+      "community": 2,
+      "norm_label": "cartdrawer.close"
+    },
+    {
+      "label": "CartDrawer.onBodyClick",
+      "file_type": "code",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "27",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_onbodyclick",
+      "community": 0,
+      "norm_label": "cartdrawer.onbodyclick"
+    },
+    {
+      "label": "CartDrawer.showStitchPrompt",
+      "file_type": "code",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "100",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_showstitchprompt",
+      "community": 0,
+      "norm_label": "cartdrawer.showstitchprompt"
+    },
+    {
+      "label": "CartDrawer.dismissStitchPrompt",
+      "file_type": "code",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "116",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_dismissstitchprompt",
+      "community": 0,
+      "norm_label": "cartdrawer.dismissstitchprompt"
+    },
+    {
+      "label": "CartDrawer.updateItem",
+      "file_type": "code",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "123",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_updateitem",
+      "community": 0,
+      "norm_label": "cartdrawer.updateitem"
+    },
+    {
+      "label": "CartDrawer.updateItems",
+      "file_type": "code",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "127",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_updateitems",
+      "community": 0,
+      "norm_label": "cartdrawer.updateitems"
+    },
+    {
+      "label": "CartDrawer.removeOrphanedAddons",
+      "file_type": "code",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "138",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_removeorphanedaddons",
+      "community": 0,
+      "norm_label": "cartdrawer.removeorphanedaddons"
+    },
+    {
+      "label": "CartDrawer.renderCart",
+      "file_type": "code",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "153",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_rendercart",
+      "community": 4,
+      "norm_label": "cartdrawer.rendercart"
+    },
+    {
+      "label": "CartDrawer.formatMoney",
+      "file_type": "code",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "235",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_formatmoney",
+      "community": 4,
+      "norm_label": "cartdrawer.formatmoney"
+    },
+    {
+      "label": "CartDrawer.escHtml",
+      "file_type": "code",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "247",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_eschtml",
+      "community": 4,
+      "norm_label": "cartdrawer.eschtml"
+    },
+    {
+      "label": "Cart Form Submit Handler",
+      "file_type": "code",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "254",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_submithandler",
+      "community": 4,
+      "norm_label": "cart form submit handler"
+    },
+    {
+      "label": "DOMContentLoaded Cart Init",
+      "file_type": "code",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "294",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_domcontentloaded",
+      "community": 4,
+      "norm_label": "domcontentloaded cart init"
+    },
+    {
+      "label": "openTailoringModalForAddUnit (external)",
+      "file_type": "concept",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "61",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_tailoringmodal",
+      "community": 0,
+      "norm_label": "opentailoringmodalforaddunit (external)"
+    },
+    {
+      "label": "Shopify Cart Ajax API",
+      "file_type": "concept",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_cart_drawer_shopify_cart_api",
+      "community": 0,
+      "norm_label": "shopify cart ajax api"
+    },
+    {
+      "label": "Shopify Skeleton Theme Architecture",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agents_md_theme_arch",
+      "community": 1,
+      "norm_label": "shopify skeleton theme architecture"
+    },
+    {
+      "label": "Sections (Liquid Components)",
+      "file_type": "concept",
+      "source_file": "AGENTS.md",
+      "source_location": "23",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agents_md_sections_concept",
+      "community": 1,
+      "norm_label": "sections (liquid components)"
+    },
+    {
+      "label": "Blocks (Liquid Components)",
+      "file_type": "concept",
+      "source_file": "AGENTS.md",
+      "source_location": "32",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agents_md_blocks_concept",
+      "community": 1,
+      "norm_label": "blocks (liquid components)"
+    },
+    {
+      "label": "Snippets (Liquid Fragments)",
+      "file_type": "concept",
+      "source_file": "AGENTS.md",
+      "source_location": "39",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agents_md_snippets_concept",
+      "community": 1,
+      "norm_label": "snippets (liquid fragments)"
+    },
+    {
+      "label": "LiquidDoc Documentation Standard",
+      "file_type": "concept",
+      "source_file": "AGENTS.md",
+      "source_location": "78",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agents_md_liquidoc_concept",
+      "community": 1,
+      "norm_label": "liquiddoc documentation standard"
+    },
+    {
+      "label": "Liquid Schema Tag",
+      "file_type": "concept",
+      "source_file": "AGENTS.md",
+      "source_location": "96",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agents_md_schema_tag",
+      "community": 1,
+      "norm_label": "liquid schema tag"
+    },
+    {
+      "label": "Translation Development Standards",
+      "file_type": "concept",
+      "source_file": "AGENTS.md",
+      "source_location": "1009",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agents_md_translation_standard",
+      "community": 1,
+      "norm_label": "translation development standards"
+    },
+    {
+      "label": "Localization Standards",
+      "file_type": "concept",
+      "source_file": "AGENTS.md",
+      "source_location": "1073",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agents_md_localization_standard",
+      "community": 1,
+      "norm_label": "localization standards"
+    },
+    {
+      "label": "Shopify Skeleton Theme Project",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_project",
+      "community": 6,
+      "norm_label": "shopify skeleton theme project"
+    },
+    {
+      "label": "Contributing Guidelines",
+      "file_type": "document",
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "contributing_md",
+      "community": 6,
+      "norm_label": "contributing guidelines"
+    },
+    {
+      "label": "Code of Conduct (Contributor Covenant)",
+      "file_type": "document",
+      "source_file": "CODE_OF_CONDUCT.md",
+      "source_location": "1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "code_of_conduct_md",
+      "community": 6,
+      "norm_label": "code of conduct (contributor covenant)"
+    },
+    {
+      "label": "MIT License (Shopify Theme Store Restricted)",
+      "file_type": "document",
+      "source_file": "LICENSE.md",
+      "source_location": "1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "license_md",
+      "community": 6,
+      "norm_label": "mit license (shopify theme store restricted)"
+    },
+    {
+      "label": "CLAUDE.md Project Instructions",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "claude_md_project",
+      "community": 1,
+      "norm_label": "claude.md project instructions"
+    },
+    {
+      "label": "Cart Icon SVG",
+      "file_type": "image",
+      "source_file": "assets/icon-cart.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_icon_cart_svg",
+      "community": 7,
+      "norm_label": "cart icon svg"
+    },
+    {
+      "label": "Account Icon SVG",
+      "file_type": "image",
+      "source_file": "assets/icon-account.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_icon_account_svg",
+      "community": 8,
+      "norm_label": "account icon svg"
+    },
+    {
+      "label": "Search Icon SVG",
+      "file_type": "image",
+      "source_file": "assets/icon-search.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_icon_search_svg",
+      "community": 8,
+      "norm_label": "search icon svg"
+    },
+    {
+      "label": "Wishlist Icon SVG",
+      "file_type": "image",
+      "source_file": "assets/icon-wishlist.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_icon_wishlist_svg",
+      "community": 7,
+      "norm_label": "wishlist icon svg"
+    },
+    {
+      "label": "Shoppy X-Ray Logo SVG",
+      "file_type": "image",
+      "source_file": "assets/shoppy-x-ray.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_shoppy_xray_svg",
+      "community": 6,
+      "norm_label": "shoppy x-ray logo svg"
+    },
+    {
+      "label": "Category Frame Image",
+      "file_type": "image",
+      "source_file": "assets/category-frame.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "assets_category_frame_png",
+      "community": 9,
+      "norm_label": "category frame image"
+    },
+    {
+      "label": "Stitching Addon Line Item Pattern",
+      "file_type": "concept",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "38",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_stitch_addon_pattern",
+      "community": 0,
+      "norm_label": "stitching addon line item pattern"
+    },
+    {
+      "label": "Orphaned Addon Cleanup Pattern",
+      "file_type": "concept",
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "138",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_orphan_addon_cleanup",
+      "community": 0,
+      "norm_label": "orphaned addon cleanup pattern"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "cart_drawer_js",
+      "target": "assets_cart_drawer_cartdrawer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L256",
+      "weight": 1.0,
+      "source": "cart_drawer_js",
+      "target": "assets_cart_drawer_form",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L258",
+      "weight": 1.0,
+      "source": "cart_drawer_js",
+      "target": "assets_cart_drawer_action",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L296",
+      "weight": 1.0,
+      "source": "cart_drawer_js",
+      "target": "assets_cart_drawer_drawer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L266",
+      "weight": 1.0,
+      "source": "cart_drawer_js",
+      "target": "assets_cart_drawer_btn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L272",
+      "weight": 1.0,
+      "source": "cart_drawer_js",
+      "target": "assets_cart_drawer_formdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L295",
+      "weight": 1.0,
+      "source": "cart_drawer_js",
+      "target": "assets_cart_drawer_carticon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L308",
+      "weight": 1.0,
+      "source": "cart_drawer_js",
+      "target": "assets_cart_drawer_d",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_cartdrawer_constructor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_cartdrawer_open",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_cartdrawer_close",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_cartdrawer_onbodyclick",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L100",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_cartdrawer_showstitchprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_cartdrawer_dismissstitchprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L123",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_cartdrawer_updateitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_cartdrawer_updateitems",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_cartdrawer_removeorphanedaddons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_cartdrawer_rendercart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L235",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_cartdrawer_formatmoney",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L247",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_cartdrawer_eschtml",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "16",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_open"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "22",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_close"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "13",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "assets_cart_drawer_onbodyclick"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": null,
+      "weight": 0.75,
+      "source": "assets_cart_drawer_cartdrawer",
+      "target": "agents_md_theme_arch"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "assets/icon-cart.svg",
+      "source_location": null,
+      "weight": 0.85,
+      "source": "assets_icon_cart_svg",
+      "target": "assets_cart_drawer_cartdrawer"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer_onbodyclick",
+      "target": "assets_cart_drawer_cartdrawer_updateitems",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer_onbodyclick",
+      "target": "assets_cart_drawer_cartdrawer_dismissstitchprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L93",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer_onbodyclick",
+      "target": "assets_cart_drawer_cartdrawer_showstitchprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer_onbodyclick",
+      "target": "assets_cart_drawer_cartdrawer_updateitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L124",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer_updateitem",
+      "target": "assets_cart_drawer_cartdrawer_updateitems",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "cart-drawer.js",
+      "source_location": "L158",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_cartdrawer_rendercart",
+      "target": "assets_cart_drawer_cartdrawer_formatmoney",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "282",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_submithandler",
+      "target": "assets_cart_drawer_open"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "302",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_domcontentloaded",
+      "target": "assets_cart_drawer_open"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "36",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_onbodyclick",
+      "target": "assets_cart_drawer_updateitems"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "59",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_onbodyclick",
+      "target": "assets_cart_drawer_dismissstitchprompt"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "93",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_onbodyclick",
+      "target": "assets_cart_drawer_showstitchprompt"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "95",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_onbodyclick",
+      "target": "assets_cart_drawer_updateitem"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "61",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_onbodyclick",
+      "target": "assets_cart_drawer_tailoringmodal"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "38",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_onbodyclick",
+      "target": "concept_stitch_addon_pattern"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "124",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_updateitem",
+      "target": "assets_cart_drawer_updateitems"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "134",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_updateitems",
+      "target": "assets_cart_drawer_removeorphanedaddons"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "135",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_updateitems",
+      "target": "assets_cart_drawer_rendercart"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "128",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_updateitems",
+      "target": "assets_cart_drawer_shopify_cart_api"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "146",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_removeorphanedaddons",
+      "target": "assets_cart_drawer_shopify_cart_api"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "138",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_removeorphanedaddons",
+      "target": "concept_orphan_addon_cleanup"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "158",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_rendercart",
+      "target": "assets_cart_drawer_formatmoney"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "190",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_rendercart",
+      "target": "assets_cart_drawer_eschtml"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "281",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_submithandler",
+      "target": "assets_cart_drawer_rendercart"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "301",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_domcontentloaded",
+      "target": "assets_cart_drawer_rendercart"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": "273",
+      "weight": 1.0,
+      "source": "assets_cart_drawer_submithandler",
+      "target": "assets_cart_drawer_shopify_cart_api"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": null,
+      "weight": 0.85,
+      "source": "assets_cart_drawer_tailoringmodal",
+      "target": "concept_stitch_addon_pattern"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": "23",
+      "weight": 1.0,
+      "source": "agents_md_theme_arch",
+      "target": "agents_md_sections_concept"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": "32",
+      "weight": 1.0,
+      "source": "agents_md_theme_arch",
+      "target": "agents_md_blocks_concept"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": "39",
+      "weight": 1.0,
+      "source": "agents_md_theme_arch",
+      "target": "agents_md_snippets_concept"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": "78",
+      "weight": 1.0,
+      "source": "agents_md_theme_arch",
+      "target": "agents_md_liquidoc_concept"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": "96",
+      "weight": 1.0,
+      "source": "agents_md_theme_arch",
+      "target": "agents_md_schema_tag"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": "1009",
+      "weight": 1.0,
+      "source": "agents_md_theme_arch",
+      "target": "agents_md_translation_standard"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": "1073",
+      "weight": 1.0,
+      "source": "agents_md_theme_arch",
+      "target": "agents_md_localization_standard"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "45",
+      "weight": 1.0,
+      "source": "readme_project",
+      "target": "agents_md_theme_arch"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 0.95,
+      "source": "agents_md_theme_arch",
+      "target": "claude_md_project"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": "27",
+      "weight": 1.0,
+      "source": "agents_md_sections_concept",
+      "target": "agents_md_schema_tag"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": "36",
+      "weight": 1.0,
+      "source": "agents_md_blocks_concept",
+      "target": "agents_md_liquidoc_concept"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": "35",
+      "weight": 1.0,
+      "source": "agents_md_blocks_concept",
+      "target": "agents_md_schema_tag"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": "44",
+      "weight": 1.0,
+      "source": "agents_md_snippets_concept",
+      "target": "agents_md_liquidoc_concept"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "156",
+      "weight": 1.0,
+      "source": "readme_project",
+      "target": "contributing_md"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "160",
+      "weight": 1.0,
+      "source": "readme_project",
+      "target": "license_md"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "3",
+      "weight": 1.0,
+      "source": "readme_project",
+      "target": "assets_shoppy_xray_svg"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CONTRIBUTING.md",
+      "source_location": "4",
+      "weight": 1.0,
+      "source": "contributing_md",
+      "target": "code_of_conduct_md"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "assets/icon-cart.svg",
+      "source_location": null,
+      "weight": 0.75,
+      "source": "assets_icon_cart_svg",
+      "target": "assets_icon_wishlist_svg"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "assets/icon-account.svg",
+      "source_location": null,
+      "weight": 0.85,
+      "source": "assets_icon_account_svg",
+      "target": "assets_icon_search_svg"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "assets/cart-drawer.js",
+      "source_location": null,
+      "weight": 0.85,
+      "source": "concept_stitch_addon_pattern",
+      "target": "concept_orphan_addon_cleanup"
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "cart_lifecycle_flow",
+      "label": "Cart Add-to-Cart Lifecycle",
+      "nodes": [
+        "assets_cart_drawer_submithandler",
+        "assets_cart_drawer_rendercart",
+        "assets_cart_drawer_open"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js"
+    },
+    {
+      "id": "addon_stitch_flow",
+      "label": "Stitching Addon Decision Flow",
+      "nodes": [
+        "assets_cart_drawer_onbodyclick",
+        "assets_cart_drawer_showstitchprompt",
+        "assets_cart_drawer_dismissstitchprompt",
+        "assets_cart_drawer_tailoringmodal"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "assets/cart-drawer.js"
+    },
+    {
+      "id": "theme_doc_governance",
+      "label": "Theme Architecture Governance Documents",
+      "nodes": [
+        "agents_md_theme_arch",
+        "readme_project",
+        "contributing_md",
+        "code_of_conduct_md"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "README.md"
+    }
+  ],
+  "built_at_commit": "412ccd9256f37a3ae9998a53d22206450d7e0d90"
+}
