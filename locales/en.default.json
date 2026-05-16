@@ -62,7 +62,8 @@
   "collection": {
     "sort_by": "Sort by",
     "filters": "Filters",
-    "load_more": "Load more"
+    "load_more": "Load more",
+    "products_count": "products"
   },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
