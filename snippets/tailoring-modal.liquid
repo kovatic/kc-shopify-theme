@@ -438,6 +438,10 @@
         <div>
           <h2 class="tailoring-modal__title">{{ 'tailoring.title' | t }}</h2>
           <p class="tailoring-modal__step-subtitle">{{ 'tailoring.blouse_step3_label' | t }}</p>
+          <button type="button" class="tailoring-modal__measure-guide-link js-measure-guide-open">
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.6"/><path d="M10 9v5M10 7v.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            View measurement chart
+          </button>
         </div>
         <button class="tailoring-modal__close" aria-label="{{ 'tailoring.close' | t }}">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -622,6 +626,17 @@
     </div>
 
   </div>
+
+  {%- comment -%} Measurement guide lightbox {%- endcomment -%}
+  <div class="tailoring-modal__guide-overlay js-measure-guide-overlay" aria-hidden="true">
+    <div class="tailoring-modal__guide-inner">
+      <button type="button" class="tailoring-modal__guide-close js-measure-guide-close" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <img src="{{ 'measurement-guide.png' | asset_url }}" alt="Blouse measurement guide" class="tailoring-modal__guide-img" loading="lazy">
+    </div>
+  </div>
+
 </div>
 
 {% stylesheet %}
@@ -1197,6 +1212,80 @@
   .tailoring-modal__measurements--4col .tailoring-modal__field--full {
     grid-column: 1 / -1;
   }
+
+  /* ── Measurement guide link ── */
+  .tailoring-modal__measure-guide-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-top: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #ce0570;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    letter-spacing: 0.02em;
+  }
+  .tailoring-modal__measure-guide-link:hover {
+    opacity: 0.8;
+  }
+
+  /* ── Measurement guide lightbox ── */
+  .tailoring-modal__guide-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    background: rgba(0,0,0,0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    border-radius: 8px;
+  }
+  .tailoring-modal__guide-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .tailoring-modal__guide-inner {
+    position: relative;
+    max-width: 90%;
+    max-height: 88%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tailoring-modal__guide-img {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 6px;
+    object-fit: contain;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  .tailoring-modal__guide-close {
+    position: absolute;
+    top: -14px;
+    right: -14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2e1f1f;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: background 0.15s;
+  }
+  .tailoring-modal__guide-close:hover { background: #f0ebe3; }
 
   /* ── Summary step ── */
   .tailoring-modal__summary {
@@ -1831,6 +1920,27 @@
         btn.textContent = originalLabel;
       });
     }
+
+    /* ── Measurement guide lightbox ── */
+    var guideOverlay = modal.querySelector('.js-measure-guide-overlay');
+    var guideOpenBtn = modal.querySelector('.js-measure-guide-open');
+    var guideCloseBtn = modal.querySelector('.js-measure-guide-close');
+    if (guideOpenBtn && guideOverlay) {
+      guideOpenBtn.addEventListener('click', function () {
+        guideOverlay.classList.add('is-open');
+        guideOverlay.setAttribute('aria-hidden', 'false');
+      });
+    }
+    function closeGuide() {
+      if (guideOverlay) {
+        guideOverlay.classList.remove('is-open');
+        guideOverlay.setAttribute('aria-hidden', 'true');
+      }
+    }
+    if (guideCloseBtn) guideCloseBtn.addEventListener('click', closeGuide);
+    if (guideOverlay) guideOverlay.addEventListener('click', function (e) {
+      if (e.target === guideOverlay) closeGuide();
+    });
 
     /* ── expose open to product page buttons ── */
     window.openTailoringModal = openModal;
