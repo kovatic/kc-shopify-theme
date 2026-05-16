@@ -2,29 +2,6 @@
   Collection page — facet filter sidebar + product grid with pagination.
 {% endcomment %}
 
-{%- comment -%} ── Mobile: sticky sort/filter bar ── {%- endcomment -%}
-<div class="collection-mobile-bar" id="collection-mobile-bar">
-  <button class="collection-mobile-bar__btn" id="collection-sort-btn">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <line x1="7" y1="12" x2="17" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <line x1="11" y1="18" x2="13" y2="18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    </svg>
-    {{ 'collection.sort_by' | t }}
-    <svg class="collection-mobile-bar__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </button>
-  <div class="collection-mobile-bar__divider"></div>
-  <button class="collection-mobile-bar__btn" id="collection-filter-btn">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <line x1="3" y1="12" x2="15" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <line x1="3" y1="18" x2="9" y2="18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    </svg>
-    {{ 'collection.filters' | t }}
-  </button>
-</div>
 
 <div class="collection-page" style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="collection-page__container">
@@ -41,119 +18,54 @@
 
     {% paginate collection.products by section.settings.products_per_page %}
 
-      <div class="collection-page__layout">
+      {%- comment -%} ── Toolbar: sort + count + filters ── {%- endcomment -%}
+      <div class="collection-toolbar">
+        <div class="collection-toolbar__sort">
+          <span class="collection-toolbar__count">{{ collection.products_count }} {{ 'collection.products_count' | t }}</span>
+          <span class="collection-toolbar__sort-divider">|</span>
+          <label class="collection-toolbar__sort-label" for="collection-sort-select">{{ 'collection.sort_by' | t }}:</label>
+          <div class="collection-toolbar__sort-select-wrap">
+            <select id="collection-sort-select" class="collection-toolbar__sort-select js-sort-select">
+              {%- assign sort_options = 'manual,best-selling,title-ascending,title-descending,price-ascending,price-descending,created-descending,created-ascending' | split: ',' -%}
+              {%- assign sort_labels = 'Featured,Best selling,Alphabetically A–Z,Alphabetically Z–A,Price low to high,Price high to low,Date new to old,Date old to new' | split: ',' -%}
+              {%- for opt in sort_options -%}
+                <option value="{{ opt }}"{% if collection.sort_by == opt or collection.default_sort_by == opt and collection.sort_by == blank %} selected{% endif %}>{{ sort_labels[forloop.index0] }}</option>
+              {%- endfor -%}
+            </select>
+            <svg class="collection-toolbar__sort-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <button class="collection-toolbar__filter-btn js-open-filter-drawer" aria-controls="collection-filter-drawer" aria-expanded="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="3" y1="12" x2="15" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="3" y1="18" x2="9" y2="18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          {{ 'collection.filters' | t }}
+        </button>
+      </div>
 
-        {%- comment -%} ── LEFT: Facet filters (Search & Discovery) ── {%- endcomment -%}
-        <aside class="collection-page__sidebar" id="collection-filters">
-
-          {%- comment -%} Active filters — clear pills {%- endcomment -%}
-          {%- assign has_active = false -%}
+      {%- comment -%} Active filter pills below toolbar ── {%- endcomment -%}
+      {%- assign has_active = false -%}
+      {%- for filter in collection.filters -%}
+        {%- if filter.type == 'price_range' -%}
+          {%- if filter.min_value.value != blank or filter.max_value.value != blank -%}{%- assign has_active = true -%}{%- endif -%}
+        {%- else -%}
+          {%- if filter.active_values.size > 0 -%}{%- assign has_active = true -%}{%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if has_active -%}
+        <div class="facet-active">
           {%- for filter in collection.filters -%}
+            {%- for value in filter.active_values -%}
+              <a class="facet-active__pill" href="{{ value.url_to_remove }}">{{ value.label }}<svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></a>
+            {%- endfor -%}
             {%- if filter.type == 'price_range' -%}
               {%- if filter.min_value.value != blank or filter.max_value.value != blank -%}
-                {%- assign has_active = true -%}
-              {%- endif -%}
-            {%- else -%}
-              {%- if filter.active_values.size > 0 -%}
-                {%- assign has_active = true -%}
+                <a class="facet-active__pill" href="{{ filter.url_to_remove }}">{{ filter.label }}<svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></a>
               {%- endif -%}
             {%- endif -%}
           {%- endfor -%}
+        </div>
+      {%- endif -%}
 
-          {%- if has_active -%}
-            <div class="facet-active">
-              {%- for filter in collection.filters -%}
-                {%- for value in filter.active_values -%}
-                  <a class="facet-active__pill" href="{{ value.url_to_remove }}">
-                    {{ value.label }}
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-                  </a>
-                {%- endfor -%}
-                {%- if filter.type == 'price_range' -%}
-                  {%- if filter.min_value.value != blank or filter.max_value.value != blank -%}
-                    <a class="facet-active__pill" href="{{ filter.url_to_remove }}">
-                      {{ filter.label }}
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-                    </a>
-                  {%- endif -%}
-                {%- endif -%}
-              {%- endfor -%}
-            </div>
-          {%- endif -%}
-
-          {%- comment -%} Dynamic filters from Search & Discovery {%- endcomment -%}
-          {%- for filter in collection.filters -%}
-            <div class="facet-group">
-              <button class="facet-group__toggle" aria-expanded="true" aria-controls="facet-{{ filter.param_name | handleize }}">
-                {{ filter.label }}
-                <svg class="facet-group__chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <div class="facet-group__body" id="facet-{{ filter.param_name | handleize }}">
-
-                {%- case filter.type -%}
-
-                  {%- when 'list' -%}
-                    <ul class="facet-list">
-                      {%- for value in filter.values -%}
-                        <li class="facet-list__item">
-                          <a class="facet-list__link{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-disabled{% endif %}"
-                             href="{{ value.url_to_add | default: value.url_to_remove }}">
-                            <span class="facet-list__check"></span>
-                            {{ value.label }}
-                            <span class="facet-list__count">({{ value.count }})</span>
-                          </a>
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-
-                  {%- when 'price_range' -%}
-                    <form class="facet-price-form" id="facet-price-form">
-                      {%- assign min_val = filter.min_value.value | default: '' -%}
-                      {%- assign max_val = filter.max_value.value | default: '' -%}
-                      {%- comment -%} Preserve other active filters when submitting price {%- endcomment -%}
-                      {%- for f in collection.filters -%}
-                        {%- if f.type == 'list' -%}
-                          {%- for v in f.active_values -%}
-                            <input type="hidden" name="{{ v.param_name }}" value="{{ v.value }}">
-                          {%- endfor -%}
-                        {%- endif -%}
-                      {%- endfor -%}
-                      <div class="facet-price-form__fields">
-                        <div class="facet-price-form__field">
-                          <label class="facet-price-form__label" for="price-min">From</label>
-                          <div class="facet-price-form__input-wrap">
-                            <span class="facet-price-form__currency">{{ cart.currency.symbol }}</span>
-                            <input class="facet-price-form__input" type="number" id="price-min"
-                              name="{{ filter.min_value.param_name }}" min="0"
-                              placeholder="0"
-                              value="{% if min_val != blank %}{{ min_val | money_without_currency | remove: ',' }}{% endif %}">
-                          </div>
-                        </div>
-                        <div class="facet-price-form__field">
-                          <label class="facet-price-form__label" for="price-max">To</label>
-                          <div class="facet-price-form__input-wrap">
-                            <span class="facet-price-form__currency">{{ cart.currency.symbol }}</span>
-                            <input class="facet-price-form__input" type="number" id="price-max"
-                              name="{{ filter.max_value.param_name }}" min="0"
-                              placeholder="Any"
-                              value="{% if max_val != blank %}{{ max_val | money_without_currency | remove: ',' }}{% endif %}">
-                          </div>
-                        </div>
-                      </div>
-                      <button class="facet-price-form__btn" type="submit">Apply</button>
-                    </form>
-
-                {%- endcase -%}
-
-              </div>
-            </div>
-          {%- endfor -%}
-
-        </aside>
-
-        {%- comment -%} ── RIGHT: Grid + pagination ── {%- endcomment -%}
-        <div class="collection-page__main">
-
+      {%- comment -%} ── Full-width grid ── {%- endcomment -%}
           <div class="collection-page__grid" id="collection-grid">
             {% for product in collection.products %}
               {%- assign first_variant = product.first_available_variant | default: product.variants.first -%}
@@ -249,62 +161,76 @@
             </div>
           {%- endif -%}
 
-        </div>
-      </div>
-
-      {%- comment -%} ── Mobile: sticky sort/filter bar ── {%- endcomment -%}
-      {%- comment -%} Sort drawer {%- endcomment -%}
-      <div class="collection-drawer" id="collection-sort-drawer" aria-hidden="true">
-        <div class="collection-drawer__overlay" id="collection-drawer-overlay"></div>
-        <div class="collection-drawer__panel">
-          <div class="collection-drawer__header">
-            <span class="collection-drawer__title">Sort by</span>
-            <button class="collection-drawer__close" id="collection-drawer-close-sort" aria-label="Close">
+      {%- comment -%} ── Filter drawer (desktop + mobile) ── {%- endcomment -%}
+      <div class="collection-filter-drawer" id="collection-filter-drawer" aria-hidden="true">
+        <div class="collection-filter-drawer__overlay js-close-filter-drawer"></div>
+        <div class="collection-filter-drawer__panel">
+          <div class="collection-filter-drawer__header">
+            <span class="collection-filter-drawer__title">{{ 'collection.filters' | t }}</span>
+            <button class="collection-filter-drawer__close js-close-filter-drawer" aria-label="Close">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
             </button>
           </div>
-          <ul class="collection-drawer__sort-list">
-            {%- assign sort_options = 'manual,best-selling,title-ascending,title-descending,price-ascending,price-descending,created-descending,created-ascending' | split: ',' -%}
-            {%- assign sort_labels = 'Featured,Best selling,Alphabetically A–Z,Alphabetically Z–A,Price low to high,Price high to low,Date new to old,Date old to new' | split: ',' -%}
-            {%- for opt in sort_options -%}
-              <li>
-                <a class="collection-drawer__sort-option{% if collection.sort_by == opt or collection.default_sort_by == opt and collection.sort_by == blank %} is-active{% endif %}"
-                   href="{{ collection.url }}?sort_by={{ opt }}">
-                  {{ sort_labels[forloop.index0] }}
-                </a>
-              </li>
-            {%- endfor -%}
-          </ul>
-        </div>
-      </div>
+          <div class="collection-filter-drawer__body">
 
-      {%- comment -%} Filter drawer {%- endcomment -%}
-      <div class="collection-drawer" id="collection-filter-drawer" aria-hidden="true">
-        <div class="collection-drawer__overlay" id="collection-filter-overlay"></div>
-        <div class="collection-drawer__panel">
-          <div class="collection-drawer__header">
-            <span class="collection-drawer__title">Filters</span>
-            <button class="collection-drawer__close" id="collection-drawer-close-filter" aria-label="Close">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            </button>
-          </div>
-          <div class="collection-drawer__filters">
-            <div class="facet-group">
-              <button class="facet-group__toggle" aria-expanded="true" aria-controls="drawer-facet-availability">
-                Availability
-                <svg class="facet-group__chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <div class="facet-group__body" id="drawer-facet-availability">
-                <ul class="facet-list">
-                  <li class="facet-list__item"><a class="facet-list__link" href="{{ collection.url }}?filter.p.m.custom.available=true"><span class="facet-list__check"></span>In stock</a></li>
-                  <li class="facet-list__item"><a class="facet-list__link" href="{{ collection.url }}?filter.p.m.custom.available=false"><span class="facet-list__check"></span>Out of stock</a></li>
-                </ul>
+            {%- comment -%} Search & Discovery filters {%- endcomment -%}
+            {%- for filter in collection.filters -%}
+              <div class="facet-group">
+                <button class="facet-group__toggle" aria-expanded="true" aria-controls="drawer-facet-{{ filter.param_name | handleize }}">
+                  {{ filter.label }}
+                  <svg class="facet-group__chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <div class="facet-group__body" id="drawer-facet-{{ filter.param_name | handleize }}">
+                  {%- case filter.type -%}
+                    {%- when 'list' -%}
+                      <ul class="facet-list">
+                        {%- for value in filter.values -%}
+                          <li class="facet-list__item">
+                            <a class="facet-list__link{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-disabled{% endif %}"
+                               href="{{ value.url_to_add | default: value.url_to_remove }}">
+                              <span class="facet-list__check"></span>{{ value.label }}<span class="facet-list__count">({{ value.count }})</span>
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- when 'price_range' -%}
+                      <form class="facet-price-form" id="facet-price-form">
+                        {%- assign min_val = filter.min_value.value | default: '' -%}
+                        {%- assign max_val = filter.max_value.value | default: '' -%}
+                        {%- for f in collection.filters -%}
+                          {%- if f.type == 'list' -%}
+                            {%- for v in f.active_values -%}
+                              <input type="hidden" name="{{ v.param_name }}" value="{{ v.value }}">
+                            {%- endfor -%}
+                          {%- endif -%}
+                        {%- endfor -%}
+                        <div class="facet-price-form__fields">
+                          <div class="facet-price-form__field">
+                            <label class="facet-price-form__label" for="price-min">From</label>
+                            <div class="facet-price-form__input-wrap">
+                              <span class="facet-price-form__currency">{{ cart.currency.symbol }}</span>
+                              <input class="facet-price-form__input" type="number" id="price-min" name="{{ filter.min_value.param_name }}" min="0" placeholder="0" value="{% if min_val != blank %}{{ min_val | money_without_currency | remove: ',' }}{% endif %}">
+                            </div>
+                          </div>
+                          <div class="facet-price-form__field">
+                            <label class="facet-price-form__label" for="price-max">To</label>
+                            <div class="facet-price-form__input-wrap">
+                              <span class="facet-price-form__currency">{{ cart.currency.symbol }}</span>
+                              <input class="facet-price-form__input" type="number" id="price-max" name="{{ filter.max_value.param_name }}" min="0" placeholder="Any" value="{% if max_val != blank %}{{ max_val | money_without_currency | remove: ',' }}{% endif %}">
+                            </div>
+                          </div>
+                        </div>
+                        <button class="facet-price-form__btn" type="submit">Apply</button>
+                      </form>
+                  {%- endcase -%}
+                </div>
               </div>
-            </div>
+            {%- endfor -%}
+
             {%- if collection.all_tags.size > 0 -%}
               <div class="facet-group">
                 <button class="facet-group__toggle" aria-expanded="true" aria-controls="drawer-facet-tags">
-                  Filter
+                  {{ 'collection.filters' | t }}
                   <svg class="facet-group__chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
                 <div class="facet-group__body" id="drawer-facet-tags">
@@ -320,6 +246,7 @@
                 </div>
               </div>
             {%- endif -%}
+
           </div>
         </div>
       </div>
@@ -389,18 +316,173 @@
 
   .collection-page__read-more:hover { text-decoration: underline; }
 
-  /* ── Two-column layout ── */
-  .collection-page__layout {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 2rem;
-    align-items: start;
+  /* ── Toolbar ── */
+  .collection-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0 1rem;
+    border-bottom: 1px solid #e8e0d5;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
   }
 
-  /* ── Sidebar ── */
-  .collection-page__sidebar {
-    position: sticky;
-    top: 120px;
+  .collection-toolbar__sort {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .collection-toolbar__sort-divider {
+    color: #ccc;
+    font-size: 0.8rem;
+    padding: 0 0.25rem;
+  }
+
+  .collection-toolbar__sort-label {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #666;
+    white-space: nowrap;
+  }
+
+  .collection-toolbar__sort-select-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .collection-toolbar__sort-select {
+    appearance: none;
+    background: none;
+    border: none;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #2e1f1f;
+    padding-right: 1.2rem;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .collection-toolbar__sort-chevron {
+    position: absolute;
+    right: 0;
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+    color: #2e1f1f;
+  }
+
+  .collection-toolbar__count {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.8rem;
+    color: #888;
+    flex: 1;
+    text-align: center;
+  }
+
+  .collection-toolbar__filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: 1px solid #2e1f1f;
+    padding: 0.4rem 0.85rem;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #2e1f1f;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+
+  .collection-toolbar__filter-btn:hover {
+    background: #2e1f1f;
+    color: #fff;
+  }
+
+  /* ── Filter drawer (all screen sizes) ── */
+  .collection-filter-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    pointer-events: none;
+  }
+
+  .collection-filter-drawer.is-open {
+    pointer-events: auto;
+  }
+
+  .collection-filter-drawer__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+  }
+
+  .collection-filter-drawer.is-open .collection-filter-drawer__overlay {
+    opacity: 1;
+  }
+
+  .collection-filter-drawer__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 340px;
+    max-width: 90vw;
+    background: #faf8f5;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+  }
+
+  .collection-filter-drawer.is-open .collection-filter-drawer__panel {
+    transform: translateX(0);
+  }
+
+  .collection-filter-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #e0dfd9;
+    flex-shrink: 0;
+  }
+
+  .collection-filter-drawer__title {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #2e1f1f;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .collection-filter-drawer__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #2e1f1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+  }
+
+  .collection-filter-drawer__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem 1.25rem 2rem;
   }
 
   .facet-group {
@@ -798,28 +880,13 @@
     cursor: not-allowed;
   }
 
-  /* ── Mobile sticky bar ── */
-  .collection-mobile-bar {
-    display: none;
-  }
-
-  /* ── Drawer ── */
-  .collection-drawer {
-    display: none;
-  }
-
   /* ── Mobile ── */
   @media screen and (max-width: 768px) {
     .collection-page { overflow-x: hidden; }
-    .collection-page__container { padding: 0 1rem 48px; }
+    .collection-page__container { padding: 0 1rem 1rem; }
 
-    .collection-page__layout {
-      grid-template-columns: 1fr;
-    }
-
-    .collection-page__sidebar {
-      display: none;
-    }
+    .collection-toolbar__sort-divider { display: none; }
+    .collection-toolbar__count { display: none; }
 
     .collection-page__grid {
       grid-template-columns: repeat(2, 1fr);
@@ -830,15 +897,9 @@
     }
 
     .product-list__image-wrapper { aspect-ratio: 3 / 5; }
-
-    .product-list__name {
-      font-size: 0.875rem;
-      -webkit-line-clamp: 1;
-    }
-
+    .product-list__name { font-size: 0.875rem; -webkit-line-clamp: 1; }
     .product-list__price { font-size: 1rem; }
     .product-list__info { gap: 0.25rem; padding: 0.5rem 0.75rem 0; }
-
     .product-card-actions { display: none; }
 
     .product-card-mobile-bar {
@@ -880,128 +941,10 @@
       backdrop-filter: blur(4px);
     }
 
-    /* Sticky sort/filter bar */
-    .collection-mobile-bar {
-      display: flex;
-      align-items: stretch;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      z-index: 200;
-      background: #EFEEE9;
-      box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
-      height: 48px;
+    .collection-filter-drawer__panel {
+      width: 100vw;
+      max-width: 100vw;
     }
-
-    .collection-mobile-bar__btn {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: none;
-      border: none;
-      font-family: var(--font-body-family, 'Montserrat', sans-serif);
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #2e1f1f;
-      cursor: pointer;
-      letter-spacing: 0.02em;
-    }
-
-    .collection-mobile-bar__divider {
-      width: 1px;
-      background: #d8cec4;
-      margin: 12px 0;
-    }
-
-    .collection-mobile-bar__chevron {
-      opacity: 0.6;
-    }
-
-    /* Drawer */
-    .collection-drawer {
-      display: block;
-      position: fixed;
-      inset: 0;
-      z-index: 400;
-      pointer-events: none;
-    }
-
-    .collection-drawer.is-open {
-      pointer-events: auto;
-    }
-
-    .collection-drawer__overlay {
-      display: none;
-    }
-
-    .collection-drawer__panel {
-      position: absolute;
-      inset: 0;
-      background: #f0e7db;
-      overflow-y: auto;
-      transform: translateX(100%);
-      transition: transform 0.3s ease;
-    }
-
-    .collection-drawer.is-open .collection-drawer__panel {
-      transform: translateX(0);
-    }
-
-    .collection-drawer__header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.25rem;
-      border-bottom: 1px solid #e0dfd9;
-    }
-
-    .collection-drawer__title {
-      font-family: var(--font-body-family, 'Montserrat', sans-serif);
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #2e1f1f;
-      letter-spacing: 0.02em;
-    }
-
-    .collection-drawer__close {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #2e1f1f;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px;
-    }
-
-    .collection-drawer__sort-list {
-      list-style: none;
-      margin: 0;
-      padding: 0.5rem 0 1rem;
-    }
-
-    .collection-drawer__sort-option {
-      display: block;
-      padding: 0.75rem 1.25rem;
-      font-family: var(--font-body-family, 'Montserrat', sans-serif);
-      font-size: 0.875rem;
-      font-weight: 400;
-      color: #2e1f1f;
-      text-decoration: none;
-    }
-
-    .collection-drawer__sort-option.is-active {
-      font-weight: 700;
-      color: #e50e7e;
-    }
-
-    .collection-drawer__filters {
-      padding: 0.5rem 1.25rem 1.5rem;
-    }
-
   }
 {% endstylesheet %}
 
@@ -1160,43 +1103,48 @@
       });
     }
 
-    // ── Mobile sort/filter drawers ──
-    function openDrawer(drawerId) {
-      var drawer = document.getElementById(drawerId);
-      if (!drawer) return;
-      drawer.classList.add('is-open');
-      drawer.setAttribute('aria-hidden', 'false');
+    // ── Sort select ──
+    var sortSelect = document.querySelector('.js-sort-select');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', function() {
+        var url = new URL(window.location.href);
+        url.searchParams.set('sort_by', sortSelect.value);
+        window.location.href = url.toString();
+      });
+    }
+
+    // ── Filter drawer ──
+    var filterDrawer = document.getElementById('collection-filter-drawer');
+
+    function openFilterDrawer() {
+      if (!filterDrawer) return;
+      filterDrawer.classList.add('is-open');
+      filterDrawer.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
+      var btn = document.querySelector('.js-open-filter-drawer');
+      if (btn) btn.setAttribute('aria-expanded', 'true');
     }
 
-    function closeDrawer(drawerId) {
-      var drawer = document.getElementById(drawerId);
-      if (!drawer) return;
-      drawer.classList.remove('is-open');
-      drawer.setAttribute('aria-hidden', 'true');
+    function closeFilterDrawer() {
+      if (!filterDrawer) return;
+      filterDrawer.classList.remove('is-open');
+      filterDrawer.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
+      var btn = document.querySelector('.js-open-filter-drawer');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
     }
 
-    function closeAllDrawers() {
-      closeDrawer('collection-sort-drawer');
-      closeDrawer('collection-filter-drawer');
-    }
+    document.querySelectorAll('.js-open-filter-drawer').forEach(function(btn) {
+      btn.addEventListener('click', openFilterDrawer);
+    });
 
-    var sortBtn = document.getElementById('collection-sort-btn');
-    var filterBtn = document.getElementById('collection-filter-btn');
+    document.querySelectorAll('.js-close-filter-drawer').forEach(function(el) {
+      el.addEventListener('click', closeFilterDrawer);
+    });
 
-    if (sortBtn) sortBtn.addEventListener('click', function() { closeDrawer('collection-filter-drawer'); openDrawer('collection-sort-drawer'); });
-    if (filterBtn) filterBtn.addEventListener('click', function() { closeDrawer('collection-sort-drawer'); openDrawer('collection-filter-drawer'); });
-
-    var closeSortBtn = document.getElementById('collection-drawer-close-sort');
-    var closeFilterBtn = document.getElementById('collection-drawer-close-filter');
-    if (closeSortBtn) closeSortBtn.addEventListener('click', function() { closeDrawer('collection-sort-drawer'); });
-    if (closeFilterBtn) closeFilterBtn.addEventListener('click', function() { closeDrawer('collection-filter-drawer'); });
-
-    var sortOverlay = document.getElementById('collection-drawer-overlay');
-    var filterOverlay = document.getElementById('collection-filter-overlay');
-    if (sortOverlay) sortOverlay.addEventListener('click', function() { closeDrawer('collection-sort-drawer'); });
-    if (filterOverlay) filterOverlay.addEventListener('click', function() { closeDrawer('collection-filter-drawer'); });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeFilterDrawer();
+    });
 
   })();
 {% endjavascript %}
