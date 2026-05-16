@@ -75,19 +75,22 @@
           "type": "mega_menu",
           "disabled": true,
           "settings": {
-            "nav_link": "Fancy Cotton Sarees",
-            "col1_heading": "",
-            "col1_menu": "",
+            "nav_link": "Trendy cotton saree",
+            "col1_heading": "Trendy cotton saree",
+            "col1_menu": "trendy-cotton-saree",
             "col2_heading": "",
             "col2_menu": "",
-            "col3_heading": "",
-            "col3_menu": "",
-            "card1_label": "",
-            "card1_url": "",
-            "card2_label": "",
-            "card2_url": "",
-            "card3_label": "Violet Grace Designer Saree",
-            "card3_url": "shopify://products/violet-grace-designer-saree"
+            "col3_heading": "Lilac semi banarasi silk saree",
+            "col3_menu": "trendy-cotton-saree",
+            "card1_image": "shopify://shop_images/DSC08310_aae042b4-269b-4ff6-acfa-4da46258a912.jpg",
+            "card1_label": "semi silk saree",
+            "card1_url": "shopify://products/varnika-silk-saree",
+            "card2_image": "shopify://shop_images/DSC08009_1.webp",
+            "card2_label": "Lilac semi banarasi silk saree",
+            "card2_url": "shopify://products/violet-grace-designer-saree",
+            "card3_image": "shopify://shop_images/DSC08334.jpg",
+            "card3_label": "Cyan semi silk saree",
+            "card3_url": "shopify://products/cyan-silk-saree"
           }
         },
         "mega_menu_R8gjQt": {
