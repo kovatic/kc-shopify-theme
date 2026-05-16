@@ -243,7 +243,7 @@
 
           {%- if paginate.next -%}
             <div class="collection-page__load-more">
-              <button class="collection-page__load-more-btn js-load-more" data-next-url="{{ paginate.next.url }}" data-label="{{ 'collection.load_more' | t }}">
+              <button class="collection-page__load-more-btn js-load-more" data-next-url="{{ paginate.next.url }}" data-section-id="{{ section.id }}" data-label="{{ 'collection.load_more' | t }}">
                 {{ 'collection.load_more' | t }}
               </button>
             </div>
@@ -1130,7 +1130,7 @@
         loadMoreBtn.disabled = true;
         loadMoreBtn.textContent = '...';
 
-        fetch(nextUrl + '&section_id={{ section.id }}')
+        fetch(nextUrl + '&section_id=' + loadMoreBtn.dataset.sectionId)
           .then(function(r) { return r.text(); })
           .then(function(html) {
             var parser = new DOMParser();
