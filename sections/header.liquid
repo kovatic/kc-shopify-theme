@@ -1,9 +1,28 @@
 <div class="site-header" id="site-header">
 {% comment %} Mobile promo bar — outside topbar-wrap so it shows on mobile {% endcomment %}
 <div class="header-promo-bar">
-  <p class="header-promo-bar__text">{{ section.settings.promo_text }}</p>
+  <div class="header-promo-bar__track" aria-live="polite">
+    {%- assign promo_str = '' -%}
+    {%- for i in (1..5) -%}
+      {%- assign key = 'promo_text_' | append: i -%}
+      {%- assign val = section.settings[key] -%}
+      {%- if val != blank -%}
+        {%- if promo_str != '' -%}{%- assign promo_str = promo_str | append: '|||' -%}{%- endif -%}
+        {%- assign promo_str = promo_str | append: val -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if promo_str == blank -%}
+      <p class="header-promo-bar__item is-active">{{ section.settings.promo_text_1 | default: 'Free Shipping on Orders Above ₹2,999' }}</p>
+    {%- else -%}
+      {%- assign promo_items = promo_str | split: '|||' -%}
+      {%- for item in promo_items -%}
+        <p class="header-promo-bar__item{% if forloop.first %} is-active{% endif %}">{{ item }}</p>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
 </div>
 
+{%- if section.settings.top_menu.links.size > 0 -%}
 <div class="site-header__topbar-wrap">
 {% comment %} Row 1: Top bar {% endcomment %}
 <div class="header-topbar">
@@ -13,13 +32,10 @@
         <a href="{{ link.url }}" class="header-topbar__link"{% if link.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>{{ link.title }}</a>
       {% endfor %}
     </nav>
-    <p class="header-topbar__contact">
-      {{ 'header.whatsapp_text' | t }}
-      <a href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: '-' | remove: ' ' }}" class="header-topbar__phone" target="_blank" rel="noopener">{{ section.settings.whatsapp_number }}</a>
-    </p>
   </div>
 </div>
 </div>{% comment %} /site-header__topbar-wrap {% endcomment %}
+{%- endif -%}
 <div class="site-header__sticky">
 {% comment %} Row 2: Logo + Icons {% endcomment %}
 <div class="header-main">
@@ -841,12 +857,20 @@
 
   /* ── Promo bar (mobile only) ── */
   .header-promo-bar {
-    display: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #ce0570;
-    padding: 7px 16px;
-    text-align: center;
+    min-height: 34px;
+    overflow: hidden;
+    position: relative;
   }
-  .header-promo-bar__text {
+  .header-promo-bar__track {
+    position: relative;
+    width: 100%;
+    height: 1.05rem;
+  }
+  .header-promo-bar__item {
     color: #fff;
     font-family: var(--font-body--family, 'Poppins', sans-serif);
     font-size: 0.75rem;
@@ -854,6 +878,26 @@
     letter-spacing: 0.02em;
     margin: 0;
     line-height: 1.4;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 16px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+  }
+  .header-promo-bar__item.is-active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .header-promo-bar__item.is-exiting {
+    opacity: 0;
+    transform: translateY(-8px);
   }
 
   /* ── Left group (hamburger + mobile search) ── */
@@ -1294,7 +1338,6 @@
       transition: none !important;
     }
     .header-topbar { display: none; }
-    .header-promo-bar { display: block; }
     .header-main__left { display: flex; }
     .header-hamburger { display: flex; }
     .header-icon-btn--search-mobile { display: flex; }
@@ -1588,6 +1631,22 @@
       }
     });
   })();
+
+  /* ── Promo bar auto-scroll ── */
+  (function() {
+    var items = document.querySelectorAll('.header-promo-bar__item');
+    if (items.length < 2) return;
+    var current = 0;
+    setInterval(function() {
+      var next = (current + 1) % items.length;
+      items[current].classList.add('is-exiting');
+      items[current].classList.remove('is-active');
+      items[next].classList.add('is-active');
+      var exiting = items[current];
+      setTimeout(function() { exiting.classList.remove('is-exiting'); }, 450);
+      current = next;
+    }, 3500);
+  })();
 {% endjavascript %}
 
 {% schema %}
@@ -1734,10 +1793,35 @@
       "default": "+91-9488202320"
     },
     {
+      "type": "header",
+      "content": "Promo bar messages"
+    },
+    {
       "type": "text",
-      "id": "promo_text",
-      "label": "t:labels.promo_text",
-      "default": "Free Shipping on Orders Above ₹2,999 | Use Code: SILK20"
+      "id": "promo_text_1",
+      "label": "Message 1",
+      "default": "Free Shipping on Orders Above ₹2,999"
+    },
+    {
+      "type": "text",
+      "id": "promo_text_2",
+      "label": "Message 2",
+      "default": "Use Code: SILK20 for 20% Off"
+    },
+    {
+      "type": "text",
+      "id": "promo_text_3",
+      "label": "Message 3"
+    },
+    {
+      "type": "text",
+      "id": "promo_text_4",
+      "label": "Message 4"
+    },
+    {
+      "type": "text",
+      "id": "promo_text_5",
+      "label": "Message 5"
     },
     {
       "type": "header",
