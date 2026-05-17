@@ -42,12 +42,15 @@
             "col2_menu": "",
             "col3_heading": "",
             "col3_menu": "",
-            "card1_label": "",
-            "card1_url": "",
-            "card2_label": "",
-            "card2_url": "",
-            "card3_label": "",
-            "card3_url": ""
+            "card1_image": "shopify://shop_images/cream_Blossom_Silk_choli.png",
+            "card1_label": "Ivory Blossom Silk Anarkali Set ",
+            "card1_url": "shopify://products/ivory-blossom-silk-anarkali-set-a-graceful-ivory-silk-anarkali-set-featuring-a-soft-elegant-tone-with-delicate-detailing-that-enhances-its-charm-offering-a-rich-flowing-silhouette-perfect-for-festive-occasions-and-refined-traditional-wear",
+            "card2_image": "shopify://shop_images/Sandalwood_premium_choli.png",
+            "card2_label": "Sandalwood Premium Sequin Choli",
+            "card2_url": "shopify://products/sandalwood-premium-sequin-choli-a-radiant-sandalwood-shimmer-gown-adorned-with-delicate-sequins-that-add-a-subtle-sparkle-the-elegant-silhouette-and-soft-fabric-create-a-graceful-luxurious-look-perfect-for-special-occasions",
+            "card3_image": "shopify://shop_images/olive_gold_crop_top_with_plazzo..png",
+            "card3_label": "Olive Royale Embroidered Anarkali",
+            "card3_url": "shopify://products/olive-royale-embroidered-anarkali-a-rich-olive-anarkali-featuring-intricate-embroidery-that-enhances-its-regal-appeal-designed-for-elegance-the-flowing-silhouette-and-matching-choker-create-a-graceful"
           }
         },
         "mega_menu_RnnEVD": {
