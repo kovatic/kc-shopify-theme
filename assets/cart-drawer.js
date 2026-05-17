@@ -157,8 +157,12 @@ class CartDrawer extends HTMLElement {
 
     if (subtotal) subtotal.textContent = this.formatMoney(cart.total_price);
     if (countEl) {
-      countEl.textContent = cart.item_count;
-      countEl.style.display = cart.item_count > 0 ? '' : 'none';
+      const archived = window.archivedProductHandles || [];
+      const visibleCount = cart.items.reduce((sum, item) => {
+        return archived.indexOf(item.handle) !== -1 ? sum : sum + item.quantity;
+      }, 0);
+      countEl.textContent = visibleCount;
+      countEl.style.display = visibleCount > 0 ? '' : 'none';
     }
 
     if (cart.item_count === 0) {

@@ -71,7 +71,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     {{ content_for_layout }}
 
     {% sections 'footer-group' %}
-    <script>window.shopMoneyFormat = {{ shop.money_format | json }};</script>
+    <script>
+      window.shopMoneyFormat = {{ shop.money_format | json }};
+      window.archivedProductHandles = [{% for product in collections.all.products %}{% if product.tags contains 'Archived' %}{{ product.handle | json }},{% endif %}{% endfor %}];
+    </script>
     <script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>
   </body>
 </html>

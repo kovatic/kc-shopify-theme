@@ -103,8 +103,14 @@
 
       <a href="{{ routes.cart_url }}" class="header-icon-btn header-icon-btn--cart" aria-label="{{ 'header.cart_label' | t }}">
         {{ 'icon-cart.svg' | inline_asset_content }}
-        {% if cart.item_count > 0 %}
-          <span class="header-cart-count">{{ cart.item_count }}</span>
+        {%- assign visible_cart_count = 0 -%}
+        {%- for item in cart.items -%}
+          {%- unless item.product.tags contains 'Archived' -%}
+            {%- assign visible_cart_count = visible_cart_count | plus: item.quantity -%}
+          {%- endunless -%}
+        {%- endfor -%}
+        {% if visible_cart_count > 0 %}
+          <span class="header-cart-count">{{ visible_cart_count }}</span>
         {% endif %}
       </a>
 
@@ -1589,7 +1595,9 @@
         .then(function(r) { return r.json(); })
         .then(function(data) {
           var res        = data.resources && data.resources.results;
-          var products   = (res && res.products)   || [];
+          var products   = ((res && res.products) || []).filter(function(p) {
+            return !p.tags || p.tags.indexOf('Archived') === -1;
+          });
           var queries    = (res && res.queries)     || [];
           renderSuggestions(queries, term);
           renderProducts(products);
