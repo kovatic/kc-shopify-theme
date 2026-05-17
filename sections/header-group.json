@@ -35,6 +35,24 @@
         "mega_menu_rgyCtx": {
           "type": "mega_menu",
           "settings": {
+            "nav_link": "Kids Wear",
+            "col1_heading": "Kids Wear",
+            "col1_menu": "kids-wear",
+            "col2_heading": "",
+            "col2_menu": "",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_label": "",
+            "card1_url": "",
+            "card2_label": "",
+            "card2_url": "",
+            "card3_label": "",
+            "card3_url": ""
+          }
+        },
+        "mega_menu_RnnEVD": {
+          "type": "mega_menu",
+          "settings": {
             "nav_link": "",
             "col1_heading": "",
             "col1_menu": "",
@@ -198,6 +216,7 @@
       "block_order": [
         "mega_menu_axEnd6",
         "mega_menu_rgyCtx",
+        "mega_menu_RnnEVD",
         "mega_menu_MzfM6K",
         "mega_menu_BtrgXR",
         "mega_menu_R8gjQt",
