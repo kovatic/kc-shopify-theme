@@ -315,40 +315,40 @@
               </select>
             </div>
 
-            {%- if pad_group != nil -%}
-              {%- assign pd_label   = pad_group.label.value -%}
-              {%- assign pd_type    = pad_group.type.value | default: 'radio' -%}
-              {%- assign pd_options = pad_group.options.value -%}
-              <div class="tailoring-modal__field">
-                <p class="tailoring-modal__field-label" style="margin:0 0 8px">{{ pd_label }}</p>
-                {%- for option in pd_options -%}
-                  {%- assign o_label = option.label.value -%}
-                  {%- assign o_price = option.price.value | plus: 0 -%}
-                  {%- assign input_id = 'pad-o' | append: forloop.index -%}
-                  {%- if o_label != blank -%}
-                    <label class="tailoring-modal__option" for="{{ input_id }}"{% unless forloop.first %} style="margin-top:8px"{% endunless %}>
-                      <input
-                        class="tailoring-modal__input"
-                        type="{{ pd_type }}"
-                        id="{{ input_id }}"
-                        name="blouse_pad"
-                        value="{{ o_label | escape }}"
-                        data-price="{{ o_price }}"
-                        data-group-label="{{ pd_label | escape }}"
-                      >
-                      <span class="tailoring-modal__option-text">
-                        {{ o_label }}
-                        {%- if o_price > 0 -%}
-                          <span class="tailoring-modal__option-price">+ &#8377;{{ o_price | floor }}</span>
-                        {%- endif -%}
-                      </span>
-                    </label>
-                  {%- endif -%}
-                {%- endfor -%}
-              </div>
-            {%- endif -%}
-
           </div>
+
+          {%- if pad_group != nil -%}
+            {%- assign pd_label   = pad_group.label.value -%}
+            {%- assign pd_type    = pad_group.type.value | default: 'radio' -%}
+            {%- assign pd_options = pad_group.options.value -%}
+            <div class="tailoring-modal__field">
+              <p class="tailoring-modal__field-label" style="margin:0 0 8px">{{ pd_label }}</p>
+              {%- for option in pd_options -%}
+                {%- assign o_label = option.label.value -%}
+                {%- assign o_price = option.price.value | plus: 0 -%}
+                {%- assign input_id = 'pad-o' | append: forloop.index -%}
+                {%- if o_label != blank -%}
+                  <label class="tailoring-modal__option" for="{{ input_id }}"{% unless forloop.first %} style="margin-top:8px"{% endunless %}>
+                    <input
+                      class="tailoring-modal__input"
+                      type="{{ pd_type }}"
+                      id="{{ input_id }}"
+                      name="blouse_pad"
+                      value="{{ o_label | escape }}"
+                      data-price="{{ o_price }}"
+                      data-group-label="{{ pd_label | escape }}"
+                    >
+                    <span class="tailoring-modal__option-text">
+                      {{ o_label }}
+                      {%- if o_price > 0 -%}
+                        <span class="tailoring-modal__option-price">+ &#8377;{{ o_price | floor }}</span>
+                      {%- endif -%}
+                    </span>
+                  </label>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
 
           <div class="tailoring-modal__step3-visuals">
 
@@ -1343,6 +1343,12 @@
     }
     .tailoring-modal__step3-layout {
       grid-template-columns: 1fr;
+    }
+    .tailoring-modal__step3-selects {
+      display: none;
+    }
+    .tailoring-modal__step3-visuals {
+      display: block;
     }
     .tailoring-modal__measurements--4col {
       grid-template-columns: 1fr 1fr;
