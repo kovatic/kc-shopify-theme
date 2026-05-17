@@ -38,6 +38,7 @@
       {%- if data_source == 'single_collection' -%}
         {%- if section.settings.single_collection != blank and items.size > 0 -%}
           {%- for product in items limit: items_count -%}
+            {%- if product.tags contains 'Archived' -%}{%- continue -%}{%- endif -%}
             <a
               class="product-carousel__card"
               href="{{ product.url }}"

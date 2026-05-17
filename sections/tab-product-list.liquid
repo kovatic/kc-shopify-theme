@@ -50,6 +50,7 @@
           {% if col != blank and col.products.size > 0 %}
             <ul class="tab-product-list__grid">
               {% for product in col.products limit: product_limit %}
+                {%- if product.tags contains 'Archived' -%}{%- continue -%}{%- endif -%}
                 {%- assign first_variant = product.first_available_variant | default: product.variants.first -%}
                 {%- assign is_available = product.available -%}
                 <li class="tab-product-list__item{% unless is_available %} is-sold-out{% endunless %}" data-variant-id="{{ first_variant.id }}" data-available="{{ is_available }}" style="position: relative;">

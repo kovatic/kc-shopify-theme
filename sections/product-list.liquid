@@ -20,6 +20,7 @@
     <div class="product-list__scroll-wrapper">
       <div class="product-list__grid" id="product-list-grid-{{ section.id }}">
         {%- for product in section.settings.collection.products limit: section.settings.products_count -%}
+          {%- if product.tags contains 'Archived' -%}{%- continue -%}{%- endif -%}
           {%- assign first_variant = product.first_available_variant | default: product.variants.first -%}
           {%- assign is_available = product.available -%}
           <div class="product-list__item{% unless is_available %} is-sold-out{% endunless %}" data-variant-id="{{ first_variant.id }}" data-available="{{ is_available }}">

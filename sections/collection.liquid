@@ -112,6 +112,7 @@
       {%- comment -%} ── Full-width grid ── {%- endcomment -%}
           <div class="collection-page__grid" id="collection-grid">
             {% for product in collection.products %}
+              {%- if product.tags contains 'Archived' -%}{%- continue -%}{%- endif -%}
               {%- assign first_variant = product.first_available_variant | default: product.variants.first -%}
               {%- assign is_available = product.available -%}
               <div class="product-list__item{% unless is_available %} is-sold-out{% endunless %}" data-variant-id="{{ first_variant.id }}" data-available="{{ is_available }}">
