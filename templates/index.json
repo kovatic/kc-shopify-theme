@@ -47,13 +47,13 @@
           "settings": {
             "image": "shopify://shop_images/hero_banner3.webp",
             "mobile_image": "shopify://shop_images/hero_banner3_mob.webp",
-            "subheading": "New Collection",
-            "heading": "Elegance in Every Thread",
-            "text": "Discover our curated collection of handcrafted sarees.",
-            "button_label": "Shop Now",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
             "button_url": "",
             "text_position": "middle-left",
-            "show_overlay": true,
+            "show_overlay": false,
             "overlay_opacity": 30
           }
         },
