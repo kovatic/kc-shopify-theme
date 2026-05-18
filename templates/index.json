@@ -12,19 +12,19 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
-        "slide_RHchTJ": {
+        "slide_48gw4q": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/kc_banner_for_website.png",
-            "mobile_image": "shopify://shop_images/kc_PNG.png",
+            "image": "shopify://shop_images/hero_banner2_1.webp",
+            "mobile_image": "shopify://shop_images/hero_banner2-mob.webp",
             "subheading": "",
             "heading": "",
             "text": "",
             "button_label": "",
-            "button_url": "shopify://collections/lehenga",
+            "button_url": "",
             "text_position": "middle-left",
-            "show_overlay": true,
-            "overlay_opacity": 0
+            "show_overlay": false,
+            "overlay_opacity": 30
           }
         },
         "slide_krfQVT": {
@@ -42,26 +42,42 @@
             "overlay_opacity": 30
           }
         },
-        "slide_48gw4q": {
+        "slide_VRUrm9": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/hero_banner2_1.webp",
-            "mobile_image": "shopify://shop_images/hero_banner2-mob.webp",
+            "image": "shopify://shop_images/hero_banner3.webp",
+            "mobile_image": "shopify://shop_images/hero_banner3_mob.webp",
+            "subheading": "New Collection",
+            "heading": "Elegance in Every Thread",
+            "text": "Discover our curated collection of handcrafted sarees.",
+            "button_label": "Shop Now",
+            "button_url": "",
+            "text_position": "middle-left",
+            "show_overlay": true,
+            "overlay_opacity": 30
+          }
+        },
+        "slide_RHchTJ": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/kc_banner_for_website.png",
+            "mobile_image": "shopify://shop_images/kc_PNG.png",
             "subheading": "",
             "heading": "",
             "text": "",
             "button_label": "",
-            "button_url": "",
+            "button_url": "shopify://collections/lehenga",
             "text_position": "middle-left",
-            "show_overlay": false,
-            "overlay_opacity": 30
+            "show_overlay": true,
+            "overlay_opacity": 0
           }
         }
       },
       "block_order": [
-        "slide_RHchTJ",
+        "slide_48gw4q",
         "slide_krfQVT",
-        "slide_48gw4q"
+        "slide_VRUrm9",
+        "slide_RHchTJ"
       ],
       "name": "t:sections.banner.name",
       "settings": {
