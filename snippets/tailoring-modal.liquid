@@ -573,9 +573,6 @@
               <option value="1 Pleat (Minimal Look)">1 Pleat — Minimal Look</option>
               <option value="4 Pleats (Simple)">4 Pleats — Simple</option>
               <option value="5 Pleats (Standard)">5 Pleats — Standard</option>
-              <option value="6 Pleats (Elegant)">6 Pleats — Elegant</option>
-              <option value="7 Pleat (Royal)">7 Pleat — Royal</option>
-              <option value="8 Pleats (Grand Bridal Look)">8 Pleats — Grand Bridal Look</option>
             </select>
           </div>
 
@@ -1751,6 +1748,44 @@
         });
         updateTotal();
       });
+    });
+
+    /* ── Deselect radio on second tap (radio or its label) ── */
+    modal.querySelectorAll('.tailoring-modal__input, .tailoring-modal__blouse-type-radio').forEach(function (radio) {
+      var wasChecked = false;
+
+      function markState() {
+        wasChecked = radio.checked;
+      }
+      function tryDeselect() {
+        if (wasChecked) {
+          radio.checked = false;
+          wasChecked = false;
+          radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+
+      /* Direct radio click */
+      radio.addEventListener('mousedown', markState);
+      radio.addEventListener('touchstart', markState, { passive: true });
+      radio.addEventListener('click', tryDeselect);
+
+      /* Label click — browser checks the radio AFTER label click fires,
+         so read state on mousedown/touchstart, deselect in setTimeout */
+      var label = radio.id ? modal.querySelector('label[for="' + radio.id + '"]') : null;
+      if (label) {
+        label.addEventListener('mousedown', markState);
+        label.addEventListener('touchstart', markState, { passive: true });
+        label.addEventListener('click', function () {
+          if (wasChecked) {
+            setTimeout(function () {
+              radio.checked = false;
+              wasChecked = false;
+              radio.dispatchEvent(new Event('change', { bubbles: true }));
+            }, 0);
+          }
+        });
+      }
     });
 
     /* ── Blouse type card highlight (driven by radio) ── */
