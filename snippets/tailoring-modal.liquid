@@ -544,8 +544,13 @@
             </select>
           </div>
 
-          <div class="tailoring-modal__field">
-            <label class="tailoring-modal__field-label" for="meas-height">Height (cm)</label>
+          <div class="tailoring-modal__field" data-blouse-only="true">
+            <label class="tailoring-modal__field-label" for="meas-height">
+              Full Height (cm)
+              <button type="button" class="tailoring-modal__info-btn" aria-label="Height info" data-info-popup="height-info-popup">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.6"/><path d="M10 9v5M10 7v.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </button>
+            </label>
             <select class="tailoring-modal__select" id="meas-height" name="height_cm">
               <option value="">Choose</option>
               <option value="130-135 cm">130 – 135</option>
@@ -561,7 +566,7 @@
             </select>
           </div>
 
-          <div class="tailoring-modal__field">
+          <div class="tailoring-modal__field" data-blouse-only="true">
             <label class="tailoring-modal__field-label" for="meas-shoulder-pleat">Shoulder Pleat</label>
             <select class="tailoring-modal__select" id="meas-shoulder-pleat" name="shoulder_pleat">
               <option value="">Choose</option>
@@ -625,6 +630,18 @@
       </div>
     </div>
 
+  </div>
+
+  {%- comment -%} Height info popup {%- endcomment -%}
+  <div class="tailoring-modal__guide-overlay js-height-info-overlay" aria-hidden="true">
+    <div class="tailoring-modal__guide-inner">
+      <button type="button" class="tailoring-modal__guide-close js-height-info-close" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <div class="tailoring-modal__info-placeholder">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true"><rect width="64" height="64" rx="8" fill="#f0f0f0"/><path d="M20 44V20M44 44V20M20 32h24" stroke="#bbb" stroke-width="2.5" stroke-linecap="round"/><text x="32" y="58" text-anchor="middle" font-size="9" fill="#aaa">Image coming soon</text></svg>
+      </div>
+    </div>
   </div>
 
   {%- comment -%} Measurement guide lightbox {%- endcomment -%}
@@ -1287,6 +1304,38 @@
   }
   .tailoring-modal__guide-close:hover { background: #f0ebe3; }
 
+  /* ── Height info button ── */
+  .tailoring-modal__field-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .tailoring-modal__info-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #888;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .tailoring-modal__info-btn:hover { color: #2e1f1f; }
+  .tailoring-modal__info-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 8px;
+    padding: 32px;
+    min-width: 220px;
+    min-height: 160px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
   /* ── Summary step ── */
   .tailoring-modal__summary {
     display: grid;
@@ -1433,6 +1482,21 @@
       return required;
     }
 
+    function isBlouseStitchingType() {
+      var checked = modal.querySelector('input[name="tailoring_blouse_stitching"]:checked');
+      if (!checked) return false;
+      return checked.value.toLowerCase() === 'blouse';
+    }
+
+    function updateBlouseOnlyFields() {
+      var hide = isBlouseStitchingType();
+      modal.querySelectorAll('[data-blouse-only="true"]').forEach(function (el) {
+        el.style.display = hide ? 'none' : '';
+        var sel = el.querySelector('select');
+        if (sel && hide) sel.value = '';
+      });
+    }
+
     function showOnly(stepEl) {
       [step1, step2, step3, step4, step5].forEach(function(s) {
         if (s) s.classList.toggle('tailoring-modal__step--hidden', s !== stepEl);
@@ -1577,13 +1641,16 @@
     /* Validate Step 4: all measurement selects must be selected */
     function validateStep4() {
       var valid = true;
+      var blouseOnlyIds = ['meas-height', 'meas-shoulder-pleat'];
       var measIds = [
         'meas-blouse-length', 'meas-chest', 'meas-waist',
         'meas-shoulder', 'meas-armhole', 'meas-sleeve-length',
         'meas-sleeve-around', 'meas-front-neck', 'meas-back-neck',
         'meas-height', 'meas-shoulder-pleat'
       ];
+      var skipBlouseOnly = isBlouseStitchingType();
       measIds.forEach(function (id) {
+        if (skipBlouseOnly && blouseOnlyIds.indexOf(id) !== -1) return;
         var el = document.getElementById(id);
         if (el && !el.value) { showFieldError(el, 'Required'); valid = false; }
       });
@@ -1625,6 +1692,7 @@
     if (neckSleeveNext) {
       neckSleeveNext.addEventListener('click', function () {
         if (!validateStep3()) return;
+        updateBlouseOnlyFields();
         showOnly(step4);
       });
     }
@@ -1645,7 +1713,7 @@
 
     /* ── Blouse step 4 (summary) back → blouse step 3 ── */
     if (backBtn5) {
-      backBtn5.addEventListener('click', function () { showOnly(step4); });
+      backBtn5.addEventListener('click', function () { updateBlouseOnlyFields(); showOnly(step4); });
     }
 
     /* ── Confirm: add to cart ── */
@@ -1803,7 +1871,7 @@
         'meas-sleeve-around': 'Sleeve Round',
         'meas-front-neck':      'Front Neck',
         'meas-back-neck':       'Back Neck',
-        'meas-height':          'Height',
+        'meas-height':          'Full Height',
         'meas-shoulder-pleat':  'Shoulder Pleat'
       };
       Object.keys(measMap).forEach(function (id) {
@@ -1926,6 +1994,28 @@
         btn.textContent = originalLabel;
       });
     }
+
+    /* ── Height info popup ── */
+    var heightInfoOverlay = modal.querySelector('.js-height-info-overlay');
+    var heightInfoClose   = modal.querySelector('.js-height-info-close');
+    modal.querySelectorAll('[data-info-popup="height-info-popup"]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (heightInfoOverlay) {
+          heightInfoOverlay.classList.add('is-open');
+          heightInfoOverlay.setAttribute('aria-hidden', 'false');
+        }
+      });
+    });
+    function closeHeightInfo() {
+      if (heightInfoOverlay) {
+        heightInfoOverlay.classList.remove('is-open');
+        heightInfoOverlay.setAttribute('aria-hidden', 'true');
+      }
+    }
+    if (heightInfoClose) heightInfoClose.addEventListener('click', closeHeightInfo);
+    if (heightInfoOverlay) heightInfoOverlay.addEventListener('click', function (e) {
+      if (e.target === heightInfoOverlay) closeHeightInfo();
+    });
 
     /* ── Measurement guide lightbox ── */
     var guideOverlay = modal.querySelector('.js-measure-guide-overlay');
