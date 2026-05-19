@@ -1,22 +1,20 @@
 {% doc %}
-  Renders a multi-step tailoring modal driven entirely by metaobjects.
+  Renders a multi-step tailoring modal. Each group is a separate metaobject
+  referenced directly from the product via individual metafields.
 
-  Metaobject structure (tailoring_group):
-    label   → single_line_text
-    type    → choice list ("checkbox" or "radio")
-    options → list of tailoring_group_options references (label, price, image)
+  Product metafields (all under custom namespace):
+    custom.blouse_stitching      → Blouse Stitching metaobject (step 1)
+    custom.fall_and_edges        → Fall and Edges metaobject (step 1)
+    custom.inskirt_7_part        → Inskirt - 7 Part metaobject (step 1)
+    custom.blouse_stitching_type → Blouse Stitching Type metaobject (step 2, image cards)
+    custom.neck                  → Neck metaobject (step 3)
+    custom.sleeves               → Sleeves metaobject (step 3)
+    custom.pad                   → Pad metaobject (step 3)
 
-  Product metafield:
-    custom.tailoring_groups → list of tailoring_group references
+  Each metaobject has: label (single_line_text), type (radio/checkbox), options list
+  Each option has: label (single_line_text), price (number), image (file_reference)
 
-  Groups are routed to steps by label (case-insensitive contains match):
-    label contains "Blouse Stitching Type" or "Blouse Type" → Step 2 (type image cards)
-    label contains "Blouse Stitching"                        → Step 1 (Required / Not Required)
-    label contains "Pad"                                     → Step 3 (pad options)
-    anything else                                            → Step 1 general options
-
-  Image filenames are derived from the option label via handleize (e.g. "Katori Blouse" → katori-blouse.png).
-  Upload matching images to Shopify assets for them to appear on the type cards.
+  Groups only render if the product metafield is set.
 
   @param {number} [tailoring_addon_variant_id] - Variant ID of the "Tailoring Add-on" product
 
@@ -24,29 +22,13 @@
   {% render 'tailoring-modal', product: product, tailoring_addon_variant_id: tailoring_addon_variant_id %}
 {% enddoc %}
 
-{%- assign tailoring_groups = product.metafields.custom.tailoring_groups.value -%}
-
-{%- comment -%} Pre-classify groups by label so each step can render from metaobjects {%- endcomment -%}
-{%- assign blouse_stitching_group = nil -%}
-{%- assign blouse_type_group      = nil -%}
-{%- assign neck_group             = nil -%}
-{%- assign sleeve_group           = nil -%}
-{%- assign pad_group              = nil -%}
-
-{%- for group in tailoring_groups -%}
-  {%- assign g_label_lower = group.label.value | downcase -%}
-  {%- if g_label_lower contains 'blouse stitching type' or g_label_lower contains 'blouse type' -%}
-    {%- assign blouse_type_group = group -%}
-  {%- elsif g_label_lower contains 'blouse stitching' -%}
-    {%- assign blouse_stitching_group = group -%}
-  {%- elsif g_label_lower contains 'neck' -%}
-    {%- assign neck_group = group -%}
-  {%- elsif g_label_lower contains 'sleeve' -%}
-    {%- assign sleeve_group = group -%}
-  {%- elsif g_label_lower contains 'pad' -%}
-    {%- assign pad_group = group -%}
-  {%- endif -%}
-{%- endfor -%}
+{%- assign blouse_stitching_options = product.metafields.custom.blouse_stitching.value -%}
+{%- assign fall_edges_options       = product.metafields.custom.fall_and_edges.value -%}
+{%- assign inskirt_options          = product.metafields.custom.inskirt_7_part.value -%}
+{%- assign blouse_type_options      = product.metafields.custom.blouse_stitching_type.value -%}
+{%- assign neck_options             = product.metafields.custom.neck.value -%}
+{%- assign sleeve_options           = product.metafields.custom.sleeves.value -%}
+{%- assign pad_options              = product.metafields.custom.pad.value -%}
 
 <div class="tailoring-modal" id="tailoring-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="tailoring-modal-title"
   data-addon-variant-id="{{ tailoring_addon_variant_id }}"
@@ -70,28 +52,25 @@
       <div class="tailoring-modal__body">
         <div class="tailoring-modal__groups">
 
-          {%- comment -%} Blouse Stitching group from metaobject {%- endcomment -%}
-          {%- if blouse_stitching_group != nil -%}
-            {%- assign bs_label   = blouse_stitching_group.label.value -%}
-            {%- assign bs_type    = blouse_stitching_group.type.value | default: 'radio' -%}
-            {%- assign bs_options = blouse_stitching_group.options.value -%}
+          {%- comment -%} Blouse Stitching — custom.blouse_stitching (list of Tailoring Group Options) {%- endcomment -%}
+          {%- if blouse_stitching_options != blank -%}
             <div class="tailoring-modal__group" data-blouse-group="true">
-              <p class="tailoring-modal__group-label">{{ bs_label }}</p>
+              <p class="tailoring-modal__group-label">Blouse Stitching</p>
               <div class="tailoring-modal__options">
-                {%- for option in bs_options -%}
-                  {%- assign o_label = option.label.value -%}
-                  {%- assign o_price = option.price.value | plus: 0 -%}
+                {%- for option in blouse_stitching_options -%}
+                  {%- assign o_label = option.label -%}
+                  {%- assign o_price = option.price | plus: 0 -%}
                   {%- assign input_id = 'bs-o' | append: forloop.index -%}
                   {%- if o_label != blank -%}
                     <label class="tailoring-modal__option" for="{{ input_id }}">
                       <input
                         class="tailoring-modal__input"
-                        type="{{ bs_type }}"
+                        type="radio"
                         id="{{ input_id }}"
                         name="tailoring_blouse_stitching"
                         value="{{ o_label | escape }}"
                         data-price="{{ o_price }}"
-                        data-group-label="{{ bs_label | escape }}"
+                        data-group-label="Blouse Stitching"
                         data-blouse-option="true"
                       >
                       <span class="tailoring-modal__option-text">
@@ -107,49 +86,71 @@
             </div>
           {%- endif -%}
 
-          {%- comment -%} All other general groups (not blouse stitching / type / pad) {%- endcomment -%}
-          {%- for group in tailoring_groups -%}
-            {%- assign g_label_lower = group.label.value | downcase -%}
-            {%- if g_label_lower contains 'blouse stitching' or g_label_lower contains 'blouse type' or g_label_lower contains 'blouse stitching type' or g_label_lower contains 'neck' or g_label_lower contains 'sleeve' or g_label_lower contains 'pad' -%}
-              {%- continue -%}
-            {%- endif -%}
-            {%- assign g_label   = group.label.value -%}
-            {%- assign g_type    = group.type.value | default: 'radio' -%}
-            {%- assign g_options = group.options.value -%}
-            {%- assign g_index   = forloop.index -%}
-            {%- if g_label != blank -%}
-              <div class="tailoring-modal__group">
-                <p class="tailoring-modal__group-label">{{ g_label }}</p>
-                <div class="tailoring-modal__options">
-                  {%- for option in g_options -%}
-                    {%- assign o_label = option.label.value -%}
-                    {%- assign o_price = option.price.value | plus: 0 -%}
-                    {%- assign input_id   = 'tailoring-g' | append: g_index | append: '-o' | append: forloop.index -%}
-                    {%- assign input_name = 'tailoring_group_' | append: g_index -%}
-                    {%- if o_label != blank -%}
-                      <label class="tailoring-modal__option" for="{{ input_id }}">
-                        <input
-                          class="tailoring-modal__input"
-                          type="{{ g_type }}"
-                          id="{{ input_id }}"
-                          name="{{ input_name }}"
-                          value="{{ o_label | escape }}"
-                          data-price="{{ o_price }}"
-                          data-group-label="{{ g_label | escape }}"
-                        >
-                        <span class="tailoring-modal__option-text">
-                          {{ o_label }}
-                          {%- if o_price > 0 -%}
-                            <span class="tailoring-modal__option-price">+ &#8377;{{ o_price | floor }}</span>
-                          {%- endif -%}
-                        </span>
-                      </label>
-                    {%- endif -%}
-                  {%- endfor -%}
-                </div>
+          {%- comment -%} Fall and Edges — custom.fall_and_edges {%- endcomment -%}
+          {%- if fall_edges_options != blank -%}
+            <div class="tailoring-modal__group">
+              <p class="tailoring-modal__group-label">Fall and Edges</p>
+              <div class="tailoring-modal__options">
+                {%- for option in fall_edges_options -%}
+                  {%- assign o_label = option.label -%}
+                  {%- assign o_price = option.price | plus: 0 -%}
+                  {%- assign input_id = 'fe-o' | append: forloop.index -%}
+                  {%- if o_label != blank -%}
+                    <label class="tailoring-modal__option" for="{{ input_id }}">
+                      <input
+                        class="tailoring-modal__input"
+                        type="radio"
+                        id="{{ input_id }}"
+                        name="tailoring_fall_edges"
+                        value="{{ o_label | escape }}"
+                        data-price="{{ o_price }}"
+                        data-group-label="Fall and Edges"
+                      >
+                      <span class="tailoring-modal__option-text">
+                        {{ o_label }}
+                        {%- if o_price > 0 -%}
+                          <span class="tailoring-modal__option-price">+ &#8377;{{ o_price | floor }}</span>
+                        {%- endif -%}
+                      </span>
+                    </label>
+                  {%- endif -%}
+                {%- endfor -%}
               </div>
-            {%- endif -%}
-          {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Inskirt - 7 Part — custom.inskirt_7_part {%- endcomment -%}
+          {%- if inskirt_options != blank -%}
+            <div class="tailoring-modal__group">
+              <p class="tailoring-modal__group-label">Inskirt - 7 Part</p>
+              <div class="tailoring-modal__options">
+                {%- for option in inskirt_options -%}
+                  {%- assign o_label = option.label -%}
+                  {%- assign o_price = option.price | plus: 0 -%}
+                  {%- assign input_id = 'is-o' | append: forloop.index -%}
+                  {%- if o_label != blank -%}
+                    <label class="tailoring-modal__option" for="{{ input_id }}">
+                      <input
+                        class="tailoring-modal__input"
+                        type="radio"
+                        id="{{ input_id }}"
+                        name="tailoring_inskirt"
+                        value="{{ o_label | escape }}"
+                        data-price="{{ o_price }}"
+                        data-group-label="Inskirt - 7 Part"
+                      >
+                      <span class="tailoring-modal__option-text">
+                        {{ o_label }}
+                        {%- if o_price > 0 -%}
+                          <span class="tailoring-modal__option-price">+ &#8377;{{ o_price | floor }}</span>
+                        {%- endif -%}
+                      </span>
+                    </label>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
 
         </div>
       </div>
@@ -185,28 +186,24 @@
       </div>
 
       <div class="tailoring-modal__body">
-        {%- if blouse_type_group != nil -%}
-          {%- assign bt_label   = blouse_type_group.label.value -%}
-          {%- assign bt_type    = blouse_type_group.type.value | default: 'radio' -%}
-          {%- assign bt_options = blouse_type_group.options.value -%}
-
-          <p class="tailoring-modal__group-label">{{ bt_label }}</p>
+        {%- if blouse_type_options != blank -%}
+          <p class="tailoring-modal__group-label">Blouse Stitching Type</p>
 
           <div class="tailoring-modal__blouse-type-list">
-            {%- for option in bt_options -%}
-              {%- assign o_label = option.label.value -%}
-              {%- assign o_price = option.price.value | plus: 0 -%}
+            {%- for option in blouse_type_options -%}
+              {%- assign o_label = option.label -%}
+              {%- assign o_price = option.price | plus: 0 -%}
               {%- assign input_id = 'blouse-type-' | append: forloop.index -%}
               {%- if o_label != blank -%}
                 <label class="tailoring-modal__blouse-type-row" for="{{ input_id }}">
                   <input
                     class="tailoring-modal__blouse-type-radio"
-                    type="{{ bt_type }}"
+                    type="radio"
                     id="{{ input_id }}"
                     name="blouse_type"
                     value="{{ o_label | escape }}"
                     data-price="{{ o_price }}"
-                    data-group-label="{{ bt_label | escape }}"
+                    data-group-label="Blouse Stitching Type"
                   >
                   <span class="tailoring-modal__blouse-type-text">
                     {{ o_label }}
@@ -220,9 +217,9 @@
           </div>
 
           <div class="tailoring-modal__blouse-type-cards">
-            {%- for option in bt_options -%}
-              {%- assign o_label = option.label.value -%}
-              {%- assign o_image = option.image.value -%}
+            {%- for option in blouse_type_options -%}
+              {%- assign o_label = option.label -%}
+              {%- assign o_image = option.image -%}
               {%- assign input_id = 'blouse-type-' | append: forloop.index -%}
               {%- if o_label != blank -%}
                 <label class="tailoring-modal__blouse-card" for="{{ input_id }}">
@@ -270,73 +267,54 @@
       </div>
 
       <div class="tailoring-modal__body">
+
         <div class="tailoring-modal__step3-layout">
 
           <div class="tailoring-modal__step3-selects">
 
             <div class="tailoring-modal__field">
-              <label class="tailoring-modal__field-label" for="blouse-neck">
-                {%- if neck_group != nil -%}{{ neck_group.label.value }}{%- else -%}{{ 'tailoring.neck' | t }}{%- endif -%}
-              </label>
+              <label class="tailoring-modal__field-label" for="blouse-neck">Neck</label>
               <select class="tailoring-modal__select" id="blouse-neck" name="blouse_neck">
                 <option value="">{{ 'tailoring.choose_neck' | t }}</option>
-                {%- if neck_group != nil -%}
-                  {%- for option in neck_group.options.value -%}
-                    {%- if option.label.value != blank -%}
-                      <option value="{{ option.label.value | escape }}">{{ option.label.value }}</option>
-                    {%- endif -%}
-                  {%- endfor -%}
-                {%- else -%}
-                  <option value="Round Neck">{{ 'tailoring.neck_round' | t }}</option>
-                  <option value="Square Neck">{{ 'tailoring.neck_square' | t }}</option>
-                  <option value="V Neck">{{ 'tailoring.neck_v' | t }}</option>
-                  <option value="Sweetheart Neck">{{ 'tailoring.neck_sweetheart' | t }}</option>
-                  <option value="Leaf Neck">{{ 'tailoring.neck_leaf' | t }}</option>
-                {%- endif -%}
+                {%- for option in neck_options -%}
+                  {%- if option.label != blank -%}
+                    <option value="{{ option.label | escape }}">{{ option.label }}</option>
+                  {%- endif -%}
+                {%- endfor -%}
               </select>
             </div>
 
             <div class="tailoring-modal__field">
-              <label class="tailoring-modal__field-label" for="blouse-sleeves">
-                {%- if sleeve_group != nil -%}{{ sleeve_group.label.value }}{%- else -%}{{ 'tailoring.sleeves' | t }}{%- endif -%}
-              </label>
+              <label class="tailoring-modal__field-label" for="blouse-sleeves">Sleeves</label>
               <select class="tailoring-modal__select" id="blouse-sleeves" name="blouse_sleeves">
                 <option value="">{{ 'tailoring.choose_sleeves' | t }}</option>
-                {%- if sleeve_group != nil -%}
-                  {%- for option in sleeve_group.options.value -%}
-                    {%- if option.label.value != blank -%}
-                      <option value="{{ option.label.value | escape }}">{{ option.label.value }}</option>
-                    {%- endif -%}
-                  {%- endfor -%}
-                {%- else -%}
-                  <option value="Sleeveless">{{ 'tailoring.sleeve_sleeveless' | t }}</option>
-                  <option value="Regular Sleeves">{{ 'tailoring.sleeve_regular' | t }}</option>
-                {%- endif -%}
+                {%- for option in sleeve_options -%}
+                  {%- if option.label != blank -%}
+                    <option value="{{ option.label | escape }}">{{ option.label }}</option>
+                  {%- endif -%}
+                {%- endfor -%}
               </select>
             </div>
 
           </div>
 
-          {%- if pad_group != nil -%}
-            {%- assign pd_label   = pad_group.label.value -%}
-            {%- assign pd_type    = pad_group.type.value | default: 'radio' -%}
-            {%- assign pd_options = pad_group.options.value -%}
+          {%- if pad_options != blank -%}
             <div class="tailoring-modal__field">
-              <p class="tailoring-modal__field-label" style="margin:0 0 8px">{{ pd_label }}</p>
-              {%- for option in pd_options -%}
-                {%- assign o_label = option.label.value -%}
-                {%- assign o_price = option.price.value | plus: 0 -%}
+              <p class="tailoring-modal__field-label" style="margin:0 0 8px">Pad</p>
+              {%- for option in pad_options -%}
+                {%- assign o_label = option.label -%}
+                {%- assign o_price = option.price | plus: 0 -%}
                 {%- assign input_id = 'pad-o' | append: forloop.index -%}
                 {%- if o_label != blank -%}
                   <label class="tailoring-modal__option" for="{{ input_id }}"{% unless forloop.first %} style="margin-top:8px"{% endunless %}>
                     <input
                       class="tailoring-modal__input"
-                      type="{{ pd_type }}"
+                      type="radio"
                       id="{{ input_id }}"
                       name="blouse_pad"
                       value="{{ o_label | escape }}"
                       data-price="{{ o_price }}"
-                      data-group-label="{{ pd_label | escape }}"
+                      data-group-label="Pad"
                     >
                     <span class="tailoring-modal__option-text">
                       {{ o_label }}
@@ -352,65 +330,43 @@
 
           <div class="tailoring-modal__step3-visuals">
 
-            {%- comment -%} Neck visual cards — from metaobject if available, else hardcoded {%- endcomment -%}
             <div class="tailoring-modal__visual-group">
               <p class="tailoring-modal__visual-heading">{{ 'tailoring.neck_types' | t }}</p>
               <div class="tailoring-modal__visual-cards">
-                {%- if neck_group != nil -%}
-                  {%- for option in neck_group.options.value -%}
-                    {%- assign o_label = option.label.value -%}
-                    {%- assign o_image = option.image.value -%}
-                    {%- if o_label != blank -%}
-                      <button type="button" class="tailoring-modal__visual-card" data-select="blouse-neck" data-value="{{ o_label | escape }}">
-                        <div class="tailoring-modal__visual-img">
-                          {%- if o_image != blank -%}
-                            {{ o_image | image_url: width: 120 | image_tag: alt: o_label, loading: 'lazy' }}
-                          {%- endif -%}
-                        </div>
-                        <span class="tailoring-modal__visual-label">{{ o_label }}</span>
-                      </button>
-                    {%- endif -%}
-                  {%- endfor -%}
-                {%- else -%}
-                  {%- assign neck_values = 'Round Neck,Square Neck,V Neck,Sweetheart Neck,Leaf Neck' | split: ',' -%}
-                  {%- for neck in neck_values -%}
-                    <button type="button" class="tailoring-modal__visual-card" data-select="blouse-neck" data-value="{{ neck }}">
-                      <div class="tailoring-modal__visual-img"></div>
-                      <span class="tailoring-modal__visual-label">{{ neck }}</span>
+                {%- for option in neck_options -%}
+                  {%- assign o_label = option.label -%}
+                  {%- assign o_image = option.image -%}
+                  {%- if o_label != blank -%}
+                    <button type="button" class="tailoring-modal__visual-card" data-select="blouse-neck" data-value="{{ o_label | escape }}">
+                      <div class="tailoring-modal__visual-img">
+                        {%- if o_image != blank -%}
+                          {{ o_image | image_url: width: 120 | image_tag: alt: o_label, loading: 'lazy' }}
+                        {%- endif -%}
+                      </div>
+                      <span class="tailoring-modal__visual-label">{{ o_label }}</span>
                     </button>
-                  {%- endfor -%}
-                {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
               </div>
             </div>
 
-            {%- comment -%} Sleeve visual cards — from metaobject if available, else hardcoded {%- endcomment -%}
             <div class="tailoring-modal__visual-group">
               <p class="tailoring-modal__visual-heading">{{ 'tailoring.sleeve_types' | t }}</p>
               <div class="tailoring-modal__visual-cards">
-                {%- if sleeve_group != nil -%}
-                  {%- for option in sleeve_group.options.value -%}
-                    {%- assign o_label = option.label.value -%}
-                    {%- assign o_image = option.image.value -%}
-                    {%- if o_label != blank -%}
-                      <button type="button" class="tailoring-modal__visual-card" data-select="blouse-sleeves" data-value="{{ o_label | escape }}">
-                        <div class="tailoring-modal__visual-img">
-                          {%- if o_image != blank -%}
-                            {{ o_image | image_url: width: 120 | image_tag: alt: o_label, loading: 'lazy' }}
-                          {%- endif -%}
-                        </div>
-                        <span class="tailoring-modal__visual-label">{{ o_label }}</span>
-                      </button>
-                    {%- endif -%}
-                  {%- endfor -%}
-                {%- else -%}
-                  {%- assign sleeve_values = 'Sleeveless,Regular Sleeves' | split: ',' -%}
-                  {%- for sleeve in sleeve_values -%}
-                    <button type="button" class="tailoring-modal__visual-card" data-select="blouse-sleeves" data-value="{{ sleeve }}">
-                      <div class="tailoring-modal__visual-img"></div>
-                      <span class="tailoring-modal__visual-label">{{ sleeve }}</span>
+                {%- for option in sleeve_options -%}
+                  {%- assign o_label = option.label -%}
+                  {%- assign o_image = option.image -%}
+                  {%- if o_label != blank -%}
+                    <button type="button" class="tailoring-modal__visual-card" data-select="blouse-sleeves" data-value="{{ o_label | escape }}">
+                      <div class="tailoring-modal__visual-img">
+                        {%- if o_image != blank -%}
+                          {{ o_image | image_url: width: 120 | image_tag: alt: o_label, loading: 'lazy' }}
+                        {%- endif -%}
+                      </div>
+                      <span class="tailoring-modal__visual-label">{{ o_label }}</span>
                     </button>
-                  {%- endfor -%}
-                {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
               </div>
             </div>
 
@@ -1586,20 +1542,27 @@
       if (e.target) clearFieldError(e.target);
     });
 
-    /* Validate Step 1: blouse stitching radio must be selected */
+    /* Validate Step 1: only blouse stitching is required; fall/edges and inskirt are optional */
+    var optionalGroupNames = ['tailoring_fall_edges', 'tailoring_inskirt'];
     function validateStep1() {
-      var sel = modal.querySelector('input[name="tailoring_blouse_stitching"]:checked');
-      if (!sel) {
-        var group = modal.querySelector('[data-blouse-group="true"]');
-        if (group && !group.querySelector('.tailoring-modal__field-error')) {
-          var err = document.createElement('span');
-          err.className = 'tailoring-modal__field-error';
-          err.textContent = 'Please select an option';
-          group.appendChild(err);
+      var valid = true;
+      modal.querySelectorAll('#tailoring-step-1 .tailoring-modal__group').forEach(function (group) {
+        var input = group.querySelector('.tailoring-modal__input');
+        if (!input) return;
+        var groupName = input.name;
+        if (optionalGroupNames.indexOf(groupName) !== -1) return;
+        var checked = modal.querySelector('input[name="' + groupName + '"]:checked');
+        if (!checked) {
+          if (!group.querySelector('.tailoring-modal__field-error')) {
+            var err = document.createElement('span');
+            err.className = 'tailoring-modal__field-error';
+            err.textContent = 'Please select an option';
+            group.appendChild(err);
+          }
+          valid = false;
         }
-        return false;
-      }
-      return true;
+      });
+      return valid;
     }
 
     /* Validate Step 2: blouse type radio must be selected */
@@ -1618,18 +1581,18 @@
       return true;
     }
 
-    /* Validate Step 3: neck, sleeves, and pad must all be selected */
+    /* Validate Step 3: only validate fields that are rendered */
     function validateStep3() {
       var valid = true;
       var neck    = document.getElementById('blouse-neck');
       var sleeves = document.getElementById('blouse-sleeves');
-      var pad     = modal.querySelector('input[name="blouse_pad"]:checked');
 
-      if (neck && !neck.value) { showFieldError(neck, 'Please select neck type'); valid = false; }
-      if (sleeves && !sleeves.value) { showFieldError(sleeves, 'Please select sleeve type'); valid = false; }
-      if (!pad) {
-        var padField = modal.querySelector('input[name="blouse_pad"]');
-        if (padField) showFieldError(padField, 'Please select pad option');
+      if (neck && neck.options.length > 1 && !neck.value) { showFieldError(neck, 'Please select neck type'); valid = false; }
+      if (sleeves && sleeves.options.length > 1 && !sleeves.value) { showFieldError(sleeves, 'Please select sleeve type'); valid = false; }
+
+      var padField = modal.querySelector('input[name="blouse_pad"]');
+      if (padField && !modal.querySelector('input[name="blouse_pad"]:checked')) {
+        showFieldError(padField, 'Please select pad option');
         valid = false;
       }
       return valid;
