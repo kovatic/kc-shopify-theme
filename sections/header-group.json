@@ -56,9 +56,9 @@
         "mega_menu_RnnEVD": {
           "type": "mega_menu",
           "settings": {
-            "nav_link": "",
-            "col1_heading": "",
-            "col1_menu": "",
+            "nav_link": "Designer sarees",
+            "col1_heading": "Designer sarees",
+            "col1_menu": "designer-sarees",
             "col2_heading": "",
             "col2_menu": "",
             "col3_heading": "",
