@@ -246,6 +246,16 @@
     margin: 0;
     line-height: 1.7;
     text-align: left;
+    white-space: pre-line;
+  }
+
+  .about-timeline__card-text p {
+    margin-bottom: 0.8em;
+    white-space: normal;
+  }
+
+  .about-timeline__card-text p:last-child {
+    margin-bottom: 0;
   }
 
   .about-timeline__card-media {
@@ -334,8 +344,7 @@
         {
           "type": "richtext",
           "id": "description",
-          "label": "t:labels.text",
-          "default": "<p>K. Chinnadurai &amp; Co. was founded with a single store in Thoothukudi, dedicated to bringing the finest handloom sarees to discerning customers.</p>"
+          "label": "t:labels.text"
         },
         {
           "type": "image_picker",
@@ -388,7 +397,7 @@
           "settings": {
             "year": "1968",
             "title": "The beginning",
-            "description": "K. Chinnadurai & Co. was founded with a single store in Thoothukudi, dedicated to bringing the finest handloom sarees."
+            "description": "<p>K. Chinnadurai &amp; Co. was founded with a single store in Thoothukudi, dedicated to bringing the finest handloom sarees.</p>"
           }
         },
         {
@@ -396,7 +405,7 @@
           "settings": {
             "year": "1980",
             "title": "Expanding our roots",
-            "description": "A second location opened in Tirunelveli, bringing our curated collection to a wider community of saree enthusiasts."
+            "description": "<p>A second location opened in Tirunelveli, bringing our curated collection to a wider community of saree enthusiasts.</p>"
           }
         },
         {
@@ -404,7 +413,7 @@
           "settings": {
             "year": "1995",
             "title": "A legacy of weaving",
-            "description": "We established direct partnerships with master weavers in Kanchipuram and Madurai, ensuring authenticity in every thread."
+            "description": "<p>We established direct partnerships with master weavers in Kanchipuram and Madurai, ensuring authenticity in every thread.</p>"
           }
         },
         {
@@ -412,7 +421,7 @@
           "settings": {
             "year": "2010",
             "title": "The next generation",
-            "description": "The second generation of the Chinnadurai family joined the business, blending heritage with a modern vision."
+            "description": "<p>The second generation of the Chinnadurai family joined the business, blending heritage with a modern vision.</p>"
           }
         },
         {
@@ -420,7 +429,7 @@
           "settings": {
             "year": "2024",
             "title": "56 years & beyond",
-            "description": "Now spanning multiple stores across Tamil Nadu, K. Chinnadurai & Co. continues to honour tradition while embracing the future."
+            "description": "<p>Now spanning multiple stores across Tamil Nadu, K. Chinnadurai &amp; Co. continues to honour tradition while embracing the future.</p>"
           }
         }
       ]
