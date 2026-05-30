@@ -16,6 +16,9 @@
       {%- if section.settings.subheading != blank -%}
         <p class="about-timeline__subheading">{{ section.settings.subheading | escape }}</p>
       {%- endif -%}
+      {%- if section.settings.description != blank -%}
+        <div class="about-timeline__description">{{ section.settings.description }}</div>
+      {%- endif -%}
     </div>
 
     {%- if section.blocks.size > 0 -%}
@@ -123,6 +126,25 @@
     margin: 0;
     line-height: 1.6;
     max-width: 680px;
+  }
+
+  .about-timeline__description {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: #494949;
+    line-height: 1.75;
+    max-width: 680px;
+    margin-top: 16px;
+    text-align: center;
+  }
+
+  .about-timeline__description p {
+    margin-bottom: 0.8em;
+  }
+
+  .about-timeline__description p:last-child {
+    margin-bottom: 0;
   }
 
   /* Track — 3-column grid: left | node-column | right */
@@ -366,6 +388,11 @@
       "id": "subheading",
       "label": "t:labels.subtitle",
       "default": "Five decades of craftsmanship, heritage, and community."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:labels.description"
     },
     {
       "type": "range",
