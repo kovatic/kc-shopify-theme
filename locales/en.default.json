@@ -35,7 +35,25 @@
     "comment_form_email": "Email",
     "comment_form_name": "Name",
     "comment_form_submit": "Post",
-    "comment_form_title": "Add a comment"
+    "comment_form_title": "Add a comment",
+    "listing": {
+      "eyebrow": "Our blog",
+      "empty": "No posts yet. Check back soon.",
+      "read_more": "Read more",
+      "comments": "comments",
+      "articles_per_page": "Articles per page"
+    },
+    "article": {
+      "back_to_blog": "Back to {{ blog_title }}",
+      "tagged": "Tagged:",
+      "share": "Share:",
+      "show_author": "Show author",
+      "show_share": "Show share buttons",
+      "previous": "Previous post",
+      "next": "Next post",
+      "all_posts": "All posts",
+      "nav_label": "Post navigation"
+    }
   },
   "cart": {
     "checkout": "Checkout",
