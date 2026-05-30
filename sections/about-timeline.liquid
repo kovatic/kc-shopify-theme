@@ -39,7 +39,7 @@
                 <h3 class="about-timeline__card-title">{{ block.settings.title | escape }}</h3>
               {%- endif -%}
               {%- if block.settings.description != blank -%}
-                <p class="about-timeline__card-text">{{ block.settings.description | escape }}</p>
+                <div class="about-timeline__card-text">{{ block.settings.description }}</div>
               {%- endif -%}
               {%- if block.settings.image != blank -%}
                 <div class="about-timeline__card-media">
@@ -245,6 +245,7 @@
     color: #494949;
     margin: 0;
     line-height: 1.7;
+    text-align: left;
   }
 
   .about-timeline__card-media {
@@ -331,10 +332,10 @@
           "default": "The beginning"
         },
         {
-          "type": "textarea",
+          "type": "richtext",
           "id": "description",
           "label": "t:labels.text",
-          "default": "K. Chinnadurai & Co. was founded with a single store in Thoothukudi, dedicated to bringing the finest handloom sarees to discerning customers."
+          "default": "<p>K. Chinnadurai &amp; Co. was founded with a single store in Thoothukudi, dedicated to bringing the finest handloom sarees to discerning customers.</p>"
         },
         {
           "type": "image_picker",
