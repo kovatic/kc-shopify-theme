@@ -154,6 +154,27 @@
             </button>
           {%- endif -%}
 
+          {%- comment -%} Stock alert {%- endcomment -%}
+          {%- assign inv = current_variant.inventory_quantity -%}
+          {%- assign inv_policy = current_variant.inventory_management -%}
+          {%- if current_variant.available and inv_policy == 'shopify' -%}
+            {%- if inv <= 3 -%}
+              <div class="product-page__stock-alert product-page__stock-alert--critical" id="stock-alert">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                {{ 'product.stock.critical' | t: count: inv }}
+              </div>
+            {%- elsif inv <= 10 -%}
+              <div class="product-page__stock-alert product-page__stock-alert--low" id="stock-alert">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                {{ 'product.stock.low' | t: count: inv }}
+              </div>
+            {%- endif -%}
+          {%- elsif current_variant.available == false -%}
+            <div class="product-page__stock-alert product-page__stock-alert--sold-out" id="stock-alert" style="display:none"></div>
+          {%- else -%}
+            <div class="product-page__stock-alert" id="stock-alert" style="display:none"></div>
+          {%- endif -%}
+
           {%- comment -%} ATC + Wishlist + Share row {%- endcomment -%}
           <div class="product-page__action-row">
             <button
@@ -495,6 +516,13 @@
 <script id="product-json-{{ section.id }}" type="application/json">
   {{ product | json }}
 </script>
+<script id="product-inventory-{{ section.id }}" type="application/json">
+  {
+    {%- for v in product.variants -%}
+      "{{ v.id }}": { "qty": {{ v.inventory_quantity }}, "managed": {{ v.inventory_management | json }} }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  }
+</script>
 
 <script>
 (function() {
@@ -522,6 +550,8 @@
 
   var productEl = document.getElementById('product-json-{{ section.id }}');
   var product = productEl ? JSON.parse(productEl.textContent) : null;
+  var invEl = document.getElementById('product-inventory-{{ section.id }}');
+  var inventoryMap = invEl ? JSON.parse(invEl.textContent) : {};
   if (!product) return;
 
   // ── Variant option buttons ───────────────────────────────────
@@ -599,6 +629,27 @@
       btn.disabled    = !available;
       btn.textContent = available ? addLabel : soldLabel;
     });
+    // Update stock alert
+    var stockAlert = document.getElementById('stock-alert');
+    if (stockAlert) {
+      var invData = inventoryMap[String(variant.id)] || {};
+      var inv     = invData.qty;
+      var managed = !!invData.managed;
+      var criticalTpl = '{{ "product.stock.critical" | t: count: "__N__" }}';
+      var lowTpl      = '{{ "product.stock.low" | t: count: "__N__" }}';
+      stockAlert.className = 'product-page__stock-alert';
+      stockAlert.innerHTML = '';
+      stockAlert.removeAttribute('style');
+      if (available && managed && typeof inv === 'number' && inv > 0 && inv <= 3) {
+        stockAlert.classList.add('product-page__stock-alert--critical');
+        stockAlert.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> ' + criticalTpl.replace('__N__', inv);
+      } else if (available && managed && typeof inv === 'number' && inv > 0 && inv <= 10) {
+        stockAlert.classList.add('product-page__stock-alert--low');
+        stockAlert.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> ' + lowTpl.replace('__N__', inv);
+      } else {
+        stockAlert.style.display = 'none';
+      }
+    }
   }
 
   document.addEventListener('tailoring:total-change', function(e) {
@@ -1873,6 +1924,41 @@
 
   /* ── Related rows background ───────────────────────────────── */
   .pp-row { background-color: #efeee9; }
+
+  /* ── Stock alerts ───────────────────────────────────────────── */
+  .product-page__stock-alert {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 4px 10px 4px 7px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+
+  .product-page__stock-alert--low {
+    background: #fef9ec;
+    color: #92560a;
+    border-left: 3px solid #e09800;
+  }
+
+  .product-page__stock-alert--low svg {
+    color: #e09800;
+    flex-shrink: 0;
+  }
+
+  .product-page__stock-alert--critical {
+    background: #fff4f4;
+    color: #9b1c1c;
+    border-left: 3px solid #dc2626;
+  }
+
+  .product-page__stock-alert--critical svg {
+    color: #dc2626;
+    flex-shrink: 0;
+  }
 
 {% endstylesheet %}
 
