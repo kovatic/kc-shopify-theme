@@ -295,8 +295,7 @@
       <span class="contact-time-sub">{{ 'sections.product.contact_timing' | t }}</span>
       <div class="contact-json-row">
         <span class="c-json-icon whatsapp-green">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.003 5.256 5.264 0 11.73 0c3.132.001 6.077 1.22 8.29 3.433 2.212 2.212 3.431 5.157 3.43 8.29-.003 6.477-5.263 11.732-11.73 11.732-2.003-.001-3.973-.513-5.717-1.488L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.725 1.451 5.399 0 9.794-4.394 9.796-9.793 0-2.615-1.017-5.074-2.865-6.922-1.848-1.848-4.306-2.864-6.921-2.865-5.398 0-9.793 4.393-9.796 9.794-.001 1.637.479 3.235 1.388 4.64l-.988 3.606 3.661-.96z"/></svg>
-        </span>
+  <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>        </span>
         <div class="c-json-text">
           <span>{{ 'sections.product.contact_whatsapp_label' | t }}</span>
           <a href="https://wa.me/7397652555" target="_blank">+91 7397652555</a>
@@ -1999,13 +1998,19 @@
     flex-shrink: 0;
   }
 
-  .chinco-json-contact-content {
-  font-family: 'Sora', sans-serif !important;
+ 
+.chinco-json-contact-content {
   color: #212529 !important;
   display: flex !important;
   flex-direction: column !important;
   text-align: left !important;
+  border: 1px solid #e5e7eb !important; 
+  border-radius: 8px !important;
+  padding: 20px !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
 }
+
 .chinco-json-contact-content strong {
   font-size: 15px !important;
   font-weight: 700 !important;
@@ -2013,12 +2018,14 @@
   margin-bottom: 4px !important;
   display: block !important;
 }
+
 .contact-time-sub {
   font-size: 13px !important;
   color: #555555 !important;
   margin-bottom: 22px !important;
   display: block !important;
 }
+
 .contact-json-row {
   display: flex !important;
   align-items: flex-start !important;
@@ -2026,9 +2033,11 @@
   margin-bottom: 18px !important;
   width: 100% !important;
 }
+
 .contact-json-row:last-child {
   margin-bottom: 0 !important;
 }
+
 .c-json-icon {
   display: flex !important;
   align-items: center !important;
@@ -2038,29 +2047,40 @@
   flex-shrink: 0 !important;
   margin-top: 2px !important;
 }
+
 .c-json-icon svg {
   width: 20px !important;
   height: 20px !important;
 }
+
 .whatsapp-green {
-  color: #25D366 !important;
+  color: #25D366 !important; 
 }
-.phone-dark, .mail-dark {
-  color: #111111 !important;
+
+.phone-dark {
+  color: #0b3c5d !important;
 }
+
+.mail-dark {
+  color: #328cc1 !important;
+}
+
 .c-json-text {
   display: flex !important;
   flex-direction: column !important;
   gap: 3px !important;
 }
+
 .c-json-text span {
   font-size: 13px !important;
   color: #555555 !important;
 }
+
 .c-json-split {
   font-size: 14px !important;
   color: #111111 !important;
 }
+
 .c-json-text a {
   font-size: 14px !important;
   font-weight: 700 !important;
@@ -2069,6 +2089,7 @@
   display: inline-block !important;
   transition: color 0.15s ease !important;
 }
+
 .c-json-text a:hover {
   color: #f12974 !important;
 }
