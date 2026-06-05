@@ -1598,6 +1598,14 @@
     .product-page__reviews > * {
       padding: 0 16px;
     }
+
+    .chinco-json-contact-content {
+    padding: 16px !important;
+  }
+  .c-json-text a, 
+  .c-json-split {
+    word-break: break-all !important; 
+  }
   }
 
   /* Accordions */
@@ -2097,7 +2105,26 @@
   text-transform: lowercase !important;
   font-weight: 600 !important;
 }
+@media screen and (max-width: 920px) and (min-width: 768px) {
+  .chinco-json-contact-content {
+    padding: 14px !important; 
+  }
 
+  .contact-json-row {
+    gap: 10px !important;
+    margin-bottom: 15px !important;
+  }
+
+  .c-json-text span {
+    font-size: 12px !important; 
+  }
+
+  .c-json-text a, 
+  .c-json-split {
+    font-size: 13px !important;
+    word-break: break-word !important;
+  }
+}
 {% endstylesheet %}
 
 
