@@ -267,13 +267,13 @@
             </summary>
             <div class="product-page__accordion-body"><p>{{ 'sections.product.returns_info' | t }}</p></div>
           </details>
-          <details class="product-page__accordion">
+          {% comment %} <details class="product-page__accordion">
             <summary class="product-page__accordion-header">
               {{ 'sections.product.mrp' | t }}
               <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
             </summary>
             <div class="product-page__accordion-body"><p>{{ current_variant.price | money }}</p></div>
-          </details>
+          </details> {% endcomment %}
           <details class="product-page__accordion">
             <summary class="product-page__accordion-header">
               {{ 'sections.product.manufacturer' | t }}
