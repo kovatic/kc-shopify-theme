@@ -1403,16 +1403,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function calculateTargetDates() {
     var today = new Date();
-    
+    // Omits Sunday
+    // function addBusinessDays(baseDate, daysToAdd) {
+    //   var count = 0;
+    //   var tmpDate = new Date(baseDate.getTime());
+    //   while (count < daysToAdd) {
+    //     tmpDate.setDate(tmpDate.getDate() + 1);
+    //     if (tmpDate.getDay() !== 0) { // Omits Sunday
+    //       count++;
+    //     }
+    //   }
+    //   return tmpDate;
+    // }
     function addBusinessDays(baseDate, daysToAdd) {
-      var count = 0;
       var tmpDate = new Date(baseDate.getTime());
-      while (count < daysToAdd) {
-        tmpDate.setDate(tmpDate.getDate() + 1);
-        if (tmpDate.getDay() !== 0) { // Omits Sunday
-          count++;
-        }
-      }
+      tmpDate.setDate(tmpDate.getDate() + daysToAdd);
       return tmpDate;
     }
 
