@@ -308,6 +308,13 @@
     <div class="location-status-text">We deliver to your location</div>
     
     <div class="delivery-dates-card">
+
+      {%- assign is_product_customisable = false -%}
+      {%- if product.metafields.custom.is_customisable.value == true or product.metafields.custom.is_customisable == true or product.metafields.custom.is_customisable.value == 'true' or product.metafields.custom.is_customisable == 'true' -%}
+        {%- assign is_product_customisable = true -%}
+      {%- endif -%}
+ 
+      {%- unless is_product_customisable -%}
       <div class="delivery-row regular-delivery">
         <div class="delivery-icon-container animated-truck-container">
           <svg class="delivery-row__vehicle-icon luxury-express-van" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -326,11 +333,8 @@
           <span class="delivery-main-msg">Expected Delivery by <strong id="date-regular-slot">--</strong></span>
         </div>
       </div>
-
-      {%- assign is_product_customisable = false -%}
-      {%- if product.metafields.custom.is_customisable.value == true or product.metafields.custom.is_customisable == true or product.metafields.custom.is_customisable.value == 'true' or product.metafields.custom.is_customisable == 'true' -%}
-        {%- assign is_product_customisable = true -%}
-      {%- endif -%}
+     {%- endunless -%}
+    
 
       {%- if is_product_customisable -%}
         <div class="delivery-row custom-delivery">
