@@ -117,27 +117,6 @@
           </span>
         </div>
 
-        {%- comment -%} Stock alert {%- endcomment -%}
-          {%- assign inv = current_variant.inventory_quantity -%}
-          {%- assign inv_policy = current_variant.inventory_management -%}
-          {%- if current_variant.available and inv_policy == 'shopify' -%}
-            {%- if inv <= 3 -%}
-              <div class="product-page__stock-alert product-page__stock-alert--critical" id="stock-alert">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                {{ 'product.stock.critical' | t: count: inv }}
-              </div>
-            {%- elsif inv <= 10 -%}
-              <div class="product-page__stock-alert product-page__stock-alert--low" id="stock-alert">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                {{ 'product.stock.low' | t: count: inv }}
-              </div>
-            {%- endif -%}
-          {%- elsif current_variant.available == false -%}
-            <div class="product-page__stock-alert product-page__stock-alert--sold-out" id="stock-alert" style="display:none"></div>
-          {%- else -%}
-            <div class="product-page__stock-alert" id="stock-alert" style="display:none"></div>
-          {%- endif -%}
-
         {%- comment -%} Variant selector + ATC (desktop inline, mobile hidden — shown in sticky bar) {%- endcomment -%}
         <div>
           <input type="hidden" id="variant-id-input" value="{{ current_variant.id }}">
@@ -175,32 +154,41 @@
             </button>
           {%- endif -%}
 
-          
+          {%- comment -%} Stock alert {%- endcomment -%}
+          {%- assign inv = current_variant.inventory_quantity -%}
+          {%- assign inv_policy = current_variant.inventory_management -%}
+          {%- if current_variant.available and inv_policy == 'shopify' -%}
+            {%- if inv <= 3 -%}
+              <div class="product-page__stock-alert product-page__stock-alert--critical" id="stock-alert">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                {{ 'product.stock.critical' | t: count: inv }}
+              </div>
+            {%- elsif inv <= 10 -%}
+              <div class="product-page__stock-alert product-page__stock-alert--low" id="stock-alert">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                {{ 'product.stock.low' | t: count: inv }}
+              </div>
+            {%- endif -%}
+          {%- elsif current_variant.available == false -%}
+            <div class="product-page__stock-alert product-page__stock-alert--sold-out" id="stock-alert" style="display:none"></div>
+          {%- else -%}
+            <div class="product-page__stock-alert" id="stock-alert" style="display:none"></div>
+          {%- endif -%}
 
           {%- comment -%} ATC + Wishlist + Share row {%- endcomment -%}
           <div class="product-page__action-row">
-            <div class="product-page__buy-buttons-group product-page__atc-btn--desktop">
-              <button
-                type="button"
-                class="product-page__atc-btn product-page__atc-btn--desktop js-atc-btn"
-                data-variant-input="variant-id-input"
-                {%- unless current_variant.available -%}disabled{%- endunless -%}
-              >
-                {%- if current_variant.available -%}
-                  {{ 'sections.product_list.add_to_cart' | t }}
-                {%- else -%}
-                  {{ 'general.product.sold_out' | t }}
-                {%- endif -%}
-              </button>
-
-              <button
-                type="button"
-                class="product-page__bin-btn product-page__bin-btn--desktop js-bin-btn"
-                {%- unless current_variant.available -%}disabled{%- endunless -%}
-              >
-                Buy Now
-              </button>
-            </div>
+            <button
+              type="button"
+              class="product-page__atc-btn product-page__atc-btn--desktop js-atc-btn"
+              data-variant-input="variant-id-input"
+              {%- unless current_variant.available -%}disabled{%- endunless -%}
+            >
+              {%- if current_variant.available -%}
+                {{ 'sections.product_list.add_to_cart' | t }}
+              {%- else -%}
+                {{ 'general.product.sold_out' | t }}
+              {%- endif -%}
+            </button>
 
             <xb-wishlist-button xb-handle="{{ product.handle }}" class="product-page__wishlist-icon-btn"></xb-wishlist-button>
 
@@ -228,26 +216,9 @@
             </div>
           </div>
         </div>
-        <div class="product-page__trust-signals">
-            <div class="trust-signal-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="trust-signal-icon"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-              <span class="trust-signal-text">Easy 3 Days Return & Exchange</span>
-            </div>
-            <div class="trust-signal-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="trust-signal-icon"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M6 14h.01M10 14h.01M14 14h.01"/></svg>
-              <span class="trust-signal-text">Cash on Delivery Available</span>
-            </div>
-            <div class="trust-signal-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="trust-signal-icon"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <span class="trust-signal-text">100% Secure Transaction</span>
-            </div>
-            <div class="trust-signal-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="trust-signal-icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              <span class="trust-signal-text">Quick Chat & Call Support</span>
-            </div>
-          </div>
+
         {%- comment -%} Pincode checker — hidden until Shiprocket proxy is configured {%- endcomment -%}
-        <!-- <div class="product-page__pincode-wrap">
+        <div class="product-page__pincode-wrap" style="display:none">
           <p class="product-page__pincode-label">{{ 'sections.product.pincode_label' | t }}</p>
           <div class="product-page__pincode">
             <input
@@ -269,99 +240,12 @@
             </button>
           </div>
           <div class="product-page__pincode-result" id="pincode-result-{{ section.id }}" aria-live="polite"></div>
-        </div> -->
-        <div class="premium-pincode-container">
-  <p class="premium-pincode-title">
-    <svg width="22" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-      <circle cx="12" cy="9" r="2.5"/>
-    </svg>
-    Check Delivery Availability
-  </p>
-  
-  <div class="premium-pincode-input-box">
-    <div class="input-field-wrapper">
-      <input 
-        type="text" 
-        id="kc-pincode-field" 
-        placeholder="Enter the PIN code" 
-        maxlength="6" 
-        inputmode="numeric"
-        autocomplete="postal-code"
-      >
-      <div class="premium-success-checkmark" id="kc-inline-tick">
-        <svg class="checkmark-svg" viewBox="0 0 52 52">
-          <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-          <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-        </svg>
-      </div>
-    </div>
-    <button type="button" id="kc-pincode-submit-btn">
-      <span class="btn-text-label">Check</span>
-      <svg class="btn-spinner-icon" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="24 48"/>
-      </svg>
-    </button>
-  </div>
-
-  <div id="kc-pincode-response-panel">
-    <div class="location-status-text">We deliver to your location</div>
-    
-    <div class="delivery-dates-card">
-      <div class="delivery-row regular-delivery">
-        <div class="delivery-icon-container animated-truck-container">
-          <svg class="delivery-row__vehicle-icon luxury-express-van" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M10 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7v14z"></path>
-            <path d="M10 5h7.5L23 10v5a2 2 0 0 1-2 2h-3v-2"></path>
-            <path d="M14 9h4l2.5 3H14V9z"></path>
-            <circle cx="5.5" cy="17.5" r="2.5" fill="#111111"></circle>
-            <circle cx="15.5" cy="17.5" r="2.5" fill="#111111"></circle>
-          </svg>
-          
-          <div class="premium-speed-lines">
-            <span class="line-streak streak-1"></span>
-            <span class="line-streak streak-2"></span>
-          </div>
         </div>
-        <div class="delivery-text-content">
-          <span class="delivery-main-msg">Expected Delivery by <strong id="date-regular-slot">--</strong></span>
-        </div>
-      </div>
-
-      {%- if product.metafields.custom.is_customisable.value == true -%}
-        <div class="delivery-row custom-delivery">
-          <div class="delivery-icon-container animated-truck-container">
-            <svg class="delivery-row__vehicle-icon luxury-express-van" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7v14z"></path>
-              <path d="M10 5h7.5L23 10v5a2 2 0 0 1-2 2h-3v-2"></path>
-              <path d="M14 9h4l2.5 3H14V9z"></path>
-              <circle cx="5.5" cy="17.5" r="2.5" fill="#111111"></circle>
-              <circle cx="15.5" cy="17.5" r="2.5" fill="#111111"></circle>
-            </svg>
-            
-            <div class="premium-speed-lines">
-              <span class="line-streak streak-1"></span>
-              <span class="line-streak streak-2"></span>
-            </div>
-          </div>
-          <div class="delivery-text-content">
-            <span class="delivery-main-msg">Customised Delivery by <strong id="date-custom-slot">--</strong></span>
-          </div>
-        </div>
-      {%- endif -%}
-    </div>
-  </div>
-  
-  <div id="kc-pincode-error-panel">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    <span id="kc-error-message-text"></span>
-  </div>
-</div>
 
         {%- comment -%} Accordions {%- endcomment -%}
         <div class="product-page__accordions">
           {%- if product.description != blank -%}
-            <details class="product-page__accordion" open>
+            <details class="product-page__accordion">
               <summary class="product-page__accordion-header">
                 {{ 'sections.product.description' | t }}
                 <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
@@ -369,14 +253,14 @@
               <div class="product-page__accordion-body">{{ product.description }}</div>
             </details>
           {%- endif -%}
-          <details class="product-page__accordion" open>
+          <details class="product-page__accordion">
             <summary class="product-page__accordion-header">
               {{ 'sections.product.delivery' | t }}
               <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
             </summary>
             <div class="product-page__accordion-body"><p>{{ 'sections.product.delivery_info' | t }}</p></div>
           </details>
-          <details class="product-page__accordion" open>
+          <details class="product-page__accordion">
             <summary class="product-page__accordion-header">
               {{ 'sections.product.returns' | t }}
               <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
@@ -390,7 +274,7 @@
             </summary>
             <div class="product-page__accordion-body"><p>{{ current_variant.price | money }}</p></div>
           </details> {% endcomment %}
-          <details class="product-page__accordion" open>
+          <details class="product-page__accordion">
             <summary class="product-page__accordion-header">
               {{ 'sections.product.manufacturer' | t }}
               <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
@@ -400,7 +284,7 @@
                <p>{{ 'sections.product.vendor_name' | t }}</p>
             </div>
           </details>
-         <details class="product-page__accordion" open>
+         <details class="product-page__accordion">
   <summary class="product-page__accordion-header">
     {{ 'sections.product.contact' | t }}
     <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
@@ -472,28 +356,19 @@
   {%- endif -%}
 
   <div class="product-page__sticky-atc__row2">
-   <div class="product-page__buy-buttons-group flex-1">
-      <button
-        type="button"
-        class="product-page__atc-btn js-atc-btn"
-        data-variant-input="variant-id-input-mobile"
-        {%- unless current_variant.available -%}disabled{%- endunless -%}
-      >
-        {%- if current_variant.available -%}
-          {{ 'sections.product_list.add_to_cart' | t }}
-        {%- else -%}
-          {{ 'general.product.sold_out' | t }}
-        {%- endif -%}
-      </button>
+    <button
+      type="button"
+      class="product-page__atc-btn js-atc-btn"
+      data-variant-input="variant-id-input-mobile"
+      {%- unless current_variant.available -%}disabled{%- endunless -%}
+    >
+      {%- if current_variant.available -%}
+        {{ 'sections.product_list.add_to_cart' | t }}
+      {%- else -%}
+        {{ 'general.product.sold_out' | t }}
+      {%- endif -%}
+    </button>
 
-      <button
-        type="button"
-        class="product-page__bin-btn js-bin-btn"
-        {%- unless current_variant.available -%}disabled{%- endunless -%}
-      >
-        Buy Now
-      </button>
-    </div>
     <xb-wishlist-button xb-handle="{{ product.handle }}" class="product-page__sticky-wishlist"></xb-wishlist-button>
 
     <div class="product-page__share-dropdown product-page__share-dropdown--mobile">
@@ -616,28 +491,7 @@
                       </div>
                       <div class="product-list__info">
                         <span class="product-list__name">{{ p.title | escape }}</span>
-                        <!-- <span class="product-list__price">{{ p.price_min | money }}</span> -->
-                         <div class="product-card__price-atc-wrapper">
-  <span class="product-list__price">{{ p.price_min | money }}</span>
-  
-  {%- if p.available -%}
-    <form method="post" action="/cart/add" class="product-card__inline-form">
-      <input type="hidden" name="id" value="{{ p.first_available_variant.id }}">
-      <input type="hidden" name="quantity" value="1">
-      <button type="submit" name="add" class="product-card__inline-atc-btn js-inline-atc-submit">
-        <span class="inline-atc-btn__text">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="display: inline-block; vertical-align: middle;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke-linecap="round"/><path d="M16 10a4 4 0 01-8 0" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Add
-        </span>
-        <svg class="inline-atc-btn__spinner" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="24 48"/>
-        </svg>
-      </button>
-    </form>
-  {%- else -%}
-    <span class="product-card__inline-oos">OOS</span>
-  {%- endif -%}
-</div>
+                        <span class="product-list__price">{{ p.price_min | money }}</span>
                       </div>
                     </a>
                     {%- if is_available -%}
@@ -715,8 +569,6 @@
       t = setTimeout(function() { fn.apply(null, args); }, ms);
     };
   }
-  
-  var binBtns = document.querySelectorAll('.js-bin-btn');
 
   function throttleRaf(fn) {
     var rafId = null;
@@ -741,7 +593,6 @@
   var optionBtns    = page.querySelectorAll('.product-page__option-btn');
   var variantInputs = document.querySelectorAll('#variant-id-input, #variant-id-input-mobile');
   var atcBtns       = document.querySelectorAll('.js-atc-btn');
-  var binBtns       = document.querySelectorAll('.js-bin-btn');
   var priceEl       = page.querySelector('.product-page__price');
 
   function formatMoney(cents) {
@@ -881,34 +732,6 @@
       atcTimer = setTimeout(function() { flushAtc(variantId); }, 400);
     });
   });
-
-  // ── Direct Buy It Now execution ────────────────────────────
-  binBtns.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var isMobile = btn.closest('#sticky-atc') !== null;
-      var inputId = isMobile ? 'variant-id-input-mobile' : 'variant-id-input';
-      var variantId = document.getElementById(inputId).value;
-      if (!variantId) return;
-
-      btn.classList.add('is-loading');
-      binBtns.forEach(function(b) { b.disabled = true; });
-
-      fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ id: parseInt(variantId), quantity: 1 })
-      })
-      .then(function() {
-        window.location.href = '/checkout';
-      })
-      .catch(function(err) {
-        console.error('Checkout error:', err);
-        btn.classList.remove('is-loading');
-        binBtns.forEach(function(b) { b.disabled = false; });
-      });
-    });
-  });
-
 
   optionBtns.forEach(function(btn) {
     btn.addEventListener('click', function() {
@@ -1237,18 +1060,6 @@
         + '<button type="submit" name="add" class="product-card-atc-form--mobile-submit"></button>'
         + '</form>'
       : '';
-    var inlineActionHtml = '';
-  if (available) {
-    inlineActionHtml = '<div class="product-card__inline-form-container">'
-      + '<button type="button" class="product-card__inline-atc-btn js-grid-inline-atc-trigger" data-variant-id="' + varId + '">'
-      + '<span class="inline-atc-btn__text">'
-      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" style="display: inline-block; vertical-align: middle; margin-right: 2px;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke-linecap="round"/><path d="M16 10a4 4 0 01-8 0" stroke-linecap="round" stroke-linejoin="round"/></svg> '
-      + 'Add</span>'
-      + '<svg class="inline-atc-btn__spinner" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none; width:14px; height:14px; color:#ffffff;"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="24 48"/></svg>'
-      + '</button></div>';
-  } else {
-    inlineActionHtml = '<span class="product-card__inline-oos">OOS</span>';
-  }
 
     return '<div class="product-list__item' + (available ? '' : ' is-sold-out') + '" data-variant-id="' + varId + '" data-available="' + available + '">'
       + '<a class="product-list__item-link" href="' + p.url + '">'
@@ -1266,66 +1077,12 @@
       + '</div>'
       + '<div class="product-list__info">'
       + '<span class="product-list__name">' + escHtml(p.title) + '</span>'
-      + '<div class="product-card__price-atc-wrapper">'
       + '<span class="product-list__price">' + formatMoney(p.price_min || (fv ? fv.price : 0)) + '</span>'
-      + inlineActionHtml
-      + '</div>'
       + '</div></a>'
       + hiddenForm
       + '</div>';
   }
-  // Handle click animations for elements generated dynamically by JavaScript loops
-  document.addEventListener('submit', function(e) {
-    var form = e.target.closest('.product-card__inline-form');
-    if (form) {
-      var btn = form.querySelector('.js-inline-atc-submit');
-      if (btn) {
-        btn.classList.add('is-loading');
-        // Fallback safety timeout if side drawer tracking event drops out
-        setTimeout(function() {
-          btn.classList.remove('is-loading');
-        }, 1200);
-      }
-    }
-  });
-  // ── 🆕 Dynamic Inline ATC Click Handler ────────────────────────────
-  document.addEventListener('click', function(e) {
-    var btn = e.target.closest('.js-grid-inline-atc-trigger');
-    if (!btn) return;
-    
-    e.preventDefault();
-    e.stopPropagation();
-    
-    var variantId = btn.getAttribute('data-variant-id');
-    if (!variantId) return;
 
-    // Turn on your loading spinner animation
-    btn.classList.add('is-loading');
-
-    // Send the product data asynchronously to your Shopify Cart database
-    fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ id: parseInt(variantId), quantity: 1 })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function() { return fetch('/cart.js').then(function(r) { return r.json(); }); })
-    .then(function(cart) {
-      // Trigger and open your side slide popup cart drawer layout framework
-      var drawer = document.querySelector('cart-drawer');
-      if (drawer) { 
-        drawer.renderCart(cart); 
-        drawer.open(); 
-      }
-      
-      // Update the button appearance to "Added" state if your theme handles it
-      btn.classList.remove('is-loading');
-    })
-    .catch(function(err) { 
-      console.error('Dynamic Grid ATC submit error:', err); 
-      btn.classList.remove('is-loading');
-    });
-  });
   // ── You may also like (Shopify recommendations API) ──────────
   var recoSection = document.getElementById('pp-recommendations-{{ section.id }}');
   var recoTrack   = document.getElementById('pp-recommendations-track-{{ section.id }}');
@@ -1387,136 +1144,6 @@
     });
   });
 })();
-document.addEventListener('DOMContentLoaded', function() {
-  var pinField     = document.getElementById('kc-pincode-field');
-  var submitBtn    = document.getElementById('kc-pincode-submit-btn');
-  var btnText      = submitBtn.querySelector('.btn-text-label');
-  var btnSpinner   = submitBtn.querySelector('.btn-spinner-icon');
-  var resPanel     = document.getElementById('kc-pincode-response-panel');
-  var errPanel     = document.getElementById('kc-pincode-error-panel');
-  var errText      = document.getElementById('kc-error-message-text');
-  var regSlot      = document.getElementById('date-regular-slot');
-  var custSlot     = document.getElementById('date-custom-slot');
-  var inputBoxWrap = document.querySelector('.premium-pincode-input-box');
-
-  function calculateTargetDates() {
-    var today = new Date();
-    
-    function addBusinessDays(baseDate, daysToAdd) {
-      var count = 0;
-      var tmpDate = new Date(baseDate.getTime());
-      while (count < daysToAdd) {
-        tmpDate.setDate(tmpDate.getDate() + 1);
-        if (tmpDate.getDay() !== 0) { // Omits Sunday
-          count++;
-        }
-      }
-      return tmpDate;
-    }
-
-    var regularDeliveryDate = addBusinessDays(today, 6);
-    regSlot.textContent = regularDeliveryDate.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
-
-    if (custSlot) {
-      var customDeliveryDate = addBusinessDays(today, 12);
-      custSlot.textContent = customDeliveryDate.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
-    }
-  }
-
-  function triggerRevealPanel() {
-    resPanel.style.display = 'block';
-    setTimeout(function() {
-      resPanel.classList.add('reveal-slide');
-    }, 15);
-  }
-
-  function showSuccessLayout(savedPin) {
-    errPanel.style.display = 'none';
-    pinField.value = savedPin;
-    inputBoxWrap.classList.add('is-verified');
-    submitBtn.classList.add('is-active-change');
-    btnText.textContent = 'Change';
-    calculateTargetDates();
-    triggerRevealPanel();
-  }
-
-  function clearCachedSession() {
-    localStorage.removeItem('kc_customer_pincode');
-    pinField.value = '';
-    inputBoxWrap.classList.remove('is-verified');
-    submitBtn.classList.remove('is-active-change');
-    btnText.textContent = 'Check';
-    resPanel.classList.remove('reveal-slide');
-    setTimeout(function() {
-      resPanel.style.display = 'none';
-    }, 450);
-    pinField.focus();
-  }
-
-  var cachedPincode = localStorage.getItem('kc_customer_pincode');
-  if (cachedPincode && /^\d{6}$/.test(cachedPincode)) {
-    showSuccessLayout(cachedPincode);
-  }
-
-  function processValidation() {
-    if (btnText.textContent === 'Change') {
-      clearCachedSession();
-      return;
-    }
-
-    var rawInput = pinField.value.trim();
-
-    if (!/^\d{6}$/.test(rawInput)) {
-      resPanel.classList.remove('reveal-slide');
-      resPanel.style.display = 'none';
-      errText.textContent = 'Please enter a valid 6-digit numeric PIN code.';
-      errPanel.style.display = 'flex';
-      pinField.focus();
-      return;
-    }
-
-    errPanel.style.display = 'none';
-    btnText.style.display = 'none';
-    btnSpinner.style.display = 'inline-block';
-    submitBtn.style.pointerEvents = 'none';
-
-    fetch('https://api.postalpincode.in/pincode/' + rawInput)
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        btnSpinner.style.display = 'none';
-        btnText.style.display = 'inline-block';
-        submitBtn.style.pointerEvents = 'auto';
-
-        var record = data && data[0];
-        if (!record || record.Status === 'Error' || !record.PostOffice || !record.PostOffice.length) {
-          resPanel.classList.remove('reveal-slide');
-          resPanel.style.display = 'none';
-          errText.textContent = 'This PIN code is not serviceable inside India.';
-          errPanel.style.display = 'flex';
-          return;
-        }
-
-        localStorage.setItem('kc_customer_pincode', rawInput);
-        showSuccessLayout(rawInput);
-      })
-      .catch(function() {
-        btnSpinner.style.display = 'none';
-        btnText.style.display = 'inline-block';
-        submitBtn.style.pointerEvents = 'auto';
-        resPanel.classList.remove('reveal-slide');
-        resPanel.style.display = 'none';
-        errText.textContent = 'Postal validation service is temporarily unreachable.';
-        errPanel.style.display = 'flex';
-      });
-  }
-
-  submitBtn.addEventListener('click', processValidation);
-  pinField.addEventListener('keydown', function(e) { if (e.key === 'Enter') processValidation(); });
-  pinField.addEventListener('input', function() {
-    pinField.value = pinField.value.replace(/\D/g, '');
-    errPanel.style.display = 'none';
-  });
-});
 </script>
 
 {% stylesheet %}
@@ -1553,7 +1180,7 @@ document.addEventListener('DOMContentLoaded', function() {
     min-width: 0;
   }
   .product-page__gallery { min-width: 0; position: relative; }
-  /* .product-page__info {
+  .product-page__info {
     min-width: 0;
     align-self: start;
     position: sticky;
@@ -1561,15 +1188,7 @@ document.addEventListener('DOMContentLoaded', function() {
     max-height: calc(100vh - 48px);
     overflow-y: auto;
     scrollbar-width: none;
-  } */
-   .product-page__info {
-  min-width: 0;
-  align-self: start;
-  position: relative !important;
-  top: 0 !important;
-  max-height: none !important;
-  overflow-y: visible !important;
-}
+  }
   .product-page__info::-webkit-scrollbar { display: none; }
 
   /* Desktop: 2x2 grid */
@@ -2030,8 +1649,6 @@ document.addEventListener('DOMContentLoaded', function() {
     .product-page__breadcrumb--desktop { display: none; }
     .product-page__images-grid { display: none; }
     .product-page__atc-btn--desktop { display: none; }
-    .product-page__bin-btn--desktop.js-bin-btn{display:none;}
-    .product-page__atc-btn--desktop{display:none !important;}
 
     /* Layout: single column */
     .product-page__layout {
@@ -2488,53 +2105,6 @@ document.addEventListener('DOMContentLoaded', function() {
   text-transform: lowercase !important;
   font-weight: 600 !important;
 }
-/* Layout alignment container for the buttons */
-.product-page__action-row {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  width: 100% !important;
-}
-
-.product-page__buy-buttons-group {
-  display: flex;
-  gap: 10px !important;
-  flex: 1 !important;
-}
-
-/* Base modifications for the desktop buttons to share row */
-.product-page__atc-btn--desktop,
-.product-page__bin-btn--desktop {
-  flex: 1 !important;
-  min-width: 140px !important;
-}
-
-/* Premium Green Styling for the Buy It Now Button */
-.js-bin-btn {
-  background-color: #1a7a3c !important; /* Elegant Forest Green */
-  color: #ffffff !important;
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: 0.95rem !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.08em !important;
-  text-transform: uppercase !important;
-  padding: 14px 20px !important;
-  border: none !important;
-  border-radius: 4px !important;
-  cursor: pointer !important;
-  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-/* Hover Accent color */
-.js-bin-btn:hover {
-  background-color: #135c2c !important; /* Slightly darker green on focus */
-}
-
-/* Disabled/OOS state */
-.js-bin-btn:disabled {
-  background-color: #ccc !important;
-  cursor: not-allowed !important;
-}
 @media screen and (max-width: 920px) and (min-width: 768px) {
   .chinco-json-contact-content {
     padding: 14px !important; 
@@ -2555,427 +2125,6 @@ document.addEventListener('DOMContentLoaded', function() {
     word-break: break-word !important;
   }
 }
-
-@media (max-width: 1200px) {
-.product-page__atc-btn--desktop, .product-page__bin-btn--desktop{
-        flex: 1 !important;
-    min-width: 130px !important;
-}
-.product-page__atc-btn{
-    font-size: 11px !important;
-}
-.js-bin-btn{
-    font-size: 11px !important;
-    width: 50% !important;
-}
- .product-page__sticky-atc__row2 {
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    width: 100% !important;
-  }
-}
-@media (max-width: 1200px) and (min-width: 769px) {
-    .product-page__buy-buttons-group {
-   display: flex !important;
-    gap: 8px !important;
-    flex: 1 !important;
-    flex-wrap: wrap !important;
-  }
-}
-  .product-page__trust-signals {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 14px 16px !important;
-    margin: 20px 0 10px 0 !important;
-    padding: 16px !important;
-    background-color: rgba(32, 32, 32, 0.04) !important;
-    border-radius: 8px !important;
-    border: 1px dashed rgba(32, 32, 32, 0.15) !important;
-  }
-  .trust-signal-item { display: flex !important; align-items: center !important; gap: 10px !important; }
-  .trust-signal-icon { width: 20px !important; height: 20px !important; color: #ce0570 !important; flex-shrink: 0 !important; }
-  .trust-signal-text { font-family: 'Montserrat', sans-serif !important; font-size: 0.8rem !important; font-weight: 600 !important; color: #333333 !important; line-height: 1.3 !important; letter-spacing: 0.01em !important; }
-
-  @media screen and (max-width: 890px) {
-    .product-page__trust-signals {
-      grid-template-columns: 1fr !important;
-      gap: 12px !important;
-      padding: 14px !important;
-      margin: 16px 0 6px 0 !important;
-      background-color: #fdfaf6 !important; 
-    }
-    .trust-signal-text { font-size: 0.78rem !important; }
-  }
-/* Container to force Price and ATC button into a single parallel row */
-.product-card__price-atc-wrapper {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 8px !important;
-  width: 100% !important;
-  margin-top: 6px !important;
-}
-
-/* Strips default margins from the card form element */
-.product-card__inline-form {
-  margin: 0 !important;
-  padding: 0 !important;
-  display: block !important;
-}
-
-/* Compact Brand Pink Add To Cart Button Sizing */
-.product-card__inline-atc-btn {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 5px !important;
-  background-color: #d7116a !important; /* Premium Brand Pink color matching your style */
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 4px !important;
-  padding: 6px 10px !important;
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: 0.72rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.04em !important;
-  cursor: pointer !important;
-  transition: background-color 0.2s ease !important;
-  line-height: 1 !important;
-}
-
-/* Button Hover State */
-.product-card__inline-atc-btn:hover {
-  background-color: #b80d58 !important;
-}
-
-/* Compact Out of Stock Label */
-.product-card__inline-oos {
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: 0.7rem !important;
-  color: #a0a0a0 !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.05em !important;
-}
-/* Inline Card ATC Spinner Classes */
-.inline-atc-btn__spinner {
-  display: none !important;
-  width: 14px !important;
-  height: 14px !important;
-  color: #ffffff !important;
-}
-
-/* While button is in loading state */
-.product-card__inline-atc-btn.is-loading {
-  background-color: #b80d58 !important; /* Darker pink track hold */
-  pointer-events: none !important;
-  cursor: wait !important;
-}
-
-.product-card__inline-atc-btn.is-loading .inline-atc-btn__text {
-  display: none !important; /* Hides 'Add' text and icon */
-}
-
-.product-card__inline-atc-btn.is-loading .inline-atc-btn__spinner {
-  display: inline-block !important;
-  animation: inlineCardSpin 0.6s linear infinite !important;
-}
-   @media(max-width:390px){
-              .product-card__price-atc-wrapper{
-                display: block !important;
-              }
-              .product-card__inline-atc-btn{
-                margin-top:8px !important;
-              }
-            }
-/* Spinner Rotation Keyframes */
-@keyframes inlineCardSpin {
-  to { transform: rotate(360deg); }
-}
-/* ── Premium Pincode Checker v2 ── */
-   .premium-pincode-container {
-       font-family: Montserrat, sans-serif;
-    width: 100%;
-    border-top: 1px solid #d6d5d1;
-    padding-top: 20px;
-    margin-top:10px;
-  }
-  .premium-pincode-title {
-    font-size: 13px !important;
-    font-weight: bold !important;
-    color: #111;
-    text-transform: uppercase;
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .premium-pincode-title svg {
-    color: #111111;
-    flex-shrink: 0;
-  }
-  .premium-pincode-input-box {
-    display: flex;
-    position: relative;
-    border: 1.5px solid #111111; 
-    border-radius: 6px;
-    background: #ffffff;
-    overflow: hidden;
-    transition: box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease;
-  }
-  .premium-pincode-input-box:focus-within {
-    border-color: #d7116a;
-    box-shadow: 0 6px 16px rgba(215, 17, 106, 0.08);
-  }
-  .input-field-wrapper {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    position: relative;
-  }
-  #kc-pincode-field {
-    width: 100%;
-    padding: 14px 16px;
-    border: none;
-    outline: none;
-    font-size: 0.95rem;
-    font-family: inherit;
-    color: #111111;
-    font-weight: 500;
-    background: transparent;
-    letter-spacing: 0.04em;
-  }
-  #kc-pincode-field::placeholder {
-    color: #888888;
-    font-weight: 400;
-    letter-spacing: 0.01em;
-  }
-  #kc-pincode-submit-btn {
-    padding: 14px 28px;
-    background: #111111; 
-    border: none;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    min-width: 110px;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-  #kc-pincode-submit-btn:hover {
-    background: #d7116a; 
-  }
-  
-  /* FIXED DESIGN: PREMIUM BRAND PINK BACKGROUND FOR ACTIVE CHANGE BUTTON STATE */
-  #kc-pincode-submit-btn.is-active-change {
-    background: #d7116a !important;
-    color: #ffffff !important;
-    border-left: 1px solid rgba(255, 255, 255, 0.15);
-  }
-  #kc-pincode-submit-btn.is-active-change:hover {
-    background: #b80d58 !important;
-  }
-  
-  .btn-spinner-icon {
-    display: none;
-    width: 14px;
-    height: 14px;
-    color: #ffffff;
-    margin: 0 auto;
-    animation: kcSpin 0.6s linear infinite;
-  }
-  
-  /* FIXED DESIGN: INLINE PROXIMITY SECTOR SUCCESS TICK ARTIFACT */
-  .premium-success-checkmark {
-    width: 20px;
-    height: 20px;
-    display: none;
-    flex-shrink: 0;
-    position: absolute;
-    right: 14px;
-  }
-  .premium-pincode-input-box.is-verified #kc-pincode-field {
-    color: #777777;
-    pointer-events: none;
-    padding-right: 44px;
-  }
-  .premium-pincode-input-box.is-verified #kc-inline-tick {
-    display: inline-block;
-  }
-  .checkmark-svg {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: block;
-    stroke-width: 4;
-    stroke: #ffffff;
-    stroke-miterlimit: 10;
-    box-shadow: inset 0px 0px 0px #10b981;
-    animation: fillCheck 0.4s ease-in-out 0.2s forwards, scaleCheck 0.3s ease-in-out forwards;
-  }
-  .checkmark-circle {
-    stroke-dasharray: 166;
-    stroke-dashoffset: 166;
-    stroke-width: 4;
-    stroke-miterlimit: 10;
-    stroke: #10b981;
-    fill: none;
-    animation: strokeCircle 0.5s cubic-bezier(0.65, 0, 0.45, 1) forwards;
-  }
-  .checkmark-check {
-    transform-origin: 50% 50%;
-    stroke-dasharray: 48;
-    stroke-dashoffset: 48;
-    animation: strokeCheck 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards;
-  }
-  @keyframes strokeCircle { 100% { stroke-dashoffset: 0; } }
-  @keyframes strokeCheck { 100% { stroke-dashoffset: 0; } }
-  @keyframes fillCheck { 100% { box-shadow: inset 0px 0px 0px 30px #10b981; } }
-  @keyframes scaleCheck { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
-
-  /* SLIDE IN FROM LEFT TO RIGHT TRANSITION */
-  #kc-pincode-response-panel {
-    margin-top: 16px;
-    display: none;
-    opacity: 0;
-    transform: translateX(-30px);
-    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  #kc-pincode-response-panel.reveal-slide {
-    display: block !important;
-    opacity: 1 !important;
-    transform: translateX(0) !important;
-  }
-  
-  .location-status-text {
-    font-size: 12px;
-    color: #16a34a;
-    font-weight: 600;
-    letter-spacing: .02em;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-  }
-  .delivery-dates-card {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .delivery-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 12px 20px;
-    background-color: #faf9f1;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px #00000004;
-    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-  }
-  .delivery-icon-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    background-color: #d7116a12;
-    border-radius: 50%;
-    flex-shrink: 0;
-    position: relative;
-    overflow: hidden;
-  }
-  .delivery-row__vehicle-icon {
-    width: 20px;
-    height: 20px;
-    color: #c3134e;
-    z-index: 2;
-    transition: transform 0.2s ease;
-  }
-  
-  /* HOVER MOTION TRANSIT ENGINE FOR BOTH SECTIONS */
-  .delivery-row { cursor: default; }
-  .delivery-row:hover {
-    transform: translateY(-2px);
-    border-color: #d7116a6b;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
-  }
-  .delivery-row:hover .luxury-express-van {
-    animation: truckMicroVibe 0.15s ease-in-out infinite alternate;
-  }
-  .premium-speed-lines {
-    position: absolute;
-    left: 2px;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-  }
-  .line-streak {
-    position: absolute;
-    background: linear-gradient(90deg, transparent, #9ca3af);
-    height: 2px;
-    border-radius: 2px;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-  .streak-1 {
-    width: 12px;
-    top: 16px;
-    animation: speedStreakLoop 0.7s linear infinite;
-  }
-  .streak-2 {
-    width: 8px;
-    top: 26px;
-    animation: speedStreakLoop 0.4s linear infinite 0.15s;
-  }
-  .delivery-row:hover .line-streak {
-    opacity: 1;
-  }
-
-  .delivery-text-content {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .delivery-main-msg {
-    font-size: 0.95rem;
-    color: #1f2937;
-    font-weight: 500;
-    letter-spacing: 0.01em;
-  }
-  #date-regular-slot {
-    color: #111111;
-    font-weight: 700;
-  }
-  #date-custom-slot {
-    color: #d7116a;
-    font-weight: 700;
-  }
-  #kc-pincode-error-panel {
-    margin-top: 12px;
-    display: none;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #dc2626;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    background-color: #fef2f2;
-    border-radius: 6px;
-    border-left: 3px solid #dc2626;
-  }
-
-  @keyframes kcSpin { to { transform: rotate(360deg); } }
-  @keyframes truckMicroVibe {
-    from { transform: translate(0, 0); }
-    to { transform: translate(1.5px, -0.5px); }
-  }
-  @keyframes speedStreakLoop {
-    0% { transform: translateX(36px); opacity: 0; }
-    50% { opacity: 0.8; }
-    100% { transform: translateX(-14px); opacity: 0; }
-  }
 {% endstylesheet %}
 
 
