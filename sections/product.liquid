@@ -270,12 +270,7 @@
           </div>
           <div class="product-page__pincode-result" id="pincode-result-{{ section.id }}" aria-live="polite"></div>
         </div> -->
-<div class="premium-pincode-container">
-  {%- assign is_product_customisable = false -%}
-  {%- if product.metafields.custom.is_customisable.value == true or product.metafields.custom.is_customisable == true or product.metafields.custom.is_customisable.value == 'true' or product.metafields.custom.is_customisable == 'true' -%}
-    {%- assign is_product_customisable = true -%}
-  {%- endif -%}
-
+        <div class="premium-pincode-container">
   <p class="premium-pincode-title">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
@@ -313,6 +308,30 @@
     <div class="location-status-text">We deliver to your location</div>
     
     <div class="delivery-dates-card">
+      <div class="delivery-row regular-delivery">
+        <div class="delivery-icon-container animated-truck-container">
+          <svg class="delivery-row__vehicle-icon luxury-express-van" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7v14z"></path>
+            <path d="M10 5h7.5L23 10v5a2 2 0 0 1-2 2h-3v-2"></path>
+            <path d="M14 9h4l2.5 3H14V9z"></path>
+            <circle cx="5.5" cy="17.5" r="2.5" fill="#111111"></circle>
+            <circle cx="15.5" cy="17.5" r="2.5" fill="#111111"></circle>
+          </svg>
+          <div class="premium-speed-lines">
+            <span class="line-streak streak-1"></span>
+            <span class="line-streak streak-2"></span>
+          </div>
+        </div>
+        <div class="delivery-text-content">
+          <span class="delivery-main-msg">Expected Delivery by <strong id="date-regular-slot">--</strong></span>
+        </div>
+      </div>
+
+      <!-- {%- assign is_product_customisable = false -%}
+      {%- if product.metafields.custom.is_customisable.value == true or product.metafields.custom.is_customisable == true or product.metafields.custom.is_customisable.value == 'true' or product.metafields.custom.is_customisable == 'true' -%}
+        {%- assign is_product_customisable = true -%}
+      {%- endif -%}
+
       {%- if is_product_customisable -%}
         <div class="delivery-row custom-delivery">
           <div class="delivery-icon-container animated-truck-container">
@@ -332,28 +351,7 @@
             <span class="delivery-main-msg">Customised Delivery by <strong id="date-custom-slot">--</strong></span>
           </div>
         </div>
-      {%- endif -%}
-
-      {%- unless is_product_customisable -%}
-        <div class="delivery-row regular-delivery">
-          <div class="delivery-icon-container animated-truck-container">
-            <svg class="delivery-row__vehicle-icon luxury-express-van" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7v14z"></path>
-              <path d="M10 5h7.5L23 10v5a2 2 0 0 1-2 2h-3v-2"></path>
-              <path d="M14 9h4l2.5 3H14V9z"></path>
-              <circle cx="5.5" cy="17.5" r="2.5" fill="#111111"></circle>
-              <circle cx="15.5" cy="17.5" r="2.5" fill="#111111"></circle>
-            </svg>
-            <div class="premium-speed-lines">
-              <span class="line-streak streak-1"></span>
-              <span class="line-streak streak-2"></span>
-            </div>
-          </div>
-          <div class="delivery-text-content">
-            <span class="delivery-main-msg">Expected Delivery by <strong id="date-regular-slot">--</strong></span>
-          </div>
-        </div>
-      {%- endunless -%}
+      {%- endif -%} -->
     </div>
   </div>
   
