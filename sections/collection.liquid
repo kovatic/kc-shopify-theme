@@ -181,7 +181,28 @@
 
                   <div class="product-list__info">
                     <span class="product-list__name">{{ product.title | escape }}</span>
-                    <span class="product-list__price">{{ product.price_min | money }}</span>
+                    <!-- <span class="product-list__price">{{ product.price_min | money }}</span> -->
+                     <div class="product-card__price-atc-wrapper">
+                        <span class="product-list__price">{{ product.price_min | money }}</span>
+                        
+                        {%- if product.available -%}
+                          <form method="post" action="/cart/add" class="product-card__inline-form">
+                            <input type="hidden" name="id" value="{{ product.first_available_variant.id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" name="add" class="product-card__inline-atc-btn js-inline-atc-submit">
+                              <span class="inline-atc-btn__text">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="display: inline-block; vertical-align: middle;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke-linecap="round"/><path d="M16 10a4 4 0 01-8 0" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                Add
+                              </span>
+                              <svg class="inline-atc-btn__spinner" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="24 48"/>
+                              </svg>
+                            </button>
+                          </form>
+                        {%- else -%}
+                          <span class="product-card__inline-oos">OOS</span>
+                        {%- endif -%}
+                      </div>
                   </div>
                 </a>
 
@@ -1097,6 +1118,91 @@
       max-width: 100vw;
     }
   }
+  /* Container to force Price and ATC button into a single parallel row */
+.product-card__price-atc-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin-top: 6px !important;
+}
+
+/* Strips default margins from the card form element */
+.product-card__inline-form {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+}
+
+/* Compact Brand Pink Add To Cart Button Sizing */
+.product-card__inline-atc-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background-color: #d7116a !important; /* Premium Brand Pink color matching your style */
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 6px 10px !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease !important;
+  line-height: 1 !important;
+}
+
+/* Button Hover State */
+.product-card__inline-atc-btn:hover {
+  background-color: #b80d58 !important;
+}
+
+/* Compact Out of Stock Label */
+.product-card__inline-oos {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.7rem !important;
+  color: #a0a0a0 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+}
+/* Inline Card ATC Spinner Classes */
+.inline-atc-btn__spinner {
+  display: none !important;
+  width: 14px !important;
+  height: 14px !important;
+  color: #ffffff !important;
+}
+
+/* While button is in loading state */
+.product-card__inline-atc-btn.is-loading {
+  background-color: #b80d58 !important; /* Darker pink track hold */
+  pointer-events: none !important;
+  cursor: wait !important;
+}
+
+.product-card__inline-atc-btn.is-loading .inline-atc-btn__text {
+  display: none !important; /* Hides 'Add' text and icon */
+}
+
+.product-card__inline-atc-btn.is-loading .inline-atc-btn__spinner {
+  display: inline-block !important;
+  animation: inlineCardSpin 0.6s linear infinite !important;
+}
+   @media(max-width:390px){
+              .product-card__price-atc-wrapper{
+                display: block !important;
+              }
+              .product-card__inline-atc-btn{
+                margin-top:8px !important;
+              }
+            }
+/* Spinner Rotation Keyframes */
+@keyframes inlineCardSpin {
+  to { transform: rotate(360deg); }
+}
 {% endstylesheet %}
 
 {% javascript %}
