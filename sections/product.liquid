@@ -177,7 +177,7 @@
 
           
 
-          {%- comment -%} ATC + Wishlist + Share row {%- endcomment -%}
+          {%- comment -%} ATC + Wishlist + Share row + buy now {%- endcomment -%}
           <div class="product-page__action-row">
             <div class="product-page__buy-buttons-group product-page__atc-btn--desktop">
               <button
@@ -198,7 +198,8 @@
                 class="product-page__bin-btn product-page__bin-btn--desktop js-bin-btn"
                 {%- unless current_variant.available -%}disabled{%- endunless -%}
               >
-                Buy Now
+               <span class="btn-text">Buy Now</span>
+              <span class="btn-loader"></span>
               </button>
             </div>
 
@@ -909,7 +910,6 @@
       })
     })
     .then(function() {
-      // Redirect → loader will naturally disappear because page changes
       window.location.href = '/checkout';
     })
     .catch(function(err) {
@@ -922,7 +922,6 @@
   });
 });
 
-// Fix loader stuck when coming back from checkout
 window.addEventListener('pageshow', function(event) {
   document.querySelectorAll('.js-bin-btn').forEach(function(btn) {
     btn.classList.remove('is-loading');
