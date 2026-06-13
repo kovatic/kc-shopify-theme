@@ -893,16 +893,9 @@
       var variantId = document.getElementById(inputId).value;
       if (!variantId) return;
 
-      if (!btn.getAttribute('data-original-text')) {
-        btn.setAttribute('data-original-text', btn.innerHTML);
-      }
-
-      // Add loading state UI styles
       btn.classList.add('is-loading');
-      btn.style.pointerEvents = 'none';
-      btn.innerHTML = '<svg class="inline-atc-btn__spinner" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block; width:16px; height:16px; color:#ffffff; margin:0 auto; animation:inlineCardSpin 0.6s linear infinite;"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="24 48"/></svg>';
-
       binBtns.forEach(function(b) { b.disabled = true; });
+
       fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -913,24 +906,11 @@
       })
       .catch(function(err) {
         console.error('Checkout error:', err);
-         resetBuyNowButtons();
+        btn.classList.remove('is-loading');
+        binBtns.forEach(function(b) { b.disabled = false; });
       });
     });
   });
-
-  function resetBuyNowButtons() {
-    binBtns.forEach(function(btn) {
-      var originalText = btn.getAttribute('data-original-text');
-      if (originalText) {
-        btn.innerHTML = originalText;
-      }
-      btn.classList.remove('is-loading');
-      btn.style.pointerEvents = 'auto';
-      btn.disabled = false;
-    });
-  }
-
-
 
 
   optionBtns.forEach(function(btn) {
@@ -2997,36 +2977,6 @@ document.addEventListener('DOMContentLoaded', function() {
     background: #d7116a !important;
     color: white !important;
   }
-  .product-page__bin-btn .inline-atc-btn__spinner,
-.js-bin-btn .inline-atc-btn__spinner,
-.product-card__inline-atc-btn .inline-atc-btn__spinner {
-  display: inline-block !important;
-  width: 18px !important;
-  height: 18px !important;
-  color: #ffffff !important;
-  vertical-align: middle !important;
-  margin: 0 auto !important;
-  animation: inlineCardSpin 0.6s linear infinite !important;
-}
-
-.js-bin-btn.is-loading,
-.product-page__bin-btn.is-loading {
-  background-color: #135c2c !important;
-  pointer-events: none !important;
-  cursor: wait !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-@keyframes inlineCardSpin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
   
 {% endstylesheet %}
 
