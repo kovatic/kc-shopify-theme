@@ -401,6 +401,10 @@
     .search-page__form { width: 100%; }
     .search-page__input { width: 100%; }
     .search-result-card__img-link { aspect-ratio: 3 / 5; }
+        .product-card__inline-form {
+        display: none !important;
+    }
+
   }
   .product-card__price-atc-wrapper {
   display: flex !important;
@@ -455,13 +459,13 @@
 }
 
 .product-card__inline-atc-btn.is-loading {
-  background-color: #b80d58 !important; /* Darker pink track hold */
+  background-color: #b80d58 !important; 
   pointer-events: none !important;
   cursor: wait !important;
 }
 
 .product-card__inline-atc-btn.is-loading .inline-atc-btn__text {
-  display: none !important; /* Hides 'Add' text and icon */
+  display: none !important; 
 }
 
 .product-card__inline-atc-btn.is-loading .inline-atc-btn__spinner {
