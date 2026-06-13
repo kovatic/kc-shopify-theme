@@ -1410,14 +1410,11 @@ document.addEventListener('DOMContentLoaded', function() {
       tmpDate.setDate(tmpDate.getDate() + daysToAdd);
       return tmpDate;
     }
-
-    // FIX: Only append values if the regular delivery row exists in the DOM layout
     if (regSlot) {
       var regularDeliveryDate = addCalendarDays(today, 6);
       regSlot.textContent = regularDeliveryDate.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
     }
 
-    // FIX: Only append values if the custom delivery row exists in the DOM layout
     if (custSlot) {
       var customDeliveryDate = addCalendarDays(today, 12);
       custSlot.textContent = customDeliveryDate.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
