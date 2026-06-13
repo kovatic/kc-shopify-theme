@@ -922,7 +922,8 @@
   });
 });
 
-window.addEventListener('load', function() {
+// Fix loader stuck when coming back from checkout
+window.addEventListener('pageshow', function(event) {
   document.querySelectorAll('.js-bin-btn').forEach(function(btn) {
     btn.classList.remove('is-loading');
     btn.disabled = false;
