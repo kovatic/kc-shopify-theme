@@ -378,7 +378,7 @@
             </summary>
             <div class="product-page__accordion-body"><p>{{ 'sections.product.delivery_info' | t }}</p></div>
           </details>
-          <details class="product-page__accordion" open>
+          <details class="product-page__accordion">
             <summary class="product-page__accordion-header">
               {{ 'sections.product.returns' | t }}
               <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
@@ -392,7 +392,7 @@
             </summary>
             <div class="product-page__accordion-body"><p>{{ current_variant.price | money }}</p></div>
           </details> {% endcomment %}
-          <details class="product-page__accordion" open>
+          <details class="product-page__accordion">
             <summary class="product-page__accordion-header">
               {{ 'sections.product.manufacturer' | t }}
               <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
@@ -1987,9 +1987,9 @@ document.addEventListener('DOMContentLoaded', function() {
       padding: 0 16px;
     }
 
-    .chinco-json-contact-content {
+    <!-- .chinco-json-contact-content {
     padding: 16px !important;
-  }
+  } -->
   .c-json-text a, 
   .c-json-split {
     word-break: break-all !important; 
@@ -2405,10 +2405,10 @@ document.addEventListener('DOMContentLoaded', function() {
     display: flex !important;
     flex-direction: column !important;
     text-align: left !important;
-    border: 1px solid #d2d3d5 !important;
+    <!-- border: 1px solid #d2d3d5 !important;
     border-radius: 8px !important;
-    padding: 20px !important;
-    background-color: #ebe7e7 !important;
+    padding: 20px !important; -->
+    <!-- background-color: #ebe7e7 !important; -->
     box-shadow: 0 1px 3px #00000005 !important;
 }
 
@@ -2546,9 +2546,9 @@ document.addEventListener('DOMContentLoaded', function() {
   cursor: not-allowed !important;
 }
 @media screen and (max-width: 920px) and (min-width: 768px) {
-  .chinco-json-contact-content {
+  <!-- .chinco-json-contact-content {
     padding: 14px !important; 
-  }
+  } -->
 
   .contact-json-row {
     gap: 10px !important;
