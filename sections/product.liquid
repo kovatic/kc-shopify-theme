@@ -488,14 +488,14 @@
           {{ 'general.product.sold_out' | t }}
         {%- endif -%}
       </button>
-<button
-  type="button"
-  class="product-page__bin-btn js-bin-btn"
-  {%- unless current_variant.available -%}disabled{%- endunless -%}
->
-  <span class="btn-text">Buy Now</span>
-  <span class="btn-loader"></span>
-</button>
+
+      <button
+        type="button"
+        class="product-page__bin-btn js-bin-btn"
+        {%- unless current_variant.available -%}disabled{%- endunless -%}
+      >
+        Buy Now
+      </button>
     </div>
     <xb-wishlist-button xb-handle="{{ product.handle }}" class="product-page__sticky-wishlist"></xb-wishlist-button>
 
@@ -887,40 +887,30 @@
 
   // ── Direct Buy It Now execution ────────────────────────────
   binBtns.forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    var isMobile = btn.closest('#sticky-atc') !== null;
-    var inputId = isMobile ? 'variant-id-input-mobile' : 'variant-id-input';
-    var variantId = document.getElementById(inputId).value;
+    btn.addEventListener('click', function() {
+      var isMobile = btn.closest('#sticky-atc') !== null;
+      var inputId = isMobile ? 'variant-id-input-mobile' : 'variant-id-input';
+      var variantId = document.getElementById(inputId).value;
+      if (!variantId) return;
 
-    if (!variantId) return;
+      btn.classList.add('is-loading');
+      binBtns.forEach(function(b) { b.disabled = true; });
 
-    btn.classList.add('is-loading');
-    binBtns.forEach(function(b) { b.disabled = true; });
-
-    fetch('/cart/add.js', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        id: parseInt(variantId),
-        quantity: 1
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: parseInt(variantId), quantity: 1 })
       })
-    })
-    .then(function() {
-      // Redirect → loader will naturally disappear because page changes
-      window.location.href = '/checkout';
-    })
-    .catch(function(err) {
-      console.error('Checkout error:', err);
-
-      // Remove loader if error
-      btn.classList.remove('is-loading');
-      binBtns.forEach(function(b) { b.disabled = false; });
+      .then(function() {
+        window.location.href = '/checkout';
+      })
+      .catch(function(err) {
+        console.error('Checkout error:', err);
+        btn.classList.remove('is-loading');
+        binBtns.forEach(function(b) { b.disabled = false; });
+      });
     });
   });
-});
 
 
   optionBtns.forEach(function(btn) {
@@ -2987,37 +2977,6 @@ document.addEventListener('DOMContentLoaded', function() {
     background: #d7116a !important;
     color: white !important;
   }
-.js-bin-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.js-bin-btn .btn-loader {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #fff;
-  border-top: 2px solid transparent;
-  border-radius: 50%;
-  position: absolute;
-  opacity: 0;
-  animation: spin 0.6s linear infinite;
-}
-
-.js-bin-btn.is-loading .btn-text {
-  opacity: 0;
-}
-
-.js-bin-btn.is-loading .btn-loader {
-  opacity: 1;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
   
 {% endstylesheet %}
 
