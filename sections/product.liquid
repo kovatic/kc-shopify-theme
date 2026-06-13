@@ -140,7 +140,9 @@
 
         {%- comment -%} Variant selector + ATC (desktop inline, mobile hidden — shown in sticky bar) {%- endcomment -%}
         <div>
-          <input type="hidden" id="variant-id-input" value="{{ current_variant.id }}">
+        {%- if product.metafields.custom.is_customisable.value == true -%}
+  <input type="hidden" name="attributes[cart_has_customisation]" value="true" id="js-custom-cart-attribute">
+{%- endif -%}
           {%- if product.variants.size > 1 -%}
             <div class="product-page__variants">
               {%- for option in product.options_with_values -%}
@@ -1324,7 +1326,7 @@ window.addEventListener('pageshow', function(event) {
     fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ id: parseInt(variantId), quantity: 1 })
+      body: JSON.stringify({ id: parseInt(variantId), quantity: 1,attributes: { "cart_has_customisation": "true" } })
     })
     .then(function(r) { return r.json(); })
     .then(function() { return fetch('/cart.js').then(function(r) { return r.json(); }); })
