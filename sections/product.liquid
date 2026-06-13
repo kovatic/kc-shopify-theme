@@ -2983,6 +2983,36 @@ document.addEventListener('DOMContentLoaded', function() {
     background: #d7116a !important;
     color: white !important;
   }
+  .product-page__bin-btn .inline-atc-btn__spinner,
+.js-bin-btn .inline-atc-btn__spinner,
+.product-card__inline-atc-btn .inline-atc-btn__spinner {
+  display: inline-block !important;
+  width: 18px !important;
+  height: 18px !important;
+  color: #ffffff !important;
+  vertical-align: middle !important;
+  margin: 0 auto !important;
+  animation: inlineCardSpin 0.6s linear infinite !important;
+}
+
+.js-bin-btn.is-loading,
+.product-page__bin-btn.is-loading {
+  background-color: #135c2c !important;
+  pointer-events: none !important;
+  cursor: wait !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+@keyframes inlineCardSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
   
 {% endstylesheet %}
 
