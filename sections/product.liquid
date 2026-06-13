@@ -1404,29 +1404,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function calculateTargetDates() {
     var today = new Date();
-    // Omits Sunday
-    // function addBusinessDays(baseDate, daysToAdd) {
-    //   var count = 0;
-    //   var tmpDate = new Date(baseDate.getTime());
-    //   while (count < daysToAdd) {
-    //     tmpDate.setDate(tmpDate.getDate() + 1);
-    //     if (tmpDate.getDay() !== 0) { // Omits Sunday
-    //       count++;
-    //     }
-    //   }
-    //   return tmpDate;
-    // }
-    function addBusinessDays(baseDate, daysToAdd) {
+    
+    function addCalendarDays(baseDate, daysToAdd) {
       var tmpDate = new Date(baseDate.getTime());
       tmpDate.setDate(tmpDate.getDate() + daysToAdd);
       return tmpDate;
     }
 
-    var regularDeliveryDate = addBusinessDays(today, 6);
-    regSlot.textContent = regularDeliveryDate.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+    // FIX: Only append values if the regular delivery row exists in the DOM layout
+    if (regSlot) {
+      var regularDeliveryDate = addCalendarDays(today, 6);
+      regSlot.textContent = regularDeliveryDate.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+    }
 
+    // FIX: Only append values if the custom delivery row exists in the DOM layout
     if (custSlot) {
-      var customDeliveryDate = addBusinessDays(today, 12);
+      var customDeliveryDate = addCalendarDays(today, 12);
       custSlot.textContent = customDeliveryDate.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
     }
   }
