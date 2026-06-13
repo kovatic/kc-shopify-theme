@@ -309,7 +309,12 @@
     
     <div class="delivery-dates-card">
       
-      {%- if product.metafields.custom.is_customisable.value == true -%}
+      {%- assign is_product_customisable = false -%}
+      {%- if product.metafields.custom.is_customisable.value == true or product.metafields.custom.is_customisable == true or product.metafields.custom.is_customisable.value == 'true' or product.metafields.custom.is_customisable == 'true' -%}
+        {%- assign is_product_customisable = true -%}
+      {%- endif -%}
+
+      {%- if is_product_customisable -%}
         <div class="delivery-row custom-delivery">
           <div class="delivery-icon-container animated-truck-container">
             <svg class="delivery-row__vehicle-icon luxury-express-van" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
