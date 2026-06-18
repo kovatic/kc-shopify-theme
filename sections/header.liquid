@@ -131,46 +131,137 @@
 </div>
 
 {% comment %} Mobile nav drawer {% endcomment %}
+{% comment %} Mobile nav drawer ── Block Synced Sliding Framework {% endcomment %}
 <div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true">
   <div class="mobile-nav-drawer__overlay"></div>
   <div class="mobile-nav-drawer__panel">
+    
     <button class="mobile-nav-drawer__close" aria-label="{{ 'header.close_menu_label' | t }}">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
       </svg>
     </button>
-    <nav aria-label="{{ 'header.main_nav_label' | t }}">
-      <ul class="mobile-nav-drawer__list">
+
+    <div class="mobile-nav-slider-container">
+      <div class="mobile-nav-slider-track" id="mobile-nav-track" data-current-level="1">
+        
+        {%- comment -%} ── LEVEL 1: Top Level Collection Links ── {%- endcomment -%}
+        <div class="mobile-nav-level" id="level-1">
+          <nav aria-label="Main navigation">
+            <ul class="mobile-nav-drawer__list">
+              {% for link in section.settings.menu.links %}
+                {%- assign matching_mega = nil -%}
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'mega_menu' and block.settings.nav_link == link.title -%}
+                    {%- assign matching_mega = block -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
+                <li class="mobile-nav-drawer__item">
+                  {% if matching_mega != blank or link.links.size > 0 %}
+                    <button type="button" class="mobile-nav-drawer__link mobile-slide-next-trigger" data-next-panel="level-2-{{ forloop.index }}">
+                      <span>{{ link.title }}</span>
+                      <span class="mobile-nav-arrow-icon">›</span>
+                    </button>
+                  {% else %}
+                    <a href="{{ link.url }}" class="mobile-nav-drawer__link">{{ link.title }}</a>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </nav>
+        </div>
+
+        {%- comment -%} ── LEVEL 2 & 3: Nested Sliding Menu Track Panels ── {%- endcomment -%}
         {% for link in section.settings.menu.links %}
-          <li class="mobile-nav-drawer__item{% if link.links.size > 0 %} mobile-nav-drawer__item--has-children{% endif %}">
-            {% if link.links.size > 0 %}
-              <button class="mobile-nav-drawer__link mobile-nav-drawer__toggle" aria-expanded="false">
-                {{- link.title -}}
-                <svg class="mobile-nav-drawer__chevron" width="12" height="12" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                  <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+          {%- assign matching_mega = nil -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'mega_menu' and block.settings.nav_link == link.title -%}
+              {%- assign matching_mega = block -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {% assign level1_index = forloop.index %}
+
+          {% if matching_mega != blank %}
+            {%- comment -%} LEVEL 2 PANEL: Dynamic Column Headers (e.g., Shop By Brand) {%- endcomment -%}
+            <div class="mobile-nav-level mobile-nav-level--sub" id="level-2-{{ level1_index }}" style="display: none;">
+              <button type="button" class="mobile-nav-drawer__back-btn mobile-slide-back-trigger" data-back-to="1">
+                <span class="back-arrow">❮</span> {{ link.title }}
               </button>
-              <ul class="mobile-nav-drawer__sub">
-                {% for child_link in link.links %}
-                  <li><a href="{{ child_link.url }}" class="mobile-nav-drawer__sub-link"{% if child_link.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>{{ child_link.title }}</a></li>
-                {% endfor %}
+              
+              <ul class="mobile-nav-drawer__list">
+                <li class="mobile-nav-drawer__item">
+                  <a href="{{ link.url }}" class="mobile-nav-drawer__link mobile-nav-drawer__link--shop-all">Shop All {{ link.title }}</a>
+                </li>
+                
+                {% if matching_mega.settings.col1_menu != blank and matching_mega.settings.col1_heading != blank %}
+                  <li class="mobile-nav-drawer__item">
+                    <button type="button" class="mobile-nav-drawer__link mobile-slide-next-trigger" data-next-panel="level-3-{{ level1_index }}-1">
+                      <span>{{ matching_mega.settings.col1_heading }}</span>
+                      <span class="mobile-nav-arrow-icon">›</span>
+                    </button>
+                  </li>
+                {% endif %}
+
+                {% if matching_mega.settings.col2_menu != blank and matching_mega.settings.col2_heading != blank %}
+                  <li class="mobile-nav-drawer__item">
+                    <button type="button" class="mobile-nav-drawer__link mobile-slide-next-trigger" data-next-panel="level-3-{{ level1_index }}-2">
+                      <span>{{ matching_mega.settings.col2_heading }}</span>
+                      <span class="mobile-nav-arrow-icon">›</span>
+                    </button>
+                  </li>
+                {% endif %}
+
+                {% if matching_mega.settings.col3_menu != blank and matching_mega.settings.col3_heading != blank %}
+                  <li class="mobile-nav-drawer__item">
+                    <button type="button" class="mobile-nav-drawer__link mobile-slide-next-trigger" data-next-panel="level-3-{{ level1_index }}-3">
+                      <span>{{ matching_mega.settings.col3_heading }}</span>
+                      <span class="mobile-nav-arrow-icon">›</span>
+                    </button>
+                  </li>
+                {% endif %}
               </ul>
-            {% else %}
-              <a href="{{ link.url }}" class="mobile-nav-drawer__link"{% if link.url contains 'http' %} target="_blank" rel="noopener"{% endif %}>{{- link.title -}}</a>
-            {% endif %}
-          </li>
+            </div>
+
+            {%- comment -%} LEVEL 3 PANEL: Deep Product Collection Endlinks + Banner Images {%- endcomment -%}
+            {%- for i in (1..3) -%}
+              {%- assign menu_key = 'col' | append: i | append: '_menu' -%}
+              {%- assign heading_key = 'col' | append: i | append: '_heading' -%}
+              {%- assign active_menu_handle = matching_mega.settings[menu_key] -%}
+              {%- assign active_heading = matching_mega.settings[heading_key] -%}
+
+              {% if active_menu_handle != blank %}
+                <div class="mobile-nav-level mobile-nav-level--sub" id="level-3-{{ level1_index }}-{{ i }}" style="display: none;">
+                  <button type="button" class="mobile-nav-drawer__back-btn mobile-slide-back-trigger" data-back-to="2">
+                    <span class="back-arrow">❮</span> {{ active_heading }}
+                  </button>
+                  
+                  <ul class="mobile-nav-drawer__list">
+                    {% for item in linklists[active_menu_handle].links %}
+                      <li class="mobile-nav-drawer__item">
+                        <a href="{{ item.url }}" class="mobile-nav-drawer__sub-link {% if item.title contains '₹' %}mega-menu__link--promo{% endif %}">
+                          {{ item.title }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+
+                  <div class="mobile-nav-drawer__banner">
+                    {% if matching_mega.settings.card1_image != blank %}
+                      <img src="{{ matching_mega.settings.card1_image | image_url: width: 500 }}" alt="{{ active_heading }}" loading="lazy">
+                    {% endif %}
+                  </div>
+                </div>
+              {% endif %}
+            {%- endfor -%}
+
+          {% endif %}
         {% endfor %}
-      </ul>
-    </nav>
-    {%- if section.settings.shop_live_url != blank -%}
-      <div class="mobile-nav-drawer__video-call">
-        <a href="{{ section.settings.shop_live_url }}" class="mobile-nav-drawer__video-call-link">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-          <span>{{ section.settings.shop_live_label | default: 'Video call shopping' }}</span>
-          <span class="header-shop-live-btn__dot mobile-nav-drawer__video-call-dot" aria-hidden="true"></span>
-        </a>
+
       </div>
-    {%- endif -%}
+    </div>
+
   </div>
 </div>
 
@@ -1364,6 +1455,68 @@
     .header-main__icons { gap: 4px; }
     .header-nav { display: none; }
   }
+  @media screen and (max-width: 768px) {
+  .mobile-nav-slider-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .mobile-nav-slider-track {
+    display: flex;
+    width: 100%;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .mobile-nav-level {
+    width: 100%;
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+
+  .mobile-nav-arrow-icon {
+    font-size: 1.2rem;
+    color: #888;
+    font-weight: bold;
+  }
+
+  .mobile-nav-drawer__back-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 16px 20px;
+    background: #f8f7f3;
+    border: none;
+    border-bottom: 1px solid #e0dfd9;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2e1f1f;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .mobile-nav-drawer__link--shop-all {
+    font-weight: 600 !important;
+    color: #ce0570 !important;
+  }
+
+  .mobile-nav-drawer__banner {
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .mobile-nav-drawer__banner img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+}
 {% endstylesheet %}
 
 {% javascript %}
@@ -1448,36 +1601,75 @@
     window.addEventListener('scroll', onScroll, { passive: true });
 
     /* ── Mobile drawer ── */
-    var hamburger = document.querySelector('.header-hamburger');
-    var drawer = document.getElementById('mobile-nav-drawer');
-    var closeBtn = document.querySelector('.mobile-nav-drawer__close');
-    var overlay = document.querySelector('.mobile-nav-drawer__overlay');
+   // Locate your mobile drawer block inside the layout function and update it to this:
+var hamburger   = document.querySelector('.header-hamburger');
+var drawer      = document.getElementById('mobile-nav-drawer');
+var closeBtn    = document.querySelector('.mobile-nav-drawer__close');
+var overlay     = document.querySelector('.mobile-nav-drawer__overlay');
+var sliderTrack = document.getElementById('mobile-nav-track');
 
-    function openDrawer() {
-      if (!drawer) return;
-      drawer.classList.add('is-open');
-      drawer.setAttribute('aria-hidden', 'false');
-      if (hamburger) hamburger.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeDrawer() {
-      if (!drawer) return;
-      drawer.classList.remove('is-open');
-      drawer.setAttribute('aria-hidden', 'true');
-      if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    }
+function openDrawer() {
+  if (!drawer) return;
+  // Reset placement back to Level 1 panel when opening the mobile menu drawer
+  if (sliderTrack) {
+    sliderTrack.style.transform = 'translateX(0%)';
+    sliderTrack.setAttribute('data-current-level', '1');
+  }
+  drawer.classList.add('is-open');
+  drawer.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
 
-    if (hamburger) hamburger.addEventListener('click', openDrawer);
-    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
-    if (overlay) overlay.addEventListener('click', closeDrawer);
+function closeDrawer() {
+  if (!drawer) return;
+  drawer.classList.remove('is-open');
+  drawer.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
 
-    document.querySelectorAll('.mobile-nav-drawer__toggle').forEach(function(toggle) {
-      toggle.addEventListener('click', function() {
-        var expanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+if (hamburger) hamburger.addEventListener('click', openDrawer);
+if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+if (overlay) overlay.addEventListener('click', closeDrawer);
+
+// Forward Slide Interaction Logic
+document.querySelectorAll('.mobile-slide-next-trigger').forEach(function(btn) {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    var nextPanelId = this.getAttribute('data-next-panel');
+    var targetPanel = document.getElementById(nextPanelId);
+    
+    if (targetPanel) {
+      var currentLevel = parseInt(sliderTrack.getAttribute('data-current-level') || '1', 10);
+      var nextLevel = currentLevel + 1;
+      
+      // Toggle visibility states cleanly
+      document.querySelectorAll('.mobile-nav-level--sub').forEach(function(p) {
+        p.style.display = 'none';
       });
-    });
+      targetPanel.style.display = 'block';
+      
+      if (sliderTrack) {
+        var shiftAmount = (nextLevel - 1) * -100;
+        sliderTrack.style.transform = 'translateX(' + shiftAmount + '%)';
+        sliderTrack.setAttribute('data-current-level', nextLevel.toString());
+      }
+    }
+  });
+});
+
+// Backward Reverse Slide Logic
+document.querySelectorAll('.mobile-slide-back-trigger').forEach(function(btn) {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    var targetLevel = parseInt(this.getAttribute('data-back-to') || '1', 10);
+    
+    if (sliderTrack) {
+      var shiftAmount = (targetLevel - 1) * -100;
+      sliderTrack.style.transform = 'translateX(' + shiftAmount + '%)';
+      sliderTrack.setAttribute('data-current-level', targetLevel.toString());
+    }
+  });
+});
 
     /* ── Search overlay ── */
     var searchOverlay  = document.getElementById('header-search-overlay');
