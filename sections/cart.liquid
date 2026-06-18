@@ -613,6 +613,37 @@
 {% javascript %}
   (function () {
     var moneyFormat = (document.getElementById('cart-money-format') || {}).dataset.format || '{{amount}}';
+    function calculateCartAttributes() {
+      var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      // 1. Standard Date Calculation (+6 calendar days straight)
+      var standardTarget = new Date();
+      standardTarget.setDate(standardTarget.getDate() + 6);
+      // This builds the exact text string format you requested
+      var standardString = "Expected Delivery: " + days[standardTarget.getDay()] + " " + months[standardTarget.getMonth()] + " " + standardTarget.getDate();
+
+      // 2. Customised Date Calculation (+12 calendar days straight)
+      var customTarget = new Date();
+      customTarget.setDate(customTarget.getDate() + 12);
+      var customString = "Expected Delivery: " + days[customTarget.getDay()] + " " + months[customTarget.getMonth()] + " " + customTarget.getDate();
+
+      // Send to Shopify Cart Attributes payload
+      fetch('/cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          attributes: {
+            'standard_delivery_date': standardString,
+            'custom_delivery_date': customString
+          }
+        })
+      });
+    }
+
+    
+    document.addEventListener('DOMContentLoaded', calculateCartAttributes);
+    calculateCartAttributes(); // Fallback prompt trigger
 
     function formatMoney(cents) {
       var value = cents / 100;
@@ -665,6 +696,7 @@
       updateItems(updates)
         .then(function(cart) { return removeOrphanedAddons(cart); })
         .then(function (cart) {
+                calculateCartAttributes();
           var subtotalEl = document.getElementById('cart-subtotal');
           if (subtotalEl) subtotalEl.textContent = formatMoney(cart.total_price);
 
