@@ -1480,8 +1480,7 @@
     .header-main__icons .header-icon-btn--search { display: none; }
     .header-main__icons { gap: 4px; }
     .header-nav { display: none; }
-  }
-  @media screen and (max-width: 768px) {
+
   .mobile-nav-slider-container {
     width: 100%;
     overflow: hidden;
@@ -1542,6 +1541,12 @@
     display: block;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   }
+}
+@media screen and (min-width: 769px) {
+  .mobile-nav-drawer {
+    display: none !important;
+  }
+  
 }
 {% endstylesheet %}
 
