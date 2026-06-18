@@ -134,7 +134,7 @@
 {% comment %} Optimized Sliding Mobile Nav Drawer (Direct List Skipping) {% endcomment %}
 <div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true">
   <div class="mobile-nav-drawer__overlay"></div>
-  <div class="mobile-nav-drawer__panel">
+  <div class="mobile-nav-drawer__panel" style="display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; width: 280px; background: #fff; z-index: 201;">
     
     <button class="mobile-nav-drawer__close" aria-label="{{ 'header.close_menu_label' | t }}">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -142,13 +142,13 @@
       </svg>
     </button>
 
-    <div class="mobile-nav-slider-container">
+    <div class="mobile-nav-slider-container" style="flex: 1; overflow-y: auto; overflow-x: hidden;">
       <div class="mobile-nav-slider-track" id="mobile-nav-track" data-current-level="1">
         
-        {%- comment -%} ── LEVEL 1: Main Categories ── {%- endcomment -%}
+        {%- comment -%} ── LEVEL 1: Main Menu Categories view Panel ── {%- endcomment -%}
         <div class="mobile-nav-level" id="level-1">
           <nav aria-label="Main navigation">
-            <ul class="mobile-nav-drawer__list">
+            <ul class="mobile-nav-drawer__list" style="padding-bottom: 80px;">
               {% for link in section.settings.menu.links %}
                 {%- assign matching_mega = nil -%}
                 {%- for block in section.blocks -%}
@@ -164,7 +164,6 @@
                     {%- if matching_mega.settings.col2_menu != blank -%}{%- assign active_cols_count = active_cols_count | plus: 1 -%}{%- endif -%}
                     {%- if matching_mega.settings.col3_menu != blank -%}{%- assign active_cols_count = active_cols_count | plus: 1 -%}{%- endif -%}
                     
-                    {%- comment -%} Smart Skip: If only 1 column exists, slide straight to level-3 panel {%- endcomment -%}
                     {% if active_cols_count == 1 %}
                       {%- assign target_panel = 'level-3-' | append: forloop.index | append: '-1' -%}
                     {% else %}
@@ -184,7 +183,7 @@
           </nav>
         </div>
 
-        {%- comment -%} ── LEVEL 2 & 3: Menu Panel Targets ── {%- endcomment -%}
+        {%- comment -%} ── LEVEL 2 & 3: Nested Sliding Menu Track sub-panels ── {%- endcomment -%}
         {% for link in section.settings.menu.links %}
           {%- assign matching_mega = nil -%}
           {%- for block in section.blocks -%}
@@ -197,12 +196,12 @@
 
           {% if matching_mega != blank %}
             
-            {%- comment -%} LEVEL 2 PANEL: Multiple Columns Selection Header {%- endcomment -%}
+            {%- comment -%} LEVEL 2 PANEL: Multiple Columns Selection Header options view {%- endcomment -%}
             <div class="mobile-nav-level mobile-nav-level--sub" id="level-2-{{ level1_index }}" style="display: none;">
               <button type="button" class="mobile-nav-drawer__back-btn mobile-slide-back-trigger" data-back-to="1">
                 <span class="back-arrow">❮</span> {{ link.title }}
               </button>
-              <ul class="mobile-nav-drawer__list">
+              <ul class="mobile-nav-drawer__list" style="padding-bottom: 80px;">
                 {% if matching_mega.settings.col1_menu != blank and matching_mega.settings.col1_heading != blank %}
                   <li class="mobile-nav-drawer__item">
                     <button type="button" class="mobile-nav-drawer__link mobile-slide-next-trigger" data-next-panel="level-3-{{ level1_index }}-1">
@@ -230,7 +229,7 @@
               </ul>
             </div>
 
-            {%- comment -%} LEVEL 3 PANEL: Direct Submenu Items List View {%- endcomment -%}
+            {%- comment -%} LEVEL 3 PANEL: Clean Deep Product Collection lists view panel {%- endcomment -%}
             {%- for i in (1..3) -%}
               {%- assign menu_key = 'col' | append: i | append: '_menu' -%}
               {%- assign heading_key = 'col' | append: i | append: '_heading' -%}
@@ -240,7 +239,6 @@
               {% if active_menu_handle != blank %}
                 <div class="mobile-nav-level mobile-nav-level--sub" id="level-3-{{ level1_index }}-{{ i }}" style="display: none;">
                   
-                  {%- comment -%} Back arrow behavior adjustment {%- endcomment -%}
                   {%- assign active_cols_count = 0 -%}
                   {%- if matching_mega.settings.col1_menu != blank -%}{%- assign active_cols_count = active_cols_count | plus: 1 -%}{%- endif -%}
                   {%- if matching_mega.settings.col2_menu != blank -%}{%- assign active_cols_count = active_cols_count | plus: 1 -%}{%- endif -%}
@@ -250,17 +248,20 @@
                     <span class="back-arrow">❮</span> {% if active_cols_count == 1 %}{{ link.title }}{% else %}{{ active_heading }}{% endif %}
                   </button>
                   
-                  <ul class="mobile-nav-drawer__list">
+                  <ul class="mobile-nav-drawer__list" style="padding-bottom: 20px;">
                     {% for item in linklists[active_menu_handle].links %}
-                      <li class="mobile-nav-drawer__item">
-                        <a href="{{ item.url }}" class="mobile-nav-drawer__sub-link {% if item.title contains '₹' %}mega-menu__link--promo{% endif %}">
-                          {{ item.title }}
-                        </a>
-                      </li>
+                      {%- comment -%} Skip the list option row completely if it is identical to the main parent link header name {%- endcomment -%}
+                      {%- unless active_cols_count == 1 and item.title == link.title -%}
+                        <li class="mobile-nav-drawer__item">
+                          <a href="{{ item.url }}" class="mobile-nav-drawer__sub-link {% if item.title contains '₹' %}mega-menu__link--promo{% endif %}">
+                            {{ item.title }}
+                          </a>
+                        </li>
+                      {%- endunless -%}
                     {% endfor %}
                   </ul>
 
-                  <div class="mobile-nav-drawer__banner">
+                  <div class="mobile-nav-drawer__banner" style="padding-bottom: 80px;">
                     {% if matching_mega.settings.card1_image != blank %}
                       <img src="{{ matching_mega.settings.card1_image | image_url: width: 500 }}" alt="Menu Banner" loading="lazy">
                     {% endif %}
@@ -276,8 +277,8 @@
     </div>
 
     {%- if section.settings.shop_live_url != blank -%}
-      <div class="mobile-nav-drawer__video-call" style="position: absolute; bottom: 0; left: 0; right: 0; background: #fff; z-index: 10;">
-        <a href="{{ section.settings.shop_live_url }}" class="mobile-nav-drawer__video-call-link">
+      <div class="mobile-nav-drawer__video-call" style="margin-top: auto; background: #fff; border-top: 1px solid #f0efe9; width: 100%; box-sizing: border-box; z-index: 20;">
+        <a href="{{ section.settings.shop_live_url }}" class="mobile-nav-drawer__video-call-link" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 16px; text-decoration: none; color: #ce0570; font-weight: bold; font-family: 'Montserrat', sans-serif; font-size: 0.9rem;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
           <span>{{ section.settings.shop_live_label | default: 'Video call shopping' }}</span>
           <span class="header-shop-live-btn__dot mobile-nav-drawer__video-call-dot" aria-hidden="true"></span>
