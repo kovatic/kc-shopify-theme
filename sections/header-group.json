@@ -14,29 +14,11 @@
     "header": {
       "type": "header",
       "blocks": {
-        "mega_menu_axEnd6": {
+        "mega_menu_PcRGYy": {
           "type": "mega_menu",
           "settings": {
-            "nav_link": "Womens",
-            "col1_heading": "Drees Meterial",
-            "col1_menu": "",
-            "col2_heading": "",
-            "col2_menu": "",
-            "col3_heading": "",
-            "col3_menu": "",
-            "card1_label": "",
-            "card1_url": "",
-            "card2_label": "",
-            "card2_url": "",
-            "card3_label": "",
-            "card3_url": ""
-          }
-        },
-        "mega_menu_TQekQe": {
-          "type": "mega_menu",
-          "settings": {
-            "nav_link": "",
-            "col1_heading": "",
+            "nav_link": "Jewellery & Accessories",
+            "col1_heading": "Jewellery & Accessories",
             "col1_menu": "",
             "col2_heading": "",
             "col2_menu": "",
@@ -215,8 +197,7 @@
         }
       },
       "block_order": [
-        "mega_menu_axEnd6",
-        "mega_menu_TQekQe",
+        "mega_menu_PcRGYy",
         "mega_menu_rgyCtx",
         "mega_menu_RnnEVD",
         "mega_menu_MzfM6K",
