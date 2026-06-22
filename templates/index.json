@@ -119,6 +119,21 @@
         "padding_bottom": 60
       }
     },
+    "product_list_AWLzR3": {
+      "type": "product-list",
+      "name": "t:sections.product_list.name",
+      "settings": {
+        "title": "Jewellery & Accessories",
+        "subtitle": "Explore our exquisite jewellery & accessories collection",
+        "collection": "",
+        "layout_type_desktop": "wrap",
+        "layout_type_mobile": "scroll",
+        "products_count": 4,
+        "view_all_url": "shopify://collections/jewellery-accessories",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
     "reel_7a3Lp6": {
       "type": "reel",
       "name": "t:sections.reel.name",
@@ -545,6 +560,7 @@
     "banner_C4FemU",
     "category_aE6ijQ",
     "product_list_hdgdex",
+    "product_list_AWLzR3",
     "reel_7a3Lp6",
     "product_list_8L8wf6",
     "tab_product_list_PynKp9",
