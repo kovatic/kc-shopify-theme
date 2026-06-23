@@ -108,14 +108,26 @@
         {%- endif -%}
 
 
-        <div class="product-page__price-row">
-          <span class="product-page__price" id="product-price-display">
-            <span class="product-page__price-current">{{ current_variant.price | money }}</span>
-            {%- if current_variant.compare_at_price > current_variant.price -%}
-              <span class="product-page__price-compare">{{ current_variant.compare_at_price | money }}</span>
-            {%- endif -%}
-          </span>
-        </div>
+<div class="product-page__price-row">
+  <span class="product-page__price" id="product-price-display">
+
+      {%- comment -%} 2. Current Active Sale Price (Rendered in Bold Red/Orange) {%- endcomment -%}
+    <span class="product-page__price-current{% if current_variant.compare_at_price > current_variant.price %} is-on-sale{% endif %}">{{ current_variant.price | money }}</span>
+    
+    {%- comment -%} 1. Compare-at Original Base Price (Struck out in gray-blue) {%- endcomment -%}
+    <span class="product-page__price-compare" {% unless current_variant.compare_at_price > current_variant.price %}style="display: none;"{% endunless %}>
+      {{ current_variant.compare_at_price | money }}
+    </span>
+
+    {%- comment -%} 3. Percentage Discount Badge Layout Container {%- endcomment -%}
+    <span class="product-page__price-discount-badge" {% unless current_variant.compare_at_price > current_variant.price %}style="display: none;"{% endunless %}>
+      {%- if current_variant.compare_at_price > current_variant.price -%}
+        {%- assign savings = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
+        -{{ savings }}%
+      {%- endif -%}
+    </span>
+  </span>
+</div>
 
         {%- comment -%} Stock alert {%- endcomment -%}
           {%- assign inv = current_variant.inventory_quantity -%}
@@ -786,14 +798,35 @@
 
   function renderPrice(variant) {
     if (!priceEl || !variant) return;
+    
     var displayPrice = variant.price + Math.round(tailoringExtraRupees * 100);
-    var html = '<span class="product-page__price-current">' + formatMoney(displayPrice) + '</span>';
-    if (variant.compare_at_price > variant.price) {
-      html += ' <span class="product-page__price-compare">' + formatMoney(variant.compare_at_price) + '</span>';
+    var comparePrice = variant.compare_at_price;
+    var html = '';
+
+   if (comparePrice && comparePrice > displayPrice) {
+      html += '<span class="product-page__price-current is-on-sale">' + formatMoney(displayPrice) + '</span>';
+    } else {
+      html += '<span class="product-page__price-current">' + formatMoney(displayPrice) + '</span>';
     }
+
+    
+    // 1. Rebuild Original Strike Price Slant Element dynamically on variant change
+    if (comparePrice && comparePrice > displayPrice) {
+      html += '<span class="product-page__price-compare">' + formatMoney(comparePrice) + '</span> ';
+    }
+    
+    // 2. Append Current Live Sale Price    
+    // 3. Re-calculate and append the percentage discount badge on variant change
+    if (comparePrice && comparePrice > displayPrice) {
+      var savingsPercent = Math.round(((comparePrice - variant.price) / comparePrice) * 100);
+      html += ' <span class="product-page__price-discount-badge">-' + savingsPercent + '%</span>';
+    }
+    
+    // 4. Preserve Tailoring context warnings if custom options are engaged
     if (tailoringExtraRupees > 0) {
-      html += ' <span class="product-page__price-tailoring-note">{{ "tailoring.price_includes_stitching" | t }}</span>';
+      html += '<div class="product-page__price-tailoring-note">{{ "tailoring.price_includes_stitching" | t }}</div>';
     }
+    
     priceEl.innerHTML = html;
   }
 
@@ -3023,7 +3056,64 @@ document.addEventListener('DOMContentLoaded', function() {
     transform: rotate(360deg);
   }
 }
-  
+  .product-page__price {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex-wrap: nowrap !important;
+    font-family: 'Montserrat', sans-serif !important;
+  }
+
+  .product-page__price-compare {
+    font-size: 15px!important;
+    font-weight: 500 !important;
+    color: #556270 !important; /* Elegant slate tone */
+    position: relative !important;
+    text-decoration: none !important;
+  }
+
+  .product-page__price-compare::after {
+    content: "" !important;
+    position: absolute !important;
+    left: -3px !important;
+    right: -3px !important;
+    top: 50% !important;
+    height: 1px !important;
+    background-color: #d15b47 !important;
+    transform: rotate(-17deg) !important; 
+    transform-origin: center !important;
+  }
+  .product-page__price-current {
+    font-size: 1.65rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+  }
+  .product-page__price-current.is-on-sale {
+    color: #1a7a3c !important;
+  }
+  .product-page__price-discount-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+   color: #d7116a !important;
+    background-color: #f4c2d94f !important;
+    border: 1px solid #f1d8e1 !important;
+    padding: 3px 8px !important;
+    border-radius: 2px !important; 
+    margin-left: 4px !important;
+    letter-spacing: 0.02em !important;
+  }
+
+.product-page__price-tailoring-note {
+    display: block !important;
+    width: 100% !important;
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    color: #ce0570 !important;
+    margin-top: 4px !important;
+  }  
 {% endstylesheet %}
 
 
