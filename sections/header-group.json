@@ -14,6 +14,24 @@
     "header": {
       "type": "header",
       "blocks": {
+        "mega_menu_UY4wKJ": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_link": "Jewellery & Accessories",
+            "col1_heading": "Jewellery & Accessories",
+            "col1_menu": "jewellery-accessories",
+            "col2_heading": "",
+            "col2_menu": "",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_label": "",
+            "card1_url": "",
+            "card2_label": "",
+            "card2_url": "",
+            "card3_label": "",
+            "card3_url": ""
+          }
+        },
         "mega_menu_rgyCtx": {
           "type": "mega_menu",
           "settings": {
@@ -179,6 +197,7 @@
         }
       },
       "block_order": [
+        "mega_menu_UY4wKJ",
         "mega_menu_rgyCtx",
         "mega_menu_RnnEVD",
         "mega_menu_MzfM6K",
