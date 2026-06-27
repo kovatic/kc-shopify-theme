@@ -634,7 +634,22 @@
                         <span class="product-list__name">{{ p.title | escape }}</span>
                         <!-- <span class="product-list__price">{{ p.price_min | money }}</span> -->
                          <div class="product-card__price-atc-wrapper">
-  <span class="product-list__price">{{ p.price_min | money }}</span>
+                           <div class="product-grid__price-stacked-layout">
+                            {%- if p.compare_at_price_min > p.price_min -%}
+                              {% comment %} Displays active sale price and struck out original price side-by-side on the same line {% endcomment %}
+                              <div class="product-grid__price-meta-row">
+                                <span class="product-page__price-current is-on-sale">{{ p.price_min | money }}</span>
+                                <span class="product-page__price-compare">{{ p.compare_at_price_min | money }}</span>
+                              </div>
+                              
+                            {%- else -%}
+                              {% comment %} Normal pricing view if item isn't marked down {% endcomment %}
+                              <div class="product-grid__price-meta-row">
+                                <span class="product-page__price-current">{{ p.price_min | money }}</span>
+                              </div>
+                            {%- endif -%}
+                            
+                          </div>
   
   {%- if p.available -%}
     <form method="post" action="/cart/add" class="product-card__inline-form">
@@ -1300,7 +1315,21 @@ window.addEventListener('pageshow', function(event) {
   } else {
     inlineActionHtml = '<span class="product-card__inline-oos">OOS</span>';
   }
-
+    var priceHtml = '';
+    var priceVal = p.price || p.price_min || (fv ? fv.price : 0);
+    var compareVal = p.compare_at_price || p.compare_at_price_min || (fv ? fv.compare_at_price : 0);
+    if (compareVal && compareVal > priceVal) {
+      // Both prices rendered side-by-side on a single row layout
+      priceHtml = '<div class="product-grid__price-meta-row" style="display: flex !important; align-items: center !important; gap: 8px !important; flex-wrap: nowrap !important;">'
+        + '<span class="product-page__price-current is-on-sale">' + formatMoney(priceVal) + '</span>'
+        + '<span class="product-page__price-compare">' + formatMoney(compareVal) + '</span>'
+        + '</div>';
+    } else {
+      // Normal price fallback configuration if no markdown exists
+      priceHtml = '<div class="product-grid__price-meta-row">'
+        + '<span class="product-page__price-current">' + formatMoney(priceVal) + '</span>'
+        + '</div>';
+    }
     return '<div class="product-list__item' + (available ? '' : ' is-sold-out') + '" data-variant-id="' + varId + '" data-available="' + available + '">'
       + '<a class="product-list__item-link" href="' + p.url + '">'
       + '<div class="product-list__image-wrapper">'
@@ -1318,7 +1347,8 @@ window.addEventListener('pageshow', function(event) {
       + '<div class="product-list__info">'
       + '<span class="product-list__name">' + escHtml(p.title) + '</span>'
       + '<div class="product-card__price-atc-wrapper">'
-      + '<span class="product-list__price">' + formatMoney(p.price_min || (fv ? fv.price : 0)) + '</span>'
+      // + '<span class="product-list__price">' + formatMoney(p.price_min || (fv ? fv.price : 0)) + '</span>'
+      + priceHtml
       + inlineActionHtml
       + '</div>'
       + '</div></a>'
@@ -1399,12 +1429,28 @@ window.addEventListener('pageshow', function(event) {
   var RV_KEY = 'pp_recently_viewed';
   var RV_MAX = 10;
   var currentHandle = '{{ product.handle }}';
+  // var currentEntry  = {
+  //   handle:    currentHandle,
+  //   title:     '{{ product.title | escape }}',
+  //   url:       '{{ product.url }}',
+  //   available: {{ product.available }},
+  //   variants:  [{ id: {{ current_variant.id }}, price: {{ current_variant.price }} }],
+  //   images:    [{ src: '{{ product.featured_image | image_url: width: 600 }}' }]
+  // };
   var currentEntry  = {
     handle:    currentHandle,
     title:     '{{ product.title | escape }}',
     url:       '{{ product.url }}',
     available: {{ product.available }},
-    variants:  [{ id: {{ current_variant.id }}, price: {{ current_variant.price }} }],
+    price:     {{ current_variant.price }},
+    price_min: {{ product.price_min | default: current_variant.price }},
+    compare_at_price: {{ current_variant.compare_at_price | default: 0 }},
+    compare_at_price_min: {{ product.compare_at_price_min | default: 0 }},
+    variants:  [{ 
+      id: {{ current_variant.id }}, 
+      price: {{ current_variant.price }},
+      compare_at_price: {{ current_variant.compare_at_price | default: 0 }} 
+    }],
     images:    [{ src: '{{ product.featured_image | image_url: width: 600 }}' }]
   };
 
