@@ -120,7 +120,7 @@
     </span>
 
     {%- comment -%} 3. Percentage Discount Badge Layout Container {%- endcomment -%}
-    <span class="product-page__price-discount-badge" {% unless current_variant.compare_at_price > current_variant.price %}style="display: none;"{% endunless %}>
+    <span class="product-page__price-discount-badge" {% unless current_variant.compare_at_price > current_variant.price %}style="display: none !important;"{% endunless %}>
       {%- if current_variant.compare_at_price > current_variant.price -%}
         {%- assign savings = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
         -{{ savings }}%
