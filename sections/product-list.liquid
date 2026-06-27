@@ -94,7 +94,7 @@
   {%- if product.compare_at_price_min > product.price_min -%}
     {% comment %} Displays active sale price and struck out original price side-by-side on the same line {% endcomment %}
     <div class="product-grid__price-meta-row" style="display: flex !important; align-items: center !important; gap: 8px !important; flex-wrap: nowrap !important;">
-      <span class="product-page__price-current is-on-sale">{{ product.price_min | money }}</span>
+      <span class="product-page__price-current grid is-on-sale">{{ product.price_min | money }}</span>
       <span class="product-page__price-compare">{{ product.compare_at_price_min | money }}</span>
     </div>
   {%- else -%}
