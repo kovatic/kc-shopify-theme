@@ -1845,8 +1845,8 @@ document.querySelectorAll('.mobile-slide-back-trigger').forEach(function(btn) {
             var compareFormatted = formatMoney(compareRaw * 100);
             // Side-by-side single-line layout matching your product grids
             priceHtml = '<div class="product-grid__price-meta-row">'
-              + '<span class="product-page__price-current grid is-on-sale" style="font-size: 0.875rem !important;">' + priceFormatted + '</span>'
-              + '<span class="product-page__price-compare" style="font-size: 12px !important;">' + compareFormatted + '</span>'
+              + '<div class="product-page__price-current grid is-on-sale" style="font-size: 0.875rem !important;">' + priceFormatted + '</div>'
+              + '<div class="product-page__price-compare" style="font-size: 12px !important;">' + compareFormatted + '</div>'
               + '</div>';
           } else {
             priceHtml = '<span class="header-search-product__price">' + priceFormatted + '</span>';

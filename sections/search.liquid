@@ -231,7 +231,7 @@
                       {%- else -%}
                         {% comment %} Normal pricing view if item isn't marked down {% endcomment %}
                         <div class="product-grid__price-meta-row">
-                          <span class="product-page__price-current grid">{{ product.price_min | money }}</span>
+                          <span class="product-page__price-current">{{ product.price_min | money }}</span>
                         </div>
                       {%- endif -%}
                     </div>
