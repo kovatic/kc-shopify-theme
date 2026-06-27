@@ -638,14 +638,14 @@
                             {%- if p.compare_at_price_min > p.price_min -%}
                               {% comment %} Displays active sale price and struck out original price side-by-side on the same line {% endcomment %}
                               <div class="product-grid__price-meta-row">
-                                <span class="product-page__price-current is-on-sale">{{ p.price_min | money }}</span>
+                                <span class="product-page__price-current grid is-on-sale">{{ p.price_min | money }}</span>
                                 <span class="product-page__price-compare">{{ p.compare_at_price_min | money }}</span>
                               </div>
                               
                             {%- else -%}
                               {% comment %} Normal pricing view if item isn't marked down {% endcomment %}
                               <div class="product-grid__price-meta-row">
-                                <span class="product-page__price-current">{{ p.price_min | money }}</span>
+                                <span class="product-page__price-current grid">{{ p.price_min | money }}</span>
                               </div>
                             {%- endif -%}
                             
@@ -1321,13 +1321,13 @@ window.addEventListener('pageshow', function(event) {
     if (compareVal && compareVal > priceVal) {
       // Both prices rendered side-by-side on a single row layout
       priceHtml = '<div class="product-grid__price-meta-row" style="display: flex !important; align-items: center !important; gap: 8px !important; flex-wrap: nowrap !important;">'
-        + '<span class="product-page__price-current is-on-sale">' + formatMoney(priceVal) + '</span>'
+        + '<span class="product-page__price-current grid is-on-sale">' + formatMoney(priceVal) + '</span>'
         + '<span class="product-page__price-compare">' + formatMoney(compareVal) + '</span>'
         + '</div>';
     } else {
       // Normal price fallback configuration if no markdown exists
       priceHtml = '<div class="product-grid__price-meta-row">'
-        + '<span class="product-page__price-current">' + formatMoney(priceVal) + '</span>'
+        + '<span class="product-page__price-current grid">' + formatMoney(priceVal) + '</span>'
         + '</div>';
     }
     return '<div class="product-list__item' + (available ? '' : ' is-sold-out') + '" data-variant-id="' + varId + '" data-available="' + available + '">'
