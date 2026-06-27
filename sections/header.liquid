@@ -1591,7 +1591,9 @@
   }
 
   @media (max-width: 1320px) and (min-width: 769px) {
-   
+   .product-grid__price-meta-row.grid{
+    display: flex !important;
+   }
   .product-page__price-compare{
     margin-top:4px;
   }
@@ -1842,7 +1844,7 @@ document.querySelectorAll('.mobile-slide-back-trigger').forEach(function(btn) {
           if (compareRaw > 0 && compareRaw > priceRaw) {
             var compareFormatted = formatMoney(compareRaw * 100);
             // Side-by-side single-line layout matching your product grids
-            priceHtml = '<div class="product-grid__price-meta-row">'
+            priceHtml = '<div class="product-grid__price-meta-row header">'
               + '<span class="product-page__price-current grid is-on-sale" style="font-size: 0.875rem !important;">' + priceFormatted + '</span>'
               + '<span class="product-page__price-compare" style="font-size: 12px !important;">' + compareFormatted + '</span>'
               + '</div>';
