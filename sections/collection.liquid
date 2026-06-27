@@ -183,7 +183,21 @@
                     <span class="product-list__name">{{ product.title | escape }}</span>
                     <!-- <span class="product-list__price">{{ product.price_min | money }}</span> -->
                      <div class="product-card__price-atc-wrapper">
-                        <span class="product-list__price">{{ product.price_min | money }}</span>
+                        <!-- <span class="product-list__price">{{ product.price_min | money }}</span> -->
+                         <div class="product-grid__price-stacked-layout">
+                      {%- if product.compare_at_price_min > product.price_min -%}
+                        {% comment %} Displays active sale price and struck out original price side-by-side on the same line {% endcomment %}
+                        <div class="product-grid__price-meta-row" style="display: flex !important; align-items: center !important; gap: 8px !important; flex-wrap: nowrap !important;">
+                          <div class="product-page__price-current is-on-sale">{{ product.price_min | money }}</div>
+                          <div class="product-page__price-compare">{{ product.compare_at_price_min | money }}</div>
+                        </div>
+                      {%- else -%}
+                        {% comment %} Normal pricing view if item isn't marked down {% endcomment %}
+                        <div class="product-grid__price-meta-row">
+                          <span class="product-page__price-current">{{ product.price_min | money }}</span>
+                        </div>
+                      {%- endif -%}
+                    </div>
                         
                         {%- if product.available -%}
                           <form method="post" action="/cart/add" class="product-card__inline-form">
@@ -1202,6 +1216,45 @@
 /* Spinner Rotation Keyframes */
 @keyframes inlineCardSpin {
   to { transform: rotate(360deg); }
+}
+.product-page__price-compare {
+    font-size: 15px!important;
+    font-weight: 500 !important;
+    color: #556270 !important;
+    position: relative !important;
+    text-decoration: none !important;
+  }
+
+  .product-page__price-compare::after {
+    content: "" !important;
+    position: absolute !important;
+    left: -3px !important;
+    right: -3px !important;
+    top: 50% !important;
+    height: 1px !important;
+    background-color: #d15b47 !important; 
+    transform: rotate(-17deg) !important;
+    transform-origin: center !important;
+  }
+  .product-page__price-current {
+    font-size: 1.65rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+  }
+  .product-page__price-current.is-on-sale {
+    color: #1a7a3c !important;
+  }
+    .product-page__price-current.grid{
+        font-size: 1.375rem !important;
+  }
+
+  @media (max-width: 1320px) and (min-width: 769px) {
+    .product-grid__price-meta-row{
+    display: block !important;
+  }
+  .product-page__price-compare{
+    margin-top:4px;
+  }
 }
 {% endstylesheet %}
 
