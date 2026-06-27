@@ -638,8 +638,8 @@
                             {%- if p.compare_at_price_min > p.price_min -%}
                               {% comment %} Displays active sale price and struck out original price side-by-side on the same line {% endcomment %}
                               <div class="product-grid__price-meta-row">
-                                <span class="product-page__price-current grid is-on-sale">{{ p.price_min | money }}</span>
-                                <span class="product-page__price-compare">{{ p.compare_at_price_min | money }}</span>
+                                <div class="product-page__price-current grid is-on-sale">{{ p.price_min | money }}</div>
+                                <div class="product-page__price-compare">{{ p.compare_at_price_min | money }}</div>
                               </div>
                               
                             {%- else -%}
@@ -1321,8 +1321,8 @@ window.addEventListener('pageshow', function(event) {
     if (compareVal && compareVal > priceVal) {
       // Both prices rendered side-by-side on a single row layout
       priceHtml = '<div class="product-grid__price-meta-row">'
-        + '<span class="product-page__price-current grid is-on-sale">' + formatMoney(priceVal) + '</span>'
-        + '<span class="product-page__price-compare">' + formatMoney(compareVal) + '</span>'
+        + '<div class="product-page__price-current grid is-on-sale">' + formatMoney(priceVal) + '</div>'
+        + '<div class="product-page__price-compare">' + formatMoney(compareVal) + '</div>'
         + '</div>';
     } else {
       // Normal price fallback configuration if no markdown exists
