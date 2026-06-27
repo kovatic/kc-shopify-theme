@@ -1559,6 +1559,45 @@
     pointer-events: auto;
   }
 }
+.product-page__price-compare {
+    font-size: 15px!important;
+    font-weight: 500 !important;
+    color: #556270 !important;
+    position: relative !important;
+    text-decoration: none !important;
+  }
+
+  .product-page__price-compare::after {
+    content: "" !important;
+    position: absolute !important;
+    left: -3px !important;
+    right: -3px !important;
+    top: 50% !important;
+    height: 1px !important;
+    background-color: #d15b47 !important; 
+    transform: rotate(-17deg) !important;
+    transform-origin: center !important;
+  }
+  .product-page__price-current {
+    font-size: 1.65rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+  }
+  .product-page__price-current.is-on-sale {
+    color: #1a7a3c !important;
+  }
+    .product-page__price-current.grid{
+        font-size: 1.375rem !important;
+  }
+
+  @media (max-width: 1320px) and (min-width: 769px) {
+    .product-grid__price-meta-row{
+    display: block !important;
+  }
+  .product-page__price-compare{
+    margin-top:4px;
+  }
+}
 {% endstylesheet %}
 
 {% javascript %}
@@ -1790,11 +1829,28 @@ document.querySelectorAll('.mobile-slide-back-trigger').forEach(function(btn) {
           : '<div class="header-search-product__img--placeholder"></div>';
         var priceRaw = p.price_min ? parseFloat(p.price_min) : 0;
         var price = priceRaw ? formatMoney(priceRaw * 100) : '';
+        var compareRaw = p.compare_at_price_min ? parseFloat(p.compare_at_price_min) : 0;
+
+         var priceHtml = '';
+        if (priceRaw > 0) {
+          var priceFormatted = formatMoney(priceRaw * 100);
+          
+          if (compareRaw > 0 && compareRaw > priceRaw) {
+            var compareFormatted = formatMoney(compareRaw * 100);
+            // Side-by-side single-line layout matching your product grids
+            priceHtml = '<div class="product-grid__price-meta-row">'
+              + '<span class="product-page__price-current grid is-on-sale" style="font-size: 0.875rem !important;">' + priceFormatted + '</span>'
+              + '<span class="product-page__price-compare" style="font-size: 12px !important;">' + compareFormatted + '</span>'
+              + '</div>';
+          } else {
+            priceHtml = '<span class="header-search-product__price">' + priceFormatted + '</span>';
+          }
+        }
         a.innerHTML = imgHtml +
           '<div class="header-search-product__info">' +
             (p.vendor ? '<span class="header-search-product__vendor">' + escHtml(p.vendor) + '</span>' : '') +
             '<span class="header-search-product__title">' + escHtml(p.title) + '</span>' +
-            (price ? '<span class="header-search-product__price">From ' + price + '</span>' : '') +
+            priceHtml +
           '</div>';
         productsEl.appendChild(a);
       });
