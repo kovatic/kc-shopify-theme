@@ -598,6 +598,11 @@
                         {%- else -%}
                           {{ 'product-1' | placeholder_svg_tag: 'product-list__image product-list__image--placeholder' }}
                         {%- endif -%}
+                        {% comment %} Glowing Discount Badge on Top Left Corner {% endcomment %}
+                        {%- if p.compare_at_price_min > p.price_min -%}
+                          {%- assign grid_savings = p.compare_at_price_min | minus: p.price_min | times: 100 | divided_by: p.compare_at_price_min -%}
+                          <span class="product-grid__glow-discount-badge">-{{ grid_savings }}%</span>
+                        {%- endif -%}
                         <div class="product-card-actions">
                           <div class="product-card-actions__cart-wrap">
                             {%- if is_available -%}
@@ -1276,6 +1281,15 @@ window.addEventListener('pageshow', function(event) {
           ? p.images[0].src  // already a sized CDN URL (recently viewed)
           : p.images[0].src.replace(/(\.\w+)(\?|$)/, '_600x$1$2'))
       : '';
+    var badgeHtml = '';
+    var priceVal = p.price || p.price_min || (fv ? fv.price : 0);
+    var compareVal = p.compare_at_price || p.compare_at_price_min || (fv ? fv.compare_at_price : 0);
+    
+    if (compareVal && compareVal > priceVal) {
+      var savingsPercent = Math.round(((compareVal - priceVal) / compareVal) * 100);
+      badgeHtml = '<span class="product-grid__glow-discount-badge">-' + savingsPercent + '%</span>';
+    }
+
     var img = imgSrc
       ? '<img class="product-list__image" src="' + imgSrc + '" alt="' + escHtml(p.title) + '" loading="lazy">'
       : '<div class="product-list__image product-list__image--placeholder"></div>';
@@ -1334,6 +1348,7 @@ window.addEventListener('pageshow', function(event) {
       + '<a class="product-list__item-link" href="' + p.url + '">'
       + '<div class="product-list__image-wrapper">'
       + img
+      + badgeHtml
       + '<div class="product-card-actions">'
       + '<div class="product-card-actions__cart-wrap">' + cartBtn + '</div>'
       + '<button class="product-card-actions__btn product-card-actions__btn--similar" type="button" aria-label="View similar">'
@@ -3180,6 +3195,44 @@ document.addEventListener('DOMContentLoaded', function() {
    @media (max-width: 990px) and (min-width: 769px) {
     .product-page__price-current, .product-page__price-current.grid{
    font-size: 19px !important;
+  }
+}
+.product-list__image-wrapper {
+  position: relative !important;
+}
+
+.product-grid__glow-discount-badge {
+  position: absolute !important;
+  top: 12px !important;
+  left: 12px !important;
+  z-index: 10 !important;
+  background: linear-gradient(135deg, #b3125b 0%, #e6a756 100%) !important;
+  color: #ffffff !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  padding: 6px 8px !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1 !important;
+  pointer-events: none !important;
+  transform-origin: center center !important;
+  animation: sugarPulse 2s infinite ease-in-out !important;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+  border: 1px solid rgba(255, 215, 150, 0.6) !important;
+
+}
+
+@keyframes sugarPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 {% endstylesheet %}
