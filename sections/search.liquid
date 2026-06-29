@@ -166,6 +166,12 @@
                         {{ 'product-1' | placeholder_svg_tag: 'product-list__image product-list__image--placeholder' }}
                       {%- endif -%}
 
+                      {% comment %} Glowing Discount Badge on Top Left Corner {% endcomment %}
+                      {%- if product.compare_at_price_min > product.price_min -%}
+                        {%- assign grid_savings = product.compare_at_price_min | minus: product.price_min | times: 100 | divided_by: product.compare_at_price_min -%}
+                        <span class="product-grid__glow-discount-badge">-{{ grid_savings }}%</span>
+                      {%- endif -%}
+
                       <button class="product-card-wishlist" type="button" aria-label="Add to wishlist">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                           <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -539,6 +545,40 @@
  @media (max-width: 990px) and (min-width: 769px) {
     .product-page__price-current, .product-page__price-current.grid{
    font-size: 19px !important;
+  }
+}
+.product-list__image-wrapper {
+  position: relative !important;
+}
+
+.product-grid__glow-discount-badge {
+  position: absolute !important;
+  top: 12px !important;
+  left: 12px !important;
+  z-index: 10 !important;
+  background: linear-gradient(135deg, #d7116a 0%, #b80d58 100%) !important;
+  color: #ffffff !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  padding: 6px 8px !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1 !important;
+  pointer-events: none !important;
+  transform-origin: center center !important;
+  animation: sugarPulse 2s infinite ease-in-out !important;
+}
+
+@keyframes sugarPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 {% endstylesheet %}
