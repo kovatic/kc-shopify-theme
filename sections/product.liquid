@@ -3181,9 +3181,11 @@ document.addEventListener('DOMContentLoaded', function() {
     gap: 8px !important;
     flex-wrap: nowrap !important;
   }
-  .product-page__price-current.grid{
+    @media screen and (min-width: 1321px) {
+   .product-page__price-current.grid, product-page__price-current{
         font-size: 1.375rem !important;
   }
+}
    @media (max-width: 1320px) and (min-width: 769px) {
     .product-grid__price-meta-row{
     display: block !important;
