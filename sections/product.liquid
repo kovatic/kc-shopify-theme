@@ -3181,23 +3181,90 @@ document.addEventListener('DOMContentLoaded', function() {
     gap: 8px;
     flex-wrap: nowrap;
   }
-    @media screen and (min-width: 1321px) {
+  @media screen and (min-width: 1321px) {
    .product-page__price-current.grid, product-page__price-current{
         font-size: 1.375rem !important;
   }
 }
-  
-   @media (max-width: 1320px) and (min-width: 769px) {
+
+  @media (max-width: 1320px) and (min-width: 769px) {
     .product-grid__price-meta-row{
     display: block !important;
   }
   .product-page__price-compare{
     margin-top:4px;
   }
-  }
-   @media (max-width: 990px) and (min-width: 769px) {
+}
+ @media (max-width: 990px) and (min-width: 769px) {
     .product-page__price-current, .product-page__price-current.grid{
    font-size: 14px !important;
+  }
+  .product-page__price-compare {
+    font-size: 14px !important;
+  }
+}
+
+
+@media (max-width: 600px) and (min-width: 426px) {
+  .product-page__price-current, 
+  .product-page__price-current.grid {
+    font-size: 17px !important;
+  }
+  .product-page__price-compare {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 440px) {
+  .product-page__price,
+  .product-grid__price-meta-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+  }
+
+  .product-page__price .product-page__price-compare,
+  .product-grid__price-meta-row .product-page__price-compare {
+    margin-top: 4px !important;
+    font-size: 14px !important;
+    display: inline-block !important;
+  }
+
+  .product-page__price .product-page__price-current,
+  .product-grid__price-meta-row .product-page__price-current,
+  .product-page__price-current.grid {
+    font-size: 16px !important;
+  }
+  .product-page__price-compare:after {
+    right:-1px !important;
+    left:-1px !important;
+  }
+}
+  @media (max-width: 1100px) and (min-width: 880px) {
+  .product-page__price,
+  .product-grid__price-meta-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+  }
+
+  .product-page__price .product-page__price-compare,
+  .product-grid__price-meta-row .product-page__price-compare {
+    margin-top: 4px !important;
+    font-size: 14px !important;
+    display: inline-block !important;
+  }
+
+  .product-page__price .product-page__price-current,
+  .product-grid__price-meta-row .product-page__price-current,
+  .product-page__price-current.grid {
+    font-size: 18px !important;
+  }
+  .product-page__price-compare:after {
+    right:-1px !important;
+    left:-1px !important;
   }
 }
 .product-list__image-wrapper {
