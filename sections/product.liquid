@@ -3199,8 +3199,15 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 }
  @media (max-width: 990px) and (min-width: 769px) {
+      .product-list__container .product-grid__price-meta-row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 5px !important;
+    }
     .product-list__container .product-page__price-current, .product-page__price-current.grid{
    font-size: 14px !important;
+   order:2;
   }
   .product-list__container .product-page__price-compare {
     font-size: 14px !important;
