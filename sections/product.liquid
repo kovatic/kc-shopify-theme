@@ -3198,13 +3198,25 @@ document.addEventListener('DOMContentLoaded', function() {
     margin-top:4px;
   }
 }
- @media (max-width: 990px) and (min-width: 769px) {
-    .product-list__container .product-page__price-current, .product-page__price-current.grid{
-   font-size: 14px !important;
+@media (max-width: 990px) and (min-width: 769px) {
+  .product-list__container .product-grid__price-meta-row {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 6px !important;
   }
+
+  .product-list__container .product-page__price-current, 
+  .product-list__container .product-page__price-current.grid {
+    font-size: 14px !important;
+    order: 1 !important;
+  }
+
   .product-list__container .product-page__price-compare {
     font-size: 14px !important;
-    order:1;
+    margin-top: 0 !important; 
+    order: 2 !important;
   }
 }
 
