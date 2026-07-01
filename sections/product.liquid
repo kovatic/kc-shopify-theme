@@ -3218,7 +3218,36 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 }
 
+@media (max-width: 440px) {
+  .product-page__price,
+  .product-grid__price-meta-row {
+    display: flex !important;
+    flex-direction: row !important; 
+    flex-wrap: nowrap !important; 
+    align-items: center !important; 
+    gap: 8px !important; 
+  }
 
+  .product-page__price .product-page__price-compare,
+  .product-grid__price-meta-row .product-page__price-compare {
+    margin-top: 0 !important;
+    font-size: 13px !important;   
+    display: inline-block !important;
+    white-space: nowrap !important;   
+  }
+
+  .product-page__price .product-page__price-current,
+  .product-grid__price-meta-row .product-page__price-current,
+  .product-page__price-current.grid {
+    font-size: 17px !important;
+    white-space: nowrap !important;  
+  }
+  
+  .product-page__price-compare:after {
+    right: -1px !important;
+    left: -1px !important;
+  }
+}
   @media (max-width: 1100px) and (min-width: 880px) {
   .product-list__container .product-page__price,
   .product-list__container .product-grid__price-meta-row {
