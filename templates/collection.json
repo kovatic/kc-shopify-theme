@@ -17,6 +17,22 @@
         "padding_bottom": 60
       }
     },
+    "reel_4wpqBR": {
+      "type": "reel",
+      "name": "t:sections.reel.name",
+      "settings": {
+        "title": "Trending Collections",
+        "subtitle": "Explore our curated collections of the finest ethnic wear",
+        "collections": [
+          "necklace-saree",
+          "silk-saree",
+          "soft-silk-saree",
+          "semi-mysore-silk-saree"
+        ],
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
     "product_carousel_JnT9jB": {
       "type": "product-carousel",
       "name": "t:sections.product_carousel.name",
@@ -34,22 +50,6 @@
           "kancheepuram-saree-silk-saree"
         ],
         "enable_reel_video": true,
-        "padding_top": 60,
-        "padding_bottom": 60
-      }
-    },
-    "reel_4wpqBR": {
-      "type": "reel",
-      "name": "t:sections.reel.name",
-      "settings": {
-        "title": "Trending Collections",
-        "subtitle": "Explore our curated collections of the finest ethnic wear",
-        "collections": [
-          "necklace-saree",
-          "silk-saree",
-          "soft-silk-saree",
-          "banarasi-silk-saree"
-        ],
         "padding_top": 60,
         "padding_bottom": 60
       }
