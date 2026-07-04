@@ -151,6 +151,14 @@
     "offer_grid": {
       "name": "Offer grid"
     },
+    "countdown_banner": {
+      "name": "Countdown banner",
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds",
+      "expired": "This offer has ended"
+    },
     "brand_marquee": {
       "name": "Brand marquee"
     },

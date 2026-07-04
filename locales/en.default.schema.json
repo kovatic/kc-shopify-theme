@@ -168,6 +168,11 @@
     "offer_grid": {
       "name": "Offer grid"
     },
+    "countdown_banner": {
+      "name": "Countdown banner",
+      "end_date": "End date & time",
+      "end_date_info": "Format: YYYY-MM-DDTHH:MM:SS (24-hour, store local time)"
+    },
     "brand_marquee": {
       "name": "Brand marquee",
       "brands": "Brands"

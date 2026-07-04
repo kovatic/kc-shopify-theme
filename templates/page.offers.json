@@ -32,6 +32,15 @@
         "padding_bottom": 0
       }
     },
+    "countdown": {
+      "type": "countdown-banner",
+      "settings": {
+        "heading": "Hurry! Aadi Offer ends in:",
+        "end_date": "2026-07-31T23:59:59",
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
     "offer-grid-section": {
       "type": "offer-grid",
       "blocks": {
@@ -143,5 +152,5 @@
       "settings": {}
     }
   },
-  "order": ["hero", "offer-grid-section", "main"]
+  "order": ["hero", "countdown", "offer-grid-section", "main"]
 }
