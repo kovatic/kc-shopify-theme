@@ -47,7 +47,7 @@
         "cat_sarees": {
           "type": "offer-category",
           "blocks": {
-            "item_1": { "type": "offer-item", "settings": { "pcs": "Buy 1 Get 1", "name": "Saree", "price": "" } },
+            "item_1": { "type": "offer-item", "settings": { "pcs": "Buy 1 Get 1", "name": "Saree", "price": "", "featured": true } },
             "item_2": { "type": "offer-item", "settings": { "pcs": "20% Off", "name": "Sarees & Lehenga", "price": "" } },
             "item_3": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Sarees", "price": "999" } },
             "item_4": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Sarees", "price": "499" } },
@@ -55,12 +55,12 @@
             "item_6": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Sarees", "price": "1188" } }
           },
           "block_order": ["item_1", "item_2", "item_3", "item_4", "item_5", "item_6"],
-          "settings": { "title": "Sarees & Lehenga" }
+          "settings": { "title": "Sarees & Lehenga", "icon": "🥻" }
         },
         "cat_womens": {
           "type": "offer-category",
           "blocks": {
-            "item_1": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Tops", "price": "1000" } },
+            "item_1": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Tops", "price": "1000", "featured": true } },
             "item_2": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Material", "price": "1000" } },
             "item_3": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Co-ord Set", "price": "1000" } },
             "item_4": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Night Suit", "price": "1000" } },
@@ -73,7 +73,7 @@
             "item_11": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "L. Jetty", "price": "175" } }
           },
           "block_order": ["item_1", "item_2", "item_3", "item_4", "item_5", "item_6", "item_7", "item_8", "item_9", "item_10", "item_11"],
-          "settings": { "title": "Women's Wear" }
+          "settings": { "title": "Women's Wear", "icon": "👗" }
         },
         "cat_mens": {
           "type": "offer-category",
@@ -81,25 +81,25 @@
             "item_1": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "T-Shirt", "price": "500" } },
             "item_2": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "T-Shirt", "price": "500" } },
             "item_3": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Track Pant", "price": "500" } },
-            "item_4": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Shirt", "price": "999" } }
+            "item_4": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Shirt", "price": "999", "featured": true } }
           },
           "block_order": ["item_1", "item_2", "item_3", "item_4"],
-          "settings": { "title": "Men's Wear" }
+          "settings": { "title": "Men's Wear", "icon": "👔" }
         },
         "cat_terrain": {
           "type": "offer-category",
           "blocks": {
             "item_1": { "type": "offer-item", "settings": { "pcs": "Buy 1 Get", "name": "20% Off", "price": "" } },
             "item_2": { "type": "offer-item", "settings": { "pcs": "Buy 2 Get", "name": "30% Off", "price": "" } },
-            "item_3": { "type": "offer-item", "settings": { "pcs": "Buy 3 Get", "name": "40% Off", "price": "" } }
+            "item_3": { "type": "offer-item", "settings": { "pcs": "Buy 3 Get", "name": "40% Off", "price": "", "featured": true } }
           },
           "block_order": ["item_1", "item_2", "item_3"],
-          "settings": { "title": "Indian Terrain" }
+          "settings": { "title": "Indian Terrain", "icon": "🏷️" }
         },
         "cat_boys": {
           "type": "offer-category",
           "blocks": {
-            "item_1": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Boys Shirt", "price": "1000" } },
+            "item_1": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Boys Shirt", "price": "1000", "featured": true } },
             "item_2": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Banian Set", "price": "1000" } },
             "item_3": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Banian Set", "price": "500" } },
             "item_4": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "3/4th Set", "price": "750" } },
@@ -113,12 +113,12 @@
             "item_12": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Pant", "price": "1000" } }
           },
           "block_order": ["item_1", "item_2", "item_3", "item_4", "item_5", "item_6", "item_7", "item_8", "item_9", "item_10", "item_11", "item_12"],
-          "settings": { "title": "Boys Wear" }
+          "settings": { "title": "Boys Wear", "icon": "🧒" }
         },
         "cat_girls": {
           "type": "offer-category",
           "blocks": {
-            "item_1": { "type": "offer-item", "settings": { "pcs": "3 Set", "name": "Western", "price": "1000" } },
+            "item_1": { "type": "offer-item", "settings": { "pcs": "3 Set", "name": "Western", "price": "1000", "featured": true } },
             "item_2": { "type": "offer-item", "settings": { "pcs": "2 Set", "name": "Western", "price": "1000" } },
             "item_3": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Long Tops", "price": "1000" } },
             "item_4": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Long Tops", "price": "1000" } },
@@ -136,7 +136,7 @@
             "item_16": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "T-Shirt", "price": "300" } }
           },
           "block_order": ["item_1", "item_2", "item_3", "item_4", "item_5", "item_6", "item_7", "item_8", "item_9", "item_10", "item_11", "item_12", "item_13", "item_14", "item_15", "item_16"],
-          "settings": { "title": "Girls Wear" }
+          "settings": { "title": "Girls Wear", "icon": "👧" }
         }
       },
       "block_order": ["cat_sarees", "cat_womens", "cat_mens", "cat_terrain", "cat_boys", "cat_girls"],

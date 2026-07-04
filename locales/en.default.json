@@ -300,7 +300,8 @@
       "name": "Offer item",
       "pcs": "Pieces label",
       "price": "Price",
-      "only": "Only"
+      "only": "Only",
+      "featured": "Featured (spotlight)"
     }
   },
   "careers": {

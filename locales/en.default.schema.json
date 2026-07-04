@@ -295,12 +295,16 @@
       "name": "Category item"
     },
     "offer_category": {
-      "name": "Offer category"
+      "name": "Offer category",
+      "icon": "Icon (emoji)",
+      "icon_info": "Paste an emoji, e.g. 🥻 for sarees, 👕 for shirts, 🧒 for kids"
     },
     "offer_item": {
       "name": "Offer item",
       "pcs": "Pieces label",
-      "price": "Price"
+      "price": "Price",
+      "featured": "Featured (spotlight)",
+      "featured_info": "Renders a larger, glowing card to highlight this offer"
     }
   },
   "options": {
