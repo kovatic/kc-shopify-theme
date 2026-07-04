@@ -14,11 +14,11 @@
     "header": {
       "type": "header",
       "blocks": {
-        "mega_menu_axEnd6": {
+        "mega_menu_iHrVEQ": {
           "type": "mega_menu",
           "settings": {
-            "nav_link": "Womens",
-            "col1_heading": "Drees Meterial",
+            "nav_link": "Jewellery & Accessories",
+            "col1_heading": "Jewellery & Accessories",
             "col1_menu": "",
             "col2_heading": "",
             "col2_menu": "",
@@ -32,22 +32,25 @@
             "card3_url": ""
           }
         },
-        "mega_menu_TQekQe": {
+        "mega_menu_UY4wKJ": {
           "type": "mega_menu",
           "settings": {
-            "nav_link": "",
-            "col1_heading": "",
-            "col1_menu": "",
+            "nav_link": "Jewellery & Accessories",
+            "col1_heading": "Jewellery & Accessories",
+            "col1_menu": "jewellery-accessories",
             "col2_heading": "",
             "col2_menu": "",
             "col3_heading": "",
             "col3_menu": "",
-            "card1_label": "",
-            "card1_url": "",
-            "card2_label": "",
-            "card2_url": "",
-            "card3_label": "",
-            "card3_url": ""
+            "card1_image": "shopify://shop_images/DSC01102.jpg",
+            "card1_label": "Antique Gold Bridal Necklace Set",
+            "card1_url": "shopify://products/antique-gold-bridal-necklace-set-long-haram-short-choker-with-earrings-ruby-emerald-pearl-temple-jewellery",
+            "card2_image": "shopify://shop_images/catbag1copy_c2e4ee08-578f-48b6-bf24-efc40e27aa3e.png",
+            "card2_label": "Beige Ragdoll Cat Plush Backpack",
+            "card2_url": "shopify://products/premium-ragdoll-cat-plush-backpack-fluffy-beige-kitten-bag-with-lace-collar-pink-bow-dangling-tail-blue-eyes-kawaii-aesthetic-bag-for-kids-girls-women",
+            "card3_image": "shopify://shop_images/DSC00986_42bf9b3f-1991-4a57-8238-c9659ad27f14.jpg",
+            "card3_label": "Peacock Link Chain Necklace Set",
+            "card3_url": "shopify://products/peacock-link-chain-necklace-set-shield-pendant-twin-peacock-rectangle-ruby-kemp-pearl-row-drops-antique-gold-sun-stud-jhumka-earrings"
           }
         },
         "mega_menu_rgyCtx": {
@@ -84,10 +87,12 @@
             "card1_image": "shopify://shop_images/DSC09858.jpg",
             "card1_label": "Golden Mustard Party Wear Saree",
             "card1_url": "shopify://products/golden-mustard-party-wear-saree-with-elegant-embroidered-border-soft-shimmer-finish-graceful-drape-perfect-for-wedding-reception-festive-celebration-traditional-occasion-styling-for-women",
-            "card2_label": "",
-            "card2_url": "",
-            "card3_label": "",
-            "card3_url": ""
+            "card2_image": "shopify://shop_images/DSC08862.jpg",
+            "card2_label": "Orange Space Silk Saree ",
+            "card2_url": "shopify://products/orange-space-silk-saree",
+            "card3_image": "shopify://shop_images/DSC08844.jpg",
+            "card3_label": "Violet Space Silk Saree",
+            "card3_url": "shopify://products/elegant-purple-space-silk-saree"
           }
         },
         "mega_menu_MzfM6K": {
@@ -130,27 +135,6 @@
             "card3_image": "shopify://shop_images/DSC08334.jpg",
             "card3_label": "Cyan semi silk saree",
             "card3_url": "shopify://products/cyan-silk-saree"
-          }
-        },
-        "mega_menu_R8gjQt": {
-          "type": "mega_menu",
-          "settings": {
-            "nav_link": "Kora Cotton Sarees",
-            "col1_heading": "Kora Cotton Sarees",
-            "col1_menu": "kora-cotton-sarees-menu",
-            "col2_heading": "",
-            "col2_menu": "",
-            "col3_heading": "",
-            "col3_menu": "",
-            "card1_image": "shopify://shop_images/DSC07964_1.webp",
-            "card1_label": "Rose Carbon Kora Saree",
-            "card1_url": "shopify://products/rose-carbon-kora-saree",
-            "card2_image": "shopify://shop_images/DSC07945.jpg",
-            "card2_label": "Plum Kora Cotton",
-            "card2_url": "shopify://products/mulberry-mist-saree",
-            "card3_image": "shopify://shop_images/DSC07968_1_1.jpg",
-            "card3_label": "Oceanic Kora Cotton",
-            "card3_url": "shopify://products/oceanic-kora-cotton"
           }
         },
         "mega_menu_NkwY3L": {
@@ -236,13 +220,12 @@
         }
       },
       "block_order": [
-        "mega_menu_axEnd6",
-        "mega_menu_TQekQe",
+        "mega_menu_iHrVEQ",
+        "mega_menu_UY4wKJ",
         "mega_menu_rgyCtx",
         "mega_menu_RnnEVD",
         "mega_menu_MzfM6K",
         "mega_menu_BtrgXR",
-        "mega_menu_R8gjQt",
         "mega_menu_NkwY3L",
         "mega_menu_zWUDDb",
         "mega_menu_794wpC",

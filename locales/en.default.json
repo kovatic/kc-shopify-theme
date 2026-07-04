@@ -224,13 +224,19 @@
       "description": "More about this Product",
       "product_details": "Product details",
       "delivery": "Delivery",
-      "delivery_info": "Free shipping on orders above ₹2000. Estimated delivery in 5-7 business days.",
+      "delivery_info": "Free shipping on orders above ₹1000. Estimated delivery in 5-7 business days.",
       "returns": "Return & exchange",
       "returns_info": "Easy returns within 7 days of delivery. Item must be unused and in original packaging.",
       "mrp": "Maximum retail price",
       "manufacturer": "Manufactured & marketed by",
       "contact": "Contact us",
       "contact_us": "Get in touch",
+      "contact_heading": "Need assistance? We're here to help.",
+      "contact_timing": "Mon - Sun - 10:00 AM TO 8:00 PM (IST)",
+      "contact_whatsapp_label": "Connect with us on WhatsApp",
+      "contact_phone_label": "Have a query? Let's connect.",
+      "contact_email_label": "Reach Out via Email",
+      "vendor_name": "K.Chinnadurai and co",
       "pincode_placeholder": "Enter Pincode to Check",
       "pincode_check": "Check",
       "pincode_label": "Check delivery availability",
@@ -253,7 +259,7 @@
     "social_media": "Social media",
     "store_location": "Store location",
     "all_rights_reserved": "All rights reserved.",
-    "copyright": "Copyrights \u00a9\ufe0f 2026 All Rights Reserved by K.Chinnadurai & Co. Established in 1970",
+    "copyright": "Copyrights ©️ 2026 All Rights Reserved by K.Chinnadurai & Co. Established in 1970",
     "social_facebook": "Facebook",
     "social_youtube": "YouTube",
     "social_instagram": "Instagram",
@@ -393,5 +399,17 @@
     "front_neck_depth": "Front Neck Depth",
     "back_neck_depth": "Back Neck Depth",
     "shoulder_to_point": "Shoulder to Point"
+  },
+  "shopify": {
+    "checkout": {
+      "order_summary": {
+        "vat_label_html": "&nbsp;"
+      }
+    }
+  },
+  "customer_accounts": {
+    "order_details": {
+      "taxes_included": "&nbsp;"
+    }
   }
 }
