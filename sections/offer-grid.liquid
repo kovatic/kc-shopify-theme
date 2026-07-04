@@ -1,0 +1,142 @@
+<div
+  class="offer-grid full-width"
+  id="offer-grid-{{ section.id }}"
+  style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="offer-grid__container">
+
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+      <div class="offer-grid__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="offer-grid__heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="offer-grid__subheading">{{ section.settings.subheading | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="offer-grid__categories">
+        {% content_for 'blocks' %}
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .offer-grid {
+    width: 100%;
+    padding-top: var(--padding-top, 60px);
+    padding-bottom: var(--padding-bottom, 60px);
+    background: linear-gradient(180deg, #e91e63 0%, #c2185b 100%);
+  }
+
+  .offer-grid__container {
+    max-width: var(--page-width, 1900px);
+    margin: 0 auto;
+    padding: 0 52px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .offer-grid__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .offer-grid__heading {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.15;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+
+  .offer-grid__subheading {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #ffe9f1;
+    margin: 0;
+  }
+
+  .offer-grid__categories {
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .offer-grid__container {
+      padding: 0 20px;
+      gap: 32px;
+    }
+
+    .offer-grid__heading {
+      font-size: 2rem;
+    }
+
+    .offer-grid__subheading {
+      font-size: 0.95rem;
+    }
+
+    .offer-grid__categories {
+      gap: 32px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.offer_grid.name",
+  "blocks": [{ "type": "offer-category" }],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.title",
+      "default": "Aadi Offer — Grab the Best Deals"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:labels.subtitle",
+      "default": "10% to 50% off across all categories"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.offer_grid.name",
+      "blocks": [{ "type": "offer-category" }]
+    }
+  ]
+}
+{% endschema %}

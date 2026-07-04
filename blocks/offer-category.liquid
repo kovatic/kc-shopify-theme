@@ -1,0 +1,84 @@
+{% doc %}
+  Renders one offer category (e.g. Sarees & Lehenga) as a heading followed by
+  a grid of nested offer-item blocks. Used inside the offer-grid section.
+
+  @example
+  {% content_for 'block', type: 'offer-category', id: 'offer-category-1' %}
+{% enddoc %}
+
+<div class="offer-category" {{ block.shopify_attributes }}>
+  {%- if block.settings.title != blank -%}
+    <h3 class="offer-category__title">
+      <span class="offer-category__title-text">{{ block.settings.title | escape }}</span>
+    </h3>
+  {%- endif -%}
+
+  <div class="offer-category__grid">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .offer-category {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .offer-category__title {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+  }
+
+  .offer-category__title-text {
+    display: inline-block;
+    padding: 8px 28px;
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #b3122c;
+    background: #ffd75e;
+    border-radius: 999px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  .offer-category__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .offer-category__title-text {
+      font-size: 1.15rem;
+      padding: 6px 20px;
+    }
+
+    .offer-category__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.offer_category.name",
+  "blocks": [{ "type": "offer-item" }],
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:labels.title",
+      "default": "Category name"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.offer_category.name",
+      "blocks": [{ "type": "offer-item" }, { "type": "offer-item" }, { "type": "offer-item" }]
+    }
+  ]
+}
+{% endschema %}

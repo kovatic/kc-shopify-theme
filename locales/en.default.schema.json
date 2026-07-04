@@ -165,6 +165,9 @@
       "name": "Promo",
       "button_label": "Button label"
     },
+    "offer_grid": {
+      "name": "Offer grid"
+    },
     "brand_marquee": {
       "name": "Brand marquee",
       "brands": "Brands"
@@ -285,6 +288,14 @@
   "blocks": {
     "category_item": {
       "name": "Category item"
+    },
+    "offer_category": {
+      "name": "Offer category"
+    },
+    "offer_item": {
+      "name": "Offer item",
+      "pcs": "Pieces label",
+      "price": "Price"
     }
   },
   "options": {

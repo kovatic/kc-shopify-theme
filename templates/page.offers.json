@@ -1,0 +1,147 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "banner",
+      "blocks": {
+        "slide_aadi": {
+          "type": "slide",
+          "settings": {
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "Shop Now",
+            "button_url": "#offer-grid-offer-grid-section",
+            "text_position": "bottom-center",
+            "show_overlay": false
+          }
+        }
+      },
+      "block_order": ["slide_aadi"],
+      "settings": {
+        "banner_height": 900,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "offer-grid-section": {
+      "type": "offer-grid",
+      "blocks": {
+        "cat_sarees": {
+          "type": "offer-category",
+          "blocks": {
+            "item_1": { "type": "offer-item", "settings": { "pcs": "Buy 1 Get 1", "name": "Saree", "price": "" } },
+            "item_2": { "type": "offer-item", "settings": { "pcs": "20% Off", "name": "Sarees & Lehenga", "price": "" } },
+            "item_3": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Sarees", "price": "999" } },
+            "item_4": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Sarees", "price": "499" } },
+            "item_5": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Sarees", "price": "1000" } },
+            "item_6": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Sarees", "price": "1188" } }
+          },
+          "block_order": ["item_1", "item_2", "item_3", "item_4", "item_5", "item_6"],
+          "settings": { "title": "Sarees & Lehenga" }
+        },
+        "cat_womens": {
+          "type": "offer-category",
+          "blocks": {
+            "item_1": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Tops", "price": "1000" } },
+            "item_2": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Material", "price": "1000" } },
+            "item_3": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Co-ord Set", "price": "1000" } },
+            "item_4": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Night Suit", "price": "1000" } },
+            "item_5": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Skirt", "price": "1000" } },
+            "item_6": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Plazzo", "price": "1000" } },
+            "item_7": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Nighty", "price": "550" } },
+            "item_8": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Pattiala", "price": "500" } },
+            "item_9": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "T Shirt", "price": "500" } },
+            "item_10": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Slip", "price": "210" } },
+            "item_11": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "L. Jetty", "price": "175" } }
+          },
+          "block_order": ["item_1", "item_2", "item_3", "item_4", "item_5", "item_6", "item_7", "item_8", "item_9", "item_10", "item_11"],
+          "settings": { "title": "Women's Wear" }
+        },
+        "cat_mens": {
+          "type": "offer-category",
+          "blocks": {
+            "item_1": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "T-Shirt", "price": "500" } },
+            "item_2": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "T-Shirt", "price": "500" } },
+            "item_3": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Track Pant", "price": "500" } },
+            "item_4": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Shirt", "price": "999" } }
+          },
+          "block_order": ["item_1", "item_2", "item_3", "item_4"],
+          "settings": { "title": "Men's Wear" }
+        },
+        "cat_terrain": {
+          "type": "offer-category",
+          "blocks": {
+            "item_1": { "type": "offer-item", "settings": { "pcs": "Buy 1 Get", "name": "20% Off", "price": "" } },
+            "item_2": { "type": "offer-item", "settings": { "pcs": "Buy 2 Get", "name": "30% Off", "price": "" } },
+            "item_3": { "type": "offer-item", "settings": { "pcs": "Buy 3 Get", "name": "40% Off", "price": "" } }
+          },
+          "block_order": ["item_1", "item_2", "item_3"],
+          "settings": { "title": "Indian Terrain" }
+        },
+        "cat_boys": {
+          "type": "offer-category",
+          "blocks": {
+            "item_1": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Boys Shirt", "price": "1000" } },
+            "item_2": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Banian Set", "price": "1000" } },
+            "item_3": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Banian Set", "price": "500" } },
+            "item_4": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "3/4th Set", "price": "750" } },
+            "item_5": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "3/4th Set", "price": "1000" } },
+            "item_6": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "T-Shirt", "price": "500" } },
+            "item_7": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "T-Shirt", "price": "300" } },
+            "item_8": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Shorts", "price": "500" } },
+            "item_9": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Shorts", "price": "300" } },
+            "item_10": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Tracks", "price": "500" } },
+            "item_11": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Tracks", "price": "1000" } },
+            "item_12": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Pant", "price": "1000" } }
+          },
+          "block_order": ["item_1", "item_2", "item_3", "item_4", "item_5", "item_6", "item_7", "item_8", "item_9", "item_10", "item_11", "item_12"],
+          "settings": { "title": "Boys Wear" }
+        },
+        "cat_girls": {
+          "type": "offer-category",
+          "blocks": {
+            "item_1": { "type": "offer-item", "settings": { "pcs": "3 Set", "name": "Western", "price": "1000" } },
+            "item_2": { "type": "offer-item", "settings": { "pcs": "2 Set", "name": "Western", "price": "1000" } },
+            "item_3": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Long Tops", "price": "1000" } },
+            "item_4": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Long Tops", "price": "1000" } },
+            "item_5": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Short Tops", "price": "500" } },
+            "item_6": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Short Tops", "price": "500" } },
+            "item_7": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Cotton Frock", "price": "500" } },
+            "item_8": { "type": "offer-item", "settings": { "pcs": "2 Pcs", "name": "Cotton Frock", "price": "500" } },
+            "item_9": { "type": "offer-item", "settings": { "pcs": "3 Set", "name": "Night Dress", "price": "1000" } },
+            "item_10": { "type": "offer-item", "settings": { "pcs": "2 Set", "name": "Shorts Set", "price": "500" } },
+            "item_11": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Plazzo Pant", "price": "500" } },
+            "item_12": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Full Pant", "price": "500" } },
+            "item_13": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "3/4th Pant", "price": "500" } },
+            "item_14": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "Shorts", "price": "300" } },
+            "item_15": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "T-Shirt", "price": "500" } },
+            "item_16": { "type": "offer-item", "settings": { "pcs": "3 Pcs", "name": "T-Shirt", "price": "300" } }
+          },
+          "block_order": ["item_1", "item_2", "item_3", "item_4", "item_5", "item_6", "item_7", "item_8", "item_9", "item_10", "item_11", "item_12", "item_13", "item_14", "item_15", "item_16"],
+          "settings": { "title": "Girls Wear" }
+        }
+      },
+      "block_order": ["cat_sarees", "cat_womens", "cat_mens", "cat_terrain", "cat_boys", "cat_girls"],
+      "settings": {
+        "heading": "Aadi Offer — K. Chinnadurai Thaan Super!",
+        "subheading": "10% to 50% off across all categories",
+        "padding_top": 60,
+        "padding_bottom": 80
+      }
+    },
+    "main": {
+      "type": "page",
+      "settings": {}
+    }
+  },
+  "order": ["hero", "offer-grid-section", "main"]
+}
