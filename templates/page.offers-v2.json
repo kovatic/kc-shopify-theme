@@ -9,6 +9,15 @@
  */
 {
   "sections": {
+    "countdown": {
+      "type": "countdown-banner",
+      "settings": {
+        "heading": "Hurry! Aadi Offer ends in:",
+        "end_date": "2026-07-31T23:59:59",
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
     "hero": {
       "type": "banner",
       "blocks": {
@@ -21,24 +30,18 @@
             "button_label": "Shop Now",
             "button_url": "#",
             "text_position": "bottom-center",
-            "show_overlay": false
+            "show_overlay": false,
+            "overlay_opacity": 30
           }
         }
       },
-      "block_order": ["slide_aadi"],
+      "block_order": [
+        "slide_aadi"
+      ],
       "settings": {
         "banner_height": 900,
         "padding_top": 0,
         "padding_bottom": 0
-      }
-    },
-    "countdown": {
-      "type": "countdown-banner",
-      "settings": {
-        "heading": "Hurry! Aadi Offer ends in:",
-        "end_date": "2026-07-31T23:59:59",
-        "padding_top": 20,
-        "padding_bottom": 20
       }
     },
     "editorial": {
@@ -56,7 +59,8 @@
             "offer_4": "3 Pcs Sarees — ₹1188",
             "button_label": "Shop Sarees",
             "button_url": "#"
-          }
+          },
+          "blocks": {}
         },
         "row_womens": {
           "type": "offer-row",
@@ -70,7 +74,8 @@
             "offer_4": "3 Pcs T-Shirt — ₹500",
             "button_label": "Shop Women's Wear",
             "button_url": "#"
-          }
+          },
+          "blocks": {}
         },
         "row_mens": {
           "type": "offer-row",
@@ -81,9 +86,11 @@
             "offer_1": "3 Pcs T-Shirt — ₹500",
             "offer_2": "2 Pcs Track Pant — ₹500",
             "offer_3": "3 Pcs Shirt — ₹999",
+            "offer_4": "",
             "button_label": "Shop Men's Wear",
             "button_url": "#"
-          }
+          },
+          "blocks": {}
         },
         "row_terrain": {
           "type": "offer-row",
@@ -94,9 +101,11 @@
             "offer_1": "Buy 1 Get 20% off",
             "offer_2": "Buy 2 Get 30% off",
             "offer_3": "Buy 3 Get 40% off",
+            "offer_4": "",
             "button_label": "Shop Indian Terrain",
             "button_url": "#"
-          }
+          },
+          "blocks": {}
         },
         "row_boys": {
           "type": "offer-row",
@@ -110,7 +119,8 @@
             "offer_4": "3 Pcs Tracks — ₹500",
             "button_label": "Shop Boys Wear",
             "button_url": "#"
-          }
+          },
+          "blocks": {}
         },
         "row_girls": {
           "type": "offer-row",
@@ -124,10 +134,18 @@
             "offer_4": "3 Pcs T-Shirt — ₹300",
             "button_label": "Shop Girls Wear",
             "button_url": "#"
-          }
+          },
+          "blocks": {}
         }
       },
-      "block_order": ["row_sarees", "row_womens", "row_mens", "row_terrain", "row_boys", "row_girls"],
+      "block_order": [
+        "row_sarees",
+        "row_womens",
+        "row_mens",
+        "row_terrain",
+        "row_boys",
+        "row_girls"
+      ],
       "settings": {
         "heading": "Aadi Offer",
         "subheading": "K. Chinnadurai Thaan Super — 10% to 50% off",
@@ -140,5 +158,10 @@
       "settings": {}
     }
   },
-  "order": ["hero", "countdown", "editorial", "main"]
+  "order": [
+    "countdown",
+    "hero",
+    "editorial",
+    "main"
+  ]
 }
