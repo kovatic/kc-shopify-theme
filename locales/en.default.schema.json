@@ -173,6 +173,9 @@
       "end_date": "End date & time",
       "end_date_info": "Format: YYYY-MM-DDTHH:MM:SS (24-hour, store local time)"
     },
+    "offer_editorial": {
+      "name": "Offer editorial"
+    },
     "brand_marquee": {
       "name": "Brand marquee",
       "brands": "Brands"
@@ -305,6 +308,9 @@
       "price": "Price",
       "featured": "Featured (spotlight)",
       "featured_info": "Renders a larger, glowing card to highlight this offer"
+    },
+    "offer_row": {
+      "name": "Offer row"
     }
   },
   "options": {

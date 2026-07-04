@@ -159,6 +159,9 @@
       "seconds": "Seconds",
       "expired": "This offer has ended"
     },
+    "offer_editorial": {
+      "name": "Offer editorial"
+    },
     "brand_marquee": {
       "name": "Brand marquee"
     },
@@ -302,6 +305,11 @@
       "price": "Price",
       "only": "Only",
       "featured": "Featured (spotlight)"
+    },
+    "offer_row": {
+      "name": "Offer row",
+      "eyebrow": "Eyebrow label",
+      "offer_line": "Offer line"
     }
   },
   "careers": {
