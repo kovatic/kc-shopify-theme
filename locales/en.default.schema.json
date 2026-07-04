@@ -165,6 +165,17 @@
       "name": "Promo",
       "button_label": "Button label"
     },
+    "offer_grid": {
+      "name": "Offer grid"
+    },
+    "countdown_banner": {
+      "name": "Countdown banner",
+      "end_date": "End date & time",
+      "end_date_info": "Format: YYYY-MM-DDTHH:MM:SS (24-hour, store local time)"
+    },
+    "offer_editorial": {
+      "name": "Offer editorial"
+    },
     "brand_marquee": {
       "name": "Brand marquee",
       "brands": "Brands"
@@ -285,6 +296,21 @@
   "blocks": {
     "category_item": {
       "name": "Category item"
+    },
+    "offer_category": {
+      "name": "Offer category",
+      "icon": "Icon (emoji)",
+      "icon_info": "Paste an emoji, e.g. 🥻 for sarees, 👕 for shirts, 🧒 for kids"
+    },
+    "offer_item": {
+      "name": "Offer item",
+      "pcs": "Pieces label",
+      "price": "Price",
+      "featured": "Featured (spotlight)",
+      "featured_info": "Renders a larger, glowing card to highlight this offer"
+    },
+    "offer_row": {
+      "name": "Offer row"
     }
   },
   "options": {
