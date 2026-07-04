@@ -148,6 +148,20 @@
       "name": "Promo",
       "button_label": "Button label"
     },
+    "offer_grid": {
+      "name": "Offer grid"
+    },
+    "countdown_banner": {
+      "name": "Countdown banner",
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds",
+      "expired": "This offer has ended"
+    },
+    "offer_editorial": {
+      "name": "Offer editorial"
+    },
     "brand_marquee": {
       "name": "Brand marquee"
     },
@@ -287,6 +301,21 @@
   "blocks": {
     "category_item": {
       "name": "Category item"
+    },
+    "offer_category": {
+      "name": "Offer category"
+    },
+    "offer_item": {
+      "name": "Offer item",
+      "pcs": "Pieces label",
+      "price": "Price",
+      "only": "Only",
+      "featured": "Featured (spotlight)"
+    },
+    "offer_row": {
+      "name": "Offer row",
+      "eyebrow": "Eyebrow label",
+      "offer_line": "Offer line"
     }
   },
   "careers": {
