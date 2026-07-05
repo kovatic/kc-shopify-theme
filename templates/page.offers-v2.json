@@ -58,7 +58,7 @@
             "description": "Handpicked silks and lehengas at once-a-year prices.",
             "offer_1": "Buy 1 Get 1 — Saree",
             "offer_2": "20% off Sarees & Lehenga",
-            "offer_3": "2 Pcs Sarees — 499",
+            "offer_3": "2 Pcs Sarees — ₹499",
             "offer_4": "",
             "button_label": "",
             "button_url": "shopify://collections/all"
@@ -72,9 +72,9 @@
             "eyebrow": "Sarees & Lehenga",
             "title": "Drape the season's finest",
             "description": "Handpicked silks and lehengas at once-a-year prices.",
-            "offer_1": "2 PCS Sarees — 999/-",
+            "offer_1": "2 PCS Sarees — ₹999",
             "offer_2": "3 Pcs Sarees — ₹1188",
-            "offer_3": "2 Pcs Sarees — 1000/-",
+            "offer_3": "2 Pcs Sarees — ₹1000",
             "offer_4": "",
             "button_label": "",
             "button_url": "shopify://collections/all"
@@ -146,7 +146,55 @@
           },
           "blocks": {}
         },
+        "offer_row_cErRmf": {
+          "type": "offer-row",
+          "settings": {
+            "image": "shopify://shop_images/Mens_shirts.jpg",
+            "eyebrow": "Boys Wear",
+            "title": "Playtime-ready outfits",
+            "description": "Shirts, banian sets, shorts and tracks for the little ones.",
+            "offer_1": "3 PCS BOYS BANIAN SET — ₹1000",
+            "offer_2": "3 PCS BOYS 3/4 TH SET — ₹750",
+            "offer_3": "3 PCS BOYS 3/4 TH SET — ₹1000",
+            "offer_4": "3 PCS BOY S T SHIRT — ₹500",
+            "button_label": "",
+            "button_url": "shopify://collections/all"
+          },
+          "blocks": {}
+        },
+        "offer_row_VLdGYr": {
+          "type": "offer-row",
+          "settings": {
+            "image": "shopify://shop_images/Mens_shirts.jpg",
+            "eyebrow": "Boys Wear",
+            "title": "Playtime-ready outfits",
+            "description": "Shirts, banian sets, shorts and tracks for the little ones.",
+            "offer_1": "3 PCS BOY SHORTS — ₹500",
+            "offer_2": "3 PCS BOY SHORTS — ₹300",
+            "offer_3": "3 PCS BOY S TRACKS — ₹1000",
+            "offer_4": "3 PCS BOYS PANT — ₹1000",
+            "button_label": "",
+            "button_url": "shopify://collections/all"
+          },
+          "blocks": {}
+        },
         "row_girls": {
+          "type": "offer-row",
+          "settings": {
+            "image": "shopify://shop_images/Untitled-3_440f3d70-792b-4aba-9ea1-79e3c80a30f6.jpg",
+            "eyebrow": "Girls Wear",
+            "title": "Little styles, big savings",
+            "description": "Western sets, frocks, nightwear and more for girls.",
+            "offer_1": "3 Set Western — ₹1000",
+            "offer_2": "3 Pcs Cotton Frock — ₹500",
+            "offer_3": "3 Set Night Dress — ₹1000",
+            "offer_4": "3 Pcs T-Shirt — ₹300",
+            "button_label": "",
+            "button_url": "#"
+          },
+          "blocks": {}
+        },
+        "offer_row_9F8ixn": {
           "type": "offer-row",
           "settings": {
             "image": "shopify://shop_images/Untitled-3_440f3d70-792b-4aba-9ea1-79e3c80a30f6.jpg",
@@ -170,7 +218,10 @@
         "row_mens",
         "offer_row_r8HKcE",
         "row_boys",
-        "row_girls"
+        "offer_row_cErRmf",
+        "offer_row_VLdGYr",
+        "row_girls",
+        "offer_row_9F8ixn"
       ],
       "settings": {
         "heading": "Aadi Na Offer",
