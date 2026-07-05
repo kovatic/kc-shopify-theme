@@ -24,6 +24,7 @@
         "slide_aadi": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/Aadii_Banner1.png",
             "subheading": "",
             "heading": "",
             "text": "",
@@ -50,36 +51,39 @@
         "row_sarees": {
           "type": "offer-row",
           "settings": {
+            "image": "shopify://shop_images/Sarees_02fe2e15-8a9a-480d-8023-ba87fafa6f61.jpg",
             "eyebrow": "Sarees & Lehenga",
             "title": "Drape the season's finest",
             "description": "Handpicked silks and lehengas at once-a-year prices.",
             "offer_1": "Buy 1 Get 1 — Saree",
             "offer_2": "20% off Sarees & Lehenga",
-            "offer_3": "2 Pcs Sarees — ₹999",
+            "offer_3": "2 Pcs Sarees — 499",
             "offer_4": "3 Pcs Sarees — ₹1188",
-            "button_label": "Shop Sarees",
-            "button_url": "#"
+            "button_label": "",
+            "button_url": "shopify://collections/all"
           },
           "blocks": {}
         },
         "row_womens": {
           "type": "offer-row",
           "settings": {
+            "image": "shopify://shop_images/Women_s_Wear.jpg",
             "eyebrow": "Women's Wear",
-            "title": "Everyday elegance, everyday price",
+            "title": "New Styles, More Collections",
             "description": "Tops, co-ord sets, nightwear and more — mix and match your wardrobe.",
-            "offer_1": "2 Pcs Tops — ₹1000",
-            "offer_2": "3 Pcs Co-ord Set — ₹1000",
+            "offer_1": "3 PCS Pattiala — ₹500",
+            "offer_2": "3 Pcs Tops — ₹500",
             "offer_3": "3 Pcs Night Suit — ₹1000",
             "offer_4": "3 Pcs T-Shirt — ₹500",
-            "button_label": "Shop Women's Wear",
-            "button_url": "#"
+            "button_label": "",
+            "button_url": "shopify://collections/all"
           },
           "blocks": {}
         },
         "row_mens": {
           "type": "offer-row",
           "settings": {
+            "image": "shopify://shop_images/Mens_t_shirt_006cb4ee-0578-4e2d-adb0-5bbcf33de97f.jpg",
             "eyebrow": "Men's Wear",
             "title": "Sharp looks, softer prices",
             "description": "T-shirts, shirts and track pants bundled up for the season.",
@@ -87,29 +91,32 @@
             "offer_2": "2 Pcs Track Pant — ₹500",
             "offer_3": "3 Pcs Shirt — ₹999",
             "offer_4": "",
-            "button_label": "Shop Men's Wear",
-            "button_url": "#"
+            "button_label": "",
+            "button_url": "shopify://collections/all"
           },
           "blocks": {}
         },
-        "row_terrain": {
+        "offer_row_r8HKcE": {
           "type": "offer-row",
+          "name": "t:blocks.offer_row.name",
           "settings": {
-            "eyebrow": "Indian Terrain",
-            "title": "More you buy, more you save",
-            "description": "Tiered discounts on the Indian Terrain collection.",
-            "offer_1": "Buy 1 Get 20% off",
-            "offer_2": "Buy 2 Get 30% off",
-            "offer_3": "Buy 3 Get 40% off",
+            "image": "shopify://shop_images/Untitled-6.jpg",
+            "eyebrow": "Live Video Call Shopping",
+            "title": "Video Call Shopping",
+            "description": "",
+            "offer_1": "Face-to-Face Shopping From Home",
+            "offer_2": "Live Shopping, Real Assistance.",
+            "offer_3": "Connect Explore Shop Live.",
             "offer_4": "",
-            "button_label": "Shop Indian Terrain",
-            "button_url": "#"
+            "button_label": "Call Now",
+            "button_url": "https://www.kchinnaduraiandco.com/pages/shop-by-video-call"
           },
           "blocks": {}
         },
         "row_boys": {
           "type": "offer-row",
           "settings": {
+            "image": "shopify://shop_images/Mens_shirts.jpg",
             "eyebrow": "Boys Wear",
             "title": "Playtime-ready outfits",
             "description": "Shirts, banian sets, shorts and tracks for the little ones.",
@@ -117,14 +124,15 @@
             "offer_2": "3 Pcs Banian Set — ₹500",
             "offer_3": "3 Pcs T-Shirt — ₹300",
             "offer_4": "3 Pcs Tracks — ₹500",
-            "button_label": "Shop Boys Wear",
-            "button_url": "#"
+            "button_label": "",
+            "button_url": "shopify://collections/all"
           },
           "blocks": {}
         },
         "row_girls": {
           "type": "offer-row",
           "settings": {
+            "image": "shopify://shop_images/Untitled-3_440f3d70-792b-4aba-9ea1-79e3c80a30f6.jpg",
             "eyebrow": "Girls Wear",
             "title": "Little styles, big savings",
             "description": "Western sets, frocks, nightwear and more for girls.",
@@ -132,7 +140,7 @@
             "offer_2": "3 Pcs Cotton Frock — ₹500",
             "offer_3": "3 Set Night Dress — ₹1000",
             "offer_4": "3 Pcs T-Shirt — ₹300",
-            "button_label": "Shop Girls Wear",
+            "button_label": "",
             "button_url": "#"
           },
           "blocks": {}
@@ -142,12 +150,12 @@
         "row_sarees",
         "row_womens",
         "row_mens",
-        "row_terrain",
+        "offer_row_r8HKcE",
         "row_boys",
         "row_girls"
       ],
       "settings": {
-        "heading": "Aadi Offer",
+        "heading": "Aadi Na Offer",
         "subheading": "K. Chinnadurai Thaan Super — 10% to 50% off",
         "padding_top": 80,
         "padding_bottom": 80
