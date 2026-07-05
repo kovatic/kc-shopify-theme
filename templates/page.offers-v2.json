@@ -59,7 +59,23 @@
             "offer_1": "Buy 1 Get 1 — Saree",
             "offer_2": "20% off Sarees & Lehenga",
             "offer_3": "2 Pcs Sarees — 499",
-            "offer_4": "3 Pcs Sarees — ₹1188",
+            "offer_4": "",
+            "button_label": "",
+            "button_url": "shopify://collections/all"
+          },
+          "blocks": {}
+        },
+        "offer_row_GHXMw3": {
+          "type": "offer-row",
+          "settings": {
+            "image": "shopify://shop_images/Sarees_02fe2e15-8a9a-480d-8023-ba87fafa6f61.jpg",
+            "eyebrow": "Sarees & Lehenga",
+            "title": "Drape the season's finest",
+            "description": "Handpicked silks and lehengas at once-a-year prices.",
+            "offer_1": "2 PCS Sarees — 999/-",
+            "offer_2": "3 Pcs Sarees — ₹1188",
+            "offer_3": "2 Pcs Sarees — 1000/-",
+            "offer_4": "",
             "button_label": "",
             "button_url": "shopify://collections/all"
           },
@@ -149,6 +165,7 @@
       },
       "block_order": [
         "row_sarees",
+        "offer_row_GHXMw3",
         "row_womens",
         "row_mens",
         "offer_row_r8HKcE",
