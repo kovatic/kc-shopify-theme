@@ -25,6 +25,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/KC_banner-0.png",
+            "mobile_image": "shopify://shop_images/KC_Mobile_banner_578087fb-213f-4bde-a30e-d20bf9623f2d.jpg",
             "subheading": "",
             "heading": "",
             "text": "",
