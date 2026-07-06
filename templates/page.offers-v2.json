@@ -133,10 +133,10 @@
         "offer_row_feUX7Y": {
           "type": "offer-row",
           "settings": {
-            "image": "shopify://shop_images/Tops.jpg",
+            "image": "shopify://shop_images/skirt.jpg",
             "eyebrow": "Women's Wear",
-            "title": "New Styles, More Collections",
-            "description": "Tops, co-ord sets, nightwear and more — mix and match your wardrobe.",
+            "title": "Explore wardrobe essentials made for every occasion.",
+            "description": "Discover Stylish Shirts, T-Shirts & Palazzos with Limited-Time Offers.",
             "offer_1": "3 Pcs Skirt — ₹1000",
             "offer_2": "2 Pcs Tops — ₹500",
             "offer_3": "2 Pcs Plazzo — ₹500",
@@ -149,10 +149,10 @@
         "offer_row_TRVq9L": {
           "type": "offer-row",
           "settings": {
-            "image": "shopify://shop_images/Tops.jpg",
+            "image": "shopify://shop_images/Nighty.jpg",
             "eyebrow": "Women's Wear",
-            "title": "New Styles, More Collections",
-            "description": "Tops, co-ord sets, nightwear and more — mix and match your wardrobe.",
+            "title": "Wear more Style more Love more.",
+            "description": "Trendy Nighties, Skirts & Plazzos Enjoy Exclusive Shopping Offers.",
             "offer_1": "2 Pcs Nighty — ₹550",
             "offer_2": "3 Pcs Skirt — ₹500",
             "offer_3": "3 Pcs Plazzo — ₹500",
