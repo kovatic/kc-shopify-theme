@@ -25,7 +25,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/KC_banner-0.png",
-            "mobile_image": "shopify://shop_images/KCbanner..jpg",
+            "mobile_image": "shopify://shop_images/KC_Mobile_banner.jpg",
             "subheading": "",
             "heading": "",
             "text": "",
@@ -107,7 +107,7 @@
             "offer_1": "3 Pcs T-Shirt — ₹500",
             "offer_2": "2 Pcs Track Pant — ₹500",
             "offer_3": "3 Pcs Shirt — ₹999",
-            "offer_4": "",
+            "offer_4": "2 pcs T-shirt — ₹500",
             "button_label": "",
             "button_url": "shopify://collections/all"
           },
