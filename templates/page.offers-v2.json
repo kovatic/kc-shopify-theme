@@ -11,6 +11,7 @@
   "sections": {
     "countdown": {
       "type": "countdown-banner",
+      "disabled": true,
       "settings": {
         "heading": "Hurry! Aadi Offer ends in:",
         "end_date": "2026-07-31T23:59:59",
