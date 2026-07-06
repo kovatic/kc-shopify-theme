@@ -98,6 +98,23 @@
           },
           "blocks": {}
         },
+        "offer_row_dM3Y3d": {
+          "type": "offer-row",
+          "name": "t:blocks.offer_row.name",
+          "settings": {
+            "image": "shopify://shop_images/VC.jpg",
+            "eyebrow": "Live Video Call Shopping",
+            "title": "Video Call Shopping",
+            "description": "",
+            "offer_1": "Face-to-Face Shopping From Home",
+            "offer_2": "Live Shopping, Real Assistance.",
+            "offer_3": "Connect Explore Shop Live.",
+            "offer_4": "Whats App US : 73976 52555",
+            "button_label": "Book Your Call",
+            "button_url": "https://www.kchinnaduraiandco.com/pages/shop-by-video-call"
+          },
+          "blocks": {}
+        },
         "offer_row_4PNUFD": {
           "type": "offer-row",
           "settings": {
@@ -191,23 +208,6 @@
             "offer_4": "2 pcs T-shirt — ₹500",
             "button_label": "",
             "button_url": "shopify://collections/all"
-          },
-          "blocks": {}
-        },
-        "offer_row_r8HKcE": {
-          "type": "offer-row",
-          "name": "t:blocks.offer_row.name",
-          "settings": {
-            "image": "shopify://shop_images/VC.jpg",
-            "eyebrow": "Live Video Call Shopping",
-            "title": "Video Call Shopping",
-            "description": "",
-            "offer_1": "Face-to-Face Shopping From Home",
-            "offer_2": "Live Shopping, Real Assistance.",
-            "offer_3": "Connect Explore Shop Live.",
-            "offer_4": "",
-            "button_label": "Book Your Call",
-            "button_url": "https://www.kchinnaduraiandco.com/pages/shop-by-video-call"
           },
           "blocks": {}
         },
@@ -328,13 +328,13 @@
         "row_sarees",
         "offer_row_GHXMw3",
         "row_womens",
+        "offer_row_dM3Y3d",
         "offer_row_4PNUFD",
         "offer_row_TxF3pd",
         "offer_row_feUX7Y",
         "offer_row_TRVq9L",
         "offer_row_hdJj3f",
         "row_mens",
-        "offer_row_r8HKcE",
         "row_boys",
         "offer_row_cErRmf",
         "offer_row_VLdGYr",
