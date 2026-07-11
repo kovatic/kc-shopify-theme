@@ -44,7 +44,13 @@
   <div class="try-ai-modal__panel">
 
     <div class="try-ai-modal__header">
-      <h2 class="try-ai-modal__title" id="try-ai-modal-title">{{ 'try_with_ai.modal_title' | t }}</h2>
+      <h2 class="try-ai-modal__title" id="try-ai-modal-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="try-ai-modal__title-icon">
+          <path d="M12 2.5l1.8 4.9 4.9 1.8-4.9 1.8L12 15.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 2.5z"/>
+          <path d="M19 14l.9 2.5L22.4 17.4l-2.5.9L19 20.8l-.9-2.5-2.5-.9 2.5-.9L19 14z"/>
+        </svg>
+        <span class="try-ai-modal__title-text">{{ 'try_with_ai.modal_title' | t }}</span>
+      </h2>
       <button type="button" class="try-ai-modal__close" aria-label="{{ 'try_with_ai.close' | t }}">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
@@ -72,10 +78,24 @@
 
       <div class="try-ai-modal__step" id="try-ai-step-loading" hidden>
         <div class="try-ai-modal__loading">
-          <div class="try-ai-modal__spinner" aria-hidden="true"></div>
-          <p class="try-ai-modal__loading-step" id="try-ai-loading-step"></p>
-          <div class="try-ai-modal__loading-dots" aria-hidden="true">
-            <span></span><span></span><span></span>
+          <img class="try-ai-modal__loading-img" id="try-ai-loading-img" alt="" aria-hidden="true">
+          <div class="try-ai-modal__loading-scan" aria-hidden="true">
+            <span class="try-ai-modal__loading-scan-line"></span>
+            <span class="try-ai-modal__loading-corner try-ai-modal__loading-corner--tl"></span>
+            <span class="try-ai-modal__loading-corner try-ai-modal__loading-corner--tr"></span>
+            <span class="try-ai-modal__loading-corner try-ai-modal__loading-corner--bl"></span>
+            <span class="try-ai-modal__loading-corner try-ai-modal__loading-corner--br"></span>
+          </div>
+          <div class="try-ai-modal__loading-overlay">
+            <div class="try-ai-modal__loading-sparkle" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2.5l1.8 4.9 4.9 1.8-4.9 1.8L12 15.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 2.5z"/>
+              </svg>
+            </div>
+            <p class="try-ai-modal__loading-step" id="try-ai-loading-step"></p>
+            <div class="try-ai-modal__loading-dots" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
           </div>
         </div>
       </div>
@@ -185,12 +205,37 @@
     flex-shrink: 0;
   }
   .try-ai-modal__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     font-family: 'Playfair Display', serif;
     font-size: 1.25rem;
     font-weight: 600;
-    color: #2e1f1f;
     margin: 0;
     text-align: center;
+  }
+  .try-ai-modal__title-text {
+    background: linear-gradient(100deg, #4b2a7b, #9c2a8f 45%, #c3134e 75%, #d98a2b 100%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #2e1f1f;
+    animation: try-ai-btn-gradient 6s ease infinite;
+  }
+  .try-ai-modal__title-icon {
+    flex-shrink: 0;
+    color: #9c2a8f;
+    animation: try-ai-btn-icon-twinkle 2.4s ease-in-out infinite;
+  }
+  @keyframes try-ai-btn-gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  @keyframes try-ai-btn-icon-twinkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.75; transform: scale(0.9); }
   }
   .try-ai-modal__close {
     position: absolute;
@@ -277,37 +322,96 @@
     display: none;
   }
 
-  /* ── Loading state ── */
+  /* ── Loading state: AI scan effect over the uploaded photo ── */
   .try-ai-modal__loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
+    position: relative;
     width: 100%;
     max-width: 420px;
     aspect-ratio: 2 / 3;
     max-height: 640px;
     margin: 0 auto;
     border-radius: 8px;
-    background: #fff;
+    overflow: hidden;
+    background: #1a1420;
     border: 1.5px solid #e8e2d9;
   }
-  .try-ai-modal__spinner {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 3px solid #e8e2d9;
-    border-top-color: var(--color-primary, #2e1f1f);
-    animation: try-ai-spin 0.8s linear infinite;
+  .try-ai-modal__loading-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.7) brightness(0.55);
   }
-  @keyframes try-ai-spin {
-    to { transform: rotate(360deg); }
+  .try-ai-modal__loading-scan {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .try-ai-modal__loading-scan-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #d98a2b, #c3134e, #9c2a8f, transparent);
+    box-shadow: 0 0 16px 3px rgba(195, 19, 78, 0.7);
+    animation: try-ai-scan-move 2.6s ease-in-out infinite;
+  }
+  @keyframes try-ai-scan-move {
+    0%   { top: 4%; opacity: 0; }
+    8%   { opacity: 1; }
+    50%  { top: 92%; opacity: 1; }
+    92%  { opacity: 1; }
+    100% { top: 4%; opacity: 0; }
+  }
+  .try-ai-modal__loading-corner {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border: 2px solid rgba(255,255,255,0.85);
+    opacity: 0.9;
+  }
+  .try-ai-modal__loading-corner--tl {
+    top: 14px; left: 14px;
+    border-right: none; border-bottom: none;
+    border-radius: 4px 0 0 0;
+  }
+  .try-ai-modal__loading-corner--tr {
+    top: 14px; right: 14px;
+    border-left: none; border-bottom: none;
+    border-radius: 0 4px 0 0;
+  }
+  .try-ai-modal__loading-corner--bl {
+    bottom: 14px; left: 14px;
+    border-right: none; border-top: none;
+    border-radius: 0 0 0 4px;
+  }
+  .try-ai-modal__loading-corner--br {
+    bottom: 14px; right: 14px;
+    border-left: none; border-top: none;
+    border-radius: 0 0 4px 0;
+  }
+  .try-ai-modal__loading-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 28px 20px 24px;
+    background: linear-gradient(180deg, transparent, rgba(20, 14, 26, 0.85) 55%);
+  }
+  .try-ai-modal__loading-sparkle {
+    color: #fff;
+    filter: drop-shadow(0 0 8px rgba(195, 19, 78, 0.8));
+    animation: try-ai-btn-icon-twinkle 1.6s ease-in-out infinite;
   }
   .try-ai-modal__loading-step {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.875rem;
-    color: #42464b;
+    color: #fff;
     margin: 0;
     text-align: center;
     min-height: 1.4em;
@@ -320,7 +424,7 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--color-primary, #2e1f1f);
+    background: linear-gradient(100deg, #d98a2b, #c3134e, #9c2a8f);
     opacity: 0.3;
     animation: try-ai-pulse 1.2s ease-in-out infinite;
   }
@@ -569,6 +673,7 @@
     var compareBeforeWrap  = document.getElementById('try-ai-compare-before-wrap');
     var compareHandle      = document.getElementById('try-ai-compare-handle');
     var loadingStepEl      = document.getElementById('try-ai-loading-step');
+    var loadingImg         = document.getElementById('try-ai-loading-img');
 
     var stepUpload  = document.getElementById('try-ai-step-upload');
     var stepLoading = document.getElementById('try-ai-step-loading');
@@ -620,12 +725,13 @@
       stopLoadingSteps();
     }
 
-    function showLoadingStep() {
+    function showLoadingStep(photoUrl) {
       stepUpload.hidden = true;
       stepLoading.hidden = false;
       stepResult.hidden = true;
       footerUpload.hidden = true;
       footerResult.hidden = true;
+      if (photoUrl) loadingImg.src = photoUrl;
       startLoadingSteps();
     }
 
@@ -656,6 +762,7 @@
       placeholder.hidden = false;
       resultImg.src = '';
       originalImg.src = '';
+      loadingImg.src = '';
       uploadBtn.disabled = true;
       uploadBtn.textContent = I18N.uploadButton;
       uploadBtn.classList.remove('is-loading');
@@ -902,7 +1009,7 @@
         return;
       }
       var originalObjectUrl = previewImg.src;
-      showLoadingStep();
+      showLoadingStep(originalObjectUrl);
       setStatus('', null);
 
       uploadCustomerPhoto(selectedFile)
