@@ -393,5 +393,17 @@
     "front_neck_depth": "Front Neck Depth",
     "back_neck_depth": "Back Neck Depth",
     "shoulder_to_point": "Shoulder to Point"
+  },
+  "try_with_ai": {
+    "cta_label": "Try with AI",
+    "login_required": "Log in to try on",
+    "modal_title": "Try with AI",
+    "close": "Close",
+    "upload_prompt": "Upload a photo of yourself",
+    "choose_photo": "Choose a photo",
+    "upload_button": "Upload photo",
+    "uploading": "Uploading…",
+    "upload_success": "Uploaded! AI try-on coming soon.",
+    "upload_error": "Upload failed. Please try again."
   }
 }

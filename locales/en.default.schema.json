@@ -47,11 +47,14 @@
     "text": "Text",
     "theme": "Theme",
     "typography": "Typography",
-    "social": "Social media"
+    "social": "Social media",
+    "try_with_ai": "Try with AI"
   },
   "labels": {
     "alignment": "Alignment",
     "primary_color": "Primary color",
+    "try_with_ai_storefront_token": "Storefront API access token",
+    "try_with_ai_storefront_token_info": "Storefront API access token with Files write access, used to upload customer photos for the Try with AI feature.",
     "background": "Background",
     "background_color": "Background color",
     "secondary_text_color": "Secondary Text Color",

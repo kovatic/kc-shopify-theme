@@ -154,6 +154,36 @@
             </button>
           {%- endif -%}
 
+          {%- comment -%} TEMP DEBUG — remove after troubleshooting {%- endcomment -%}
+          <div style="background:#fee;border:2px solid red;padding:8px;margin:8px 0;font-size:12px;font-family:monospace;">
+            DEBUG try_with_ai metafield: "{{ product.metafields.custom.try_with_ai.value }}" (type: {{ product.metafields.custom.try_with_ai.type }})<br>
+            DEBUG customer: {% if customer %}logged in as {{ customer.email }}{% else %}NOT logged in{% endif %}<br>
+            DEBUG shop.customer_accounts_enabled: {{ shop.customer_accounts_enabled }}
+          </div>
+
+          {%- comment -%} Try with AI button (only for try-with-ai-enabled products) {%- endcomment -%}
+          {%- if product.metafields.custom.try_with_ai.value == true -%}
+            {%- if customer -%}
+              <button type="button" class="product-page__try-ai-btn js-try-ai-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="M21 15l-5-5L5 21"/>
+                </svg>
+                <span class="product-page__try-ai-btn-text">{{ 'try_with_ai.cta_label' | t }}</span>
+              </button>
+            {%- else -%}
+              <a href="{{ routes.account_login_url }}" class="product-page__try-ai-btn product-page__try-ai-btn--login">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="M21 15l-5-5L5 21"/>
+                </svg>
+                <span class="product-page__try-ai-btn-text">{{ 'try_with_ai.login_required' | t }}</span>
+              </a>
+            {%- endif -%}
+          {%- endif -%}
+
           {%- comment -%} Stock alert {%- endcomment -%}
           {%- assign inv = current_variant.inventory_quantity -%}
           {%- assign inv_policy = current_variant.inventory_management -%}
@@ -305,6 +335,10 @@
   {% render 'tailoring-modal', product: product, tailoring_addon_variant_id: tailoring_addon_variant_id %}
 {%- endif -%}
 
+{%- if product.metafields.custom.try_with_ai.value == true and customer -%}
+  {% render 'try-with-ai-modal', product: product, storefront_access_token: settings.try_with_ai_storefront_token %}
+{%- endif -%}
+
 {%- comment -%} Mobile sticky ATC bar {%- endcomment -%}
 <div class="product-page__sticky-atc" id="sticky-atc">
   <input type="hidden" name="id" value="{{ current_variant.id }}" id="variant-id-input-mobile">
@@ -318,6 +352,28 @@
       </svg>
       {{ 'tailoring.stitching_btn' | t }}
     </button>
+  {%- endif -%}
+
+  {%- if product.metafields.custom.try_with_ai.value == true -%}
+    {%- if customer -%}
+      <button type="button" class="product-page__try-ai-btn product-page__try-ai-btn--mobile js-try-ai-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="M21 15l-5-5L5 21"/>
+        </svg>
+        {{ 'try_with_ai.cta_label' | t }}
+      </button>
+    {%- else -%}
+      <a href="{{ routes.account_login_url }}" class="product-page__try-ai-btn product-page__try-ai-btn--mobile product-page__try-ai-btn--login">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="M21 15l-5-5L5 21"/>
+        </svg>
+        {{ 'try_with_ai.login_required' | t }}
+      </a>
+    {%- endif -%}
   {%- endif -%}
 
   <div class="product-page__sticky-atc__row2">
@@ -1108,6 +1164,13 @@
       if (window.openTailoringModal) window.openTailoringModal();
     });
   });
+
+  /* ── Try with AI modal trigger ── */
+  document.querySelectorAll('.js-try-ai-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (window.openTryWithAiModal) window.openTryWithAiModal();
+    });
+  });
 })();
 </script>
 
@@ -1325,6 +1388,40 @@
   .product-page__stitching-btn:hover .product-page__stitching-btn-badge {
     background: #a8045c;
   }
+
+  /* Try with AI button */
+  .product-page__try-ai-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 48px;
+    margin-bottom: 10px;
+    padding: 0 16px;
+    background: #2e1f1f;
+    color: #fff;
+    border: 1.5px solid #2e1f1f;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    text-decoration: none;
+  }
+  .product-page__try-ai-btn:hover {
+    opacity: 0.88;
+  }
+  .product-page__try-ai-btn svg {
+    flex-shrink: 0;
+  }
+  .product-page__try-ai-btn--login {
+    background: #fff;
+    color: #2e1f1f;
+  }
+
   .product-page__wishlist-icon-btn {
     flex-shrink: 0;
     display: flex;
@@ -1763,6 +1860,32 @@
       border-radius: 20px;
       margin-left: 6px;
       flex-shrink: 0;
+    }
+
+    .product-page__try-ai-btn--mobile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 40px;
+      min-height: unset;
+      margin-bottom: 8px;
+      padding: 0 16px;
+      background: #2e1f1f;
+      color: #fff;
+      border: 1.5px solid #2e1f1f;
+      border-radius: 8px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .product-page__try-ai-btn--mobile.product-page__try-ai-btn--login {
+      background: #fff;
+      color: #2e1f1f;
     }
 
     /* Row 2: ATC + Wishlist + Share */
