@@ -451,6 +451,9 @@
     flex-shrink: 0;
     background: #faf8f4;
   }
+  .try-ai-modal__footer[hidden] {
+    display: none;
+  }
   .try-ai-modal__upload-btn {
     height: 44px;
     padding: 0 28px;
@@ -618,7 +621,7 @@
       footerUpload.hidden = true;
       footerResult.hidden = false;
       stopLoadingSteps();
-      setCompareRatio(0.5);
+      requestAnimationFrame(function () { setCompareRatio(0.5); });
     }
 
     function setCompareRatio(ratio) {
