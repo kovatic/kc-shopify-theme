@@ -23,6 +23,12 @@
   aria-labelledby="try-ai-modal-title"
   data-backend-url="{{ backend_url }}"
   data-product-image="{{ product.featured_image | image_url: width: 1024 }}"
+  data-product-id="{{ product.id }}"
+  data-i18n-upload-button="{{ 'try_with_ai.upload_button' | t | escape }}"
+  data-i18n-uploading="{{ 'try_with_ai.uploading' | t | escape }}"
+  data-i18n-generating="{{ 'try_with_ai.generating' | t | escape }}"
+  data-i18n-upload-success="{{ 'try_with_ai.upload_success' | t | escape }}"
+  data-i18n-upload-error="{{ 'try_with_ai.upload_error' | t | escape }}"
 >
   <div class="try-ai-modal__backdrop"></div>
   <div class="try-ai-modal__panel">
@@ -278,8 +284,25 @@
 
     var BACKEND_URL             = (modal.dataset.backendUrl || '').replace(/\/+$/, '');
     var PRODUCT_IMAGE_URL       = modal.dataset.productImage || '';
+    var PRODUCT_ID              = modal.dataset.productId || '';
     var POLL_INTERVAL_MS        = 2500;
     var POLL_TIMEOUT_MS         = 120000;
+    var DEBUG = /[?&]try_ai_debug=1/.test(window.location.search) || window.localStorage.getItem('tryAiDebug') === '1';
+
+    function debugLog() {
+      if (!DEBUG) return;
+      var args = Array.prototype.slice.call(arguments);
+      args.unshift('[Try with AI]');
+      console.log.apply(console, args);
+    }
+
+    var I18N = {
+      uploadButton:  modal.dataset.i18nUploadButton  || 'Generate try-on',
+      uploading:     modal.dataset.i18nUploading      || 'Uploading…',
+      generating:    modal.dataset.i18nGenerating     || 'Generating your try-on…',
+      uploadSuccess: modal.dataset.i18nUploadSuccess  || 'Here is your AI try-on!',
+      uploadError:   modal.dataset.i18nUploadError    || 'Something went wrong. Please try again.'
+    };
 
     var dropzone           = document.getElementById('try-ai-dropzone');
     var fileInput          = document.getElementById('try-ai-file-input');
@@ -330,7 +353,7 @@
       placeholder.hidden = false;
       resultImg.src = '';
       uploadBtn.disabled = true;
-      uploadBtn.textContent = '{{ "try_with_ai.upload_button" | t }}';
+      uploadBtn.textContent = I18N.uploadButton;
       setStatus('', null);
       showUploadStep();
     }
@@ -374,34 +397,62 @@
       setStatus('', null);
     });
 
+    function readErrorBody(r) {
+      return r.text().then(function (text) {
+        var message = text;
+        try {
+          var json = JSON.parse(text);
+          message = json.error || json.message || text;
+        } catch (e) {}
+        return message;
+      }).catch(function () { return ''; });
+    }
+
     function uploadCustomerPhoto(file) {
-      var formData = new FormData();
-      formData.append('file', file);
+      debugLog('uploading photo to', BACKEND_URL + '/api/upload', file);
       return fetch(BACKEND_URL + '/api/upload', {
         method: 'POST',
-        body: formData
+        body: (function () {
+          var formData = new FormData();
+          formData.append('file', file);
+          return formData;
+        })()
       }).then(function (r) {
-        if (!r.ok) throw new Error('Photo upload failed');
+        if (!r.ok) {
+          return readErrorBody(r).then(function (message) {
+            debugLog('upload failed', r.status, message);
+            throw new Error('Photo upload failed (' + r.status + ')' + (message ? ': ' + message : ''));
+          });
+        }
         return r.json();
       }).then(function (data) {
+        debugLog('upload response', data);
         if (!data || !data.url) throw new Error('Backend did not return an uploaded photo URL');
         return data.url;
       });
     }
 
     function createTryOnJob(customerImageUrl) {
+      var payload = {
+        customerImageUrl: customerImageUrl,
+        productImageUrl: PRODUCT_IMAGE_URL,
+        productId: PRODUCT_ID
+      };
+      debugLog('creating try-on job', BACKEND_URL + '/api/try-on', payload);
       return fetch(BACKEND_URL + '/api/try-on', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customerImageUrl: customerImageUrl,
-          productImageUrl: PRODUCT_IMAGE_URL,
-          productId: '{{ product.id }}'
-        })
+        body: JSON.stringify(payload)
       }).then(function (r) {
-        if (!r.ok) throw new Error('Failed to start AI try-on job');
+        if (!r.ok) {
+          return readErrorBody(r).then(function (message) {
+            debugLog('try-on job creation failed', r.status, message);
+            throw new Error('Failed to start AI try-on job (' + r.status + ')' + (message ? ': ' + message : ''));
+          });
+        }
         return r.json();
       }).then(function (data) {
+        debugLog('try-on job created', data);
         if (!data || !data.jobId) throw new Error('Backend did not return a job id');
         return data.jobId;
       });
@@ -411,9 +462,14 @@
       var startedAt = Date.now();
       function poll() {
         return fetch(BACKEND_URL + '/api/try-on/' + jobId).then(function (r) {
-          if (!r.ok) throw new Error('Failed to check AI try-on status');
+          if (!r.ok) {
+            return readErrorBody(r).then(function (message) {
+              throw new Error('Failed to check AI try-on status (' + r.status + ')' + (message ? ': ' + message : ''));
+            });
+          }
           return r.json();
         }).then(function (job) {
+          debugLog('poll job', jobId, job);
           if (job.status === 'completed' && job.outputImageUrl) {
             return job.outputImageUrl;
           }
@@ -434,33 +490,45 @@
     uploadBtn.addEventListener('click', function () {
       if (!selectedFile) return;
       if (!BACKEND_URL) {
-        setStatus('{{ "try_with_ai.upload_error" | t | escape }}', 'error');
+        setStatus(I18N.uploadError, 'error');
         return;
       }
       uploadBtn.disabled = true;
-      uploadBtn.textContent = '{{ "try_with_ai.uploading" | t }}';
+      uploadBtn.textContent = I18N.uploading;
       setStatus('', null);
 
       uploadCustomerPhoto(selectedFile)
         .then(function (customerImageUrl) {
-          setStatus('{{ "try_with_ai.generating" | t | escape }}', null);
+          setStatus(I18N.generating, null);
           return createTryOnJob(customerImageUrl);
         })
         .then(function (jobId) { return waitForTryOnJob(jobId); })
         .then(function (outputImageUrl) {
           resultImg.src = outputImageUrl;
           showResultStep();
-          setStatus('{{ "try_with_ai.upload_success" | t | escape }}', 'success');
-          uploadBtn.textContent = '{{ "try_with_ai.upload_button" | t }}';
+          setStatus(I18N.uploadSuccess, 'success');
+          uploadBtn.textContent = I18N.uploadButton;
         })
         .catch(function (err) {
           console.error('Try with AI error:', err);
-          setStatus('{{ "try_with_ai.upload_error" | t | escape }}', 'error');
+          var message = I18N.uploadError;
+          if (DEBUG && err && err.message) {
+            message = I18N.uploadError + ' [debug: ' + err.message + ']';
+          }
+          setStatus(message, 'error');
           uploadBtn.disabled = false;
-          uploadBtn.textContent = '{{ "try_with_ai.upload_button" | t }}';
+          uploadBtn.textContent = I18N.uploadButton;
         });
     });
 
     window.openTryWithAiModal = openModal;
+
+    window.tryAiDebug = {
+      enable: function () { window.localStorage.setItem('tryAiDebug', '1'); location.reload(); },
+      disable: function () { window.localStorage.removeItem('tryAiDebug'); location.reload(); },
+      config: function () {
+        return { backendUrl: BACKEND_URL, productImageUrl: PRODUCT_IMAGE_URL, productId: PRODUCT_ID };
+      }
+    };
   })();
 {% endjavascript %}
