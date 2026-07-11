@@ -419,9 +419,12 @@
     "close": "Close",
     "upload_prompt": "Upload a photo of yourself",
     "choose_photo": "Choose a photo",
-    "upload_button": "Upload photo",
+    "upload_button": "Generate try-on",
     "uploading": "Uploading…",
-    "upload_success": "Uploaded! AI try-on coming soon.",
-    "upload_error": "Upload failed. Please try again."
+    "generating": "Generating your try-on…",
+    "upload_success": "Here's your AI try-on!",
+    "upload_error": "Something went wrong. Please try again.",
+    "result_alt": "AI-generated saree try-on preview",
+    "try_another_photo": "Try another photo"
   }
 }

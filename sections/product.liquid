@@ -187,13 +187,6 @@
             </button>
           {%- endif -%}
 
-          {%- comment -%} TEMP DEBUG — remove after troubleshooting {%- endcomment -%}
-          <div style="background:#fee;border:2px solid red;padding:8px;margin:8px 0;font-size:12px;font-family:monospace;">
-            DEBUG try_with_ai metafield: "{{ product.metafields.custom.try_with_ai.value }}" (type: {{ product.metafields.custom.try_with_ai.type }})<br>
-            DEBUG customer: {% if customer %}logged in as {{ customer.email }}{% else %}NOT logged in{% endif %}<br>
-            DEBUG shop.customer_accounts_enabled: {{ shop.customer_accounts_enabled }}
-          </div>
-
           {%- comment -%} Try with AI button (only for try-with-ai-enabled products) {%- endcomment -%}
           {%- if product.metafields.custom.try_with_ai.value == true -%}
             {%- if customer -%}
@@ -522,7 +515,11 @@
 {%- endif -%}
 
 {%- if product.metafields.custom.try_with_ai.value == true and customer -%}
-  {% render 'try-with-ai-modal', product: product, storefront_access_token: settings.try_with_ai_storefront_token %}
+  {%
+    render 'try-with-ai-modal',
+    product: product,
+    backend_url: settings.try_with_ai_backend_url
+  %}
 {%- endif -%}
 
 {%- comment -%} Mobile sticky ATC bar {%- endcomment -%}

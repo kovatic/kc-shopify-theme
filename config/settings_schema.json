@@ -83,10 +83,10 @@
     "name": "t:general.try_with_ai",
     "settings": [
       {
-        "type": "text",
-        "id": "try_with_ai_storefront_token",
-        "label": "t:labels.try_with_ai_storefront_token",
-        "info": "t:labels.try_with_ai_storefront_token_info"
+        "type": "url",
+        "id": "try_with_ai_backend_url",
+        "label": "t:labels.try_with_ai_backend_url",
+        "info": "t:labels.try_with_ai_backend_url_info"
       }
     ]
   },

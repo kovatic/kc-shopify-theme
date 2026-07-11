@@ -1,20 +1,17 @@
 {% doc %}
   Renders the "Try with AI" upload modal. Customer picks/uploads a photo of
-  themselves; the photo is uploaded to Shopify Files via the Storefront API.
+  themselves; the photo is uploaded directly to the KC Wear AI backend, which
+  generates an AI saree try-on image using the product image, and the result
+  is polled for and displayed.
 
-  Phase 1 scope only: no gallery/list of previously uploaded photos, no
-  linking the file to the customer, and no AI processing yet — those land in
-  a later phase once a backend is chosen. This modal only proves out the
-  upload step and shows a "coming soon" confirmation.
-
-  Requires a Storefront API access token with Files write access, configured
-  via the section/theme setting `try_with_ai_storefront_token`.
+  Requires the KC Wear AI backend base URL, configured via the theme setting
+  `try_with_ai_backend_url`.
 
   @param {product} product - The product being tried on
-  @param {string} [storefront_access_token] - Storefront API access token with Files write scope
+  @param {string} [backend_url] - Base URL of the KC Wear AI backend (e.g. https://kc-wear-ai.vercel.app)
 
   @example
-  {% render 'try-with-ai-modal', product: product, storefront_access_token: settings.try_with_ai_storefront_token %}
+  {% render 'try-with-ai-modal', product: product, backend_url: settings.try_with_ai_backend_url %}
 {% enddoc %}
 
 <div
@@ -24,7 +21,8 @@
   role="dialog"
   aria-modal="true"
   aria-labelledby="try-ai-modal-title"
-  data-storefront-token="{{ storefront_access_token }}"
+  data-backend-url="{{ backend_url }}"
+  data-product-image="{{ product.featured_image | image_url: width: 1024 }}"
 >
   <div class="try-ai-modal__backdrop"></div>
   <div class="try-ai-modal__panel">
@@ -53,10 +51,17 @@
       </label>
       <input type="file" accept="image/*" id="try-ai-file-input" class="try-ai-modal__file-input">
 
+      <div class="try-ai-modal__result" id="try-ai-result" hidden>
+        <img class="try-ai-modal__result-img" id="try-ai-result-img" alt="{{ 'try_with_ai.result_alt' | t }}">
+      </div>
+
       <p class="try-ai-modal__status" id="try-ai-status" aria-live="polite"></p>
     </div>
 
     <div class="try-ai-modal__footer">
+      <button type="button" class="try-ai-modal__upload-btn" id="try-ai-retry-btn" hidden>
+        {{ 'try_with_ai.try_another_photo' | t }}
+      </button>
       <button type="button" class="try-ai-modal__upload-btn" id="try-ai-upload-btn" disabled>
         {{ 'try_with_ai.upload_button' | t }}
       </button>
@@ -193,6 +198,20 @@
     border: 0;
   }
 
+  .try-ai-modal__result {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    border: 1.5px solid #e8e2d9;
+  }
+  .try-ai-modal__result-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
   .try-ai-modal__status {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.8rem;
@@ -257,8 +276,10 @@
     var modal = document.getElementById('try-ai-modal');
     if (!modal) return;
 
-    var STOREFRONT_ACCESS_TOKEN = modal.dataset.storefrontToken || '';
-    var API_VERSION = '2025-01';
+    var BACKEND_URL             = (modal.dataset.backendUrl || '').replace(/\/+$/, '');
+    var PRODUCT_IMAGE_URL       = modal.dataset.productImage || '';
+    var POLL_INTERVAL_MS        = 2500;
+    var POLL_TIMEOUT_MS         = 120000;
 
     var dropzone           = document.getElementById('try-ai-dropzone');
     var fileInput          = document.getElementById('try-ai-file-input');
@@ -266,8 +287,12 @@
     var placeholder        = document.getElementById('try-ai-dropzone-placeholder');
     var statusEl           = document.getElementById('try-ai-status');
     var uploadBtn          = document.getElementById('try-ai-upload-btn');
+    var retryBtn           = document.getElementById('try-ai-retry-btn');
+    var resultWrap         = document.getElementById('try-ai-result');
+    var resultImg          = document.getElementById('try-ai-result-img');
 
     var selectedFile = null;
+    var pollTimer = null;
 
     function setStatus(text, type) {
       statusEl.textContent = text || '';
@@ -275,15 +300,39 @@
       if (type) statusEl.classList.add('is-' + type);
     }
 
+    function stopPolling() {
+      if (pollTimer) {
+        clearTimeout(pollTimer);
+        pollTimer = null;
+      }
+    }
+
+    function showUploadStep() {
+      dropzone.hidden = false;
+      resultWrap.hidden = true;
+      uploadBtn.hidden = false;
+      retryBtn.hidden = true;
+    }
+
+    function showResultStep() {
+      dropzone.hidden = true;
+      resultWrap.hidden = false;
+      uploadBtn.hidden = true;
+      retryBtn.hidden = false;
+    }
+
     function resetState() {
+      stopPolling();
       selectedFile = null;
       fileInput.value = '';
       previewImg.src = '';
       previewImg.hidden = true;
       placeholder.hidden = false;
+      resultImg.src = '';
       uploadBtn.disabled = true;
       uploadBtn.textContent = '{{ "try_with_ai.upload_button" | t }}';
       setStatus('', null);
+      showUploadStep();
     }
 
     function openModal() {
@@ -294,6 +343,7 @@
     }
 
     function closeModal() {
+      stopPolling();
       modal.classList.remove('is-open');
       modal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
@@ -306,6 +356,8 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
     });
+
+    retryBtn.addEventListener('click', resetState);
 
     fileInput.addEventListener('change', function () {
       var file = fileInput.files && fileInput.files[0];
@@ -322,76 +374,66 @@
       setStatus('', null);
     });
 
-    function gqlRequest(query, variables) {
-      return fetch('/api/' + API_VERSION + '/graphql.json', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Shopify-Storefront-Access-Token': STOREFRONT_ACCESS_TOKEN
-        },
-        body: JSON.stringify({ query: query, variables: variables })
-      }).then(function (r) { return r.json(); });
-    }
-
-    function stagedUploadsCreate(file) {
-      var query = 'mutation stagedUploadsCreate($input: [StagedUploadInput!]!) {' +
-        ' stagedUploadsCreate(input: $input) {' +
-        '   stagedTargets { url resourceUrl parameters { name value } }' +
-        '   userErrors { field message }' +
-        ' }' +
-        '}';
-      var variables = {
-        input: [{
-          resource: 'FILE',
-          filename: file.name,
-          mimeType: file.type,
-          fileSize: String(file.size),
-          httpMethod: 'POST'
-        }]
-      };
-      return gqlRequest(query, variables).then(function (res) {
-        var payload = res.data && res.data.stagedUploadsCreate;
-        if (!payload || (payload.userErrors && payload.userErrors.length)) {
-          throw new Error((payload && payload.userErrors[0] && payload.userErrors[0].message) || 'Staged upload failed');
-        }
-        return payload.stagedTargets[0];
-      });
-    }
-
-    function putFileToStagedTarget(target, file) {
+    function uploadCustomerPhoto(file) {
       var formData = new FormData();
-      target.parameters.forEach(function (param) {
-        formData.append(param.name, param.value);
-      });
       formData.append('file', file);
-      return fetch(target.url, { method: 'POST', body: formData }).then(function (r) {
-        if (!r.ok) throw new Error('File upload to storage failed');
-        return target.resourceUrl;
+      return fetch(BACKEND_URL + '/api/upload', {
+        method: 'POST',
+        body: formData
+      }).then(function (r) {
+        if (!r.ok) throw new Error('Photo upload failed');
+        return r.json();
+      }).then(function (data) {
+        if (!data || !data.url) throw new Error('Backend did not return an uploaded photo URL');
+        return data.url;
       });
     }
 
-    function fileCreate(resourceUrl) {
-      var query = 'mutation fileCreate($files: [FileCreateInput!]!) {' +
-        ' fileCreate(files: $files) {' +
-        '   files { id fileStatus }' +
-        '   userErrors { field message }' +
-        ' }' +
-        '}';
-      var variables = {
-        files: [{ contentType: 'IMAGE', originalSource: resourceUrl }]
-      };
-      return gqlRequest(query, variables).then(function (res) {
-        var payload = res.data && res.data.fileCreate;
-        if (!payload || (payload.userErrors && payload.userErrors.length)) {
-          throw new Error((payload && payload.userErrors[0] && payload.userErrors[0].message) || 'File create failed');
-        }
-        return payload.files[0];
+    function createTryOnJob(customerImageUrl) {
+      return fetch(BACKEND_URL + '/api/try-on', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerImageUrl: customerImageUrl,
+          productImageUrl: PRODUCT_IMAGE_URL,
+          productId: '{{ product.id }}'
+        })
+      }).then(function (r) {
+        if (!r.ok) throw new Error('Failed to start AI try-on job');
+        return r.json();
+      }).then(function (data) {
+        if (!data || !data.jobId) throw new Error('Backend did not return a job id');
+        return data.jobId;
       });
+    }
+
+    function waitForTryOnJob(jobId) {
+      var startedAt = Date.now();
+      function poll() {
+        return fetch(BACKEND_URL + '/api/try-on/' + jobId).then(function (r) {
+          if (!r.ok) throw new Error('Failed to check AI try-on status');
+          return r.json();
+        }).then(function (job) {
+          if (job.status === 'completed' && job.outputImageUrl) {
+            return job.outputImageUrl;
+          }
+          if (job.status === 'failed') {
+            throw new Error(job.error || 'AI try-on generation failed');
+          }
+          if (Date.now() - startedAt > POLL_TIMEOUT_MS) {
+            throw new Error('Timed out waiting for AI try-on result');
+          }
+          return new Promise(function (resolve) {
+            pollTimer = setTimeout(resolve, POLL_INTERVAL_MS);
+          }).then(poll);
+        });
+      }
+      return poll();
     }
 
     uploadBtn.addEventListener('click', function () {
       if (!selectedFile) return;
-      if (!STOREFRONT_ACCESS_TOKEN) {
+      if (!BACKEND_URL) {
         setStatus('{{ "try_with_ai.upload_error" | t | escape }}', 'error');
         return;
       }
@@ -399,15 +441,20 @@
       uploadBtn.textContent = '{{ "try_with_ai.uploading" | t }}';
       setStatus('', null);
 
-      stagedUploadsCreate(selectedFile)
-        .then(function (target) { return putFileToStagedTarget(target, selectedFile); })
-        .then(function (resourceUrl) { return fileCreate(resourceUrl); })
-        .then(function () {
+      uploadCustomerPhoto(selectedFile)
+        .then(function (customerImageUrl) {
+          setStatus('{{ "try_with_ai.generating" | t | escape }}', null);
+          return createTryOnJob(customerImageUrl);
+        })
+        .then(function (jobId) { return waitForTryOnJob(jobId); })
+        .then(function (outputImageUrl) {
+          resultImg.src = outputImageUrl;
+          showResultStep();
           setStatus('{{ "try_with_ai.upload_success" | t | escape }}', 'success');
           uploadBtn.textContent = '{{ "try_with_ai.upload_button" | t }}';
         })
         .catch(function (err) {
-          console.error('Try with AI upload error:', err);
+          console.error('Try with AI error:', err);
           setStatus('{{ "try_with_ai.upload_error" | t | escape }}', 'error');
           uploadBtn.disabled = false;
           uploadBtn.textContent = '{{ "try_with_ai.upload_button" | t }}';
