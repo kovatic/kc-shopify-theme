@@ -45,7 +45,7 @@
 
     <div class="try-ai-modal__header">
       <h2 class="try-ai-modal__title" id="try-ai-modal-title">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="try-ai-modal__title-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="try-ai-modal__title-icon">
           <path d="M12 2.5l1.8 4.9 4.9 1.8-4.9 1.8L12 15.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 2.5z"/>
           <path d="M19 14l.9 2.5L22.4 17.4l-2.5.9L19 20.8l-.9-2.5-2.5-.9 2.5-.9L19 14z"/>
         </svg>
@@ -183,7 +183,7 @@
     border-radius: 8px;
     width: 94%;
     max-width: 720px;
-    max-height: 92vh;
+    max-height: 96vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -199,18 +199,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px 24px 16px;
+    padding: 10px 40px;
     border-bottom: 1px solid #e8e2d9;
     position: relative;
     flex-shrink: 0;
+    min-height: 0;
   }
   .try-ai-modal__title {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
+    font-size: 0.95rem;
     font-weight: 600;
     margin: 0;
     text-align: center;
@@ -258,13 +259,13 @@
   .try-ai-modal__body {
     overflow-y: auto;
     flex: 1;
-    padding: 24px;
+    padding: 14px 20px 20px;
   }
   .try-ai-modal__prompt {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.875rem;
     color: #42464b;
-    margin: 0 0 16px;
+    margin: 0 0 10px;
   }
 
   .try-ai-modal__dropzone {
@@ -565,7 +566,7 @@
     align-items: center;
     justify-content: flex-end;
     gap: 10px;
-    padding: 16px 24px;
+    padding: 12px 20px;
     border-top: 1px solid #e8e2d9;
     flex-shrink: 0;
     background: #faf8f4;
