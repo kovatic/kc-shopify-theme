@@ -24,6 +24,7 @@
   data-backend-url="{{ backend_url }}"
   data-product-image="{{ product.featured_image | image_url: width: 1024 }}"
   data-product-id="{{ product.id }}"
+  data-customer-id="{{ customer.id }}"
   data-i18n-upload-button="{{ 'try_with_ai.upload_button' | t | escape }}"
   data-i18n-uploading="{{ 'try_with_ai.uploading' | t | escape }}"
   data-i18n-generating="{{ 'try_with_ai.generating' | t | escape }}"
@@ -285,6 +286,7 @@
     var BACKEND_URL             = (modal.dataset.backendUrl || '').replace(/\/+$/, '');
     var PRODUCT_IMAGE_URL       = modal.dataset.productImage || '';
     var PRODUCT_ID              = modal.dataset.productId || '';
+    var CUSTOMER_ID             = modal.dataset.customerId || '';
     var POLL_INTERVAL_MS        = 2500;
     var POLL_TIMEOUT_MS         = 120000;
     var DEBUG = /[?&]try_ai_debug=1/.test(window.location.search) || window.localStorage.getItem('tryAiDebug') === '1';
@@ -402,7 +404,7 @@
         var message = text;
         try {
           var json = JSON.parse(text);
-          message = json.error || json.message || text;
+          message = json.error || (json.errors && json.errors.join(', ')) || json.message || text;
         } catch (e) {}
         return message;
       }).catch(function () { return ''; });
@@ -427,16 +429,18 @@
         return r.json();
       }).then(function (data) {
         debugLog('upload response', data);
-        if (!data || !data.url) throw new Error('Backend did not return an uploaded photo URL');
-        return data.url;
+        var url = data && data.data && data.data.url;
+        if (!data || !data.success || !url) throw new Error('Backend did not return an uploaded photo URL');
+        return url;
       });
     }
 
-    function createTryOnJob(customerImageUrl) {
+    function createTryOnJob(userImageUrl) {
       var payload = {
-        customerImageUrl: customerImageUrl,
-        productImageUrl: PRODUCT_IMAGE_URL,
-        productId: PRODUCT_ID
+        customerId: CUSTOMER_ID,
+        productId: PRODUCT_ID,
+        sareeImageUrl: PRODUCT_IMAGE_URL,
+        userImageUrl: userImageUrl
       };
       debugLog('creating try-on job', BACKEND_URL + '/api/try-on', payload);
       return fetch(BACKEND_URL + '/api/try-on', {
@@ -453,8 +457,9 @@
         return r.json();
       }).then(function (data) {
         debugLog('try-on job created', data);
-        if (!data || !data.jobId) throw new Error('Backend did not return a job id');
-        return data.jobId;
+        var jobId = data && data.data && data.data.jobId;
+        if (!data || !data.success || !jobId) throw new Error('Backend did not return a job id');
+        return jobId;
       });
     }
 
@@ -468,13 +473,15 @@
             });
           }
           return r.json();
-        }).then(function (job) {
-          debugLog('poll job', jobId, job);
+        }).then(function (res) {
+          debugLog('poll job', jobId, res);
+          var job = res && res.data;
+          if (!job) throw new Error((res && res.error) || 'Failed to check AI try-on status');
           if (job.status === 'completed' && job.outputImageUrl) {
             return job.outputImageUrl;
           }
           if (job.status === 'failed') {
-            throw new Error(job.error || 'AI try-on generation failed');
+            throw new Error(job.errorMessage || 'AI try-on generation failed');
           }
           if (Date.now() - startedAt > POLL_TIMEOUT_MS) {
             throw new Error('Timed out waiting for AI try-on result');
