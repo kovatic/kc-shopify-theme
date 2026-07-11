@@ -425,6 +425,16 @@
     "upload_success": "Here's your AI try-on!",
     "upload_error": "Something went wrong. Please try again.",
     "result_alt": "AI-generated saree try-on preview",
-    "try_another_photo": "Try another photo"
+    "original_alt": "Your original uploaded photo",
+    "try_another_photo": "Try another photo",
+    "step_uploading": "Uploading your photo…",
+    "step_styling": "AI is styling your saree…",
+    "step_finishing": "Adding finishing touches…",
+    "view_original": "Original",
+    "view_result": "AI try-on",
+    "add_to_cart": "Add to cart",
+    "added_to_cart": "Added!",
+    "download": "Download",
+    "share": "Share"
   }
 }
