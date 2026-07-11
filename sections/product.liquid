@@ -232,6 +232,10 @@
             <div class="product-page__stock-alert" id="stock-alert" style="display:none"></div>
           {%- endif -%}
 
+          {%- if product.metafields.custom.try_with_ai.value == true and customer -%}
+            {% render 'try-with-ai-gallery', product: product, backend_url: settings.try_with_ai_backend_url %}
+          {%- endif -%}
+
           {%- comment -%} ATC + Wishlist + Share row {%- endcomment -%}
           <div class="product-page__action-row">
             <div class="product-page__buy-buttons-group product-page__atc-btn--desktop">

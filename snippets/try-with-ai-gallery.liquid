@@ -1,0 +1,122 @@
+{% doc %}
+  Renders a strip of the customer's previous AI try-on results for this
+  product, fetched from the KC Wear AI backend. Clicking a thumbnail opens
+  the try-with-ai modal directly on that result (no re-generation).
+
+  Hidden entirely if the customer has no previous completed try-ons for this
+  product. Requires `window.openTryWithAiModal` to be defined by
+  `snippets/try-with-ai-modal.liquid`, rendered elsewhere on the page.
+
+  @param {product} product - The product being tried on
+  @param {string} [backend_url] - Base URL of the KC Wear AI backend
+
+  @example
+  {% render 'try-with-ai-gallery', product: product, backend_url: settings.try_with_ai_backend_url %}
+{% enddoc %}
+
+<div
+  class="try-ai-gallery"
+  id="try-ai-gallery"
+  data-backend-url="{{ backend_url }}"
+  data-product-id="{{ product.id }}"
+  data-customer-id="{{ customer.id }}"
+  data-i18n-label="{{ 'try_with_ai.previous_tryons' | t | escape }}"
+  data-i18n-alt="{{ 'try_with_ai.previous_tryon_alt' | t | escape }}"
+  hidden
+>
+  <p class="try-ai-gallery__label"></p>
+  <div class="try-ai-gallery__list" id="try-ai-gallery-list"></div>
+</div>
+
+{% stylesheet %}
+  .try-ai-gallery {
+    margin: 4px 0 14px;
+  }
+  .try-ai-gallery[hidden] {
+    display: none;
+  }
+  .try-ai-gallery__label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #888;
+    margin: 0 0 8px;
+    text-transform: uppercase;
+  }
+  .try-ai-gallery__list {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .try-ai-gallery__item {
+    flex-shrink: 0;
+    width: 64px;
+    height: 96px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1.5px solid #e8e2d9;
+    background: #fff;
+    cursor: pointer;
+    padding: 0;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .try-ai-gallery__item:hover {
+    border-color: #9c2a8f;
+    transform: translateY(-2px);
+  }
+  .try-ai-gallery__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    var gallery = document.getElementById('try-ai-gallery');
+    if (!gallery) return;
+
+    var BACKEND_URL  = (gallery.dataset.backendUrl || '').replace(/\/+$/, '');
+    var PRODUCT_ID   = gallery.dataset.productId || '';
+    var CUSTOMER_ID  = gallery.dataset.customerId || '';
+    var LABEL        = gallery.dataset.i18nLabel || 'Your previous try-ons';
+    var ALT          = gallery.dataset.i18nAlt || 'Previous AI try-on result';
+
+    var labelEl = gallery.querySelector('.try-ai-gallery__label');
+    var listEl  = document.getElementById('try-ai-gallery-list');
+
+    if (!BACKEND_URL || !CUSTOMER_ID || !PRODUCT_ID) return;
+
+    labelEl.textContent = LABEL;
+
+    var url = BACKEND_URL + '/api/try-on/history?customerId=' + encodeURIComponent(CUSTOMER_ID) + '&productId=' + encodeURIComponent(PRODUCT_ID);
+
+    fetch(url)
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        var items = res && res.success ? res.data : null;
+        if (!items || !items.length) return;
+
+        items.forEach(function (item) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'try-ai-gallery__item';
+          var img = document.createElement('img');
+          img.src = item.outputImageUrl;
+          img.alt = ALT;
+          img.loading = 'lazy';
+          btn.appendChild(img);
+          btn.addEventListener('click', function () {
+            if (window.openTryWithAiModal) window.openTryWithAiModal(item.outputImageUrl);
+          });
+          listEl.appendChild(btn);
+        });
+
+        gallery.hidden = false;
+      })
+      .catch(function () {});
+  })();
+{% endjavascript %}

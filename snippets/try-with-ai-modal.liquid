@@ -39,7 +39,6 @@
   data-i18n-added-to-cart="{{ 'try_with_ai.added_to_cart' | t | escape }}"
   data-i18n-download="{{ 'try_with_ai.download' | t | escape }}"
   data-i18n-share="{{ 'try_with_ai.share' | t | escape }}"
-  data-i18n-previous-tryon-alt="{{ 'try_with_ai.previous_tryon_alt' | t | escape }}"
 >
   <div class="try-ai-modal__backdrop"></div>
   <div class="try-ai-modal__panel">
@@ -75,11 +74,6 @@
           </span>
         </label>
         <input type="file" accept="image/*" id="try-ai-file-input" class="try-ai-modal__file-input">
-
-        <div class="try-ai-modal__history" id="try-ai-history" hidden>
-          <p class="try-ai-modal__history-label">{{ 'try_with_ai.previous_tryons' | t }}</p>
-          <div class="try-ai-modal__history-list" id="try-ai-history-list"></div>
-        </div>
       </div>
 
       <div class="try-ai-modal__step" id="try-ai-step-loading" hidden>
@@ -323,49 +317,6 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
-  }
-
-  .try-ai-modal__history {
-    margin-top: 14px;
-  }
-  .try-ai-modal__history[hidden] {
-    display: none;
-  }
-  .try-ai-modal__history-label {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    color: #888;
-    margin: 0 0 8px;
-    text-transform: uppercase;
-  }
-  .try-ai-modal__history-list {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-  }
-  .try-ai-modal__history-item {
-    flex-shrink: 0;
-    width: 64px;
-    height: 96px;
-    border-radius: 6px;
-    overflow: hidden;
-    border: 1.5px solid #e8e2d9;
-    background: #fff;
-    cursor: pointer;
-    padding: 0;
-    transition: border-color 0.15s;
-  }
-  .try-ai-modal__history-item:hover {
-    border-color: #9c2a8f;
-  }
-  .try-ai-modal__history-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
   }
 
   .try-ai-modal__step[hidden] {
@@ -710,8 +661,7 @@
       addToCart:     modal.dataset.i18nAddToCart      || 'Add to cart',
       addedToCart:   modal.dataset.i18nAddedToCart    || 'Added!',
       download:      modal.dataset.i18nDownload       || 'Download',
-      share:         modal.dataset.i18nShare          || 'Share',
-      previousTryonAlt: modal.dataset.i18nPreviousTryonAlt || 'Previous AI try-on result'
+      share:         modal.dataset.i18nShare          || 'Share'
     };
 
     var dropzone           = document.getElementById('try-ai-dropzone');
@@ -731,8 +681,6 @@
     var compareHandle      = document.getElementById('try-ai-compare-handle');
     var loadingStepEl      = document.getElementById('try-ai-loading-step');
     var loadingImg         = document.getElementById('try-ai-loading-img');
-    var historyWrap        = document.getElementById('try-ai-history');
-    var historyList         = document.getElementById('try-ai-history-list');
 
     var stepUpload  = document.getElementById('try-ai-step-upload');
     var stepLoading = document.getElementById('try-ai-step-loading');
@@ -835,51 +783,16 @@
       showUploadStep();
     }
 
-    function renderHistory(items) {
-      historyList.innerHTML = '';
-      if (!items || !items.length) {
-        historyWrap.hidden = true;
-        return;
-      }
-      items.forEach(function (item) {
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'try-ai-modal__history-item';
-        var img = document.createElement('img');
-        img.src = item.outputImageUrl;
-        img.alt = I18N.previousTryonAlt;
-        img.loading = 'lazy';
-        btn.appendChild(img);
-        btn.addEventListener('click', function () {
-          resultImg.src = item.outputImageUrl;
-          originalImg.src = '';
-          showResultStep(false);
-          setStatus('', null);
-        });
-        historyList.appendChild(btn);
-      });
-      historyWrap.hidden = false;
-    }
-
-    function loadHistory() {
-      if (!BACKEND_URL || !CUSTOMER_ID || !PRODUCT_ID) return;
-      var url = BACKEND_URL + '/api/try-on/history?customerId=' + encodeURIComponent(CUSTOMER_ID) + '&productId=' + encodeURIComponent(PRODUCT_ID);
-      debugLog('loading history', url);
-      fetch(url)
-        .then(function (r) { return r.json(); })
-        .then(function (res) {
-          debugLog('history response', res);
-          if (res && res.success) renderHistory(res.data);
-        })
-        .catch(function (err) { debugLog('history load failed', err); });
-    }
-
-    function openModal() {
+    function openModal(presetResultUrl) {
       resetState();
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
-      loadHistory();
+      if (presetResultUrl) {
+        resultImg.src = presetResultUrl;
+        originalImg.src = '';
+        showResultStep(false);
+      }
     }
 
     function closeModal() {
