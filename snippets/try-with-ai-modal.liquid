@@ -227,8 +227,10 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    aspect-ratio: 4 / 3;
-    max-height: 480px;
+    max-width: 420px;
+    aspect-ratio: 2 / 3;
+    max-height: 640px;
+    margin: 0 auto;
     border: 1.5px dashed #d4cdc4;
     border-radius: 8px;
     background: #fff;
@@ -248,10 +250,16 @@
     font-family: 'Montserrat', sans-serif;
     font-size: 0.8rem;
   }
+  .try-ai-modal__dropzone-placeholder[hidden] {
+    display: none;
+  }
   .try-ai-modal__preview-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  .try-ai-modal__preview-img[hidden] {
+    display: none;
   }
   .try-ai-modal__file-input {
     position: absolute;
@@ -277,8 +285,10 @@
     justify-content: center;
     gap: 16px;
     width: 100%;
-    aspect-ratio: 4 / 3;
-    max-height: 480px;
+    max-width: 420px;
+    aspect-ratio: 2 / 3;
+    max-height: 640px;
+    margin: 0 auto;
     border-radius: 8px;
     background: #fff;
     border: 1.5px solid #e8e2d9;
@@ -325,8 +335,10 @@
   .try-ai-modal__compare {
     position: relative;
     width: 100%;
-    aspect-ratio: 4 / 3;
-    max-height: 480px;
+    max-width: 420px;
+    aspect-ratio: 2 / 3;
+    max-height: 640px;
+    margin: 0 auto;
     border-radius: 8px;
     overflow: hidden;
     background: #fff;
