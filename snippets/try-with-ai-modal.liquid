@@ -22,7 +22,7 @@
   aria-modal="true"
   aria-labelledby="try-ai-modal-title"
   data-backend-url="{{ backend_url }}"
-  data-product-image="{{ product.featured_image | image_url: width: 1024 }}"
+  data-product-image="https:{{ product.featured_image | image_url: width: 1024 }}"
   data-product-id="{{ product.id }}"
   data-customer-id="{{ customer.id }}"
   data-i18n-upload-button="{{ 'try_with_ai.upload_button' | t | escape }}"
