@@ -36,14 +36,18 @@
       <p class="offer-row__description">{{ block.settings.description | escape }}</p>
     {%- endif -%}
 
-    {%- if block.settings.offer_1 != blank or block.settings.offer_2 != blank or block.settings.offer_3 != blank or block.settings.offer_4 != blank -%}
-      <ul class="offer-row__list">
-        {%- if block.settings.offer_1 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_1 | escape }}</li>{%- endif -%}
-        {%- if block.settings.offer_2 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_2 | escape }}</li>{%- endif -%}
-        {%- if block.settings.offer_3 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_3 | escape }}</li>{%- endif -%}
-        {%- if block.settings.offer_4 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_4 | escape }}</li>{%- endif -%}
-      </ul>
-    {%- endif -%}
+    {%- if block.settings.offer_1 != blank or block.settings.offer_2 != blank or block.settings.offer_3 != blank or block.settings.offer_4 != blank or block.settings.offer_5 != blank or block.settings.offer_6 != blank or block.settings.offer_7 != blank or block.settings.offer_8 != blank -%}
+  <ul class="offer-row__list">
+    {%- if block.settings.offer_1 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_1 | escape }}</li>{%- endif -%}
+    {%- if block.settings.offer_2 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_2 | escape }}</li>{%- endif -%}
+    {%- if block.settings.offer_3 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_3 | escape }}</li>{%- endif -%}
+    {%- if block.settings.offer_4 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_4 | escape }}</li>{%- endif -%}
+    {%- if block.settings.offer_5 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_5 | escape }}</li>{%- endif -%}
+    {%- if block.settings.offer_6 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_6 | escape }}</li>{%- endif -%}
+    {%- if block.settings.offer_7 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_7 | escape }}</li>{%- endif -%}
+    {%- if block.settings.offer_8 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_8 | escape }}</li>{%- endif -%}
+  </ul>
+{%- endif -%}
 
     {%- if block.settings.button_label != blank -%}
       <a class="offer-row__btn" href="{{ block.settings.button_url | default: '#' }}">
