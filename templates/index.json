@@ -24,7 +24,7 @@
             "button_url": "shopify://pages/aadi-offer",
             "text_position": "middle-left",
             "show_overlay": true,
-            "overlay_opacity": 30
+            "overlay_opacity": 0
           }
         },
         "slide_48gw4q": {
