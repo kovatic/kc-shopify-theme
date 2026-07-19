@@ -71,29 +71,13 @@
             "show_overlay": false,
             "overlay_opacity": 30
           }
-        },
-        "slide_RHchTJ": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/kc_banner_for_website.png",
-            "mobile_image": "shopify://shop_images/kc_PNG.png",
-            "subheading": "",
-            "heading": "",
-            "text": "",
-            "button_label": "",
-            "button_url": "shopify://collections/lehenga",
-            "text_position": "middle-left",
-            "show_overlay": true,
-            "overlay_opacity": 0
-          }
         }
       },
       "block_order": [
         "slide_QNFNx4",
         "slide_48gw4q",
         "slide_krfQVT",
-        "slide_VRUrm9",
-        "slide_RHchTJ"
+        "slide_VRUrm9"
       ],
       "name": "t:sections.banner.name",
       "settings": {
