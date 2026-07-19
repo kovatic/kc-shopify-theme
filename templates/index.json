@@ -12,6 +12,21 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
+        "slide_QNFNx4": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/website.jpg_1.jpg",
+            "mobile_image": "shopify://shop_images/mobile.jpg_1.jpg",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "shopify://pages/aadi-offer",
+            "text_position": "middle-left",
+            "show_overlay": true,
+            "overlay_opacity": 30
+          }
+        },
         "slide_48gw4q": {
           "type": "slide",
           "settings": {
@@ -74,6 +89,7 @@
         }
       },
       "block_order": [
+        "slide_QNFNx4",
         "slide_48gw4q",
         "slide_krfQVT",
         "slide_VRUrm9",
