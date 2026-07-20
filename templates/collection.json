@@ -11,10 +11,53 @@
   "sections": {
     "main": {
       "type": "collection",
-      "settings": {}
+      "settings": {
+        "products_per_page": 20,
+        "padding_top": 40,
+        "padding_bottom": 60
+      }
+    },
+    "reel_4wpqBR": {
+      "type": "reel",
+      "name": "t:sections.reel.name",
+      "settings": {
+        "title": "Trending Collections",
+        "subtitle": "Explore our curated collections of the finest ethnic wear",
+        "collections": [
+          "necklace-saree",
+          "silk-saree",
+          "soft-silk-saree",
+          "semi-mysore-silk-saree"
+        ],
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "product_carousel_JnT9jB": {
+      "type": "product-carousel",
+      "name": "t:sections.product_carousel.name",
+      "settings": {
+        "title": "Celebrities' Favorites",
+        "subtitle": "Discover what's new this season.",
+        "data_source": "multiple_collections",
+        "single_collection": "",
+        "products_count": 7,
+        "collections": [
+          "silk-saree",
+          "juet-silk-saree",
+          "banarasi-silk-saree",
+          "art-silk-saree",
+          "kancheepuram-saree-silk-saree"
+        ],
+        "enable_reel_video": true,
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "reel_4wpqBR",
+    "product_carousel_JnT9jB"
   ]
 }

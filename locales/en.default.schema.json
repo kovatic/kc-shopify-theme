@@ -120,6 +120,13 @@
     "share_image": "Social share image"
   },
   "sections": {
+    "careers_form": {
+      "name": "Careers form",
+      "job_roles_label": "Job roles",
+      "job_roles_info": "Comma-separated list of roles shown in the dropdown (e.g. Tailor, Store Manager, Other).",
+      "store_locations_label": "Store locations",
+      "store_locations_info": "Comma-separated list of store locations shown in the dropdown."
+    },
     "tab_product_list": {
       "name": "Tab product list",
       "blocks": {
@@ -157,6 +164,17 @@
     "promo": {
       "name": "Promo",
       "button_label": "Button label"
+    },
+    "offer_grid": {
+      "name": "Offer grid"
+    },
+    "countdown_banner": {
+      "name": "Countdown banner",
+      "end_date": "End date & time",
+      "end_date_info": "Format: YYYY-MM-DDTHH:MM:SS (24-hour, store local time)"
+    },
+    "offer_editorial": {
+      "name": "Offer editorial"
     },
     "brand_marquee": {
       "name": "Brand marquee",
@@ -278,6 +296,21 @@
   "blocks": {
     "category_item": {
       "name": "Category item"
+    },
+    "offer_category": {
+      "name": "Offer category",
+      "icon": "Icon (emoji)",
+      "icon_info": "Paste an emoji, e.g. 🥻 for sarees, 👕 for shirts, 🧒 for kids"
+    },
+    "offer_item": {
+      "name": "Offer item",
+      "pcs": "Pieces label",
+      "price": "Price",
+      "featured": "Featured (spotlight)",
+      "featured_info": "Renders a larger, glowing card to highlight this offer"
+    },
+    "offer_row": {
+      "name": "Offer row"
     }
   },
   "options": {

@@ -30,7 +30,28 @@
         <div class="cart-page__form" id="cart-form">
           <div class="cart-page__items" id="cart-items">
             {%- for item in cart.items -%}
-              <div class="cart-item" data-key="{{ item.key }}">
+              {%- comment -%} Skip addon line items — rendered as sub-rows under their parent {%- endcomment -%}
+              {%- assign is_addon_item = false -%}
+              {%- for property in item.properties -%}
+                {%- if property.first == '_linked_item' -%}
+                  {%- assign is_addon_item = true -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- unless is_addon_item -%}
+
+              {%- comment -%} Find paired addon by unique cart line key {%- endcomment -%}
+              {%- assign paired_addon_item = nil -%}
+              {%- for other in cart.items -%}
+                {%- for prop in other.properties -%}
+                  {%- if prop.first == '_linked_item' -%}
+                    {%- if prop.last == item.key -%}
+                      {%- assign paired_addon_item = other -%}
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endfor -%}
+
+              <div class="cart-item" data-key="{{ item.key }}"{% if paired_addon_item %} data-addon-key="{{ paired_addon_item.key }}"{% endif %}>
 
                 {%- comment -%} Product image {%- endcomment -%}
                 <a href="{{ item.url }}" class="cart-item__image-link">
@@ -51,9 +72,42 @@
                     <p class="cart-item__variant">{{ item.variant.title | escape }}</p>
                   {%- endunless -%}
 
+                  {%- assign has_tailoring_props = false -%}
+                  {%- for property in item.properties -%}
+                    {%- assign prop_key_first_char = property.first | slice: 0 -%}
+                    {%- unless property.first == 'Tailoring Extras' -%}
+                      {%- unless prop_key_first_char == '_' -%}
+                        {%- unless property.last == blank -%}
+                          {%- assign has_tailoring_props = true -%}
+                        {%- endunless -%}
+                      {%- endunless -%}
+                    {%- endunless -%}
+                  {%- endfor -%}
+                  {%- if has_tailoring_props -%}
+                    <ul class="cart-item__tailoring-props">
+                      {%- for property in item.properties -%}
+                        {%- assign prop_key_first_char = property.first | slice: 0 -%}
+                        {%- unless property.first == 'Tailoring Extras' -%}
+                          {%- unless prop_key_first_char == '_' -%}
+                            {%- unless property.last == blank -%}
+                              <li><span class="cart-item__prop-key">{{ property.first }}:</span> {{ property.last }}</li>
+                            {%- endunless -%}
+                          {%- endunless -%}
+                        {%- endunless -%}
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+
                   <p class="cart-item__price" data-line-price>{{ item.final_line_price | money }}</p>
                   {%- if item.original_line_price != item.final_line_price -%}
                     <p class="cart-item__original-price">{{ item.original_line_price | money }}</p>
+                  {%- endif -%}
+
+                  {%- if paired_addon_item -%}
+                    <div class="cart-item__addon-row">
+                      <span class="cart-item__addon-label">{{ paired_addon_item.product.title | escape }}</span>
+                      <span class="cart-item__addon-price">{{ paired_addon_item.final_line_price | money }}</span>
+                    </div>
                   {%- endif -%}
 
                   <div class="cart-item__qty-row">
@@ -77,6 +131,7 @@
                 </div>
 
               </div>
+              {%- endunless -%}
             {%- endfor -%}
           </div>
         </div>
@@ -295,6 +350,57 @@
     font-weight: 600;
     color: #1a1a1a;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cart-item__addon-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 5px 10px;
+    background: #f5f0eb;
+    border-left: 2px solid #ce0570;
+    border-radius: 0 3px 3px 0;
+    margin: 4px 0;
+  }
+
+  .cart-item__addon-label {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #555;
+  }
+
+  .cart-item__addon-price {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #ce0570;
+    white-space: nowrap;
+  }
+
+  .cart-item__tailoring-props {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .cart-item__tailoring-props li {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.75rem;
+    color: #888;
+    line-height: 1.4;
+  }
+
+  .cart-item__prop-key {
+    font-weight: 600;
+    color: #555;
   }
 
   .cart-item__original-price {
@@ -521,48 +627,64 @@
         .replace('{{amount_no_decimals_with_comma_separator}}', amountNoDecimalsWithComma);
     }
 
+    function updateItems(updates) {
+      return fetch('/cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ updates: updates })
+      }).then(function (r) { return r.json(); });
+    }
+
+    function removeOrphanedAddons(cart) {
+      var allKeys = {};
+      cart.items.forEach(function(i) { allKeys[i.key] = true; });
+      var orphans = {};
+      cart.items.forEach(function(item) {
+        var linked = (item.properties || {})['_linked_item'];
+        if (linked && !allKeys[linked]) orphans[item.key] = 0;
+      });
+      if (!Object.keys(orphans).length) return Promise.resolve(cart);
+      return fetch('/cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ updates: orphans })
+      }).then(function(r) { return r.json(); });
+    }
+
     function updateCart(key, quantity) {
       var itemEl = document.querySelector('.cart-item[data-key="' + key + '"]');
       if (itemEl) itemEl.classList.add('is-loading');
 
-      fetch('/cart/change.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: key, quantity: quantity })
-      })
-        .then(function (r) { return r.json(); })
+      var updates = {};
+      updates[key] = quantity;
+
+      /* Also zero out the addon if removing the parent */
+      var addonKey = itemEl && itemEl.dataset.addonKey;
+      if (quantity === 0 && addonKey) updates[addonKey] = 0;
+
+      updateItems(updates)
+        .then(function(cart) { return removeOrphanedAddons(cart); })
         .then(function (cart) {
-          // Update subtotal
           var subtotalEl = document.getElementById('cart-subtotal');
           if (subtotalEl) subtotalEl.textContent = formatMoney(cart.total_price);
 
           if (quantity === 0) {
-            // Remove item row
             if (itemEl) itemEl.remove();
-
-            // If cart is now empty, reload to show empty state
-            if (cart.item_count === 0) {
-              location.reload();
-              return;
-            }
+            if (cart.item_count === 0) { location.reload(); return; }
           } else {
-            // Update displayed quantity and line price
             if (itemEl) {
               var qtyEl = itemEl.querySelector('.cart-item__qty-input');
               if (qtyEl) qtyEl.textContent = quantity;
 
-              // Find matching item in response
               var updatedItem = cart.items.find(function (i) { return i.key === key; });
               if (updatedItem) {
                 var priceEl = itemEl.querySelector('[data-line-price]');
                 if (priceEl) priceEl.textContent = formatMoney(updatedItem.final_line_price);
               }
-
               itemEl.classList.remove('is-loading');
             }
           }
 
-          // Dispatch event for header cart count updates
           document.dispatchEvent(new CustomEvent('cart:updated', { detail: cart }));
         })
         .catch(function () {
@@ -575,7 +697,6 @@
       if (!item) return;
       var key = item.dataset.key;
 
-      // Remove
       if (e.target.closest('.js-remove')) {
         updateCart(key, 0);
         return;

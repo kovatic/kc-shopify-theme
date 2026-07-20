@@ -1,0 +1,118 @@
+<div class="appointment-page">
+  <div class="appointment-page__inner">
+
+    <div class="appointment-page__header">
+      <h1 class="appointment-page__title">{{ section.settings.title }}</h1>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="appointment-page__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="appointment-page__calendar">
+      <iframe
+        src="{{ section.settings.calendar_url }}"
+        style="border: 0; background-color: #ffffff;"
+        width="100%"
+        height="{{ section.settings.height }}"
+        frameborder="0"
+        title="Book an appointment"
+      ></iframe>
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .appointment-page {
+    background-color: var(--color-background);
+    padding: 60px 20px;
+  }
+
+  .appointment-page__inner {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .appointment-page__header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .appointment-page__title {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #2e1f1f;
+    margin: 0 0 12px;
+  }
+
+  .appointment-page__subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    color: #494949;
+    margin: 0;
+  }
+
+  .appointment-page__calendar {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(46, 31, 31, 0.07);
+    background-color: #ffffff;
+  }
+
+  .appointment-page__calendar iframe {
+    display: block;
+    background-color: #ffffff;
+  }
+
+  @media screen and (max-width: 767px) {
+    .appointment-page {
+      padding: 40px 16px;
+    }
+
+    .appointment-page__title {
+      font-size: 28px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Appointment",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Book an appointment"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Schedule a visit at your preferred store location."
+    },
+    {
+      "type": "text",
+      "id": "calendar_url",
+      "label": "Google Calendar embed URL",
+      "default": "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3_byvECutiwY1wgBTBo4A89AEDlqFVEGtjoniNu4MqnaCbS5uMsLTEdn1iilgI4iJD7p0JCNZZ?gv=true"
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "label": "Calendar height",
+      "min": 400,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "default": 600
+    }
+  ],
+  "presets": [
+    {
+      "name": "Appointment"
+    }
+  ]
+}
+{% endschema %}

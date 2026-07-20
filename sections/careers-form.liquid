@@ -1,0 +1,535 @@
+<div class="careers-page">
+  <div class="careers-page__inner">
+
+    <div class="careers-page__header">
+      <h1 class="careers-page__title">{{ 'careers.title' | t }}</h1>
+      <p class="careers-page__subtitle">{{ 'careers.subtitle' | t }}</p>
+    </div>
+
+    <div class="careers-page__form-wrap">
+      {%- form 'contact' -%}
+        <input type="hidden" name="contact[subject]" value="Job Application – K.Chinnadurai & Co.">
+
+        {%- if form.posted_successfully? -%}
+          <div class="careers-form__success">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p>{{ 'careers.success_message' | t }}</p>
+          </div>
+        {%- endif -%}
+
+        {%- if form.errors -%}
+          <div class="careers-form__errors">
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Row 1: Name + Email {%- endcomment -%}
+        <div class="careers-form__row">
+          <div class="careers-form__field">
+            <label class="careers-form__label" for="CareersFormName">
+              {{ 'careers.name_label' | t }} <span class="careers-form__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              class="careers-form__input"
+              type="text"
+              id="CareersFormName"
+              name="contact[name]"
+              value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+              autocomplete="name"
+              placeholder="{{ 'careers.name_placeholder' | t }}"
+              required
+            >
+          </div>
+          <div class="careers-form__field">
+            <label class="careers-form__label" for="CareersFormEmail">
+              {{ 'careers.email_label' | t }} <span class="careers-form__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              class="careers-form__input"
+              type="email"
+              id="CareersFormEmail"
+              name="contact[email]"
+              value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+              autocomplete="email"
+              autocorrect="off"
+              autocapitalize="off"
+              placeholder="{{ 'careers.email_placeholder' | t }}"
+              required
+            >
+          </div>
+        </div>
+
+        {%- comment -%} Row 2: Mobile + Role {%- endcomment -%}
+        <div class="careers-form__row">
+          <div class="careers-form__field">
+            <label class="careers-form__label" for="CareersFormMobile">
+              {{ 'careers.mobile_label' | t }} <span class="careers-form__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              class="careers-form__input"
+              type="tel"
+              id="CareersFormMobile"
+              name="contact[Mobile number]"
+              autocomplete="tel"
+              placeholder="{{ 'careers.mobile_placeholder' | t }}"
+              required
+            >
+          </div>
+          <div class="careers-form__field">
+            <label class="careers-form__label" for="CareersFormRole">
+              {{ 'careers.role_label' | t }} <span class="careers-form__required" aria-hidden="true">*</span>
+            </label>
+            <select
+              class="careers-form__input careers-form__select"
+              id="CareersFormRole"
+              name="contact[Role]"
+              required
+            >
+              <option value="">{{ 'careers.role_placeholder' | t }}</option>
+              {%- assign job_roles = metaobjects.job_role.values -%}
+              {%- for role in job_roles -%}
+                <option value="{{ role.title | escape }}">{{ role.title | escape }}</option>
+              {%- endfor -%}
+            </select>
+          </div>
+        </div>
+
+        {%- comment -%} Store Location {%- endcomment -%}
+        <div class="careers-form__field">
+          <label class="careers-form__label" for="CareersFormStore">
+            {{ 'careers.store_label' | t }} <span class="careers-form__required" aria-hidden="true">*</span>
+          </label>
+          <select
+            class="careers-form__input careers-form__select"
+            id="CareersFormStore"
+            name="contact[Preferred store location]"
+            required
+          >
+            <option value="">{{ 'careers.store_placeholder' | t }}</option>
+            {%- assign store_metaobject = metaobjects['store_location'] -%}
+            {%- if store_metaobject != blank -%}
+              {%- for store in store_metaobject.values -%}
+                <option value="{{ store.fields.store_name.value | default: store.handle | escape }}">
+                  {{- store.fields.store_name.value | default: store.handle | escape -}}
+                </option>
+              {%- endfor -%}
+            {%- else -%}
+              {%- comment -%} Fallback to section settings store list {%- endcomment -%}
+              {%- assign store_list = section.settings.store_locations | split: ',' -%}
+              {%- for store in store_list -%}
+                {%- assign store_trimmed = store | strip -%}
+                {%- if store_trimmed != blank -%}
+                  <option value="{{ store_trimmed | escape }}">{{ store_trimmed | escape }}</option>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          </select>
+        </div>
+
+        {%- comment -%} Comments {%- endcomment -%}
+        <div class="careers-form__field">
+          <label class="careers-form__label" for="CareersFormComments">
+            {{ 'careers.comments_label' | t }}
+          </label>
+          <textarea
+            class="careers-form__input careers-form__textarea"
+            id="CareersFormComments"
+            name="contact[Comments]"
+            rows="5"
+            placeholder="{{ 'careers.comments_placeholder' | t }}"
+          ></textarea>
+        </div>
+
+        {%- comment -%} Resume / CV upload {%- endcomment -%}
+        <div class="careers-form__field">
+          <label class="careers-form__label" for="CareersFormResume">
+            {{ 'careers.resume_upload_label' | t }}
+          </label>
+          <div class="careers-form__file-wrap" id="CareersFileWrap">
+            <input
+              class="careers-form__file-input"
+              type="file"
+              id="CareersFormResume"
+              accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              aria-describedby="CareersFileHint CareersFileError"
+            >
+            <label class="careers-form__file-label" for="CareersFormResume">
+              <svg class="careers-form__file-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M12 16V8m0 0l-3 3m3-3l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4 16.5A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span class="careers-form__file-text" id="CareersFileText">{{ 'careers.resume_upload_placeholder' | t }}</span>
+            </label>
+          </div>
+          <p class="careers-form__hint" id="CareersFileHint">{{ 'careers.resume_upload_hint' | t }}</p>
+          <p class="careers-form__file-error" id="CareersFileError" role="alert" aria-live="assertive"></p>
+          <input type="hidden" name="contact[Resume attachment]" id="CareersResumeData">
+        </div>
+
+        <button type="submit" class="careers-form__submit">
+          {{ 'careers.submit_label' | t }}
+        </button>
+
+      {%- endform -%}
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .careers-page {
+    background-color: var(--color-background);
+    padding: 60px 20px;
+  }
+
+  .careers-page__inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .careers-page__header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .careers-page__title {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #2e1f1f;
+    margin: 0 0 12px;
+  }
+
+  .careers-page__subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    color: #494949;
+    margin: 0;
+  }
+
+  .careers-page__form-wrap {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: 0 2px 16px rgba(46, 31, 31, 0.07);
+  }
+
+  .careers-form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .careers-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .careers-form__label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2e1f1f;
+  }
+
+  .careers-form__required {
+    color: #c0392b;
+    margin-left: 2px;
+  }
+
+  .careers-form__input {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #2e1f1f;
+    border: 1.5px solid rgba(46, 31, 31, 0.2);
+    border-radius: 4px;
+    padding: 10px 14px;
+    background-color: #faf8f5;
+    outline: none;
+    transition: border-color 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .careers-form__input:focus {
+    border-color: var(--color-primary);
+  }
+
+  .careers-form__select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%232e1f1f' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+
+  .careers-form__textarea {
+    resize: vertical;
+    min-height: 130px;
+  }
+
+  .careers-form__hint {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #888;
+    margin: 2px 0 0;
+  }
+
+  .careers-form__file-wrap {
+    position: relative;
+  }
+
+  .careers-form__file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .careers-form__file-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #2e1f1f;
+    border: 1.5px dashed rgba(46, 31, 31, 0.3);
+    border-radius: 4px;
+    padding: 12px 16px;
+    background-color: #faf8f5;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .careers-form__file-label:hover,
+  .careers-form__file-input:focus-visible + .careers-form__file-label {
+    border-color: var(--color-primary);
+    background-color: #f5f0ea;
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .careers-form__file-wrap.careers-form__file-wrap--selected .careers-form__file-label {
+    border-color: var(--color-primary);
+    border-style: solid;
+  }
+
+  .careers-form__file-wrap.careers-form__file-wrap--error .careers-form__file-label {
+    border-color: #c0392b;
+    background-color: #fff8f8;
+  }
+
+  .careers-form__file-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: #888;
+  }
+
+  .careers-form__file-wrap.careers-form__file-wrap--selected .careers-form__file-icon {
+    color: var(--color-primary);
+  }
+
+  .careers-form__file-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #888;
+  }
+
+  .careers-form__file-wrap.careers-form__file-wrap--selected .careers-form__file-text {
+    color: #2e1f1f;
+  }
+
+  .careers-form__file-error {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #c0392b;
+    margin: 4px 0 0;
+    min-height: 0;
+  }
+
+  .careers-form__file-error:empty {
+    display: none;
+  }
+
+  .careers-form__submit {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #fff;
+    background-color: var(--color-primary);
+    border: none;
+    border-radius: 4px;
+    padding: 13px 32px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  .careers-form__submit:hover {
+    opacity: 0.88;
+  }
+
+  .careers-form__success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #edf7ed;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+  }
+
+  .careers-form__success svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: #2d6a2d;
+  }
+
+  .careers-form__success p {
+    margin: 0;
+    color: #2d6a2d;
+  }
+
+  .careers-form__errors {
+    background-color: #fdecea;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #b71c1c;
+  }
+
+  @media screen and (max-width: 767px) {
+    .careers-page {
+      padding: 40px 16px;
+    }
+
+    .careers-page__title {
+      font-size: 28px;
+    }
+
+    .careers-page__form-wrap {
+      padding: 24px 16px;
+    }
+
+    .careers-form__row {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    var MAX_SIZE_MB = 5;
+    var MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+    var ALLOWED_TYPES = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
+    var ALLOWED_EXTS = /\.(pdf|doc|docx)$/i;
+
+    var fileInput = document.getElementById('CareersFormResume');
+    var fileWrap  = document.getElementById('CareersFileWrap');
+    var fileText  = document.getElementById('CareersFileText');
+    var fileError = document.getElementById('CareersFileError');
+    var hiddenField = document.getElementById('CareersResumeData');
+
+    if (!fileInput) return;
+
+    fileInput.addEventListener('change', function () {
+      var file = fileInput.files[0];
+
+      fileWrap.classList.remove('careers-form__file-wrap--selected', 'careers-form__file-wrap--error');
+      fileError.textContent = '';
+      hiddenField.value = '';
+
+      if (!file) {
+        fileText.textContent = fileInput.getAttribute('data-placeholder') || 'Choose a file';
+        return;
+      }
+
+      var extOk  = ALLOWED_EXTS.test(file.name);
+      var typeOk = ALLOWED_TYPES.indexOf(file.type) !== -1 || file.type === '';
+
+      if (!extOk || (!typeOk && file.type !== '')) {
+        fileWrap.classList.add('careers-form__file-wrap--error');
+        fileError.textContent = 'Only PDF, DOC, or DOCX files are accepted.';
+        fileInput.value = '';
+        return;
+      }
+
+      if (file.size > MAX_SIZE_BYTES) {
+        fileWrap.classList.add('careers-form__file-wrap--error');
+        fileError.textContent = 'File is too large. Maximum size is ' + MAX_SIZE_MB + ' MB.';
+        fileInput.value = '';
+        return;
+      }
+
+      fileWrap.classList.add('careers-form__file-wrap--selected');
+      fileText.textContent = file.name;
+
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        hiddenField.value = file.name + '::' + e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    var form = fileInput.closest('form');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        if (fileInput.files[0] && !hiddenField.value) {
+          e.preventDefault();
+          fileError.textContent = 'Please wait — the file is still being processed.';
+        }
+      });
+    }
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.careers_form.name",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "job_roles",
+      "label": "t:sections.careers_form.job_roles_label",
+      "info": "t:sections.careers_form.job_roles_info",
+      "default": "Sales Associate, Store Manager, Tailor, Customer Service, Warehouse Staff, Other"
+    },
+    {
+      "type": "textarea",
+      "id": "store_locations",
+      "label": "t:sections.careers_form.store_locations_label",
+      "info": "t:sections.careers_form.store_locations_info",
+      "default": "Eral, Tirunelveli, Chennai, Thoothukudi"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.careers_form.name"
+    }
+  ]
+}
+{% endschema %}

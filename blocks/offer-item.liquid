@@ -1,0 +1,267 @@
+{% doc %}
+  Renders a single seasonal offer card: pcs count, price, item name.
+  Styled as a bold festive badge for promotional landing pages. Supports a
+  "featured" mode that renders a larger spotlight card.
+
+  @example
+  {% content_for 'block', type: 'offer-item', id: 'offer-item-1' %}
+{% enddoc %}
+
+<div
+  class="offer-item{% if block.settings.featured %} offer-item--featured{% endif %} js-offer-item-animate"
+  {{ block.shopify_attributes }}
+>
+  <div class="offer-item__badge">
+    {%- if block.settings.featured -%}
+      <span class="offer-item__star" aria-hidden="true">★</span>
+    {%- endif -%}
+    {%- if block.settings.pcs != blank -%}
+      <span class="offer-item__pcs">{{ block.settings.pcs | escape }}</span>
+    {%- endif -%}
+    {%- if block.settings.name != blank -%}
+      <span class="offer-item__name">{{ block.settings.name | escape }}</span>
+    {%- endif -%}
+    {%- if block.settings.price != blank -%}
+      <span class="offer-item__price">
+        <span class="offer-item__price-currency">₹</span>{{ block.settings.price | escape }}
+      </span>
+    {%- endif -%}
+    <span class="offer-item__only">{{ 'blocks.offer_item.only' | t }}</span>
+  </div>
+</div>
+
+{% stylesheet %}
+  .offer-item {
+    display: flex;
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .offer-item.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .offer-item__badge {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    width: 100%;
+    min-height: 148px;
+    padding: 18px 12px 14px;
+    background: #b3122c;
+    border: 2px solid #ffd75e;
+    border-radius: 10px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+    text-align: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+
+  .offer-item__badge:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 14px 26px rgba(0, 0, 0, 0.3);
+    border-color: #fff1c2;
+  }
+
+  .offer-item__badge::before,
+  .offer-item__badge::after {
+    content: '';
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    height: 8px;
+    background: inherit;
+    border: inherit;
+    border-radius: 8px;
+    z-index: -1;
+  }
+
+  .offer-item__badge::before {
+    top: -6px;
+  }
+
+  .offer-item__badge::after {
+    bottom: -6px;
+  }
+
+  /* Featured spotlight variant */
+  .offer-item--featured {
+    grid-column: span 2;
+  }
+
+  .offer-item--featured .offer-item__badge {
+    min-height: 190px;
+    background: linear-gradient(160deg, #d4152f 0%, #8f0e21 100%);
+    border-color: #ffe066;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3), 0 0 0 4px rgba(255, 215, 94, 0.18);
+  }
+
+  .offer-item--featured .offer-item__name {
+    font-size: 1.5rem;
+  }
+
+  .offer-item--featured .offer-item__price {
+    font-size: 2.6rem;
+  }
+
+  .offer-item__star {
+    position: absolute;
+    top: -14px;
+    right: -10px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffd75e;
+    color: #8f0e21;
+    border-radius: 50%;
+    font-size: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  }
+
+  .offer-item__pcs {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .offer-item__name {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+    margin: 2px 0;
+  }
+
+  .offer-item__price {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 2rem;
+    font-weight: 800;
+    color: #ffd75e;
+    line-height: 1;
+  }
+
+  .offer-item__price-currency {
+    font-size: 1.25rem;
+    vertical-align: top;
+  }
+
+  .offer-item__only {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #ffe9b3;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .offer-item__badge {
+      min-height: 128px;
+      padding: 14px 10px 12px;
+    }
+
+    .offer-item--featured {
+      grid-column: span 2;
+    }
+
+    .offer-item--featured .offer-item__badge {
+      min-height: 150px;
+    }
+
+    .offer-item__name {
+      font-size: 1rem;
+    }
+
+    .offer-item__price {
+      font-size: 1.6rem;
+    }
+
+    .offer-item--featured .offer-item__name {
+      font-size: 1.2rem;
+    }
+
+    .offer-item--featured .offer-item__price {
+      font-size: 2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .offer-item {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll('.js-offer-item-animate').forEach(function (el) {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll('.js-offer-item-animate').forEach(function (el) {
+      observer.observe(el);
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:blocks.offer_item.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "pcs",
+      "label": "t:blocks.offer_item.pcs",
+      "default": "3 Pcs"
+    },
+    {
+      "type": "text",
+      "id": "name",
+      "label": "t:labels.title",
+      "default": "T-Shirt"
+    },
+    {
+      "type": "text",
+      "id": "price",
+      "label": "t:blocks.offer_item.price",
+      "default": "500"
+    },
+    {
+      "type": "checkbox",
+      "id": "featured",
+      "label": "t:blocks.offer_item.featured",
+      "info": "t:blocks.offer_item.featured_info",
+      "default": false
+    }
+  ],
+  "presets": [{ "name": "t:blocks.offer_item.name" }]
+}
+{% endschema %}

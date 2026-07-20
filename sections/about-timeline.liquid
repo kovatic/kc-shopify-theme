@@ -16,6 +16,9 @@
       {%- if section.settings.subheading != blank -%}
         <p class="about-timeline__subheading">{{ section.settings.subheading | escape }}</p>
       {%- endif -%}
+      {%- if section.settings.description != blank -%}
+        <div class="about-timeline__description">{{ section.settings.description }}</div>
+      {%- endif -%}
     </div>
 
     {%- if section.blocks.size > 0 -%}
@@ -39,7 +42,7 @@
                 <h3 class="about-timeline__card-title">{{ block.settings.title | escape }}</h3>
               {%- endif -%}
               {%- if block.settings.description != blank -%}
-                <p class="about-timeline__card-text">{{ block.settings.description | escape }}</p>
+                <div class="about-timeline__card-text">{{ block.settings.description }}</div>
               {%- endif -%}
               {%- if block.settings.image != blank -%}
                 <div class="about-timeline__card-media">
@@ -123,6 +126,25 @@
     margin: 0;
     line-height: 1.6;
     max-width: 680px;
+  }
+
+  .about-timeline__description {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: #494949;
+    line-height: 1.75;
+    max-width: 680px;
+    margin-top: 16px;
+    text-align: center;
+  }
+
+  .about-timeline__description p {
+    margin-bottom: 0.8em;
+  }
+
+  .about-timeline__description p:last-child {
+    margin-bottom: 0;
   }
 
   /* Track — 3-column grid: left | node-column | right */
@@ -245,6 +267,17 @@
     color: #494949;
     margin: 0;
     line-height: 1.7;
+    text-align: left;
+    white-space: pre-line;
+  }
+
+  .about-timeline__card-text p {
+    margin-bottom: 0.8em;
+    white-space: normal;
+  }
+
+  .about-timeline__card-text p:last-child {
+    margin-bottom: 0;
   }
 
   .about-timeline__card-media {
@@ -331,10 +364,9 @@
           "default": "The beginning"
         },
         {
-          "type": "textarea",
+          "type": "richtext",
           "id": "description",
-          "label": "t:labels.text",
-          "default": "K. Chinnadurai & Co. was founded with a single store in Thoothukudi, dedicated to bringing the finest handloom sarees to discerning customers."
+          "label": "t:labels.text"
         },
         {
           "type": "image_picker",
@@ -356,6 +388,11 @@
       "id": "subheading",
       "label": "t:labels.subtitle",
       "default": "Five decades of craftsmanship, heritage, and community."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:labels.description"
     },
     {
       "type": "range",
@@ -387,7 +424,7 @@
           "settings": {
             "year": "1968",
             "title": "The beginning",
-            "description": "K. Chinnadurai & Co. was founded with a single store in Thoothukudi, dedicated to bringing the finest handloom sarees."
+            "description": "<p>K. Chinnadurai &amp; Co. was founded with a single store in Thoothukudi, dedicated to bringing the finest handloom sarees.</p>"
           }
         },
         {
@@ -395,7 +432,7 @@
           "settings": {
             "year": "1980",
             "title": "Expanding our roots",
-            "description": "A second location opened in Tirunelveli, bringing our curated collection to a wider community of saree enthusiasts."
+            "description": "<p>A second location opened in Tirunelveli, bringing our curated collection to a wider community of saree enthusiasts.</p>"
           }
         },
         {
@@ -403,7 +440,7 @@
           "settings": {
             "year": "1995",
             "title": "A legacy of weaving",
-            "description": "We established direct partnerships with master weavers in Kanchipuram and Madurai, ensuring authenticity in every thread."
+            "description": "<p>We established direct partnerships with master weavers in Kanchipuram and Madurai, ensuring authenticity in every thread.</p>"
           }
         },
         {
@@ -411,7 +448,7 @@
           "settings": {
             "year": "2010",
             "title": "The next generation",
-            "description": "The second generation of the Chinnadurai family joined the business, blending heritage with a modern vision."
+            "description": "<p>The second generation of the Chinnadurai family joined the business, blending heritage with a modern vision.</p>"
           }
         },
         {
@@ -419,7 +456,7 @@
           "settings": {
             "year": "2024",
             "title": "56 years & beyond",
-            "description": "Now spanning multiple stores across Tamil Nadu, K. Chinnadurai & Co. continues to honour tradition while embracing the future."
+            "description": "<p>Now spanning multiple stores across Tamil Nadu, K. Chinnadurai &amp; Co. continues to honour tradition while embracing the future.</p>"
           }
         }
       ]

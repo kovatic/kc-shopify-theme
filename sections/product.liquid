@@ -38,7 +38,7 @@
 
       {%- comment -%} Desktop: 2x2 grid {%- endcomment -%}
       <div class="product-page__images-grid" id="zoom-grid-{{ section.id }}">
-        {%- for image in product.images limit: 4 -%}
+        {%- for image in product.images -%}
           <div class="product-page__image-item js-zoom-item js-lb-open" data-zoom-src="{{ image | image_url: width: 1800 }}" data-lb-index="{{ forloop.index0 }}">
             {{ image | image_url: width: 600 | image_tag: loading: 'lazy', alt: image.alt | default: product.title }}
           </div>
@@ -53,7 +53,7 @@
       {%- comment -%} Mobile: horizontal swipe carousel {%- endcomment -%}
       <div class="product-page__carousel" id="product-carousel">
         <div class="product-page__carousel-track" id="carousel-track">
-          {%- for image in product.images limit: 4 -%}
+          {%- for image in product.images -%}
             <div class="product-page__carousel-slide js-lb-open" data-zoom-src="{{ image | image_url: width: 1800 }}" data-lb-index="{{ forloop.index0 }}">
               {{ image | image_url: width: 800 | image_tag: loading: 'lazy', alt: image.alt | default: product.title }}
             </div>
@@ -65,7 +65,7 @@
         </div>
         {%- if product.images.size > 1 -%}
           <div class="product-page__dots" id="carousel-dots">
-            {%- for image in product.images limit: 4 -%}
+            {%- for image in product.images -%}
               <button class="product-page__dot{% if forloop.first %} is-active{% endif %}" data-index="{{ forloop.index0 }}" aria-label="Go to image {{ forloop.index }}"></button>
             {%- endfor -%}
           </div>
@@ -103,19 +103,52 @@
 
         <h1 class="product-page__title">{{ product.title }}</h1>
 
-        {%- if product.vendor != blank -%}
-          <a href="{{ product.vendor | url_for_vendor }}" class="product-page__vendor">{{ product.vendor }}</a>
+        {%- if product.collections.first != blank -%}
+          <a href="{{ product.collections.first.url }}" class="product-page__vendor">{{ product.collections.first.title }}</a>
         {%- endif -%}
 
 
-        <div class="product-page__price-row">
-          <span class="product-page__price">
-            {%- if current_variant.compare_at_price > current_variant.price -%}
-              <span class="product-page__price-compare">{{ current_variant.compare_at_price | money }}</span>
+<div class="product-page__price-row">
+  <span class="product-page__price" id="product-price-display">
+
+      {%- comment -%} 2. Current Active Sale Price (Rendered in Bold Red/Orange) {%- endcomment -%}
+    <span class="product-page__price-current{% if current_variant.compare_at_price > current_variant.price %} is-on-sale{% endif %}">{{ current_variant.price | money }}</span>
+    
+    {%- comment -%} 1. Compare-at Original Base Price (Struck out in gray-blue) {%- endcomment -%}
+    <span class="product-page__price-compare" {% unless current_variant.compare_at_price > current_variant.price %}style="display: none;"{% endunless %}>
+      {{ current_variant.compare_at_price | money }}
+    </span>
+
+    {%- comment -%} 3. Percentage Discount Badge Layout Container {%- endcomment -%}
+    <span class="product-page__price-discount-badge" {% unless current_variant.compare_at_price > current_variant.price %}style="display: none !important;"{% endunless %}>
+      {%- if current_variant.compare_at_price > current_variant.price -%}
+        {%- assign savings = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
+        -{{ savings }}%
+      {%- endif -%}
+    </span>
+  </span>
+</div>
+
+        {%- comment -%} Stock alert {%- endcomment -%}
+          {%- assign inv = current_variant.inventory_quantity -%}
+          {%- assign inv_policy = current_variant.inventory_management -%}
+          {%- if current_variant.available and inv_policy == 'shopify' -%}
+            {%- if inv <= 3 -%}
+              <div class="product-page__stock-alert product-page__stock-alert--critical" id="stock-alert">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                {{ 'product.stock.critical' | t: count: inv }}
+              </div>
+            {%- elsif inv <= 10 -%}
+              <div class="product-page__stock-alert product-page__stock-alert--low" id="stock-alert">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                {{ 'product.stock.low' | t: count: inv }}
+              </div>
             {%- endif -%}
-            {{ current_variant.price | money }}
-          </span>
-        </div>
+          {%- elsif current_variant.available == false -%}
+            <div class="product-page__stock-alert product-page__stock-alert--sold-out" id="stock-alert" style="display:none"></div>
+          {%- else -%}
+            <div class="product-page__stock-alert" id="stock-alert" style="display:none"></div>
+          {%- endif -%}
 
         {%- comment -%} Variant selector + ATC (desktop inline, mobile hidden — shown in sticky bar) {%- endcomment -%}
         <div>
@@ -137,20 +170,50 @@
             </div>
           {%- endif -%}
 
-          {%- comment -%} ATC + Wishlist + Share row {%- endcomment -%}
-          <div class="product-page__action-row">
-            <button
-              type="button"
-              class="product-page__atc-btn product-page__atc-btn--desktop js-atc-btn"
-              data-variant-input="variant-id-input"
-              {%- unless current_variant.available -%}disabled{%- endunless -%}
-            >
-              {%- if current_variant.available -%}
-                {{ 'sections.product_list.add_to_cart' | t }}
-              {%- else -%}
-                {{ 'general.product.sold_out' | t }}
-              {%- endif -%}
+          {%- comment -%} Stitching button (only for tailoring-enabled products) {%- endcomment -%}
+          {%- if product.metafields.custom.is_customisable.value == true -%}
+            <button type="button" class="product-page__stitching-btn js-tailoring-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
+                <line x1="20" y1="4" x2="8.12" y2="15.88"/>
+                <line x1="14.47" y1="14.48" x2="20" y2="20"/>
+                <line x1="8.12" y1="8.12" x2="12" y2="12"/>
+              </svg>
+              <span class="product-page__stitching-btn-text">
+                <span class="product-page__stitching-btn-title">{{ 'tailoring.stitching_btn' | t }}</span>
+                <span class="product-page__stitching-btn-sub">Add tailoring</span>
+              </span>
+              <span class="product-page__stitching-btn-badge">Customise</span>
             </button>
+          {%- endif -%}
+
+          
+
+          {%- comment -%} ATC + Wishlist + Share row + buy now {%- endcomment -%}
+          <div class="product-page__action-row">
+            <div class="product-page__buy-buttons-group product-page__atc-btn--desktop">
+              <button
+                type="button"
+                class="product-page__atc-btn product-page__atc-btn--desktop js-atc-btn"
+                data-variant-input="variant-id-input"
+                {%- unless current_variant.available -%}disabled{%- endunless -%}
+              >
+                {%- if current_variant.available -%}
+                  {{ 'sections.product_list.add_to_cart' | t }}
+                {%- else -%}
+                  {{ 'general.product.sold_out' | t }}
+                {%- endif -%}
+              </button>
+
+              <button
+                type="button"
+                class="product-page__bin-btn product-page__bin-btn--desktop js-bin-btn"
+                {%- unless current_variant.available -%}disabled{%- endunless -%}
+              >
+               <span class="btn-text">Buy Now</span>
+              <span class="btn-loader"></span>
+              </button>
+            </div>
 
             <xb-wishlist-button xb-handle="{{ product.handle }}" class="product-page__wishlist-icon-btn"></xb-wishlist-button>
 
@@ -168,16 +231,36 @@
                 <a href="https://pinterest.com/pin/create/button/?url={{ shop.url }}{{ product.url }}&media={{ product.featured_image | image_url: width: 600 }}&description={{ product.title | url_encode }}" target="_blank" rel="noopener" class="product-page__share-menu-item">
                   <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg> Pinterest
                 </a>
-                <a href="mailto:?subject={{ product.title | url_encode }}&body={{ shop.url }}{{ product.url }}" class="product-page__share-menu-item">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg> Email
+                <a href="https://wa.me/?text={{ product.title | url_encode }}%20{{ shop.url }}{{ product.url | url_encode }}" target="_blank" rel="noopener" class="product-page__share-menu-item">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg> WhatsApp
                 </a>
+                <button type="button" class="product-page__share-menu-item js-copy-link" data-url="{{ shop.url }}{{ product.url }}">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy link
+                </button>
               </div>
             </div>
           </div>
         </div>
-
+        <div class="product-page__trust-signals">
+            <div class="trust-signal-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="trust-signal-icon"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              <span class="trust-signal-text">Easy 7 Days Return & Exchange</span>
+            </div>
+            <div class="trust-signal-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="trust-signal-icon"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M6 14h.01M10 14h.01M14 14h.01"/></svg>
+              <span class="trust-signal-text">Cash on Delivery Available</span>
+            </div>
+            <div class="trust-signal-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="trust-signal-icon"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span class="trust-signal-text">100% Secure Transaction</span>
+            </div>
+            <div class="trust-signal-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="trust-signal-icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span class="trust-signal-text">Quick Chat & Call Support</span>
+            </div>
+          </div>
         {%- comment -%} Pincode checker — hidden until Shiprocket proxy is configured {%- endcomment -%}
-        <div class="product-page__pincode-wrap" style="display:none">
+        <!-- <div class="product-page__pincode-wrap">
           <p class="product-page__pincode-label">{{ 'sections.product.pincode_label' | t }}</p>
           <div class="product-page__pincode">
             <input
@@ -199,12 +282,102 @@
             </button>
           </div>
           <div class="product-page__pincode-result" id="pincode-result-{{ section.id }}" aria-live="polite"></div>
-        </div>
+        </div> -->
+        <div class="premium-pincode-container">
+  <p class="premium-pincode-title">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+      <circle cx="12" cy="9" r="2.5"/>
+    </svg>
+    Check Delivery Availability
+  </p>
+  
+  <div class="premium-pincode-input-box">
+    <div class="input-field-wrapper">
+      <input 
+        type="text" 
+        id="kc-pincode-field" 
+        placeholder="Enter the PIN code" 
+        maxlength="6" 
+        inputmode="numeric"
+        autocomplete="postal-code"
+      >
+      <div class="premium-success-checkmark" id="kc-inline-tick">
+        <svg class="checkmark-svg" viewBox="0 0 52 52">
+          <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+          <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        </svg>
+      </div>
+    </div>
+    <button type="button" id="kc-pincode-submit-btn">
+      <span class="btn-text-label">Check</span>
+      <svg class="btn-spinner-icon" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="24 48"/>
+      </svg>
+    </button>
+  </div>
 
+  <div id="kc-pincode-response-panel">
+    <div class="location-status-text">We deliver to your location</div>
+    
+    <div class="delivery-dates-card">
+      
+      {%- assign is_product_customisable = false -%}
+      {%- if product.metafields.custom.is_customisable.value == true or product.metafields.custom.is_customisable == true or product.metafields.custom.is_customisable.value == 'true' or product.metafields.custom.is_customisable == 'true' -%}
+        {%- assign is_product_customisable = true -%}
+      {%- endif -%}
+
+      {%- if is_product_customisable -%}
+        <div class="delivery-row custom-delivery">
+          <div class="delivery-icon-container animated-truck-container">
+            <svg class="delivery-row__vehicle-icon luxury-express-van" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7v14z"></path>
+              <path d="M10 5h7.5L23 10v5a2 2 0 0 1-2 2h-3v-2"></path>
+              <path d="M14 9h4l2.5 3H14V9z"></path>
+              <circle cx="5.5" cy="17.5" r="2.5" fill="#111111"></circle>
+              <circle cx="15.5" cy="17.5" r="2.5" fill="#111111"></circle>
+            </svg>
+            <div class="premium-speed-lines">
+              <span class="line-streak streak-1"></span>
+              <span class="line-streak streak-2"></span>
+            </div>
+          </div>
+          <div class="delivery-text-content">
+            <span class="delivery-main-msg">Expected Delivery by <strong id="date-custom-slot">--</strong></span>
+          </div>
+        </div>
+      {%- else -%}
+       <div class="delivery-row regular-delivery">
+        <div class="delivery-icon-container animated-truck-container">
+          <svg class="delivery-row__vehicle-icon luxury-express-van" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7v14z"></path>
+            <path d="M10 5h7.5L23 10v5a2 2 0 0 1-2 2h-3v-2"></path>
+            <path d="M14 9h4l2.5 3H14V9z"></path>
+            <circle cx="5.5" cy="17.5" r="2.5" fill="#111111"></circle>
+            <circle cx="15.5" cy="17.5" r="2.5" fill="#111111"></circle>
+          </svg>
+          <div class="premium-speed-lines">
+            <span class="line-streak streak-1"></span>
+            <span class="line-streak streak-2"></span>
+          </div>
+        </div>
+        <div class="delivery-text-content">
+          <span class="delivery-main-msg">Expected Delivery by <strong id="date-regular-slot">--</strong></span>
+        </div>
+      </div>
+      {%- endif -%}
+    </div>
+  </div>
+  
+  <div id="kc-pincode-error-panel">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span id="kc-error-message-text"></span>
+  </div>
+</div>
         {%- comment -%} Accordions {%- endcomment -%}
         <div class="product-page__accordions">
           {%- if product.description != blank -%}
-            <details class="product-page__accordion">
+            <details class="product-page__accordion" open>
               <summary class="product-page__accordion-header">
                 {{ 'sections.product.description' | t }}
                 <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
@@ -212,20 +385,7 @@
               <div class="product-page__accordion-body">{{ product.description }}</div>
             </details>
           {%- endif -%}
-          <details class="product-page__accordion">
-            <summary class="product-page__accordion-header">
-              {{ 'sections.product.product_details' | t }}
-              <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
-            </summary>
-            <div class="product-page__accordion-body">
-              {%- if product.metafields.custom.product_details != blank -%}
-                {{ product.metafields.custom.product_details }}
-              {%- else -%}
-                <p>{{ product.title }}</p>
-              {%- endif -%}
-            </div>
-          </details>
-          <details class="product-page__accordion">
+          <details class="product-page__accordion" open>
             <summary class="product-page__accordion-header">
               {{ 'sections.product.delivery' | t }}
               <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
@@ -239,29 +399,64 @@
             </summary>
             <div class="product-page__accordion-body"><p>{{ 'sections.product.returns_info' | t }}</p></div>
           </details>
-          <details class="product-page__accordion">
+          {% comment %} <details class="product-page__accordion">
             <summary class="product-page__accordion-header">
               {{ 'sections.product.mrp' | t }}
               <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
             </summary>
             <div class="product-page__accordion-body"><p>{{ current_variant.price | money }}</p></div>
-          </details>
+          </details> {% endcomment %}
           <details class="product-page__accordion">
             <summary class="product-page__accordion-header">
               {{ 'sections.product.manufacturer' | t }}
               <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
             </summary>
             <div class="product-page__accordion-body">
-              <p>{{ product.vendor | default: shop.name }}</p>
+              {% comment %} <p>{{ product.vendor | default: shop.name }}</p> {% endcomment %}
+               <p>{{ 'sections.product.vendor_name' | t }}</p>
             </div>
           </details>
-          <details class="product-page__accordion">
-            <summary class="product-page__accordion-header">
-              {{ 'sections.product.contact' | t }}
-              <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
-            </summary>
-            <div class="product-page__accordion-body"><p><a href="/pages/contact">{{ 'sections.product.contact_us' | t }}</a></p></div>
-          </details>
+         <details class="product-page__accordion" open>
+  <summary class="product-page__accordion-header">
+    {{ 'sections.product.contact' | t }}
+    <svg class="product-page__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+  </summary>
+  <div class="product-page__accordion-body">
+    <div class="chinco-json-contact-content">
+      <strong>{{ 'sections.product.contact_heading' | t }}</strong>
+      <span class="contact-time-sub">{{ 'sections.product.contact_timing' | t }}</span>
+      <div class="contact-json-row">
+        <span class="c-json-icon whatsapp-green">
+  <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>        </span>
+        <div class="c-json-text">
+          <span>{{ 'sections.product.contact_whatsapp_label' | t }}</span>
+          <a href="https://wa.me/7397652555" target="_blank">+91 7397652555</a>
+        </div>
+      </div>
+      <div class="contact-json-row">
+        <span class="c-json-icon phone-dark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </span>
+        <div class="c-json-text">
+          <span>{{ 'sections.product.contact_phone_label' | t }}</span>
+          <div class="c-json-split">
+            <a href="tel:+919488202320">+91 9488202320</a> / 
+            <a href="tel:+917397652555">+91 7397652555</a>
+          </div>
+        </div>
+      </div>
+      <div class="contact-json-row">
+        <span class="c-json-icon mail-dark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </span>
+        <div class="c-json-text">
+          <span>{{ 'sections.product.contact_email_label' | t }}</span>
+          <a href="mailto:help@kchinnaduraiandco.com" class="lowercase-email">help@kchinnaduraiandco.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</details>
         </div>
 
       </div>
@@ -271,25 +466,53 @@
 
 </div>
 
+{%- if product.metafields.custom.is_customisable.value == true -%}
+  {%- assign tailoring_addon_product = all_products['tailoring-add-on'] -%}
+  {%- assign tailoring_addon_variant_id = tailoring_addon_product.variants.first.id -%}
+  {% render 'tailoring-modal', product: product, tailoring_addon_variant_id: tailoring_addon_variant_id %}
+{%- endif -%}
+
 {%- comment -%} Mobile sticky ATC bar {%- endcomment -%}
 <div class="product-page__sticky-atc" id="sticky-atc">
   <input type="hidden" name="id" value="{{ current_variant.id }}" id="variant-id-input-mobile">
-  <button
-    type="button"
-    class="product-page__atc-btn js-atc-btn"
-    data-variant-input="variant-id-input-mobile"
-    {%- unless current_variant.available -%}disabled{%- endunless -%}
-  >
-    {%- if current_variant.available -%}
-      {{ 'sections.product_list.add_to_cart' | t }}
-    {%- else -%}
-      {{ 'general.product.sold_out' | t }}
-    {%- endif -%}
-  </button>
+  {%- if product.metafields.custom.is_customisable.value == true -%}
+    <button type="button" class="product-page__stitching-btn product-page__stitching-btn--mobile js-tailoring-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
+        <line x1="20" y1="4" x2="8.12" y2="15.88"/>
+        <line x1="14.47" y1="14.48" x2="20" y2="20"/>
+        <line x1="8.12" y1="8.12" x2="12" y2="12"/>
+      </svg>
+      {{ 'tailoring.stitching_btn' | t }}
+    </button>
+  {%- endif -%}
 
-  <xb-wishlist-button xb-handle="{{ product.handle }}" class="product-page__sticky-wishlist"></xb-wishlist-button>
+  <div class="product-page__sticky-atc__row2">
+   <div class="product-page__buy-buttons-group flex-1">
+      <button
+        type="button"
+        class="product-page__atc-btn js-atc-btn"
+        data-variant-input="variant-id-input-mobile"
+        {%- unless current_variant.available -%}disabled{%- endunless -%}
+      >
+        {%- if current_variant.available -%}
+          {{ 'sections.product_list.add_to_cart' | t }}
+        {%- else -%}
+          {{ 'general.product.sold_out' | t }}
+        {%- endif -%}
+      </button>
+<button
+  type="button"
+  class="product-page__bin-btn js-bin-btn"
+  {%- unless current_variant.available -%}disabled{%- endunless -%}
+>
+  <span class="btn-text">Buy Now</span>
+  <span class="btn-loader"></span>
+</button>
+    </div>
+    <xb-wishlist-button xb-handle="{{ product.handle }}" class="product-page__sticky-wishlist"></xb-wishlist-button>
 
-  <div class="product-page__share-dropdown product-page__share-dropdown--mobile">
+    <div class="product-page__share-dropdown product-page__share-dropdown--mobile">
     <button type="button" class="product-page__share-icon-btn" aria-label="Share">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
     </button>
@@ -303,10 +526,14 @@
       <a href="https://pinterest.com/pin/create/button/?url={{ shop.url }}{{ product.url }}&media={{ product.featured_image | image_url: width: 600 }}&description={{ product.title | url_encode }}" target="_blank" rel="noopener" class="product-page__share-menu-item">
         <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg> Pinterest
       </a>
-      <a href="mailto:?subject={{ product.title | url_encode }}&body={{ shop.url }}{{ product.url }}" class="product-page__share-menu-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg> Email
+      <a href="https://wa.me/?text={{ product.title | url_encode }}%20{{ shop.url }}{{ product.url | url_encode }}" target="_blank" rel="noopener" class="product-page__share-menu-item">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg> WhatsApp
       </a>
+      <button type="button" class="product-page__share-menu-item js-copy-link" data-url="{{ shop.url }}{{ product.url }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy link
+      </button>
     </div>
+  </div>
   </div>
 </div>
 
@@ -371,6 +598,11 @@
                         {%- else -%}
                           {{ 'product-1' | placeholder_svg_tag: 'product-list__image product-list__image--placeholder' }}
                         {%- endif -%}
+                        {% comment %} Glowing Discount Badge on Top Left Corner {% endcomment %}
+                        {%- if p.compare_at_price_min > p.price_min -%}
+                          {%- assign grid_savings = p.compare_at_price_min | minus: p.price_min | times: 100 | divided_by: p.compare_at_price_min -%}
+                          <span class="product-grid__glow-discount-badge">-{{ grid_savings }}%</span>
+                        {%- endif -%}
                         <div class="product-card-actions">
                           <div class="product-card-actions__cart-wrap">
                             {%- if is_available -%}
@@ -405,7 +637,43 @@
                       </div>
                       <div class="product-list__info">
                         <span class="product-list__name">{{ p.title | escape }}</span>
-                        <span class="product-list__price">{{ p.price_min | money }}</span>
+                        <!-- <span class="product-list__price">{{ p.price_min | money }}</span> -->
+                         <div class="product-card__price-atc-wrapper">
+                           <div class="product-grid__price-stacked-layout">
+                            {%- if p.compare_at_price_min > p.price_min -%}
+                              {% comment %} Displays active sale price and struck out original price side-by-side on the same line {% endcomment %}
+                              <div class="product-grid__price-meta-row">
+                                <div class="product-page__price-current grid is-on-sale">{{ p.price_min | money }}</div>
+                                <div class="product-page__price-compare">{{ p.compare_at_price_min | money }}</div>
+                              </div>
+                              
+                            {%- else -%}
+                              {% comment %} Normal pricing view if item isn't marked down {% endcomment %}
+                              <div class="product-grid__price-meta-row">
+                                <span class="product-page__price-current grid">{{ p.price_min | money }}</span>
+                              </div>
+                            {%- endif -%}
+                            
+                          </div>
+  
+  {%- if p.available -%}
+    <form method="post" action="/cart/add" class="product-card__inline-form">
+      <input type="hidden" name="id" value="{{ p.first_available_variant.id }}">
+      <input type="hidden" name="quantity" value="1">
+      <button type="submit" name="add" class="product-card__inline-atc-btn js-inline-atc-submit">
+        <span class="inline-atc-btn__text">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="display: inline-block; vertical-align: middle;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke-linecap="round"/><path d="M16 10a4 4 0 01-8 0" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Add
+        </span>
+        <svg class="inline-atc-btn__spinner" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="24 48"/>
+        </svg>
+      </button>
+    </form>
+  {%- else -%}
+    <span class="product-card__inline-oos">OOS</span>
+  {%- endif -%}
+</div>
                       </div>
                     </a>
                     {%- if is_available -%}
@@ -465,6 +733,13 @@
 <script id="product-json-{{ section.id }}" type="application/json">
   {{ product | json }}
 </script>
+<script id="product-inventory-{{ section.id }}" type="application/json">
+  {
+    {%- for v in product.variants -%}
+      "{{ v.id }}": { "qty": {{ v.inventory_quantity }}, "managed": {{ v.inventory_management | json }} }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  }
+</script>
 
 <script>
 (function() {
@@ -476,6 +751,8 @@
       t = setTimeout(function() { fn.apply(null, args); }, ms);
     };
   }
+  
+  var binBtns = document.querySelectorAll('.js-bin-btn');
 
   function throttleRaf(fn) {
     var rafId = null;
@@ -492,12 +769,15 @@
 
   var productEl = document.getElementById('product-json-{{ section.id }}');
   var product = productEl ? JSON.parse(productEl.textContent) : null;
+  var invEl = document.getElementById('product-inventory-{{ section.id }}');
+  var inventoryMap = invEl ? JSON.parse(invEl.textContent) : {};
   if (!product) return;
 
   // ── Variant option buttons ───────────────────────────────────
   var optionBtns    = page.querySelectorAll('.product-page__option-btn');
   var variantInputs = document.querySelectorAll('#variant-id-input, #variant-id-input-mobile');
   var atcBtns       = document.querySelectorAll('.js-atc-btn');
+  var binBtns       = document.querySelectorAll('.js-bin-btn');
   var priceEl       = page.querySelector('.product-page__price');
 
   function formatMoney(cents) {
@@ -534,6 +814,42 @@
     });
   }
 
+  var tailoringExtraRupees = 0;
+
+  function renderPrice(variant) {
+    if (!priceEl || !variant) return;
+    
+    var displayPrice = variant.price + Math.round(tailoringExtraRupees * 100);
+    var comparePrice = variant.compare_at_price;
+    var html = '';
+
+   if (comparePrice && comparePrice > displayPrice) {
+      html += '<span class="product-page__price-current is-on-sale">' + formatMoney(displayPrice) + '</span>';
+    } else {
+      html += '<span class="product-page__price-current">' + formatMoney(displayPrice) + '</span>';
+    }
+
+    
+    // 1. Rebuild Original Strike Price Slant Element dynamically on variant change
+    if (comparePrice && comparePrice > displayPrice) {
+      html += '<span class="product-page__price-compare">' + formatMoney(comparePrice) + '</span> ';
+    }
+    
+    // 2. Append Current Live Sale Price    
+    // 3. Re-calculate and append the percentage discount badge on variant change
+    if (comparePrice && comparePrice > displayPrice) {
+      var savingsPercent = Math.round(((comparePrice - variant.price) / comparePrice) * 100);
+      html += ' <span class="product-page__price-discount-badge">-' + savingsPercent + '%</span>';
+    }
+    
+    // 4. Preserve Tailoring context warnings if custom options are engaged
+    if (tailoringExtraRupees > 0) {
+      html += '<div class="product-page__price-tailoring-note">{{ "tailoring.price_includes_stitching" | t }}</div>';
+    }
+    
+    priceEl.innerHTML = html;
+  }
+
   function updateVariant(variant) {
     if (!variant) return;
     // Update hidden id inputs in both forms
@@ -544,15 +860,7 @@
       url.searchParams.set('variant', variant.id);
       history.replaceState({}, '', url.toString());
     }
-    // Update price
-    if (priceEl) {
-      var html = '';
-      if (variant.compare_at_price > variant.price) {
-        html += '<span class="product-page__price-compare">' + formatMoney(variant.compare_at_price) + '</span> ';
-      }
-      html += formatMoney(variant.price);
-      priceEl.innerHTML = html;
-    }
+    renderPrice(variant);
     // Update ATC buttons availability
     var available = variant.available;
     var addLabel  = '{{ "sections.product_list.add_to_cart" | t }}';
@@ -561,7 +869,40 @@
       btn.disabled    = !available;
       btn.textContent = available ? addLabel : soldLabel;
     });
+    // Update stock alert
+    var stockAlert = document.getElementById('stock-alert');
+    if (stockAlert) {
+      var invData = inventoryMap[String(variant.id)] || {};
+      var inv     = invData.qty;
+      var managed = !!invData.managed;
+      var criticalTpl = '{{ "product.stock.critical" | t: count: "__N__" }}';
+      var lowTpl      = '{{ "product.stock.low" | t: count: "__N__" }}';
+      stockAlert.className = 'product-page__stock-alert';
+      stockAlert.innerHTML = '';
+      stockAlert.removeAttribute('style');
+      if (available && managed && typeof inv === 'number' && inv > 0 && inv <= 3) {
+        stockAlert.classList.add('product-page__stock-alert--critical');
+        stockAlert.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> ' + criticalTpl.replace('__N__', inv);
+      } else if (available && managed && typeof inv === 'number' && inv > 0 && inv <= 10) {
+        stockAlert.classList.add('product-page__stock-alert--low');
+        stockAlert.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> ' + lowTpl.replace('__N__', inv);
+      } else {
+        stockAlert.style.display = 'none';
+      }
+    }
   }
+
+  document.addEventListener('tailoring:total-change', function(e) {
+    tailoringExtraRupees = e.detail.rupees;
+    var opts = getSelectedOptions();
+    var variant = findVariant(opts);
+    if (!variant) {
+      /* fall back to the currently selected variant id */
+      var currentId = parseInt(document.getElementById('variant-id-input').value, 10);
+      variant = product.variants.find(function(v) { return v.id === currentId; });
+    }
+    renderPrice(variant);
+  });
 
   // ── AJAX Add to Cart (batched) ────────────────────────────────
   var atcPending = 0;
@@ -598,6 +939,48 @@
     });
   });
 
+  // ── Direct Buy It Now execution ────────────────────────────
+  binBtns.forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var isMobile = btn.closest('#sticky-atc') !== null;
+    var inputId = isMobile ? 'variant-id-input-mobile' : 'variant-id-input';
+    var variantId = document.getElementById(inputId).value;
+
+    if (!variantId) return;
+
+    btn.classList.add('is-loading');
+    binBtns.forEach(function(b) { b.disabled = true; });
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        id: parseInt(variantId),
+        quantity: 1
+      })
+    })
+    .then(function() {
+      window.location.href = '/checkout';
+    })
+    .catch(function(err) {
+      console.error('Checkout error:', err);
+
+      // Remove loader if error
+      btn.classList.remove('is-loading');
+      binBtns.forEach(function(b) { b.disabled = false; });
+    });
+  });
+});
+
+window.addEventListener('pageshow', function(event) {
+  document.querySelectorAll('.js-bin-btn').forEach(function(btn) {
+    btn.classList.remove('is-loading');
+    btn.disabled = false;
+  });
+});
   optionBtns.forEach(function(btn) {
     btn.addEventListener('click', function() {
       var idx = btn.getAttribute('data-option-index');
@@ -622,6 +1005,21 @@
   document.addEventListener('click', function() {
     document.querySelectorAll('.product-page__share-dropdown').forEach(function(d) {
       d.classList.remove('is-open');
+    });
+  });
+
+  // ── Copy link ──────────────────────────────────────────────
+  document.querySelectorAll('.js-copy-link').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var url = btn.dataset.url;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(function() {
+          var orig = btn.innerHTML;
+          btn.textContent = 'Copied!';
+          setTimeout(function() { btn.innerHTML = orig; }, 2000);
+        });
+      }
     });
   });
 
@@ -883,6 +1281,15 @@
           ? p.images[0].src  // already a sized CDN URL (recently viewed)
           : p.images[0].src.replace(/(\.\w+)(\?|$)/, '_600x$1$2'))
       : '';
+    var badgeHtml = '';
+    var priceVal = p.price || p.price_min || (fv ? fv.price : 0);
+    var compareVal = p.compare_at_price || p.compare_at_price_min || (fv ? fv.compare_at_price : 0);
+    
+    if (compareVal && compareVal > priceVal) {
+      var savingsPercent = Math.round(((compareVal - priceVal) / compareVal) * 100);
+      badgeHtml = '<span class="product-grid__glow-discount-badge">-' + savingsPercent + '%</span>';
+    }
+
     var img = imgSrc
       ? '<img class="product-list__image" src="' + imgSrc + '" alt="' + escHtml(p.title) + '" loading="lazy">'
       : '<div class="product-list__image product-list__image--placeholder"></div>';
@@ -910,11 +1317,38 @@
         + '<button type="submit" name="add" class="product-card-atc-form--mobile-submit"></button>'
         + '</form>'
       : '';
-
+    var inlineActionHtml = '';
+  if (available) {
+    inlineActionHtml = '<div class="product-card__inline-form-container">'
+      + '<button type="button" class="product-card__inline-atc-btn js-grid-inline-atc-trigger" data-variant-id="' + varId + '">'
+      + '<span class="inline-atc-btn__text">'
+      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" style="display: inline-block; vertical-align: middle; margin-right: 2px;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke-linecap="round"/><path d="M16 10a4 4 0 01-8 0" stroke-linecap="round" stroke-linejoin="round"/></svg> '
+      + 'Add</span>'
+      + '<svg class="inline-atc-btn__spinner" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none; width:14px; height:14px; color:#ffffff;"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="24 48"/></svg>'
+      + '</button></div>';
+  } else {
+    inlineActionHtml = '<span class="product-card__inline-oos">OOS</span>';
+  }
+    var priceHtml = '';
+    var priceVal = p.price || p.price_min || (fv ? fv.price : 0);
+    var compareVal = p.compare_at_price || p.compare_at_price_min || (fv ? fv.compare_at_price : 0);
+    if (compareVal && compareVal > priceVal) {
+      // Both prices rendered side-by-side on a single row layout
+      priceHtml = '<div class="product-grid__price-meta-row">'
+        + '<div class="product-page__price-current grid is-on-sale">' + formatMoney(priceVal) + '</div>'
+        + '<div class="product-page__price-compare">' + formatMoney(compareVal) + '</div>'
+        + '</div>';
+    } else {
+      // Normal price fallback configuration if no markdown exists
+      priceHtml = '<div class="product-grid__price-meta-row">'
+        + '<span class="product-page__price-current grid">' + formatMoney(priceVal) + '</span>'
+        + '</div>';
+    }
     return '<div class="product-list__item' + (available ? '' : ' is-sold-out') + '" data-variant-id="' + varId + '" data-available="' + available + '">'
       + '<a class="product-list__item-link" href="' + p.url + '">'
       + '<div class="product-list__image-wrapper">'
       + img
+      + badgeHtml
       + '<div class="product-card-actions">'
       + '<div class="product-card-actions__cart-wrap">' + cartBtn + '</div>'
       + '<button class="product-card-actions__btn product-card-actions__btn--similar" type="button" aria-label="View similar">'
@@ -927,12 +1361,67 @@
       + '</div>'
       + '<div class="product-list__info">'
       + '<span class="product-list__name">' + escHtml(p.title) + '</span>'
-      + '<span class="product-list__price">' + formatMoney(p.price_min || (fv ? fv.price : 0)) + '</span>'
+      + '<div class="product-card__price-atc-wrapper">'
+      // + '<span class="product-list__price">' + formatMoney(p.price_min || (fv ? fv.price : 0)) + '</span>'
+      + priceHtml
+      + inlineActionHtml
+      + '</div>'
       + '</div></a>'
       + hiddenForm
       + '</div>';
   }
+  // Handle click animations for elements generated dynamically by JavaScript loops
+  document.addEventListener('submit', function(e) {
+    var form = e.target.closest('.product-card__inline-form');
+    if (form) {
+      var btn = form.querySelector('.js-inline-atc-submit');
+      if (btn) {
+        btn.classList.add('is-loading');
+        // Fallback safety timeout if side drawer tracking event drops out
+        setTimeout(function() {
+          btn.classList.remove('is-loading');
+        }, 1200);
+      }
+    }
+  });
+  // ── 🆕 Dynamic Inline ATC Click Handler ────────────────────────────
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.js-grid-inline-atc-trigger');
+    if (!btn) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
+    
+    var variantId = btn.getAttribute('data-variant-id');
+    if (!variantId) return;
 
+    // Turn on your loading spinner animation
+    btn.classList.add('is-loading');
+
+    // Send the product data asynchronously to your Shopify Cart database
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ id: parseInt(variantId), quantity: 1 })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function() { return fetch('/cart.js').then(function(r) { return r.json(); }); })
+    .then(function(cart) {
+      // Trigger and open your side slide popup cart drawer layout framework
+      var drawer = document.querySelector('cart-drawer');
+      if (drawer) { 
+        drawer.renderCart(cart); 
+        drawer.open(); 
+      }
+      
+      // Update the button appearance to "Added" state if your theme handles it
+      btn.classList.remove('is-loading');
+    })
+    .catch(function(err) { 
+      console.error('Dynamic Grid ATC submit error:', err); 
+      btn.classList.remove('is-loading');
+    });
+  });
   // ── You may also like (Shopify recommendations API) ──────────
   var recoSection = document.getElementById('pp-recommendations-{{ section.id }}');
   var recoTrack   = document.getElementById('pp-recommendations-track-{{ section.id }}');
@@ -955,12 +1444,28 @@
   var RV_KEY = 'pp_recently_viewed';
   var RV_MAX = 10;
   var currentHandle = '{{ product.handle }}';
+  // var currentEntry  = {
+  //   handle:    currentHandle,
+  //   title:     '{{ product.title | escape }}',
+  //   url:       '{{ product.url }}',
+  //   available: {{ product.available }},
+  //   variants:  [{ id: {{ current_variant.id }}, price: {{ current_variant.price }} }],
+  //   images:    [{ src: '{{ product.featured_image | image_url: width: 600 }}' }]
+  // };
   var currentEntry  = {
     handle:    currentHandle,
     title:     '{{ product.title | escape }}',
     url:       '{{ product.url }}',
     available: {{ product.available }},
-    variants:  [{ id: {{ current_variant.id }}, price: {{ current_variant.price }} }],
+    price:     {{ current_variant.price }},
+    price_min: {{ product.price_min | default: current_variant.price }},
+    compare_at_price: {{ current_variant.compare_at_price | default: 0 }},
+    compare_at_price_min: {{ product.compare_at_price_min | default: 0 }},
+    variants:  [{ 
+      id: {{ current_variant.id }}, 
+      price: {{ current_variant.price }},
+      compare_at_price: {{ current_variant.compare_at_price | default: 0 }} 
+    }],
     images:    [{ src: '{{ product.featured_image | image_url: width: 600 }}' }]
   };
 
@@ -986,7 +1491,139 @@
   } else {
     init();
   }
+
+  /* ── Tailoring modal trigger ── */
+  document.querySelectorAll('.js-tailoring-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (window.openTailoringModal) window.openTailoringModal();
+    });
+  });
 })();
+document.addEventListener('DOMContentLoaded', function() {
+  var pinField     = document.getElementById('kc-pincode-field');
+  var submitBtn    = document.getElementById('kc-pincode-submit-btn');
+  var btnText      = submitBtn.querySelector('.btn-text-label');
+  var btnSpinner   = submitBtn.querySelector('.btn-spinner-icon');
+  var resPanel     = document.getElementById('kc-pincode-response-panel');
+  var errPanel     = document.getElementById('kc-pincode-error-panel');
+  var errText      = document.getElementById('kc-error-message-text');
+  var regSlot      = document.getElementById('date-regular-slot');
+  var custSlot     = document.getElementById('date-custom-slot');
+  var inputBoxWrap = document.querySelector('.premium-pincode-input-box');
+
+  function calculateTargetDates() {
+    var today = new Date();
+    
+    function addCalendarDays(baseDate, daysToAdd) {
+      var tmpDate = new Date(baseDate.getTime());
+      tmpDate.setDate(tmpDate.getDate() + daysToAdd);
+      return tmpDate;
+    }
+    if (regSlot) {
+      var regularDeliveryDate = addCalendarDays(today, 6);
+      regSlot.textContent = regularDeliveryDate.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+    }
+
+    if (custSlot) {
+      var customDeliveryDate = addCalendarDays(today, 12);
+      custSlot.textContent = customDeliveryDate.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+    }
+  }
+
+  function triggerRevealPanel() {
+    resPanel.style.display = 'block';
+    setTimeout(function() {
+      resPanel.classList.add('reveal-slide');
+    }, 15);
+  }
+
+  function showSuccessLayout(savedPin) {
+    errPanel.style.display = 'none';
+    pinField.value = savedPin;
+    inputBoxWrap.classList.add('is-verified');
+    submitBtn.classList.add('is-active-change');
+    btnText.textContent = 'Change';
+    calculateTargetDates();
+    triggerRevealPanel();
+  }
+
+  function clearCachedSession() {
+    localStorage.removeItem('kc_customer_pincode');
+    pinField.value = '';
+    inputBoxWrap.classList.remove('is-verified');
+    submitBtn.classList.remove('is-active-change');
+    btnText.textContent = 'Check';
+    resPanel.classList.remove('reveal-slide');
+    setTimeout(function() {
+      resPanel.style.display = 'none';
+    }, 450);
+    pinField.focus();
+  }
+
+  var cachedPincode = localStorage.getItem('kc_customer_pincode');
+  if (cachedPincode && /^\d{6}$/.test(cachedPincode)) {
+    showSuccessLayout(cachedPincode);
+  }
+
+  function processValidation() {
+    if (btnText.textContent === 'Change') {
+      clearCachedSession();
+      return;
+    }
+
+    var rawInput = pinField.value.trim();
+
+    if (!/^\d{6}$/.test(rawInput)) {
+      resPanel.classList.remove('reveal-slide');
+      resPanel.style.display = 'none';
+      errText.textContent = 'Please enter a valid 6-digit numeric PIN code.';
+      errPanel.style.display = 'flex';
+      pinField.focus();
+      return;
+    }
+
+    errPanel.style.display = 'none';
+    btnText.style.display = 'none';
+    btnSpinner.style.display = 'inline-block';
+    submitBtn.style.pointerEvents = 'none';
+
+    fetch('https://api.postalpincode.in/pincode/' + rawInput)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        btnSpinner.style.display = 'none';
+        btnText.style.display = 'inline-block';
+        submitBtn.style.pointerEvents = 'auto';
+
+        var record = data && data[0];
+        if (!record || record.Status === 'Error' || !record.PostOffice || !record.PostOffice.length) {
+          resPanel.classList.remove('reveal-slide');
+          resPanel.style.display = 'none';
+          errText.textContent = 'This PIN code is not serviceable inside India.';
+          errPanel.style.display = 'flex';
+          return;
+        }
+
+        localStorage.setItem('kc_customer_pincode', rawInput);
+        showSuccessLayout(rawInput);
+      })
+      .catch(function() {
+        btnSpinner.style.display = 'none';
+        btnText.style.display = 'inline-block';
+        submitBtn.style.pointerEvents = 'auto';
+        resPanel.classList.remove('reveal-slide');
+        resPanel.style.display = 'none';
+        errText.textContent = 'Postal validation service is temporarily unreachable.';
+        errPanel.style.display = 'flex';
+      });
+  }
+
+  submitBtn.addEventListener('click', processValidation);
+  pinField.addEventListener('keydown', function(e) { if (e.key === 'Enter') processValidation(); });
+  pinField.addEventListener('input', function() {
+    pinField.value = pinField.value.replace(/\D/g, '');
+    errPanel.style.display = 'none';
+  });
+});
 </script>
 
 {% stylesheet %}
@@ -1023,7 +1660,7 @@
     min-width: 0;
   }
   .product-page__gallery { min-width: 0; position: relative; }
-  .product-page__info {
+  /* .product-page__info {
     min-width: 0;
     align-self: start;
     position: sticky;
@@ -1031,7 +1668,15 @@
     max-height: calc(100vh - 48px);
     overflow-y: auto;
     scrollbar-width: none;
-  }
+  } */
+   .product-page__info {
+  min-width: 0;
+  align-self: start;
+  position: relative !important;
+  top: 0 !important;
+  max-height: none !important;
+  overflow-y: visible !important;
+}
   .product-page__info::-webkit-scrollbar { display: none; }
 
   /* Desktop: 2x2 grid */
@@ -1095,7 +1740,7 @@
   }
   .product-page__vendor {
     font-size: 0.85rem;
-    color: #666;
+    color: #1a1a1a;
     text-decoration: underline;
     text-underline-offset: 2px;
   }
@@ -1107,18 +1752,28 @@
     gap: 12px;
   }
   .product-page__price {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #202020;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 10px;
+    flex-wrap: wrap;
+  }
+  .product-page__price-current {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #2e1f1f;
+    letter-spacing: -0.01em;
   }
   .product-page__price-compare {
     font-size: 1rem;
     font-weight: 400;
-    color: #999;
+    color: var(--color-primary, #c3134e);
     text-decoration: line-through;
+  }
+  .product-page__price-tailoring-note {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #ce0570;
+    letter-spacing: 0.02em;
   }
 
   /* Action row: ATC + Wishlist + Share */
@@ -1129,6 +1784,69 @@
   }
   .product-page__atc-btn--desktop {
     flex: 1;
+  }
+
+  /* Stitching button */
+  .product-page__stitching-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 56px;
+    margin-bottom: 10px;
+    padding: 0 16px;
+    background: linear-gradient(135deg, #fdf6ee 0%, #f9ede0 100%);
+    color: var(--color-primary, #2e1f1f);
+    border: 1.5px solid #d4a97a;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+  .product-page__stitching-btn:hover {
+    border-color: #ce0570;
+    box-shadow: 0 2px 12px rgba(206,5,112,0.15);
+    background: linear-gradient(135deg, #fff5fb 0%, #fde8f4 100%);
+  }
+  .product-page__stitching-btn svg {
+    flex-shrink: 0;
+    color: #ce0570;
+  }
+  .product-page__stitching-btn-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+  }
+  .product-page__stitching-btn-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: #2e1f1f;
+    line-height: 1.2;
+  }
+  .product-page__stitching-btn-sub {
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: #888;
+    letter-spacing: 0.02em;
+  }
+  .product-page__stitching-btn-badge {
+    flex-shrink: 0;
+    background: #ce0570;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+  .product-page__stitching-btn:hover .product-page__stitching-btn-badge {
+    background: #a8045c;
   }
   .product-page__wishlist-icon-btn {
     flex-shrink: 0;
@@ -1368,6 +2086,11 @@
     .product-page__reviews > * {
       padding: 0 16px;
     }
+
+  .c-json-text a, 
+  .c-json-split {
+    word-break: break-all !important; 
+  }
   }
 
   /* Accordions */
@@ -1381,6 +2104,7 @@
     font-size: 1rem;
     font-weight: 500;
     color: #202020;
+    font-weight:600 ;
     cursor: pointer;
     list-style: none;
     user-select: none;
@@ -1391,7 +2115,7 @@
   .product-page__accordion-body {
     padding: 0 0 16px;
     font-size: 0.95rem;
-    color: #444;
+    color: #1a1a1a;
     line-height: 1.6;
   }
   .product-page__accordion-body a { color: #d7116a; text-decoration: underline; }
@@ -1406,11 +2130,16 @@
       background-color: #fff;
       margin-top: -32px;
     }
+    .product-card__inline-form, .product-card__inline-form-container{
+      display:none !important;
+    }
 
     /* Hide desktop elements */
     .product-page__breadcrumb--desktop { display: none; }
     .product-page__images-grid { display: none; }
     .product-page__atc-btn--desktop { display: none; }
+    .product-page__bin-btn--desktop.js-bin-btn{display:none;}
+    .product-page__atc-btn--desktop{display:none !important;}
 
     /* Layout: single column */
     .product-page__layout {
@@ -1507,35 +2236,105 @@
     /* Sticky ATC bar */
     .product-page__sticky-atc {
       display: flex;
-      align-items: center;
-      gap: 8px;
+      flex-direction: column;
+      gap: 10px;
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
       background: #fff;
-      padding: 12px 16px;
-      box-shadow: 0 -2px 12px rgba(0,0,0,0.1);
+      padding: 12px 16px 16px;
+      box-shadow: 0 -2px 16px rgba(0,0,0,0.12);
       z-index: 50;
       overflow: visible;
     }
+
+    /* Row 1: Zip & Go / Blouse button — full width */
+    .product-page__stitching-btn--mobile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 40px;
+      min-height: unset;
+      margin-bottom: 0;
+      padding: 0 16px;
+      background: linear-gradient(135deg, #fdf6ee 0%, #f9ede0 100%);
+      border: 1.5px solid #d4a97a;
+      border-radius: 8px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #2e1f1f;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .product-page__stitching-btn--mobile:active {
+      border-color: #ce0570;
+      background: linear-gradient(135deg, #fff5fb 0%, #fde8f4 100%);
+      box-shadow: 0 2px 10px rgba(206,5,112,0.15);
+    }
+    .product-page__stitching-btn--mobile {
+      overflow: visible;
+    }
+    .product-page__stitching-btn--mobile svg {
+      color: #ce0570;
+      flex-shrink: 0;
+    }
+    .product-page__stitching-btn--mobile::after {
+      content: 'Customise';
+      display: inline-flex;
+      align-items: center;
+      background: #ce0570;
+      color: #fff;
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 20px;
+      margin-left: 6px;
+      flex-shrink: 0;
+    }
+
+    /* Row 2: ATC + Wishlist + Share */
+    .product-page__sticky-atc__row2 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
     .product-page__sticky-atc .product-page__atc-btn {
       flex: 1;
-      border-radius: 4px;
+      height: 44px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
     }
     .product-page__sticky-wishlist {
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 48px;
-      height: 48px;
-      border: 1.5px solid #ddd;
-      border-radius: 4px;
-      background: #fff;
+      width: 44px;
+      height: 44px;
+      border: 1.5px solid #e0dfd9;
+      border-radius: 6px;
+      background: #faf8f5;
     }
     .product-page__share-dropdown--mobile {
       flex-shrink: 0;
+    }
+    .product-page__share-dropdown--mobile .product-page__share-icon-btn {
+      width: 44px;
+      height: 44px;
+      border: 1.5px solid #e0dfd9;
+      border-radius: 6px;
+      background: #faf8f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .product-page__share-dropdown--mobile .product-page__share-menu {
       bottom: calc(100% + 8px);
@@ -1663,6 +2462,875 @@
   /* ── Related rows background ───────────────────────────────── */
   .pp-row { background-color: #efeee9; }
 
+  /* ── Stock alerts ───────────────────────────────────────────── */
+  .product-page__stock-alert {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 4px 10px 4px 7px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+
+  .product-page__stock-alert--low {
+    background: #fef9ec;
+    color: #92560a;
+    border-left: 3px solid #e09800;
+  }
+
+  .product-page__stock-alert--low svg {
+    color: #e09800;
+    flex-shrink: 0;
+  }
+
+  .product-page__stock-alert--critical {
+    background: #fff4f4;
+    color: #9b1c1c;
+    border-left: 3px solid #dc2626;
+  }
+
+  .product-page__stock-alert--critical svg {
+    color: #dc2626;
+    flex-shrink: 0;
+  }
+
+ 
+.chinco-json-contact-content {
+    color: #212529 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    text-align: left !important;
+    box-shadow: 0 1px 3px #00000005 !important;
+}
+
+.chinco-json-contact-content strong {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #111111 !important;
+  margin-bottom: 4px !important;
+  display: block !important;
+}
+
+.contact-time-sub {
+  font-size: 13px !important;
+  color: #1a1a1a !important;
+  margin-bottom: 22px !important;
+  display: block !important;
+}
+
+.contact-json-row {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 14px !important;
+  margin-bottom: 18px !important;
+  width: 100% !important;
+}
+
+.contact-json-row:last-child {
+  margin-bottom: 0 !important;
+}
+
+.c-json-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 20px !important;
+  height: 20px !important;
+  flex-shrink: 0 !important;
+  margin-top: 2px !important;
+}
+
+.c-json-icon svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.whatsapp-green {
+  color: #25D366 !important; 
+}
+
+.phone-dark {
+  color: #0b3c5d !important;
+}
+
+.mail-dark {
+  color: #328cc1 !important;
+}
+
+.c-json-text {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+}
+
+.c-json-text span {
+  font-size: 13px !important;
+  color: #1a1a1a !important;
+}
+
+.c-json-split {
+  font-size: 14px !important;
+  color: #111111 !important;
+}
+
+.c-json-text a {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #111111 !important;
+  text-decoration: underline !important;
+  display: inline-block !important;
+  transition: color 0.15s ease !important;
+}
+
+.c-json-text a:hover {
+  color: #f12974 !important;
+}
+.lowercase-email {
+  text-transform: lowercase !important;
+  font-weight: 600 !important;
+}
+/* Layout alignment container for the buttons */
+.product-page__action-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+}
+
+.product-page__buy-buttons-group {
+  display: flex;
+  gap: 10px !important;
+  flex: 1 !important;
+}
+
+/* Base modifications for the desktop buttons to share row */
+.product-page__atc-btn--desktop,
+.product-page__bin-btn--desktop {
+  flex: 1 !important;
+  min-width: 140px !important;
+}
+
+/* Premium Green Styling for the Buy It Now Button */
+.js-bin-btn {
+  background-color: #1a7a3c !important; /* Elegant Forest Green */
+  color: #ffffff !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  padding: 14px 20px !important;
+  border: none !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Hover Accent color */
+.js-bin-btn:hover {
+  background-color: #135c2c !important; /* Slightly darker green on focus */
+}
+
+/* Disabled/OOS state */
+.js-bin-btn:disabled {
+  background-color: #ccc !important;
+  cursor: not-allowed !important;
+}
+@media screen and (max-width: 920px) and (min-width: 768px) {
+
+
+  .contact-json-row {
+    gap: 10px !important;
+    margin-bottom: 15px !important;
+  }
+
+  .c-json-text span {
+    font-size: 12px !important; 
+  }
+
+  .c-json-text a, 
+  .c-json-split {
+    font-size: 13px !important;
+    word-break: break-word !important;
+  }
+}
+
+@media (max-width: 1200px) {
+.product-page__atc-btn--desktop, .product-page__bin-btn--desktop{
+        flex: 1 !important;
+    min-width: 130px !important;
+}
+.product-page__atc-btn{
+    font-size: 11px !important;
+}
+.js-bin-btn{
+    font-size: 11px !important;
+    width: 50% !important;
+}
+ .product-page__sticky-atc__row2 {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+}
+@media (max-width: 1200px) and (min-width: 769px) {
+    .product-page__buy-buttons-group {
+   display: flex !important;
+    gap: 8px !important;
+    flex: 1 !important;
+    flex-wrap: wrap !important;
+  }
+}
+  .product-page__trust-signals {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 14px 16px !important;
+    margin: 20px 0 10px 0 !important;
+    padding: 16px !important;
+    background-color: rgba(32, 32, 32, 0.04) !important;
+    border-radius: 8px !important;
+    border: 1px dashed rgba(32, 32, 32, 0.15) !important;
+  }
+  .trust-signal-item { display: flex !important; align-items: center !important; gap: 10px !important; }
+  .trust-signal-icon { width: 20px !important; height: 20px !important; color: #ce0570 !important; flex-shrink: 0 !important; }
+  .trust-signal-text { font-family: 'Montserrat', sans-serif !important; font-size: 0.8rem !important; font-weight: 600 !important; color: #333333 !important; line-height: 1.3 !important; letter-spacing: 0.01em !important; }
+
+  @media screen and (max-width: 890px) {
+    .product-page__trust-signals {
+      grid-template-columns: 1fr !important;
+      gap: 12px !important;
+      padding: 14px !important;
+      margin: 16px 0 6px 0 !important;
+      background-color: #fdfaf6 !important; 
+    }
+    .trust-signal-text { font-size: 0.78rem !important; }
+  }
+/* Container to force Price and ATC button into a single parallel row */
+.product-card__price-atc-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin-top: 6px !important;
+}
+
+/* Strips default margins from the card form element */
+.product-card__inline-form {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block;
+}
+
+/* Compact Brand Pink Add To Cart Button Sizing */
+.product-card__inline-atc-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background-color: #d7116a !important; /* Premium Brand Pink color matching your style */
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 6px 10px !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease !important;
+  line-height: 1 !important;
+}
+
+/* Button Hover State */
+.product-card__inline-atc-btn:hover {
+  background-color: #b80d58 !important;
+}
+
+/* Compact Out of Stock Label */
+.product-card__inline-oos {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.7rem !important;
+  color: #a0a0a0 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+}
+/* Inline Card ATC Spinner Classes */
+.inline-atc-btn__spinner {
+  display: none !important;
+  width: 14px !important;
+  height: 14px !important;
+  color: #ffffff !important;
+}
+
+/* While button is in loading state */
+.product-card__inline-atc-btn.is-loading {
+  background-color: #b80d58 !important; /* Darker pink track hold */
+  pointer-events: none !important;
+  cursor: wait !important;
+}
+
+.product-card__inline-atc-btn.is-loading .inline-atc-btn__text {
+  display: none !important; /* Hides 'Add' text and icon */
+}
+
+.product-card__inline-atc-btn.is-loading .inline-atc-btn__spinner {
+  display: inline-block !important;
+  animation: inlineCardSpin 0.6s linear infinite !important;
+}
+   @media(max-width:390px){
+              .product-card__price-atc-wrapper{
+                display: block !important;
+              }
+              .product-card__inline-atc-btn{
+                margin-top:8px !important;
+              }
+            }
+/* Spinner Rotation Keyframes */
+@keyframes inlineCardSpin {
+  to { transform: rotate(360deg); }
+}
+/* ── Premium Pincode Checker v2 ── */
+   .premium-pincode-container {
+       font-family: Montserrat, sans-serif;
+    width: 100%;
+    border-top: 1px solid #d6d5d1;
+    padding-top: 20px;
+    margin-top:10px;
+  }
+  .premium-pincode-title {
+    font-size: 13px !important;
+    font-weight: bold !important;
+    color: #111;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .premium-pincode-title svg {
+    color: #111111;
+    flex-shrink: 0;
+  }
+  .premium-pincode-input-box {
+    display: flex;
+    position: relative;
+    border: 1.5px solid #111111; 
+    border-radius: 6px;
+    background: #ffffff;
+    overflow: hidden;
+    transition: box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease;
+    margin-bottom: 15px;
+  }
+  .premium-pincode-input-box:focus-within {
+    border-color: #d7116a;
+    box-shadow: 0 6px 16px rgba(215, 17, 106, 0.08);
+  }
+  .input-field-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    position: relative;
+  }
+  #kc-pincode-field {
+    width: 100%;
+    padding: 14px 16px;
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: #111111;
+    font-weight: 500;
+    background: transparent;
+    letter-spacing: 0.04em;
+  }
+  #kc-pincode-field::placeholder {
+    color: #888888;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+  #kc-pincode-submit-btn {
+    padding: 14px 28px;
+    background: #111111; 
+    border: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    min-width: 110px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  #kc-pincode-submit-btn:hover {
+    background: #d7116a; 
+  }
+  
+  /* FIXED DESIGN: PREMIUM BRAND PINK BACKGROUND FOR ACTIVE CHANGE BUTTON STATE */
+  #kc-pincode-submit-btn.is-active-change {
+    background: #d7116a !important;
+    color: #ffffff !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  #kc-pincode-submit-btn.is-active-change:hover {
+    background: #b80d58 !important;
+  }
+  
+  .btn-spinner-icon {
+    display: none;
+    width: 14px;
+    height: 14px;
+    color: #ffffff;
+    margin: 0 auto;
+    animation: kcSpin 0.6s linear infinite;
+  }
+  
+  /* FIXED DESIGN: INLINE PROXIMITY SECTOR SUCCESS TICK ARTIFACT */
+  .premium-success-checkmark {
+    width: 20px;
+    height: 20px;
+    display: none;
+    flex-shrink: 0;
+    position: absolute;
+    right: 14px;
+  }
+  .premium-pincode-input-box.is-verified #kc-pincode-field {
+    color: #777777;
+    pointer-events: none;
+    padding-right: 44px;
+  }
+  .premium-pincode-input-box.is-verified #kc-inline-tick {
+    display: inline-block;
+  }
+  .checkmark-svg {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 4;
+    stroke: #ffffff;
+    stroke-miterlimit: 10;
+    box-shadow: inset 0px 0px 0px #10b981;
+    animation: fillCheck 0.4s ease-in-out 0.2s forwards, scaleCheck 0.3s ease-in-out forwards;
+  }
+  .checkmark-circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 4;
+    stroke-miterlimit: 10;
+    stroke: #10b981;
+    fill: none;
+    animation: strokeCircle 0.5s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+  }
+  .checkmark-check {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: strokeCheck 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards;
+  }
+  @keyframes strokeCircle { 100% { stroke-dashoffset: 0; } }
+  @keyframes strokeCheck { 100% { stroke-dashoffset: 0; } }
+  @keyframes fillCheck { 100% { box-shadow: inset 0px 0px 0px 30px #10b981; } }
+  @keyframes scaleCheck { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
+
+  /* SLIDE IN FROM LEFT TO RIGHT TRANSITION */
+  #kc-pincode-response-panel {
+    margin-top: 16px;
+    display: none;
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #kc-pincode-response-panel.reveal-slide {
+    display: block !important;
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+  }
+  
+  .location-status-text {
+    font-size: 12px;
+    color: #16a34a;
+    font-weight: 600;
+    letter-spacing: .02em;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  .delivery-dates-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .delivery-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 20px;
+    background-color: #faf9f1;
+    border: 1px solid #d7116a6b;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px #00000004;
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .delivery-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background-color: #d7116a12;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .delivery-row__vehicle-icon {
+    width: 20px;
+    height: 20px;
+    color: #c3134e;
+    z-index: 2;
+    transition: transform 0.2s ease;
+  }
+  
+  /* HOVER MOTION TRANSIT ENGINE FOR BOTH SECTIONS */
+  .delivery-row { cursor: default; }
+  .delivery-row:hover {
+    transform: translateY(-2px);
+    border-color: #d7116a6b;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+  }
+  .delivery-row .luxury-express-van {
+    animation: truckMicroVibe 0.15s ease-in-out infinite alternate;
+  }
+  .premium-speed-lines {
+    position: absolute;
+    left: 2px;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .line-streak {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, #9ca3af);
+    height: 2px;
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .streak-1 {
+    width: 12px;
+    top: 16px;
+    animation: speedStreakLoop 0.7s linear infinite;
+  }
+  .streak-2 {
+    width: 8px;
+    top: 26px;
+    animation: speedStreakLoop 0.4s linear infinite 0.15s;
+  }
+  .delivery-row:hover .line-streak {
+    opacity: 1;
+  }
+
+  .delivery-text-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .delivery-main-msg {
+    font-size: 0.95rem;
+    color: #1f2937;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  #date-regular-slot {
+    color: #111111;
+    font-weight: 700;
+  }
+  #date-custom-slot {
+    color: #d7116a;
+    font-weight: 700;
+  }
+  #kc-pincode-error-panel {
+    margin-top: 12px;
+    display: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #dc2626;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background-color: #fef2f2;
+    border-radius: 6px;
+    border-left: 3px solid #dc2626;
+  }
+
+  @keyframes kcSpin { to { transform: rotate(360deg); } }
+  @keyframes truckMicroVibe {
+    from { transform: translate(0, 0); }
+    to { transform: translate(1.5px, -0.5px); }
+  }
+  @keyframes speedStreakLoop {
+    0% { transform: translateX(36px); opacity: 0; }
+    50% { opacity: 0.8; }
+    100% { transform: translateX(-14px); opacity: 0; }
+  }
+  .product-card-mobile-bar__similar{
+    background: #000000a8 !important;
+    color: white !important;
+  }
+  .product-card-mobile-bar__cart{
+    background: #d7116a !important;
+    color: white !important;
+  }
+.js-bin-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.js-bin-btn .btn-loader {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #fff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  position: absolute;
+  opacity: 0;
+  animation: spin 0.6s linear infinite;
+}
+
+.js-bin-btn.is-loading .btn-text {
+  opacity: 0;
+}
+
+.js-bin-btn.is-loading .btn-loader {
+  opacity: 1;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+  .product-page__price {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex-wrap: nowrap !important;
+    font-family: 'Montserrat', sans-serif !important;
+  }
+
+  .product-page__price-compare {
+    font-size: 15px;
+    font-weight: 500 !important;
+    /* color: #556270 !important; */
+    color: #404245 !important;
+    position: relative !important;
+    text-decoration: none !important;
+  }
+
+  .product-page__price-compare::after {
+    content: "" !important;
+    position: absolute !important;
+    left: -3px;
+    right: -3px;
+    top: 50% !important;
+    height: 1px !important;
+    background-color: #d15b47 !important;
+    transform: rotate(-17deg) !important; 
+    transform-origin: center !important;
+  }
+  .product-page__price-current {
+    font-size: 1.65rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+  }
+  .product-page__price-current.is-on-sale {
+    color: #1a7a3c !important;
+  }
+  .product-page__price-discount-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+   color: #d7116a !important;
+    background-color: #f4c2d94f !important;
+    border: 1px solid #f1d8e1 !important;
+    padding: 3px 8px !important;
+    border-radius: 2px !important; 
+    margin-left: 4px !important;
+    letter-spacing: 0.02em !important;
+  }
+
+.product-page__price-tailoring-note {
+    display: block !important;
+    width: 100% !important;
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    color: #ce0570 !important;
+    margin-top: 4px !important;
+  }  
+   .product-grid__price-meta-row{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+   @media screen and (min-width: 1321px) {
+   .product-list__container .product-page__price-current.grid, .product-list__container product-page__price-current{
+        font-size: 1.375rem !important;
+  }
+  .product-page__info .product-page__price-current{
+  font-size: 1.65rem!important
+}
+}
+
+  @media (max-width: 1320px) and (min-width: 769px) {
+    .product-list__container .product-grid__price-meta-row{
+    display: block !important;
+  }
+  .product-list__container .product-page__price-compare{
+    margin-top:4px;
+  }
+}
+ @media (max-width: 990px) and (min-width: 769px) {
+      .product-list__container .product-grid__price-meta-row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 5px !important;
+    }
+    .product-list__container .product-page__price-current, .product-page__price-current.grid{
+   font-size: 14px !important;
+   order:2;
+  }
+  .product-list__container .product-page__price-compare {
+    font-size: 14px !important;
+    order:1;
+  }
+}
+
+
+@media (max-width: 600px) and (min-width: 426px) {
+  .product-list__container .product-page__price-current, 
+  .product-list__container .product-page__price-current.grid {
+    font-size: 16px !important;
+  }
+  .product-list__container .product-page__price-compare {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 440px) {
+  .product-list__container .product-page__price,
+  .product-list__container .product-grid__price-meta-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 5px !important;
+  }
+
+  .product-list__container .product-page__price .product-page__price-compare,
+  .product-list__container .product-grid__price-meta-row .product-page__price-compare {
+    /* margin-top: 4px !important; */
+    font-size: 15px !important;
+    display: inline-block !important;
+    order:1;
+  }
+
+  .product-list__container .product-page__price .product-page__price-current,
+  .product-list__container .product-grid__price-meta-row .product-page__price-current,
+  .product-list__container .product-page__price-current.grid {
+    font-size: 21px !important;
+    order:2;
+  }
+  .product-list__container .product-page__price-compare:after {
+    right:-1px !important;
+    left:-1px !important;
+  }
+  .product-page__info .product-page__price-current{
+    font-size:18px !important;
+  }
+}
+  @media (max-width: 1100px) and (min-width: 880px) {
+  .product-list__container .product-page__price,
+  .product-list__container .product-grid__price-meta-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 5px !important;
+  }
+
+  .product-list__container .product-page__price .product-page__price-compare,
+  .product-list__container .product-grid__price-meta-row .product-page__price-compare {
+    /* margin-top: 4px !important; */
+    font-size: 14px !important;
+    display: inline-block !important;
+  }
+
+  .product-list__container .product-page__price .product-page__price-current,
+  .product-list__container .product-grid__price-meta-row .product-page__price-current,
+  .product-list__container .product-page__price-current.grid {
+    font-size: 18px !important;
+    order:2;
+  }
+  .product-list__container .product-page__price-compare:after {
+    right:-1px !important;
+    left:-1px !important;
+  }
+}
+.product-page__info .product-page__price-compare{
+  font-size:15px !important;
+}
+
+    .product-page__info .product-page__price, .product-page__info .product-grid__price-meta-row{
+     flex-direction:row !important;
+    }
+.product-list__image-wrapper {
+  position: relative !important;
+}
+
+.product-grid__glow-discount-badge {
+  position: absolute !important;
+  top: 12px !important;
+  left: 12px !important;
+  z-index: 10 !important;
+  background: linear-gradient(135deg, #b3125b 0%, #e6a756 100%) !important;
+  color: #ffffff !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  padding: 6px 8px !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1 !important;
+  pointer-events: none !important;
+  transform-origin: center center !important;
+  animation: sugarPulse 2s infinite ease-in-out !important;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+  border: 1px solid rgba(255, 215, 150, 0.6) !important;
+
+}
+
+@keyframes sugarPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 {% endstylesheet %}
 
 

@@ -38,6 +38,7 @@
       {%- if data_source == 'single_collection' -%}
         {%- if section.settings.single_collection != blank and items.size > 0 -%}
           {%- for product in items limit: items_count -%}
+            {%- if product.tags contains 'Archived' -%}{%- continue -%}{%- endif -%}
             <a
               class="product-carousel__card"
               href="{{ product.url }}"
@@ -208,7 +209,7 @@
     font-family: var(--font-body-family, 'Montserrat', sans-serif);
     font-size: 18px;
     font-weight: 400;
-    color: #7e6767;
+    color: #1a1a1a;
     text-align: center;
     margin: 0;
     line-height: 1.55;

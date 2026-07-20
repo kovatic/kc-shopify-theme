@@ -1,0 +1,285 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "countdown": {
+      "type": "countdown-banner",
+      "disabled": true,
+      "settings": {
+        "heading": "Hurry! Aadi Offer ends in:",
+        "end_date": "2026-07-31T23:59:59",
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
+    "hero": {
+      "type": "banner",
+      "blocks": {
+        "slide_aadi": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/KC_banner-0.png",
+            "mobile_image": "shopify://shop_images/KC_Mobile_banner_578087fb-213f-4bde-a30e-d20bf9623f2d.jpg",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "shopify://collections/all",
+            "text_position": "bottom-center",
+            "show_overlay": false,
+            "overlay_opacity": 30
+          }
+        }
+      },
+      "block_order": [
+        "slide_aadi"
+      ],
+      "settings": {
+        "banner_height": 900,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "editorial": {
+      "type": "offer-editorial",
+      "blocks": {
+        "row_sarees": {
+          "type": "offer-row",
+          "settings": {
+            "image": "shopify://shop_images/sareess.jpg",
+            "eyebrow": "Sarees & Lehenga",
+            "title": "Drape the season's finest",
+            "description": "Handpicked silks and lehengas at once-a-year prices.",
+            "offer_1": "Buy 1 Get 1 — Saree",
+            "offer_2": "20% off Sarees & Lehenga",
+            "offer_3": "2 Pcs Sarees — ₹499",
+            "offer_4": "2 PCS Sarees — ₹999",
+            "offer_5": "3 Pcs Sarees — ₹1188",
+            "offer_6": "2 Pcs Sarees — ₹1000",
+            "offer_7": "",
+            "offer_8": "",
+            "button_label": "",
+            "button_url": "shopify://collections/all"
+          },
+          "blocks": {}
+        },
+        "row_womens": {
+          "type": "offer-row",
+          "settings": {
+            "image": "shopify://shop_images/Tops.jpg",
+            "eyebrow": "Women's Wear",
+            "title": "New Styles, More Collections",
+            "description": "Tops, co-ord sets, nightwear and more — mix and match your wardrobe.",
+            "offer_1": "3 PCS Pattiala — ₹500",
+            "offer_2": "3 Pcs Tops — ₹500",
+            "offer_3": "3 Pcs Night Suit — ₹1000",
+            "offer_4": "3 Pcs T-Shirt — ₹500",
+            "offer_5": "2 Pcs Tops — ₹1000",
+            "offer_6": "2 Pcs Material  — ₹1000",
+            "offer_7": "3 Pcs T-shirt   — ₹1000",
+            "offer_8": "3 Pcs Tops — ₹1000",
+            "button_label": "",
+            "button_url": "shopify://collections/all"
+          },
+          "blocks": {}
+        },
+        "offer_row_dM3Y3d": {
+          "type": "offer-row",
+          "name": "t:blocks.offer_row.name",
+          "settings": {
+            "image": "shopify://shop_images/VC.jpg",
+            "eyebrow": "Live Video Call Shopping",
+            "title": "Video Call Shopping",
+            "description": "",
+            "offer_1": "Face-to-Face Shopping From Home",
+            "offer_2": "Live Shopping, Real Assistance.",
+            "offer_3": "Connect Explore Shop Live.",
+            "offer_4": "Whats App US : 6384111286",
+            "offer_5": "",
+            "offer_6": "",
+            "offer_7": "",
+            "offer_8": "",
+            "button_label": "Book Your Call",
+            "button_url": "https://www.kchinnaduraiandco.com/pages/shop-by-video-call"
+          },
+          "blocks": {}
+        },
+        "offer_row_TxF3pd": {
+          "type": "offer-row",
+          "settings": {
+            "image": "shopify://shop_images/plazzo99.jpg",
+            "eyebrow": "Women's Wear",
+            "title": "Everyday fashion made simple and stylish.",
+            "description": "Exclusive Offers on Night Pants, Co-ord Sets & Palazzo Collections.",
+            "offer_1": "3 Pcs Plazzo — ₹1000",
+            "offer_2": "3 Pcs Material — ₹1000",
+            "offer_3": "3 Pcs Co-ord-set — ₹1000",
+            "offer_4": "3 Pcs Night Pant — ₹1000",
+            "offer_5": "2 Pcs T-Shirt — ₹500",
+            "offer_6": "2 Pcs Tops — ₹500",
+            "offer_7": "2 Pcs Plazzo — ₹500",
+            "offer_8": "",
+            "button_label": "",
+            "button_url": "shopify://collections/all"
+          },
+          "blocks": {}
+        },
+        "offer_row_Jgp3px": {
+          "type": "offer-row",
+          "settings": {
+            "image": "shopify://shop_images/Nighty_jpg.jpg",
+            "eyebrow": "Women's Wear",
+            "title": "Everyday fashion made simple and stylish.",
+            "description": "Exclusive Offers on Night Pants, Co-ord Sets & Palazzo Collections.",
+            "offer_1": "3 Pcs Plazzo — ₹500",
+            "offer_2": "3 Pcs Pattiala — ₹599",
+            "offer_3": "2 Pcs Nighty — ₹550",
+            "offer_4": "3 Pcs Skirt  — ₹500",
+            "offer_5": "3 Pcs Plazzo — ₹300",
+            "offer_6": "3 Pcs Slip — ₹210",
+            "offer_7": "3 Pcs L.Jetty — ₹175",
+            "offer_8": "3 Pcs L.Jetty — ₹150",
+            "button_label": "",
+            "button_url": "shopify://collections/all"
+          },
+          "blocks": {}
+        },
+        "row_mens": {
+          "type": "offer-row",
+          "settings": {
+            "image": "shopify://shop_images/Pant.jpg",
+            "eyebrow": "Men's Wear",
+            "title": "Sharp looks, softer prices",
+            "description": "T-shirts, shirts and track pants bundled up for the season.",
+            "offer_1": "3 Pcs T-Shirt — ₹500",
+            "offer_2": "2 Pcs Track Pant — ₹500",
+            "offer_3": "3 Pcs Shirt — ₹999",
+            "offer_4": "2 pcs T-shirt — ₹500",
+            "offer_5": "",
+            "offer_6": "",
+            "offer_7": "",
+            "offer_8": "",
+            "button_label": "",
+            "button_url": "shopify://collections/all"
+          },
+          "blocks": {}
+        },
+        "row_boys": {
+          "type": "offer-row",
+          "settings": {
+            "image": "shopify://shop_images/shirtss.jpg",
+            "eyebrow": "Boys Wear",
+            "title": "Stylish Looks for Every OccasionPlaytime-ready outfits",
+            "description": "Shirts, banian sets, shorts and tracks for the little ones.",
+            "offer_1": "3 Pcs Boys Shirt — ₹1000",
+            "offer_2": "3 Pcs Banian Set — ₹500",
+            "offer_3": "3 Pcs T-Shirt — ₹300",
+            "offer_4": "3 Pcs Tracks — ₹500",
+            "offer_5": "3 PCS BOYS BANIAN SET — ₹1000",
+            "offer_6": "3 PCS BOYS 3/4 TH SET — ₹750",
+            "offer_7": "3 PCS BOYS 3/4 TH SET — ₹1000",
+            "offer_8": "3 PCS BOY S T SHIRT — ₹500",
+            "button_label": "",
+            "button_url": "shopify://collections/all"
+          },
+          "blocks": {}
+        },
+        "offer_row_VLdGYr": {
+          "type": "offer-row",
+          "settings": {
+            "image": "shopify://shop_images/shorts.jpg",
+            "eyebrow": "Boys Wear",
+            "title": "Playtime-ready outfits",
+            "description": "Comfy Boy Shorts & Tracks – Adi Exclusive Picks",
+            "offer_1": "3 PCS BOY SHORTS — ₹500",
+            "offer_2": "3 PCS BOY SHORTS — ₹300",
+            "offer_3": "3 PCS BOY S TRACKS — ₹1000",
+            "offer_4": "3 PCS BOYS PANT — ₹1000",
+            "offer_5": "",
+            "offer_6": "",
+            "offer_7": "",
+            "offer_8": "",
+            "button_label": "",
+            "button_url": "shopify://collections/all"
+          },
+          "blocks": {}
+        },
+        "row_girls": {
+          "type": "offer-row",
+          "settings": {
+            "image": "shopify://shop_images/frock.jpg",
+            "eyebrow": "Girls Wear",
+            "title": "Tiny Trends, Amazing Deals",
+            "description": "Western sets, frocks, nightwear and more for girls.",
+            "offer_1": "3 Set Western — ₹1000",
+            "offer_2": "3 Pcs Cotton Frock — ₹500",
+            "offer_3": "3 Set Night Dress — ₹1000",
+            "offer_4": "3 Pcs T-Shirt — ₹300",
+            "offer_5": "2 Set Western  — ₹1000",
+            "offer_6": "3 pcs long tops — ₹1000",
+            "offer_7": "2 pcs long tops — ₹1000",
+            "offer_8": "3 pcs short tops — ₹500",
+            "button_label": "",
+            "button_url": "#"
+          },
+          "blocks": {}
+        },
+        "offer_row_yc7nRf": {
+          "type": "offer-row",
+          "settings": {
+            "image": "shopify://shop_images/short_tops.jpg",
+            "eyebrow": "Girls Wear",
+            "title": "Adorable Styles, Unbeatable Value",
+            "description": "Refresh Your Wardrobe with Adi Sale Picks",
+            "offer_1": "2 pcs short tops  — ₹500",
+            "offer_2": "2 pcs cotton frock — ₹500",
+            "offer_3": "2 Set short set  — ₹500",
+            "offer_4": "3 pcs plazzo pant — ₹500",
+            "offer_5": "3 pcs full pant — ₹500",
+            "offer_6": "3 pcs 3/4th pant — ₹500",
+            "offer_7": "3 pcs shorts — ₹300",
+            "offer_8": "3 pcs T-shirt — ₹500",
+            "button_label": "",
+            "button_url": "#"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "row_sarees",
+        "row_womens",
+        "offer_row_dM3Y3d",
+        "offer_row_TxF3pd",
+        "offer_row_Jgp3px",
+        "row_mens",
+        "row_boys",
+        "offer_row_VLdGYr",
+        "row_girls",
+        "offer_row_yc7nRf"
+      ],
+      "settings": {
+        "heading": "Shop More, Save More",
+        "subheading": "This Aadi at K.Chinnadurai & Co | 10%–50% OFF",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "main": {
+      "type": "page",
+      "settings": {}
+    }
+  },
+  "order": [
+    "countdown",
+    "hero",
+    "editorial",
+    "main"
+  ]
+}

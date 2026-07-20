@@ -153,6 +153,7 @@
               <div class="collection-page__grid" id="search-grid">
             {%- for result in search.results -%}
               {%- if result.object_type == 'product' -%}
+                {%- if result.tags contains 'Archived' -%}{%- continue -%}{%- endif -%}
                 {%- assign product = result -%}
                 {%- assign first_variant = product.first_available_variant | default: product.variants.first -%}
                 {%- assign is_available = product.available -%}
@@ -163,6 +164,12 @@
                         {{ product.featured_image | image_url: width: 600, height: 700, crop: 'center' | image_tag: class: 'product-list__image', loading: 'lazy', alt: product.title | escape }}
                       {%- else -%}
                         {{ 'product-1' | placeholder_svg_tag: 'product-list__image product-list__image--placeholder' }}
+                      {%- endif -%}
+
+                      {% comment %} Glowing Discount Badge on Top Left Corner {% endcomment %}
+                      {%- if product.compare_at_price_min > product.price_min -%}
+                        {%- assign grid_savings = product.compare_at_price_min | minus: product.price_min | times: 100 | divided_by: product.compare_at_price_min -%}
+                        <span class="product-grid__glow-discount-badge">-{{ grid_savings }}%</span>
                       {%- endif -%}
 
                       <button class="product-card-wishlist" type="button" aria-label="Add to wishlist">
@@ -217,8 +224,43 @@
 
                     <div class="product-list__info">
                       <span class="product-list__name">{{ product.title | escape }}</span>
-                      <span class="product-list__price">{{ product.price | money }}</span>
+                      <!-- <span class="product-list__price">{{ product.price | money }}</span> -->
+                     <div class="product-card__price-atc-wrapper">
+                        <!-- <span class="product-list__price">{{ product.price_min | money }}</span> -->
+                          <div class="product-grid__price-stacked-layout">
+                      {%- if product.compare_at_price_min > product.price_min -%}
+                        {% comment %} Displays active sale price and struck out original price side-by-side on the same line {% endcomment %}
+                        <div class="product-grid__price-meta-row">
+                          <div class="product-page__price-current grid is-on-sale">{{ product.price_min | money }}</div>
+                          <div class="product-page__price-compare">{{ product.compare_at_price_min | money }}</div>
+                        </div>
+                      {%- else -%}
+                        {% comment %} Normal pricing view if item isn't marked down {% endcomment %}
+                        <div class="product-grid__price-meta-row">
+                          <span class="product-page__price-current grid">{{ product.price_min | money }}</span>
+                        </div>
+                      {%- endif -%}
                     </div>
+                        
+                        {%- if product.available -%}
+                          <form method="post" action="/cart/add" class="product-card__inline-form">
+                            <input type="hidden" name="id" value="{{ product.first_available_variant.id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" name="add" class="product-card__inline-atc-btn js-inline-atc-submit">
+                              <span class="inline-atc-btn__text">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="display: inline-block; vertical-align: middle;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke-linecap="round"/><path d="M16 10a4 4 0 01-8 0" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                Add
+                              </span>
+                              <svg class="inline-atc-btn__spinner" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="24 48"/>
+                              </svg>
+                            </button>
+                          </form>
+                        {%- else -%}
+                          <!-- <span class="product-card__inline-oos">OOS</span> -->
+                        {%- endif -%}
+                      </div>
+                       </div>
                   </a>
                 </div>
 
@@ -379,7 +421,245 @@
     .search-page__form { width: 100%; }
     .search-page__input { width: 100%; }
     .search-result-card__img-link { aspect-ratio: 3 / 5; }
+        .product-card__inline-form {
+        display: none !important;
+    }
+
   }
+  @media (max-width: 1100px) and (min-width: 880px) {
+  .search-page__container .product-page__price,
+  .search-page__container .product-grid__price-meta-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 5px !important;
+  }
+
+  .search-page__container .product-page__price .product-page__price-compare,
+  .search-page__container .product-grid__price-meta-row .product-page__price-compare {
+    /* margin-top: 4px !important; */
+    font-size: 14px !important;
+    display: inline-block !important;
+  }
+
+  .search-page__container .product-page__price .product-page__price-current,
+  .search-page__container .product-grid__price-meta-row .product-page__price-current,
+  .search-page__container .product-page__price-current.grid {
+    font-size: 18px !important;
+    order:2;
+  }
+  .search-page__container .product-page__price-compare:after {
+    right:-1px !important;
+    left:-1px !important;
+  }
+}
+ @media (max-width: 989px) and (min-width: 769px) {
+        .search-page__container .product-grid__price-meta-row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 5px !important;
+    }
+      .search-page__container .product-page__price-current, .product-page__price-current.grid{
+   font-size: 19px !important;
+   order:2;
+  }
+    .search-page__container .product-page__price-compare {
+    font-size: 14px !important;
+    order:1;
+  }
+}
+  @media (max-width: 440px) {
+  .search-page__container .product-page__price,
+  .search-page__container .product-grid__price-meta-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 5px !important;
+  }
+
+  .search-page__container .product-page__price .product-page__price-compare,
+  .search-page__container .product-grid__price-meta-row .product-page__price-compare {
+    /* margin-top: 4px !important; */
+    font-size: 15px !important;
+    display: inline-block !important;
+    order:1;
+  }
+
+  .search-page__container .product-page__price .product-page__price-current,
+  .search-page__container .product-grid__price-meta-row .product-page__price-current,
+  .search-page__container .product-page__price-current.grid {
+    font-size: 21px !important;
+    order:2;
+  }
+  .search-page__container .product-page__price-compare:after {
+    right:-1px !important;
+    left:-1px !important;
+  }
+  .product-page__info .product-page__price-current{
+    font-size:18px !important;
+  }
+}
+  .product-card__price-atc-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin-top: 6px !important;
+}
+
+.product-card__inline-form {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block;
+}
+
+.product-card__inline-atc-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background-color: #d7116a !important; 
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 6px 10px !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease !important;
+  line-height: 1 !important;
+}
+
+.product-card__inline-atc-btn:hover {
+  background-color: #b80d58 !important;
+}
+
+.product-card__inline-oos {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.7rem !important;
+  color: #a0a0a0 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+}
+.inline-atc-btn__spinner {
+  display: none !important;
+  width: 14px !important;
+  height: 14px !important;
+  color: #ffffff !important;
+}
+
+.product-card__inline-atc-btn.is-loading {
+  background-color: #b80d58 !important; 
+  pointer-events: none !important;
+  cursor: wait !important;
+}
+
+.product-card__inline-atc-btn.is-loading .inline-atc-btn__text {
+  display: none !important; 
+}
+
+.product-card__inline-atc-btn.is-loading .inline-atc-btn__spinner {
+  display: inline-block !important;
+  animation: inlineCardSpin 0.6s linear infinite !important;
+}
+   @media(max-width:390px){
+              .product-card__price-atc-wrapper{
+                display: block !important;
+              }
+              .product-card__inline-atc-btn{
+                margin-top:8px !important;
+              }
+            }
+@keyframes inlineCardSpin {
+  to { transform: rotate(360deg); }
+}
+.product-page__price-compare {
+    font-size: 15px;
+    font-weight: 500 !important;
+   color: #404245 !important;
+    position: relative !important;
+    text-decoration: none !important;
+  }
+
+  .product-page__price-compare::after {
+    content: "" !important;
+    position: absolute !important;
+    left: -3px;
+    right: -3px;
+    top: 50% !important;
+    height: 1px !important;
+    background-color: #d15b47 !important; 
+    transform: rotate(-17deg) !important;
+    transform-origin: center !important;
+  }
+  .product-page__price-current {
+    font-size: 1.65rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+  }
+  .product-page__price-current.is-on-sale {
+    color: #1a7a3c !important;
+  }
+        @media screen and (min-width: 1321px) {
+   .product-page__price-current.grid, product-page__price-current{
+        font-size: 1.375rem !important;
+  }
+}
+
+  @media (max-width: 1320px) and (min-width: 769px) {
+    .product-grid__price-meta-row{
+    display: block !important;
+  }
+  .product-page__price-compare{
+    margin-top:4px;
+  }
+}
+ @media (max-width: 990px) and (min-width: 769px) {
+    .product-page__price-current, .product-page__price-current.grid{
+   font-size: 14px !important;
+  }
+}
+.product-list__image-wrapper {
+  position: relative !important;
+}
+
+.product-grid__glow-discount-badge {
+  position: absolute !important;
+  top: 12px !important;
+  left: 12px !important;
+  z-index: 10 !important;
+  background: linear-gradient(135deg, #ff5fa2 0%, #e34196 35%, #8424c8 100%) !important;
+  color: #ffffff !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  padding: 5px 9px !important;
+  border-radius: 6px !important;
+  letter-spacing: 0.03em !important;
+  line-height: 1 !important;
+  pointer-events: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 0 6px 16px rgb(0 0 0 / 16%), 0 0 8px rgb(255 95 162 / 30%);
+  transform-origin: center center !important;
+  will-change: transform;
+  animation: sugarPulse 2s infinite ease-in-out !important;
+}
+
+@keyframes sugarPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 {% endstylesheet %}
 
 {% javascript %}
