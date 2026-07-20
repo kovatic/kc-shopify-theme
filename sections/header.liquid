@@ -188,7 +188,17 @@
           <span>{{ section.settings.shop_live_label | default: 'Video call shopping' }}</span>
           <span class="header-shop-live-btn__dot mobile-nav-drawer__video-call-dot" aria-hidden="true"></span>
         </a>
-  
+
+                </li>
+              {%- endif -%}
+
+              {%- if shop.customer_accounts_enabled -%}
+                <li class="mobile-nav-drawer__item">
+                  {% if customer %}
+                    <a href="{{ routes.account_url }}" class="mobile-nav-drawer__link mobile-nav-drawer__link--account">{{ 'header.account_label' | t }}</a>
+                  {% else %}
+                    <a href="{{ routes.account_login_url }}" class="mobile-nav-drawer__link mobile-nav-drawer__link--account">{{ 'header.login_label' | t }}</a>
+                  {% endif %}
                 </li>
               {%- endif -%}
             </ul>
