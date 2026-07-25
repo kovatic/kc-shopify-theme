@@ -104,6 +104,39 @@
         "padding_bottom": 40
       }
     },
+    "about_team_fJPAaj": {
+      "type": "about-team",
+      "blocks": {
+        "member_AMPqtY": {
+          "type": "member",
+          "settings": {
+            "name": "Team member",
+            "role": "Role",
+            "bio": ""
+          }
+        },
+        "member_Ce49wG": {
+          "type": "member",
+          "settings": {
+            "name": "Team member",
+            "role": "Role",
+            "bio": ""
+          }
+        }
+      },
+      "block_order": [
+        "member_AMPqtY",
+        "member_Ce49wG"
+      ],
+      "name": "t:sections.about_team.name",
+      "settings": {
+        "heading": "Meet the team",
+        "subheading": "The people who bring K. Chinnadurai & Co. to life every day.",
+        "columns": "4",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
     "product_list_hdgdex": {
       "type": "product-list",
       "name": "t:sections.product_list.name",
@@ -559,6 +592,7 @@
   "order": [
     "banner_C4FemU",
     "category_aE6ijQ",
+    "about_team_fJPAaj",
     "product_list_hdgdex",
     "product_list_JmtKph",
     "reel_G8fWym",
