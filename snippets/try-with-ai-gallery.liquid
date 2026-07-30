@@ -1,10 +1,13 @@
 {% doc %}
   Renders a strip of the customer's previous AI try-on results for this
-  product, fetched from the KC Wear AI backend. Clicking a thumbnail opens
-  the try-with-ai modal directly on that result (no re-generation).
+  product, fetched from the KC Wear AI backend. Always rendered (not just
+  when history exists): a leading "+" tile is the entry point into the
+  try-on flow, and previous results (if any) appear as thumbnails after it.
+  Clicking a thumbnail opens the try-with-ai modal directly on that result
+  (no re-generation). Clicking the "+" tile opens the modal fresh, or
+  redirects to login if the customer isn't signed in.
 
-  Hidden entirely if the customer has no previous completed try-ons for this
-  product. Requires `window.openTryWithAiModal` to be defined by
+  Requires `window.openTryWithAiModal` to be defined by
   `snippets/try-with-ai-modal.liquid`, rendered elsewhere on the page.
 
   @param {product} product - The product being tried on
@@ -20,20 +23,28 @@
   data-backend-url="{{ backend_url }}"
   data-product-id="{{ product.id }}"
   data-customer-id="{{ customer.id }}"
+  data-login-url="{{ routes.account_login_url }}"
   data-i18n-label="{{ 'try_with_ai.previous_tryons' | t | escape }}"
   data-i18n-alt="{{ 'try_with_ai.previous_tryon_alt' | t | escape }}"
-  hidden
+  data-i18n-add="{{ 'try_with_ai.cta_label' | t | escape }}"
 >
   <p class="try-ai-gallery__label"></p>
-  <div class="try-ai-gallery__list" id="try-ai-gallery-list"></div>
+  <div class="try-ai-gallery__list" id="try-ai-gallery-list">
+    {%- if customer -%}
+      <button type="button" class="try-ai-gallery__item try-ai-gallery__item--add" id="try-ai-gallery-add" aria-label="{{ 'try_with_ai.cta_label' | t | escape }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    {%- else -%}
+      <a href="{{ routes.account_login_url }}" class="try-ai-gallery__item try-ai-gallery__item--add" aria-label="{{ 'try_with_ai.login_required' | t | escape }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      </a>
+    {%- endif -%}
+  </div>
 </div>
 
 {% stylesheet %}
   .try-ai-gallery {
     margin: 4px 0 14px;
-  }
-  .try-ai-gallery[hidden] {
-    display: none;
   }
   .try-ai-gallery__label {
     font-family: 'Montserrat', sans-serif;
@@ -46,6 +57,7 @@
   }
   .try-ai-gallery__list {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     overflow-x: auto;
     padding-bottom: 4px;
@@ -72,6 +84,27 @@
     object-fit: cover;
     display: block;
   }
+  .try-ai-gallery__item--add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-style: dashed;
+    border-color: #d4cdc4;
+    background: #fafafa;
+    color: #888;
+    text-decoration: none;
+  }
+  .try-ai-gallery__item--add:hover {
+    border-color: #2e1f1f;
+    color: #2e1f1f;
+    transform: translateY(-2px);
+  }
+
+  @media screen and (max-width: 600px) {
+    .try-ai-gallery__list {
+      flex-wrap: nowrap;
+    }
+  }
 {% endstylesheet %}
 
 {% javascript %}
@@ -87,10 +120,17 @@
 
     var labelEl = gallery.querySelector('.try-ai-gallery__label');
     var listEl  = document.getElementById('try-ai-gallery-list');
-
-    if (!BACKEND_URL || !CUSTOMER_ID || !PRODUCT_ID) return;
+    var addTile = document.getElementById('try-ai-gallery-add');
 
     labelEl.textContent = LABEL;
+
+    if (addTile) {
+      addTile.addEventListener('click', function () {
+        if (window.openTryWithAiModal) window.openTryWithAiModal();
+      });
+    }
+
+    if (!BACKEND_URL || !CUSTOMER_ID || !PRODUCT_ID) return;
 
     var url = BACKEND_URL + '/api/try-on/history?customerId=' + encodeURIComponent(CUSTOMER_ID) + '&productId=' + encodeURIComponent(PRODUCT_ID);
 
@@ -114,8 +154,6 @@
           });
           listEl.appendChild(btn);
         });
-
-        gallery.hidden = false;
       })
       .catch(function () {});
   })();

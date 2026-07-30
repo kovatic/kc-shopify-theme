@@ -24,7 +24,10 @@
   data-backend-url="{{ backend_url }}"
   data-product-image="https:{{ product.featured_image | image_url: width: 1024 }}"
   data-product-id="{{ product.id }}"
+  data-product-url="{{ shop.url }}{{ product.url }}"
+  data-product-title="{{ product.title | escape }}"
   data-customer-id="{{ customer.id }}"
+  data-privacy-url="{{ pages.privacy-policy.url | default: '/pages/privacy-policy' }}"
   data-i18n-upload-button="{{ 'try_with_ai.upload_button' | t | escape }}"
   data-i18n-uploading="{{ 'try_with_ai.uploading' | t | escape }}"
   data-i18n-generating="{{ 'try_with_ai.generating' | t | escape }}"
@@ -39,6 +42,8 @@
   data-i18n-added-to-cart="{{ 'try_with_ai.added_to_cart' | t | escape }}"
   data-i18n-download="{{ 'try_with_ai.download' | t | escape }}"
   data-i18n-share="{{ 'try_with_ai.share' | t | escape }}"
+  data-i18n-privacy-required="{{ 'try_with_ai.privacy_required' | t | escape }}"
+  data-i18n-share-text="{{ 'try_with_ai.share_text' | t | escape }}"
 >
   <div class="try-ai-modal__backdrop"></div>
   <div class="try-ai-modal__panel">
@@ -74,6 +79,14 @@
           </span>
         </label>
         <input type="file" accept="image/*" id="try-ai-file-input" class="try-ai-modal__file-input">
+
+        <label class="try-ai-modal__privacy" for="try-ai-privacy-checkbox">
+          <input type="checkbox" id="try-ai-privacy-checkbox">
+          <span>
+            {{ 'try_with_ai.privacy_text_prefix' | t }}
+            <a href="{{ pages.privacy-policy.url | default: '/pages/privacy-policy' }}" target="_blank" rel="noopener">{{ 'try_with_ai.privacy_link_text' | t }}</a>
+          </span>
+        </label>
       </div>
 
       <div class="try-ai-modal__step" id="try-ai-step-loading" hidden>
@@ -125,13 +138,47 @@
             </svg>
             <span>{{ 'try_with_ai.download' | t }}</span>
           </button>
-          <button type="button" class="try-ai-modal__icon-btn" id="try-ai-share-btn" aria-label="{{ 'try_with_ai.share' | t | escape }}">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="18" cy="5" r="2.4"/><circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="19" r="2.4"/>
-              <path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/>
-            </svg>
-            <span>{{ 'try_with_ai.share' | t }}</span>
-          </button>
+          <div class="try-ai-modal__share-wrap">
+            <button type="button" class="try-ai-modal__icon-btn" id="try-ai-share-btn" aria-label="{{ 'try_with_ai.share' | t | escape }}" aria-haspopup="true" aria-expanded="false">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="18" cy="5" r="2.4"/><circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="19" r="2.4"/>
+                <path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/>
+              </svg>
+              <span>{{ 'try_with_ai.share' | t }}</span>
+            </button>
+            <div class="try-ai-modal__share-menu" id="try-ai-share-menu" hidden>
+              <button type="button" class="try-ai-modal__share-option" data-share="whatsapp">
+                <span class="try-ai-modal__share-icon try-ai-modal__share-icon--whatsapp">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1-.2.2-.6.9-.8 1.1-.1.2-.3.2-.5.1-1.4-.6-2.3-1.4-3.2-2.8-.1-.2-.1-.4.1-.5.2-.2.5-.5.6-.7.1-.2.1-.4 0-.6-.1-.2-.7-1.6-.9-2.1-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.2-.6.4-.7.8-1 1.7-1 2.7.1 1.5 1.1 3 2.5 4.2 1.7 1.5 3.1 2 5 2.3.5.1 1 0 1.4-.1.5-.2 1.4-1 1.6-1.5.2-.5.2-.9.1-1-.1-.1-.2-.1-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.5 5.2L2 22l4.9-1.4C8.3 21.5 10.1 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.7 0-3.4-.5-4.8-1.4l-.3-.2-3 .8.8-3-.2-.3C3.5 14.5 3 13.3 3 12c0-4.9 4.1-9 9-9s9 4.1 9 9-4.1 9.2-9 9.2z"/></svg>
+                </span>
+                <span>WhatsApp</span>
+              </button>
+              <button type="button" class="try-ai-modal__share-option" data-share="pinterest">
+                <span class="try-ai-modal__share-icon try-ai-modal__share-icon--pinterest">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3-.1-.8-.2-2 0-2.8.2-.8 1.3-5.4 1.3-5.4s-.3-.7-.3-1.6c0-1.6.9-2.7 2-2.7 1 0 1.4.7 1.4 1.6 0 1-.6 2.4-.9 3.7-.3 1.1.5 2 1.6 2 1.9 0 3.2-2.4 3.2-5.3 0-2.2-1.5-3.8-4.2-3.8-3.1 0-5 2.3-5 4.8 0 .9.3 1.5.7 2 .2.2.2.3.1.5l-.3 1c-.1.3-.3.4-.6.3-1.6-.7-2.4-2.5-2.4-4.6 0-3.4 2.9-7.5 8.6-7.5 4.6 0 7.6 3.3 7.6 6.9 0 4.7-2.7 8.2-6.6 8.2-1.3 0-2.6-.7-3-1.6 0 0-.7 2.9-.9 3.6-.2.8-.6 1.6-1 2.2.9.3 1.9.4 2.9.4 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+                </span>
+                <span>Pinterest</span>
+              </button>
+              <button type="button" class="try-ai-modal__share-option" data-share="instagram">
+                <span class="try-ai-modal__share-icon try-ai-modal__share-icon--instagram">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c-2.7 0-3.1 0-4.1.1-1.1 0-1.8.2-2.4.4-.7.3-1.2.6-1.7 1.1-.5.5-.9 1.1-1.1 1.7-.2.6-.4 1.4-.4 2.4C2.2 8.7 2.2 9.1 2.2 12s0 3.1.1 4.1c0 1.1.2 1.8.4 2.4.3.7.6 1.2 1.1 1.7.5.5 1.1.9 1.7 1.1.6.2 1.4.4 2.4.4 1 .1 1.4.1 4.1.1s3.1 0 4.1-.1c1.1 0 1.8-.2 2.4-.4.7-.3 1.2-.6 1.7-1.1.5-.5.9-1.1 1.1-1.7.2-.6.4-1.4.4-2.4.1-1 .1-1.4.1-4.1s0-3.1-.1-4.1c0-1.1-.2-1.8-.4-2.4-.3-.7-.6-1.2-1.1-1.7-.5-.5-1.1-.9-1.7-1.1-.6-.2-1.4-.4-2.4-.4C15.1 2.2 14.7 2.2 12 2.2zm0 1.8c2.6 0 3 0 4 .1.9 0 1.5.2 1.8.3.5.2.8.4 1.1.7.3.3.6.7.7 1.1.1.3.3.9.3 1.8.1 1 .1 1.4.1 4s0 3-.1 4c0 .9-.2 1.5-.3 1.8-.2.5-.4.8-.7 1.1-.3.3-.7.6-1.1.7-.3.1-.9.3-1.8.3-1 .1-1.4.1-4 .1s-3 0-4-.1c-.9 0-1.5-.2-1.8-.3-.5-.2-.8-.4-1.1-.7-.3-.3-.6-.7-.7-1.1-.1-.3-.3-.9-.3-1.8-.1-1-.1-1.4-.1-4s0-3 .1-4c0-.9.2-1.5.3-1.8.2-.5.4-.8.7-1.1.3-.3.7-.6 1.1-.7.3-.1.9-.3 1.8-.3 1-.1 1.4-.1 4-.1z"/><path d="M12 7a5 5 0 100 10 5 5 0 000-10zm0 8.2a3.2 3.2 0 110-6.4 3.2 3.2 0 010 6.4z"/><circle cx="17.4" cy="6.6" r="1.2"/></svg>
+                </span>
+                <span>Instagram</span>
+              </button>
+              <button type="button" class="try-ai-modal__share-option" data-share="snapchat">
+                <span class="try-ai-modal__share-icon try-ai-modal__share-icon--snapchat">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5c3 0 5 2.2 5 5.4 0 1 0 2 .1 2.6.1.3.6.5 1 .6.5.1 1.1.4 1.1.9 0 .4-.4.7-.8.9.2.5-.1.9-.6 1.1-.4.1-.4.3-.3.6.1.3.3.7-.2.9-.4.2-1 .1-1.4.3-.3.2-.3.7-.9.9-.6.2-1.3-.2-2.2-.2-.8 0-1.3.6-2.4.6s-1.6-.6-2.4-.6c-.9 0-1.6.4-2.2.2-.6-.2-.6-.7-.9-.9-.4-.2-1-.1-1.4-.3-.5-.2-.3-.6-.2-.9.1-.3.1-.5-.3-.6-.5-.2-.8-.6-.6-1.1-.4-.2-.8-.5-.8-.9 0-.5.6-.8 1.1-.9.4-.1.9-.3 1-.6.1-.6.1-1.6.1-2.6 0-3.2 2-5.4 5-5.4z"/></svg>
+                </span>
+                <span>Snapchat</span>
+              </button>
+              <button type="button" class="try-ai-modal__share-option" data-share="copy">
+                <span class="try-ai-modal__share-icon try-ai-modal__share-icon--copy">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>
+                </span>
+                <span>{{ 'try_with_ai.copy_link' | t }}</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -287,6 +334,10 @@
   .try-ai-modal__dropzone:hover {
     border-color: #2e1f1f;
   }
+  .try-ai-modal__dropzone.is-dragover {
+    border-color: #9c2a8f;
+    background: #fbf3f9;
+  }
   .try-ai-modal__dropzone-placeholder {
     display: flex;
     flex-direction: column;
@@ -321,6 +372,31 @@
 
   .try-ai-modal__step[hidden] {
     display: none;
+  }
+
+  .try-ai-modal__privacy {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    max-width: 420px;
+    margin: 10px auto 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: #666;
+    cursor: pointer;
+  }
+  .try-ai-modal__privacy input {
+    margin-top: 2px;
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+    accent-color: #2e1f1f;
+    cursor: pointer;
+  }
+  .try-ai-modal__privacy a {
+    color: #2e1f1f;
+    text-decoration: underline;
   }
 
   /* ── Loading state: AI scan effect over the uploaded photo ── */
@@ -553,6 +629,61 @@
     border-color: #2e1f1f;
   }
 
+  .try-ai-modal__share-wrap {
+    position: relative;
+    flex: 1;
+  }
+  .try-ai-modal__share-wrap .try-ai-modal__icon-btn {
+    width: 100%;
+  }
+  .try-ai-modal__share-menu {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    z-index: 10;
+    background: #fff;
+    border: 1px solid #e8e2d9;
+    border-radius: 8px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.16);
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    min-width: 180px;
+  }
+  .try-ai-modal__share-menu[hidden] {
+    display: none;
+  }
+  .try-ai-modal__share-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    color: #2e1f1f;
+    text-align: left;
+  }
+  .try-ai-modal__share-option:hover {
+    background: #f5f1eb;
+  }
+  .try-ai-modal__share-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  .try-ai-modal__share-icon--whatsapp { color: #25d366; }
+  .try-ai-modal__share-icon--pinterest { color: #e60023; }
+  .try-ai-modal__share-icon--instagram { color: #c3134e; }
+  .try-ai-modal__share-icon--snapchat { color: #b9950a; }
+  .try-ai-modal__share-icon--copy { color: #666; }
+
   .try-ai-modal__status {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.8rem;
@@ -637,6 +768,9 @@
     var BACKEND_URL             = (modal.dataset.backendUrl || '').replace(/\/+$/, '');
     var PRODUCT_IMAGE_URL       = modal.dataset.productImage || '';
     var PRODUCT_ID              = modal.dataset.productId || '';
+    var PRODUCT_URL             = modal.dataset.productUrl || '';
+    var PRODUCT_TITLE           = modal.dataset.productTitle || '';
+    var PRIVACY_URL             = modal.dataset.privacyUrl || '/pages/privacy-policy';
     var CUSTOMER_ID             = modal.dataset.customerId || '';
     var POLL_INTERVAL_MS        = 2500;
     var POLL_TIMEOUT_MS         = 120000;
@@ -661,7 +795,11 @@
       addToCart:     modal.dataset.i18nAddToCart      || 'Add to cart',
       addedToCart:   modal.dataset.i18nAddedToCart    || 'Added!',
       download:      modal.dataset.i18nDownload       || 'Download',
-      share:         modal.dataset.i18nShare          || 'Share'
+      share:         modal.dataset.i18nShare          || 'Share',
+      stepAlmostDone: modal.dataset.i18nStepAlmostDone || 'Almost done…',
+      stepLovingIt:   modal.dataset.i18nStepLovingIt   || 'Hope you\'ll love the output…',
+      privacyRequired: modal.dataset.i18nPrivacyRequired || 'Please agree to the Privacy Policy to continue.',
+      shareText:       modal.dataset.i18nShareText        || 'Check out my AI saree try-on from ' + PRODUCT_TITLE + '!'
     };
 
     var dropzone           = document.getElementById('try-ai-dropzone');
@@ -674,6 +812,8 @@
     var atcBtn             = document.getElementById('try-ai-atc-btn');
     var downloadBtn        = document.getElementById('try-ai-download-btn');
     var shareBtn           = document.getElementById('try-ai-share-btn');
+    var shareMenu          = document.getElementById('try-ai-share-menu');
+    var privacyCheckbox    = document.getElementById('try-ai-privacy-checkbox');
     var resultImg          = document.getElementById('try-ai-result-img');
     var originalImg        = document.getElementById('try-ai-original-img');
     var compareEl          = document.getElementById('try-ai-compare');
@@ -713,14 +853,20 @@
     }
 
     function startLoadingSteps() {
-      var steps = [I18N.stepUploading, I18N.stepStyling, I18N.stepFinishing];
+      var steps = [
+        I18N.stepUploading,
+        I18N.stepStyling,
+        I18N.stepLovingIt,
+        I18N.stepFinishing,
+        I18N.stepAlmostDone
+      ];
       var i = 0;
       loadingStepEl.textContent = steps[0];
       stopLoadingSteps();
       loadingStepTimer = setInterval(function () {
         i = Math.min(i + 1, steps.length - 1);
         loadingStepEl.textContent = steps[i];
-      }, 7000);
+      }, 4000);
     }
 
     function showUploadStep() {
@@ -779,6 +925,8 @@
       uploadBtn.classList.remove('is-loading');
       atcBtn.textContent = I18N.addToCart;
       atcBtn.disabled = false;
+      if (privacyCheckbox) privacyCheckbox.checked = false;
+      closeShareMenu();
       setStatus('', null);
       showUploadStep();
     }
@@ -812,8 +960,7 @@
 
     retryBtn.addEventListener('click', resetState);
 
-    fileInput.addEventListener('change', function () {
-      var file = fileInput.files && fileInput.files[0];
+    function handleFile(file) {
       if (!file || file.type.indexOf('image/') !== 0) {
         selectedFile = null;
         uploadBtn.disabled = true;
@@ -825,6 +972,35 @@
       placeholder.hidden = true;
       uploadBtn.disabled = false;
       setStatus('', null);
+    }
+
+    fileInput.addEventListener('change', function () {
+      handleFile(fileInput.files && fileInput.files[0]);
+    });
+
+    /* ── Drag & drop (desktop) ── */
+    ['dragenter', 'dragover'].forEach(function (evtName) {
+      dropzone.addEventListener(evtName, function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add('is-dragover');
+      });
+    });
+    ['dragleave', 'dragend'].forEach(function (evtName) {
+      dropzone.addEventListener(evtName, function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('is-dragover');
+      });
+    });
+    dropzone.addEventListener('drop', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.remove('is-dragover');
+      var file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (!file) return;
+      fileInput.value = '';
+      handleFile(file);
     });
 
     /* ── Before/after compare slider ── */
@@ -871,27 +1047,83 @@
 
     /* ── Result actions: download / share / add to cart ── */
     downloadBtn.addEventListener('click', function () {
-      var link = document.createElement('a');
-      link.href = resultImg.src;
-      link.download = 'try-with-ai-result.jpg';
-      link.target = '_blank';
-      link.rel = 'noopener';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      var originalLabel = downloadBtn.innerHTML;
+      fetch(resultImg.src)
+        .then(function (r) { return r.blob(); })
+        .then(function (blob) {
+          var blobUrl = URL.createObjectURL(blob);
+          var link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = 'try-with-ai-result.jpg';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          setTimeout(function () { URL.revokeObjectURL(blobUrl); }, 1000);
+        })
+        .catch(function () {
+          var link = document.createElement('a');
+          link.href = resultImg.src;
+          link.download = 'try-with-ai-result.jpg';
+          link.target = '_blank';
+          link.rel = 'noopener';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        });
     });
 
-    shareBtn.addEventListener('click', function () {
-      if (navigator.share) {
-        navigator.share({
-          title: document.title,
-          url: resultImg.src
-        }).catch(function () {});
-      } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(resultImg.src).then(function () {
-          setStatus(I18N.uploadSuccess, 'success');
-        }).catch(function () {});
+    function closeShareMenu() {
+      shareMenu.hidden = true;
+      shareBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    function openShareMenu() {
+      shareMenu.hidden = false;
+      shareBtn.setAttribute('aria-expanded', 'true');
+    }
+
+    shareBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (shareMenu.hidden) openShareMenu(); else closeShareMenu();
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!shareMenu.hidden && !shareMenu.contains(e.target) && e.target !== shareBtn) {
+        closeShareMenu();
       }
+    });
+
+    shareMenu.querySelectorAll('.try-ai-modal__share-option').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var network = btn.dataset.share;
+        var shareUrl = PRODUCT_URL || window.location.href;
+        var text = I18N.shareText;
+
+        switch (network) {
+          case 'whatsapp':
+            window.open('https://wa.me/?text=' + encodeURIComponent(text + ' ' + shareUrl), '_blank', 'noopener');
+            break;
+          case 'pinterest':
+            window.open('https://pinterest.com/pin/create/button/?url=' + encodeURIComponent(shareUrl) + '&media=' + encodeURIComponent(resultImg.src) + '&description=' + encodeURIComponent(text), '_blank', 'noopener');
+            break;
+          case 'instagram':
+          case 'snapchat':
+            if (navigator.share) {
+              navigator.share({ title: PRODUCT_TITLE, text: text, url: shareUrl }).catch(function () {});
+            } else if (navigator.clipboard) {
+              navigator.clipboard.writeText(text + ' ' + shareUrl).then(function () {
+                setStatus(I18N.uploadSuccess, 'success');
+              }).catch(function () {});
+            }
+            break;
+          case 'copy':
+            if (navigator.clipboard) {
+              navigator.clipboard.writeText(text + ' ' + shareUrl).catch(function () {});
+            }
+            break;
+        }
+        closeShareMenu();
+      });
     });
 
     atcBtn.addEventListener('click', function () {
@@ -1020,6 +1252,11 @@
 
     uploadBtn.addEventListener('click', function () {
       if (!selectedFile) return;
+      if (privacyCheckbox && !privacyCheckbox.checked) {
+        setStatus(I18N.privacyRequired, 'error');
+        privacyCheckbox.focus();
+        return;
+      }
       if (!BACKEND_URL) {
         setStatus(I18N.uploadError, 'error');
         return;

@@ -427,16 +427,23 @@
     "result_alt": "AI-generated saree try-on preview",
     "original_alt": "Your original uploaded photo",
     "try_another_photo": "Try another photo",
-    "step_uploading": "Uploading your photo…",
+    "step_uploading": "Getting your saree look ready…",
     "step_styling": "AI is styling your saree…",
-    "step_finishing": "Adding finishing touches…",
+    "step_loving_it": "Hope you'll love the output…",
+    "step_finishing": "Adding final touches…",
+    "step_almost_done": "Almost done…",
     "view_original": "Original",
     "view_result": "AI try-on",
     "add_to_cart": "Add to cart",
     "added_to_cart": "Added!",
     "download": "Download",
     "share": "Share",
+    "copy_link": "Copy link",
     "previous_tryons": "Your previous try-ons",
-    "previous_tryon_alt": "Previous AI try-on result"
+    "previous_tryon_alt": "Previous AI try-on result",
+    "privacy_text_prefix": "We care about your privacy. All uploaded images are handled as per our",
+    "privacy_link_text": "Privacy Policy.",
+    "privacy_required": "Please agree to the Privacy Policy to continue.",
+    "share_text": "Check out my AI saree try-on!"
   }
 }

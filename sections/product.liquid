@@ -72,6 +72,25 @@
         {%- endif -%}
       </div>
 
+      {%- comment -%} Floating "Try with AI" entry point (only for try-with-ai-enabled products) {%- endcomment -%}
+      {%- if product.metafields.custom.try_with_ai.value == true -%}
+        {%- if customer -%}
+          <button type="button" class="product-page__try-ai-fab js-try-ai-btn" aria-label="{{ 'try_with_ai.cta_label' | t | escape }}" data-tooltip="{{ 'try_with_ai.cta_label' | t | escape }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2.5l1.8 4.9 4.9 1.8-4.9 1.8L12 15.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 2.5z"/>
+              <path d="M19 14l.9 2.5L22.4 17.4l-2.5.9L19 20.8l-.9-2.5-2.5-.9 2.5-.9L19 14z"/>
+            </svg>
+          </button>
+        {%- else -%}
+          <a href="{{ routes.account_login_url }}" class="product-page__try-ai-fab" aria-label="{{ 'try_with_ai.login_required' | t | escape }}" data-tooltip="{{ 'try_with_ai.login_required' | t | escape }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2.5l1.8 4.9 4.9 1.8-4.9 1.8L12 15.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 2.5z"/>
+              <path d="M19 14l.9 2.5L22.4 17.4l-2.5.9L19 20.8l-.9-2.5-2.5-.9 2.5-.9L19 14z"/>
+            </svg>
+          </a>
+        {%- endif -%}
+      {%- endif -%}
+
     </div>
 
     {%- comment -%} RIGHT: product info {%- endcomment -%}
@@ -187,52 +206,7 @@
             </button>
           {%- endif -%}
 
-          {%- comment -%} Try with AI button (only for try-with-ai-enabled products) {%- endcomment -%}
           {%- if product.metafields.custom.try_with_ai.value == true -%}
-            {%- if customer -%}
-              <button type="button" class="product-page__try-ai-btn js-try-ai-btn">
-                <span class="product-page__try-ai-btn-shimmer" aria-hidden="true"></span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="product-page__try-ai-btn-icon">
-                  <path d="M12 2.5l1.8 4.9 4.9 1.8-4.9 1.8L12 15.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 2.5z"/>
-                  <path d="M19 14l.9 2.5L22.4 17.4l-2.5.9L19 20.8l-.9-2.5-2.5-.9 2.5-.9L19 14z"/>
-                  <path d="M5 13l.7 1.9L7.6 15.6l-1.9.7L5 18.2l-.7-1.9-1.9-.7 1.9-.7L5 13z"/>
-                </svg>
-                <span class="product-page__try-ai-btn-text">{{ 'try_with_ai.cta_label' | t }}</span>
-              </button>
-            {%- else -%}
-              <a href="{{ routes.account_login_url }}" class="product-page__try-ai-btn product-page__try-ai-btn--login">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="product-page__try-ai-btn-icon">
-                  <path d="M12 2.5l1.8 4.9 4.9 1.8-4.9 1.8L12 15.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 2.5z"/>
-                  <path d="M19 14l.9 2.5L22.4 17.4l-2.5.9L19 20.8l-.9-2.5-2.5-.9 2.5-.9L19 14z"/>
-                  <path d="M5 13l.7 1.9L7.6 15.6l-1.9.7L5 18.2l-.7-1.9-1.9-.7 1.9-.7L5 13z"/>
-                </svg>
-                <span class="product-page__try-ai-btn-text">{{ 'try_with_ai.login_required' | t }}</span>
-              </a>
-            {%- endif -%}
-          {%- endif -%}
-
-          {%- comment -%} Stock alert {%- endcomment -%}
-          {%- assign inv = current_variant.inventory_quantity -%}
-          {%- assign inv_policy = current_variant.inventory_management -%}
-          {%- if current_variant.available and inv_policy == 'shopify' -%}
-            {%- if inv <= 3 -%}
-              <div class="product-page__stock-alert product-page__stock-alert--critical" id="stock-alert">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                {{ 'product.stock.critical' | t: count: inv }}
-              </div>
-            {%- elsif inv <= 10 -%}
-              <div class="product-page__stock-alert product-page__stock-alert--low" id="stock-alert">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                {{ 'product.stock.low' | t: count: inv }}
-              </div>
-            {%- endif -%}
-          {%- elsif current_variant.available == false -%}
-            <div class="product-page__stock-alert product-page__stock-alert--sold-out" id="stock-alert" style="display:none"></div>
-          {%- else -%}
-            <div class="product-page__stock-alert" id="stock-alert" style="display:none"></div>
-          {%- endif -%}
-
-          {%- if product.metafields.custom.try_with_ai.value == true and customer -%}
             {% render 'try-with-ai-gallery', product: product, backend_url: settings.try_with_ai_backend_url %}
           {%- endif -%}
 
@@ -540,29 +514,6 @@
       </svg>
       {{ 'tailoring.stitching_btn' | t }}
     </button>
-  {%- endif -%}
-
-  {%- if product.metafields.custom.try_with_ai.value == true -%}
-    {%- if customer -%}
-      <button type="button" class="product-page__try-ai-btn product-page__try-ai-btn--mobile js-try-ai-btn">
-        <span class="product-page__try-ai-btn-shimmer" aria-hidden="true"></span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="product-page__try-ai-btn-icon">
-          <path d="M12 2.5l1.8 4.9 4.9 1.8-4.9 1.8L12 15.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 2.5z"/>
-          <path d="M19 14l.9 2.5L22.4 17.4l-2.5.9L19 20.8l-.9-2.5-2.5-.9 2.5-.9L19 14z"/>
-          <path d="M5 13l.7 1.9L7.6 15.6l-1.9.7L5 18.2l-.7-1.9-1.9-.7 1.9-.7L5 13z"/>
-        </svg>
-        {{ 'try_with_ai.cta_label' | t }}
-      </button>
-    {%- else -%}
-      <a href="{{ routes.account_login_url }}" class="product-page__try-ai-btn product-page__try-ai-btn--mobile product-page__try-ai-btn--login">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="product-page__try-ai-btn-icon">
-          <path d="M12 2.5l1.8 4.9 4.9 1.8-4.9 1.8L12 15.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 2.5z"/>
-          <path d="M19 14l.9 2.5L22.4 17.4l-2.5.9L19 20.8l-.9-2.5-2.5-.9 2.5-.9L19 14z"/>
-          <path d="M5 13l.7 1.9L7.6 15.6l-1.9.7L5 18.2l-.7-1.9-1.9-.7 1.9-.7L5 13z"/>
-        </svg>
-        {{ 'try_with_ai.login_required' | t }}
-      </a>
-    {%- endif -%}
   {%- endif -%}
 
   <div class="product-page__sticky-atc__row2">
@@ -1934,77 +1885,55 @@ document.addEventListener('DOMContentLoaded', function() {
     background: #a8045c;
   }
 
-  /* Try with AI button */
-  .product-page__try-ai-btn {
-    position: relative;
+  /* Try with AI floating icon button (on product image) */
+  .product-page__try-ai-fab {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    z-index: 5;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    width: 100%;
-    min-height: 48px;
-    margin-bottom: 10px;
-    padding: 0 16px;
-    background: linear-gradient(100deg, #4b2a7b, #9c2a8f 45%, #c3134e 75%, #d98a2b 100%);
-    background-size: 220% 100%;
-    animation: try-ai-btn-gradient 6s ease infinite;
+    width: 34px;
+    height: 34px;
+    background: rgba(20, 14, 26, 0.55);
     color: #fff;
     border: none;
-    border-radius: 8px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
+    border-radius: 50%;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
     text-decoration: none;
-    overflow: hidden;
-    box-shadow: 0 4px 14px rgba(156, 42, 143, 0.35);
+    backdrop-filter: blur(2px);
+    transition: background 0.15s ease, transform 0.15s ease;
   }
-  .product-page__try-ai-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(156, 42, 143, 0.45);
+  .product-page__try-ai-fab:hover {
+    background: rgba(20, 14, 26, 0.75);
+    transform: scale(1.06);
   }
-  @keyframes try-ai-btn-gradient {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+  .product-page__try-ai-fab svg {
+    flex-shrink: 0;
   }
-  .product-page__try-ai-btn-shimmer {
+  .product-page__try-ai-fab::after {
+    content: attr(data-tooltip);
     position: absolute;
-    top: 0;
-    left: -60%;
-    width: 40%;
-    height: 100%;
-    background: linear-gradient(115deg, transparent, rgba(255,255,255,0.45), transparent);
-    animation: try-ai-btn-shimmer-sweep 3.2s ease-in-out infinite;
+    right: 0;
+    bottom: calc(100% + 8px);
+    white-space: nowrap;
+    background: rgba(20, 14, 26, 0.9);
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 5px;
+    opacity: 0;
     pointer-events: none;
+    transform: translateY(4px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
   }
-  @keyframes try-ai-btn-shimmer-sweep {
-    0% { left: -60%; }
-    45%, 100% { left: 130%; }
-  }
-  .product-page__try-ai-btn-icon {
-    flex-shrink: 0;
-    filter: drop-shadow(0 0 3px rgba(255,255,255,0.6));
-    animation: try-ai-btn-icon-twinkle 2.4s ease-in-out infinite;
-  }
-  @keyframes try-ai-btn-icon-twinkle {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.75; transform: scale(0.9); }
-  }
-  .product-page__try-ai-btn svg {
-    flex-shrink: 0;
-  }
-  .product-page__try-ai-btn--login {
-    background: #fff;
-    color: #2e1f1f;
-    box-shadow: none;
-    border: 1.5px solid #2e1f1f;
-    animation: none;
-  }
-  .product-page__try-ai-btn--login .product-page__try-ai-btn-icon {
-    filter: none;
-    animation: none;
+  .product-page__try-ai-fab:hover::after,
+  .product-page__try-ai-fab:focus-visible::after {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .product-page__wishlist-icon-btn {
@@ -2458,30 +2387,12 @@ document.addEventListener('DOMContentLoaded', function() {
       flex-shrink: 0;
     }
 
-    .product-page__try-ai-btn--mobile {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      height: 40px;
-      min-height: unset;
-      margin-bottom: 8px;
-      padding: 0 16px;
-      background: #2e1f1f;
-      color: #fff;
-      border: 1.5px solid #2e1f1f;
-      border-radius: 8px;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .product-page__try-ai-btn--mobile.product-page__try-ai-btn--login {
-      background: #fff;
-      color: #2e1f1f;
+    /* Try with AI floating icon: stay pinned to image corner on mobile */
+    .product-page__try-ai-fab {
+      width: 32px;
+      height: 32px;
+      right: 10px;
+      bottom: 10px;
     }
 
     /* Row 2: ATC + Wishlist + Share */
