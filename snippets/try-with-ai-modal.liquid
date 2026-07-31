@@ -173,7 +173,7 @@
     </div>
 
     <div class="try-ai-modal__footer try-ai-modal__footer--result" id="try-ai-footer-result" hidden>
-      <div class="try-ai-modal__footer-secondary">
+      <div class="try-ai-modal__footer-row">
         <button type="button" class="try-ai-modal__ghost-btn" id="try-ai-download-btn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3v12M12 15l-4-4M12 15l4-4"/>
@@ -222,11 +222,15 @@
             </button>
           </div>
         </div>
-      </div>
 
-      <button type="button" class="try-ai-modal__btn try-ai-modal__btn--primary try-ai-modal__btn--block" id="try-ai-atc-btn">
-        {{ 'try_with_ai.add_to_cart' | t }}
-      </button>
+        <button type="button" class="try-ai-modal__btn try-ai-modal__btn--primary" id="try-ai-atc-btn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 7h12l-1 13H7L6 7z"/>
+            <path d="M9 7V6a3 3 0 016 0v1"/>
+          </svg>
+          <span>{{ 'try_with_ai.add_to_cart' | t }}</span>
+        </button>
+      </div>
 
       <button type="button" class="try-ai-modal__retry-link" id="try-ai-retry-btn">
         {{ 'try_with_ai.try_another_photo' | t }}
@@ -275,11 +279,16 @@
     transform: translateY(0);
   }
 
+  @keyframes try-ai-btn-icon-twinkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.75; transform: scale(0.9); }
+  }
+
   .try-ai-modal__header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 10px 40px;
+    justify-content: space-between;
+    padding: 16px 20px;
     border-bottom: 1px solid #e8e2d9;
     position: relative;
     flex-shrink: 0;
@@ -290,45 +299,27 @@
   .try-ai-modal__title {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
-    font-family: 'Playfair Display', serif;
-    font-size: 0.95rem;
-    font-weight: 600;
+    gap: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
     margin: 0;
-    text-align: center;
+    text-align: left;
   }
   .try-ai-modal__title-text {
-    background: linear-gradient(100deg, #4b2a7b, #9c2a8f 45%, #c3134e 75%, #d98a2b 100%);
-    background-size: 220% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: #2e1f1f;
-    animation: try-ai-btn-gradient 6s ease infinite;
+    color: #1a1a1a;
   }
   .try-ai-modal__title-icon {
     flex-shrink: 0;
-    color: #9c2a8f;
-    animation: try-ai-btn-icon-twinkle 2.4s ease-in-out infinite;
-  }
-  @keyframes try-ai-btn-gradient {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-  @keyframes try-ai-btn-icon-twinkle {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.75; transform: scale(0.9); }
+    color: #c3134e;
   }
   .try-ai-modal__close {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
+    position: static;
+    transform: none;
     background: none;
     border: none;
     cursor: pointer;
-    color: #666;
+    color: #1a1a1a;
     padding: 4px;
     display: flex;
     align-items: center;
@@ -336,7 +327,7 @@
     border-radius: 4px;
     transition: color 0.15s;
   }
-  .try-ai-modal__close:hover { color: #2e1f1f; }
+  .try-ai-modal__close:hover { color: #666; }
 
   .try-ai-modal__body {
     overflow-y: auto;
@@ -760,6 +751,10 @@
   .try-ai-modal__btn {
     height: 46px;
     padding: 0 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
@@ -788,24 +783,31 @@
     cursor: wait;
   }
 
-  .try-ai-modal__footer-secondary {
+  .try-ai-modal__footer-row {
     display: flex;
+    align-items: stretch;
     gap: 8px;
   }
-  .try-ai-modal__ghost-btn {
+  .try-ai-modal__footer-row .try-ai-modal__btn {
     flex: 1;
+    min-width: 0;
+  }
+  .try-ai-modal__ghost-btn {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    height: 40px;
+    height: 46px;
+    padding: 0 16px;
     background: transparent;
     border: 1.5px solid #d4cdc4;
     border-radius: 8px;
     color: #2e1f1f;
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     font-weight: 600;
+    white-space: nowrap;
     cursor: pointer;
     transition: border-color 0.15s, background 0.15s;
   }
@@ -815,16 +817,12 @@
   }
   .try-ai-modal__share-wrap {
     position: relative;
-    flex: 1;
-  }
-  .try-ai-modal__share-wrap .try-ai-modal__ghost-btn {
-    width: 100%;
+    flex-shrink: 0;
   }
   .try-ai-modal__share-menu {
     position: absolute;
     bottom: calc(100% + 8px);
     left: 0;
-    right: 0;
     z-index: 10;
     background: #fff;
     border: 1px solid #e8e2d9;
@@ -833,6 +831,7 @@
     padding: 6px;
     display: flex;
     flex-direction: column;
+    width: max-content;
     min-width: 180px;
   }
   .try-ai-modal__share-menu[hidden] {
