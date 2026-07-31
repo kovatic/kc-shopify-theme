@@ -41,6 +41,9 @@
         {%- for image in product.images -%}
           <div class="product-page__image-item js-zoom-item js-lb-open" data-zoom-src="{{ image | image_url: width: 1800 }}" data-lb-index="{{ forloop.index0 }}">
             {{ image | image_url: width: 600 | image_tag: loading: 'lazy', alt: image.alt | default: product.title }}
+            {%- if forloop.index0 == 1 -%}
+              {%- render 'try-with-ai-fab', product: product -%}
+            {%- endif -%}
           </div>
         {%- else -%}
           <div class="product-page__image-item product-page__image-item--placeholder">
@@ -70,26 +73,8 @@
             {%- endfor -%}
           </div>
         {%- endif -%}
+        {%- render 'try-with-ai-fab', product: product -%}
       </div>
-
-      {%- comment -%} Floating "Try with AI" entry point (only for try-with-ai-enabled products) {%- endcomment -%}
-      {%- if product.metafields.custom.try_with_ai.value == true -%}
-        {%- if customer -%}
-          <button type="button" class="product-page__try-ai-fab js-try-ai-btn" aria-label="{{ 'try_with_ai.cta_label' | t | escape }}" data-tooltip="{{ 'try_with_ai.cta_label' | t | escape }}">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 2.5l1.8 4.9 4.9 1.8-4.9 1.8L12 15.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 2.5z"/>
-              <path d="M19 14l.9 2.5L22.4 17.4l-2.5.9L19 20.8l-.9-2.5-2.5-.9 2.5-.9L19 14z"/>
-            </svg>
-          </button>
-        {%- else -%}
-          <a href="{{ routes.account_login_url }}" class="product-page__try-ai-fab" aria-label="{{ 'try_with_ai.login_required' | t | escape }}" data-tooltip="{{ 'try_with_ai.login_required' | t | escape }}">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 2.5l1.8 4.9 4.9 1.8-4.9 1.8L12 15.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 2.5z"/>
-              <path d="M19 14l.9 2.5L22.4 17.4l-2.5.9L19 20.8l-.9-2.5-2.5-.9 2.5-.9L19 14z"/>
-            </svg>
-          </a>
-        {%- endif -%}
-      {%- endif -%}
 
     </div>
 
@@ -1722,6 +1707,7 @@ document.addEventListener('DOMContentLoaded', function() {
     gap: 8px;
   }
   .product-page__image-item {
+    position: relative;
     aspect-ratio: 2 / 3;
     overflow: hidden;
     border-radius: 6px;
@@ -1883,57 +1869,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   .product-page__stitching-btn:hover .product-page__stitching-btn-badge {
     background: #a8045c;
-  }
-
-  /* Try with AI floating icon button (on product image) */
-  .product-page__try-ai-fab {
-    position: absolute;
-    right: 14px;
-    bottom: 14px;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    background: rgba(20, 14, 26, 0.55);
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    text-decoration: none;
-    backdrop-filter: blur(2px);
-    transition: background 0.15s ease, transform 0.15s ease;
-  }
-  .product-page__try-ai-fab:hover {
-    background: rgba(20, 14, 26, 0.75);
-    transform: scale(1.06);
-  }
-  .product-page__try-ai-fab svg {
-    flex-shrink: 0;
-  }
-  .product-page__try-ai-fab::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + 8px);
-    white-space: nowrap;
-    background: rgba(20, 14, 26, 0.9);
-    color: #fff;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 600;
-    padding: 5px 10px;
-    border-radius: 5px;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(4px);
-    transition: opacity 0.15s ease, transform 0.15s ease;
-  }
-  .product-page__try-ai-fab:hover::after,
-  .product-page__try-ai-fab:focus-visible::after {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   .product-page__wishlist-icon-btn {
@@ -2385,14 +2320,6 @@ document.addEventListener('DOMContentLoaded', function() {
       border-radius: 20px;
       margin-left: 6px;
       flex-shrink: 0;
-    }
-
-    /* Try with AI floating icon: stay pinned to image corner on mobile */
-    .product-page__try-ai-fab {
-      width: 32px;
-      height: 32px;
-      right: 10px;
-      bottom: 10px;
     }
 
     /* Row 2: ATC + Wishlist + Share */
