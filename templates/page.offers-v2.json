@@ -1,0 +1,167 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "countdown": {
+      "type": "countdown-banner",
+      "settings": {
+        "heading": "Hurry! Aadi Offer ends in:",
+        "end_date": "2026-07-31T23:59:59",
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
+    "hero": {
+      "type": "banner",
+      "blocks": {
+        "slide_aadi": {
+          "type": "slide",
+          "settings": {
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "Shop Now",
+            "button_url": "#",
+            "text_position": "bottom-center",
+            "show_overlay": false,
+            "overlay_opacity": 30
+          }
+        }
+      },
+      "block_order": [
+        "slide_aadi"
+      ],
+      "settings": {
+        "banner_height": 900,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "editorial": {
+      "type": "offer-editorial",
+      "blocks": {
+        "row_sarees": {
+          "type": "offer-row",
+          "settings": {
+            "eyebrow": "Sarees & Lehenga",
+            "title": "Drape the season's finest",
+            "description": "Handpicked silks and lehengas at once-a-year prices.",
+            "offer_1": "Buy 1 Get 1 — Saree",
+            "offer_2": "20% off Sarees & Lehenga",
+            "offer_3": "2 Pcs Sarees — ₹999",
+            "offer_4": "3 Pcs Sarees — ₹1188",
+            "button_label": "Shop Sarees",
+            "button_url": "#"
+          },
+          "blocks": {}
+        },
+        "row_womens": {
+          "type": "offer-row",
+          "settings": {
+            "eyebrow": "Women's Wear",
+            "title": "Everyday elegance, everyday price",
+            "description": "Tops, co-ord sets, nightwear and more — mix and match your wardrobe.",
+            "offer_1": "2 Pcs Tops — ₹1000",
+            "offer_2": "3 Pcs Co-ord Set — ₹1000",
+            "offer_3": "3 Pcs Night Suit — ₹1000",
+            "offer_4": "3 Pcs T-Shirt — ₹500",
+            "button_label": "Shop Women's Wear",
+            "button_url": "#"
+          },
+          "blocks": {}
+        },
+        "row_mens": {
+          "type": "offer-row",
+          "settings": {
+            "eyebrow": "Men's Wear",
+            "title": "Sharp looks, softer prices",
+            "description": "T-shirts, shirts and track pants bundled up for the season.",
+            "offer_1": "3 Pcs T-Shirt — ₹500",
+            "offer_2": "2 Pcs Track Pant — ₹500",
+            "offer_3": "3 Pcs Shirt — ₹999",
+            "offer_4": "",
+            "button_label": "Shop Men's Wear",
+            "button_url": "#"
+          },
+          "blocks": {}
+        },
+        "row_terrain": {
+          "type": "offer-row",
+          "settings": {
+            "eyebrow": "Indian Terrain",
+            "title": "More you buy, more you save",
+            "description": "Tiered discounts on the Indian Terrain collection.",
+            "offer_1": "Buy 1 Get 20% off",
+            "offer_2": "Buy 2 Get 30% off",
+            "offer_3": "Buy 3 Get 40% off",
+            "offer_4": "",
+            "button_label": "Shop Indian Terrain",
+            "button_url": "#"
+          },
+          "blocks": {}
+        },
+        "row_boys": {
+          "type": "offer-row",
+          "settings": {
+            "eyebrow": "Boys Wear",
+            "title": "Playtime-ready outfits",
+            "description": "Shirts, banian sets, shorts and tracks for the little ones.",
+            "offer_1": "3 Pcs Boys Shirt — ₹1000",
+            "offer_2": "3 Pcs Banian Set — ₹500",
+            "offer_3": "3 Pcs T-Shirt — ₹300",
+            "offer_4": "3 Pcs Tracks — ₹500",
+            "button_label": "Shop Boys Wear",
+            "button_url": "#"
+          },
+          "blocks": {}
+        },
+        "row_girls": {
+          "type": "offer-row",
+          "settings": {
+            "eyebrow": "Girls Wear",
+            "title": "Little styles, big savings",
+            "description": "Western sets, frocks, nightwear and more for girls.",
+            "offer_1": "3 Set Western — ₹1000",
+            "offer_2": "3 Pcs Cotton Frock — ₹500",
+            "offer_3": "3 Set Night Dress — ₹1000",
+            "offer_4": "3 Pcs T-Shirt — ₹300",
+            "button_label": "Shop Girls Wear",
+            "button_url": "#"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "row_sarees",
+        "row_womens",
+        "row_mens",
+        "row_terrain",
+        "row_boys",
+        "row_girls"
+      ],
+      "settings": {
+        "heading": "Aadi Offer",
+        "subheading": "K. Chinnadurai Thaan Super — 10% to 50% off",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "main": {
+      "type": "page",
+      "settings": {}
+    }
+  },
+  "order": [
+    "countdown",
+    "hero",
+    "editorial",
+    "main"
+  ]
+}

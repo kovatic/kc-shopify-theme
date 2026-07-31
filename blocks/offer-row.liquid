@@ -1,0 +1,270 @@
+{% doc %}
+  Renders one editorial offer row: a large lifestyle image alongside a
+  category heading and a short list of headline offers. Alternates image
+  left/right automatically based on position within the section.
+
+  @example
+  {% content_for 'block', type: 'offer-row', id: 'offer-row-1' %}
+{% enddoc %}
+
+<div class="offer-row" {{ block.shopify_attributes }}>
+  <div class="offer-row__media">
+    {%- if block.settings.image != blank -%}
+      {{ block.settings.image | image_url: width: 1200 | image_tag:
+        class: 'offer-row__image',
+        loading: 'lazy',
+        alt: block.settings.title | escape
+      }}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'offer-row__image offer-row__image--placeholder' }}
+    {%- endif -%}
+  </div>
+
+  <div class="offer-row__body">
+    {%- if block.settings.eyebrow != blank -%}
+      <div class="offer-row__eyebrow">
+        <span class="offer-row__eyebrow-line" aria-hidden="true"></span>
+        <span class="offer-row__eyebrow-text">{{ block.settings.eyebrow | escape }}</span>
+      </div>
+    {%- endif -%}
+
+    {%- if block.settings.title != blank -%}
+      <h3 class="offer-row__title">{{ block.settings.title | escape }}</h3>
+    {%- endif -%}
+
+    {%- if block.settings.description != blank -%}
+      <p class="offer-row__description">{{ block.settings.description | escape }}</p>
+    {%- endif -%}
+
+    {%- if block.settings.offer_1 != blank or block.settings.offer_2 != blank or block.settings.offer_3 != blank or block.settings.offer_4 != blank -%}
+      <ul class="offer-row__list">
+        {%- if block.settings.offer_1 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_1 | escape }}</li>{%- endif -%}
+        {%- if block.settings.offer_2 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_2 | escape }}</li>{%- endif -%}
+        {%- if block.settings.offer_3 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_3 | escape }}</li>{%- endif -%}
+        {%- if block.settings.offer_4 != blank -%}<li class="offer-row__list-item">{{ block.settings.offer_4 | escape }}</li>{%- endif -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if block.settings.button_label != blank -%}
+      <a class="offer-row__btn" href="{{ block.settings.button_url | default: '#' }}">
+        {{ block.settings.button_label | escape }}
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .offer-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    padding: 48px 0;
+  }
+
+  .offer-row:nth-of-type(even) .offer-row__media {
+    order: 2;
+  }
+
+  .offer-row:nth-of-type(even) .offer-row__body {
+    order: 1;
+  }
+
+  .offer-row__media {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  .offer-row__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .offer-row__image--placeholder {
+    aspect-ratio: 4 / 3;
+    background: #f3e3e9;
+  }
+
+  .offer-row__body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .offer-row__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .offer-row__eyebrow-line {
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: #b3122c;
+    flex-shrink: 0;
+  }
+
+  .offer-row__eyebrow-text {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #b3122c;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .offer-row__title {
+    font-family: var(--font-heading-family, 'Playfair Display', serif);
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #2e1f1f;
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .offer-row__description {
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 1rem;
+    font-weight: 400;
+    color: #7e6767;
+    margin: 0;
+    line-height: 1.65;
+    max-width: 480px;
+  }
+
+  .offer-row__list {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .offer-row__list-item {
+    position: relative;
+    padding-left: 28px;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: #2e1f1f;
+  }
+
+  .offer-row__list-item::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    top: 1px;
+    color: #b3122c;
+    font-size: 0.9rem;
+  }
+
+  .offer-row__btn {
+    display: inline-block;
+    align-self: flex-start;
+    margin-top: 8px;
+    padding: 14px 32px;
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #f9f8f6;
+    background: #b3122c;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-radius: 2px;
+    transition: opacity 0.2s ease;
+  }
+
+  .offer-row__btn:hover {
+    opacity: 0.88;
+  }
+
+  @media screen and (max-width: 900px) {
+    .offer-row {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding: 32px 0;
+    }
+
+    .offer-row:nth-of-type(even) .offer-row__media,
+    .offer-row:nth-of-type(even) .offer-row__body {
+      order: initial;
+    }
+
+    .offer-row__title {
+      font-size: 1.75rem;
+    }
+
+    .offer-row__description {
+      max-width: 100%;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.offer_row.name",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:blocks.offer_row.eyebrow",
+      "default": "Limited time"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:labels.title",
+      "default": "Category name"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "t:labels.description"
+    },
+    {
+      "type": "text",
+      "id": "offer_1",
+      "label": "t:blocks.offer_row.offer_line"
+    },
+    {
+      "type": "text",
+      "id": "offer_2",
+      "label": "t:blocks.offer_row.offer_line"
+    },
+    {
+      "type": "text",
+      "id": "offer_3",
+      "label": "t:blocks.offer_row.offer_line"
+    },
+    {
+      "type": "text",
+      "id": "offer_4",
+      "label": "t:blocks.offer_row.offer_line"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:sections.promo.button_label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "t:labels.url"
+    }
+  ],
+  "presets": [{ "name": "t:blocks.offer_row.name" }]
+}
+{% endschema %}

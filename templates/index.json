@@ -119,7 +119,22 @@
         "padding_bottom": 60
       }
     },
-    "reel_7a3Lp6": {
+    "product_list_JmtKph": {
+      "type": "product-list",
+      "name": "t:sections.product_list.name",
+      "settings": {
+        "title": "Jewellery & Accessories",
+        "subtitle": "Explore our exquisite jewellery & accessories collection",
+        "collection": "imitation-jewellerys",
+        "layout_type_desktop": "wrap",
+        "layout_type_mobile": "scroll",
+        "products_count": 4,
+        "view_all_url": "shopify://collections/imitation-jewellerys",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "reel_G8fWym": {
       "type": "reel",
       "name": "t:sections.reel.name",
       "settings": {
@@ -129,7 +144,7 @@
           "necklace-saree",
           "silk-saree",
           "soft-silk-saree",
-          "banarasi-silk-saree"
+          "semi-mysore-silk-saree"
         ],
         "padding_top": 60,
         "padding_bottom": 60
@@ -140,7 +155,7 @@
       "name": "t:sections.product_list.name",
       "settings": {
         "title": "Banarasi Silk Sarees",
-        "subtitle": "Discover what's new this season.",
+        "subtitle": "Classic Beauty, Modern Charm",
         "collection": "banarasi-silk-saree",
         "layout_type_desktop": "wrap",
         "layout_type_mobile": "wrap",
@@ -153,6 +168,13 @@
     "tab_product_list_PynKp9": {
       "type": "tab-product-list",
       "blocks": {
+        "tab_hn3JBg": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "",
+            "collection": ""
+          }
+        },
         "tab_nBQFfe": {
           "type": "tab",
           "settings": {
@@ -190,6 +212,7 @@
         }
       },
       "block_order": [
+        "tab_hn3JBg",
         "tab_nBQFfe",
         "tab_BGtcPL",
         "tab_r7nxTJ",
@@ -438,7 +461,8 @@
             "arrows_color": "#000000",
             "transition_speed": 5,
             "header_text": "",
-            "show_average_rating": false
+            "show_average_rating": false,
+            "rating_display": "default"
           }
         }
       },
@@ -536,7 +560,8 @@
     "banner_C4FemU",
     "category_aE6ijQ",
     "product_list_hdgdex",
-    "reel_7a3Lp6",
+    "product_list_JmtKph",
+    "reel_G8fWym",
     "product_list_8L8wf6",
     "tab_product_list_PynKp9",
     "custom_section_FLDGhd",
