@@ -35,7 +35,11 @@
   data-i18n-upload-error="{{ 'try_with_ai.upload_error' | t | escape }}"
   data-i18n-step-uploading="{{ 'try_with_ai.step_uploading' | t | escape }}"
   data-i18n-step-styling="{{ 'try_with_ai.step_styling' | t | escape }}"
+  data-i18n-step-draping="{{ 'try_with_ai.step_draping' | t | escape }}"
+  data-i18n-step-adjusting="{{ 'try_with_ai.step_adjusting' | t | escape }}"
   data-i18n-step-finishing="{{ 'try_with_ai.step_finishing' | t | escape }}"
+  data-i18n-step-almost-done="{{ 'try_with_ai.step_almost_done' | t | escape }}"
+  data-i18n-step-loving-it="{{ 'try_with_ai.step_loving_it' | t | escape }}"
   data-i18n-view-original="{{ 'try_with_ai.view_original' | t | escape }}"
   data-i18n-view-result="{{ 'try_with_ai.view_result' | t | escape }}"
   data-i18n-add-to-cart="{{ 'try_with_ai.add_to_cart' | t | escape }}"
@@ -66,24 +70,39 @@
     <div class="try-ai-modal__body">
 
       <div class="try-ai-modal__step" id="try-ai-step-upload">
-        <p class="try-ai-modal__prompt">{{ 'try_with_ai.upload_prompt' | t }}</p>
-
         <label class="try-ai-modal__dropzone" for="try-ai-file-input" id="try-ai-dropzone">
           <img class="try-ai-modal__preview-img" id="try-ai-preview-img" alt="" hidden>
           <span class="try-ai-modal__dropzone-placeholder" id="try-ai-dropzone-placeholder">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 16V4M12 4l-4 4M12 4l4 4"/>
               <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
             </svg>
-            <span>{{ 'try_with_ai.choose_photo' | t }}</span>
+            <span class="try-ai-modal__dropzone-label">{{ 'try_with_ai.choose_photo' | t }}</span>
+            <span class="try-ai-modal__dropzone-helper">{{ 'try_with_ai.choose_photo_helper' | t }}</span>
           </span>
         </label>
         <input type="file" accept="image/*" id="try-ai-file-input" class="try-ai-modal__file-input">
+
+        <ul class="try-ai-modal__tips">
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            {{ 'try_with_ai.tip_full_length' | t }}
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            {{ 'try_with_ai.tip_plain_background' | t }}
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            {{ 'try_with_ai.tip_even_lighting' | t }}
+          </li>
+        </ul>
       </div>
 
       <div class="try-ai-modal__step" id="try-ai-step-loading" hidden>
         <div class="try-ai-modal__loading">
           <img class="try-ai-modal__loading-img" id="try-ai-loading-img" alt="" aria-hidden="true">
+          <div class="try-ai-modal__loading-mask" aria-hidden="true"></div>
           <div class="try-ai-modal__loading-scan" aria-hidden="true">
             <span class="try-ai-modal__loading-scan-line"></span>
             <span class="try-ai-modal__loading-corner try-ai-modal__loading-corner--tl"></span>
@@ -93,13 +112,19 @@
           </div>
           <div class="try-ai-modal__loading-overlay">
             <div class="try-ai-modal__loading-sparkle" aria-hidden="true">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M12 2.5l1.8 4.9 4.9 1.8-4.9 1.8L12 15.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 2.5z"/>
               </svg>
             </div>
             <p class="try-ai-modal__loading-step" id="try-ai-loading-step"></p>
-            <div class="try-ai-modal__loading-dots" aria-hidden="true">
-              <span></span><span></span><span></span>
+            <div class="try-ai-modal__loading-progress">
+              <div class="try-ai-modal__loading-progress-track">
+                <div class="try-ai-modal__loading-progress-fill" id="try-ai-progress-fill"></div>
+              </div>
+              <div class="try-ai-modal__loading-progress-meta">
+                <span id="try-ai-progress-pct">0%</span>
+                <span id="try-ai-progress-eta"></span>
+              </div>
             </div>
           </div>
         </div>
@@ -113,13 +138,21 @@
           </div>
           <div class="try-ai-modal__compare-handle" id="try-ai-compare-handle">
             <span class="try-ai-modal__compare-handle-grip">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/>
               </svg>
             </span>
           </div>
           <span class="try-ai-modal__compare-label try-ai-modal__compare-label--before">{{ 'try_with_ai.view_original' | t }}</span>
           <span class="try-ai-modal__compare-label try-ai-modal__compare-label--after">{{ 'try_with_ai.view_result' | t }}</span>
+        </div>
+
+        <div class="try-ai-modal__product-summary" id="try-ai-product-summary">
+          <p class="try-ai-modal__product-name" id="try-ai-product-name">{{ product.title | escape }}</p>
+          <div class="try-ai-modal__product-meta">
+            <span class="try-ai-modal__product-price" id="try-ai-product-price"></span>
+            <span class="try-ai-modal__product-size" id="try-ai-product-size"></span>
+          </div>
         </div>
       </div>
 
@@ -134,25 +167,27 @@
           <a href="{{ pages.privacy-policy.url | default: '/pages/privacy-policy' }}" target="_blank" rel="noopener">{{ 'try_with_ai.privacy_link_text' | t }}</a>
         </span>
       </label>
-      <button type="button" class="try-ai-modal__upload-btn" id="try-ai-upload-btn" disabled>
+      <button type="button" class="try-ai-modal__btn try-ai-modal__btn--primary try-ai-modal__btn--block" id="try-ai-upload-btn" disabled>
         {{ 'try_with_ai.upload_button' | t }}
       </button>
     </div>
 
     <div class="try-ai-modal__footer try-ai-modal__footer--result" id="try-ai-footer-result" hidden>
-      <div class="try-ai-modal__footer-icons">
-        <button type="button" class="try-ai-modal__icon-btn" id="try-ai-download-btn" aria-label="{{ 'try_with_ai.download' | t | escape }}">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <div class="try-ai-modal__footer-secondary">
+        <button type="button" class="try-ai-modal__ghost-btn" id="try-ai-download-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3v12M12 15l-4-4M12 15l4-4"/>
             <path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
           </svg>
+          <span>{{ 'try_with_ai.save' | t }}</span>
         </button>
         <div class="try-ai-modal__share-wrap">
-          <button type="button" class="try-ai-modal__icon-btn" id="try-ai-share-btn" aria-label="{{ 'try_with_ai.share' | t | escape }}" aria-haspopup="true" aria-expanded="false">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <button type="button" class="try-ai-modal__ghost-btn" id="try-ai-share-btn" aria-haspopup="true" aria-expanded="false">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="18" cy="5" r="2.4"/><circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="19" r="2.4"/>
               <path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/>
             </svg>
+            <span>{{ 'try_with_ai.share' | t }}</span>
           </button>
           <div class="try-ai-modal__share-menu" id="try-ai-share-menu" hidden>
             <button type="button" class="try-ai-modal__share-option" data-share="whatsapp">
@@ -188,14 +223,14 @@
           </div>
         </div>
       </div>
-      <div class="try-ai-modal__footer-actions">
-        <button type="button" class="try-ai-modal__upload-btn try-ai-modal__upload-btn--secondary" id="try-ai-retry-btn">
-          {{ 'try_with_ai.try_another_photo' | t }}
-        </button>
-        <button type="button" class="try-ai-modal__upload-btn" id="try-ai-atc-btn">
-          {{ 'try_with_ai.add_to_cart' | t }}
-        </button>
-      </div>
+
+      <button type="button" class="try-ai-modal__btn try-ai-modal__btn--primary try-ai-modal__btn--block" id="try-ai-atc-btn">
+        {{ 'try_with_ai.add_to_cart' | t }}
+      </button>
+
+      <button type="button" class="try-ai-modal__retry-link" id="try-ai-retry-btn">
+        {{ 'try_with_ai.try_another_photo' | t }}
+      </button>
     </div>
 
   </div>
@@ -205,7 +240,7 @@
   .try-ai-modal {
     position: fixed;
     inset: 0;
-    z-index: 500;
+    z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -225,7 +260,7 @@
   .try-ai-modal__panel {
     position: relative;
     background: #faf8f4;
-    border-radius: 8px;
+    border-radius: 12px;
     width: 94%;
     max-width: 720px;
     max-height: 96vh;
@@ -249,6 +284,8 @@
     position: relative;
     flex-shrink: 0;
     min-height: 0;
+    background: #faf8f4;
+    opacity: 1;
   }
   .try-ai-modal__title {
     display: flex;
@@ -304,13 +341,7 @@
   .try-ai-modal__body {
     overflow-y: auto;
     flex: 1;
-    padding: 14px 20px 20px;
-  }
-  .try-ai-modal__prompt {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.875rem;
-    color: #42464b;
-    margin: 0 0 10px;
+    padding: 16px 20px 20px;
   }
 
   .try-ai-modal__dropzone {
@@ -320,10 +351,10 @@
     width: 100%;
     max-width: 420px;
     aspect-ratio: 2 / 3;
-    max-height: 640px;
+    max-height: 520px;
     margin: 0 auto;
     border: 1.5px dashed #d4cdc4;
-    border-radius: 8px;
+    border-radius: 12px;
     background: #fff;
     cursor: pointer;
     overflow: hidden;
@@ -340,10 +371,23 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
+    padding: 0 20px;
     color: #888;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.8rem;
+    text-align: center;
+  }
+  .try-ai-modal__dropzone-placeholder svg {
+    margin-bottom: 6px;
+  }
+  .try-ai-modal__dropzone-label {
+    color: #2e1f1f;
+    font-weight: 600;
+  }
+  .try-ai-modal__dropzone-helper {
+    color: #999;
+    font-size: 0.72rem;
   }
   .try-ai-modal__dropzone-placeholder[hidden] {
     display: none;
@@ -372,14 +416,35 @@
     display: none;
   }
 
+  /* ── Photo tips checklist ── */
+  .try-ai-modal__tips {
+    list-style: none;
+    margin: 12px auto 0;
+    padding: 0;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .try-ai-modal__tips li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    color: #55504a;
+  }
+  .try-ai-modal__tips svg {
+    flex-shrink: 0;
+    color: #2e7d32;
+  }
+
   .try-ai-modal__privacy {
     display: flex;
     align-items: flex-start;
     gap: 8px;
-    max-width: 420px;
-    margin: 10px auto 0;
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     line-height: 1.4;
     color: #666;
     cursor: pointer;
@@ -389,7 +454,7 @@
     flex-shrink: 0;
     width: 15px;
     height: 15px;
-    accent-color: #2e1f1f;
+    accent-color: #993556;
     cursor: pointer;
   }
   .try-ai-modal__privacy a {
@@ -403,9 +468,9 @@
     width: 100%;
     max-width: 420px;
     aspect-ratio: 2 / 3;
-    max-height: 640px;
+    max-height: 520px;
     margin: 0 auto;
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
     background: #1a1420;
     border: 1.5px solid #e8e2d9;
@@ -416,7 +481,13 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: saturate(0.7) brightness(0.55);
+    filter: saturate(0.7) brightness(0.55) blur(6px);
+    transform: scale(1.05);
+  }
+  .try-ai-modal__loading-mask {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 14, 26, 0.35);
   }
   .try-ai-modal__loading-scan {
     position: absolute;
@@ -474,9 +545,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     padding: 28px 20px 24px;
-    background: linear-gradient(180deg, transparent, rgba(20, 14, 26, 0.85) 55%);
+    background: linear-gradient(180deg, transparent, rgba(20, 14, 26, 0.9) 45%);
   }
   .try-ai-modal__loading-sparkle {
     color: #fff;
@@ -491,23 +562,32 @@
     text-align: center;
     min-height: 1.4em;
   }
-  .try-ai-modal__loading-dots {
+  .try-ai-modal__loading-progress {
+    width: 100%;
+    max-width: 260px;
+  }
+  .try-ai-modal__loading-progress-track {
+    width: 100%;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.2);
+    overflow: hidden;
+  }
+  .try-ai-modal__loading-progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #d98a2b, #c3134e, #9c2a8f);
+    transition: width 0.6s ease;
+  }
+  .try-ai-modal__loading-progress-meta {
     display: flex;
-    gap: 6px;
-  }
-  .try-ai-modal__loading-dots span {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: linear-gradient(100deg, #d98a2b, #c3134e, #9c2a8f);
-    opacity: 0.3;
-    animation: try-ai-pulse 1.2s ease-in-out infinite;
-  }
-  .try-ai-modal__loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-  .try-ai-modal__loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes try-ai-pulse {
-    0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.3); }
+    justify-content: space-between;
+    margin-top: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.75);
   }
 
   /* ── Result / before-after compare ── */
@@ -516,9 +596,9 @@
     width: 100%;
     max-width: 420px;
     aspect-ratio: 2 / 3;
-    max-height: 640px;
+    max-height: 520px;
     margin: 0 auto;
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
     background: #fff;
     border: 1.5px solid #e8e2d9;
@@ -549,8 +629,8 @@
     top: 0;
     bottom: 0;
     left: 50%;
-    width: 36px;
-    margin-left: -18px;
+    width: 40px;
+    margin-left: -20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -569,8 +649,8 @@
   }
   .try-ai-modal__compare-handle-grip {
     position: relative;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: #fff;
     color: #2e1f1f;
@@ -601,35 +681,150 @@
     display: none;
   }
 
-  .try-ai-modal__footer-icons {
+  /* ── Result: product summary ── */
+  .try-ai-modal__product-summary {
+    max-width: 420px;
+    margin: 14px auto 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e8e2d9;
+  }
+  .try-ai-modal__product-name {
+    margin: 0 0 4px;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2e1f1f;
+  }
+  .try-ai-modal__product-meta {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    color: #55504a;
+  }
+  .try-ai-modal__product-price {
+    font-weight: 700;
+    color: #993556;
+  }
+  .try-ai-modal__product-size {
+    color: #888;
+  }
+  .try-ai-modal__product-size:empty,
+  .try-ai-modal__product-price:empty {
+    display: none;
+  }
+
+  .try-ai-modal__status {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    margin: 12px 0 0;
+    min-height: 1.2em;
+    color: #666;
+  }
+  .try-ai-modal__status.is-error {
+    color: #ce0570;
+  }
+  .try-ai-modal__status.is-success {
+    color: #2e7d32;
+  }
+
+  .try-ai-modal__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 20px;
+    border-top: 1px solid #e8e2d9;
+    flex-shrink: 0;
+    background: #faf8f4;
+  }
+  .try-ai-modal__footer[hidden] {
+    display: none;
+  }
+  .try-ai-modal__footer--upload {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .try-ai-modal__footer .try-ai-modal__privacy {
+    flex: 1;
+    min-width: 180px;
+  }
+  .try-ai-modal__footer--upload .try-ai-modal__btn {
+    width: auto;
     flex-shrink: 0;
   }
-  .try-ai-modal__icon-btn {
-    width: 40px;
-    height: 40px;
+
+  /* ── Buttons ── */
+  .try-ai-modal__btn {
+    height: 46px;
+    padding: 0 28px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s, background 0.15s, border-color 0.15s;
+    border: none;
+  }
+  .try-ai-modal__btn--block {
+    width: 100%;
+  }
+  .try-ai-modal__btn--primary {
+    background: #993556;
+    color: #fff;
+  }
+  .try-ai-modal__btn--primary:hover {
+    opacity: 0.9;
+  }
+  .try-ai-modal__btn--primary:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .try-ai-modal__btn.is-loading {
+    opacity: 0.7;
+    cursor: wait;
+  }
+
+  .try-ai-modal__footer-secondary {
+    display: flex;
+    gap: 8px;
+  }
+  .try-ai-modal__ghost-btn {
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff;
+    gap: 6px;
+    height: 40px;
+    background: transparent;
     border: 1.5px solid #d4cdc4;
-    border-radius: 5px;
+    border-radius: 8px;
     color: #2e1f1f;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, background 0.15s;
   }
-  .try-ai-modal__icon-btn:hover {
+  .try-ai-modal__ghost-btn:hover {
     border-color: #2e1f1f;
+    background: #fff;
   }
-
   .try-ai-modal__share-wrap {
     position: relative;
+    flex: 1;
+  }
+  .try-ai-modal__share-wrap .try-ai-modal__ghost-btn {
+    width: 100%;
   }
   .try-ai-modal__share-menu {
     position: absolute;
     bottom: calc(100% + 8px);
     left: 0;
+    right: 0;
     z-index: 10;
     background: #fff;
     border: 1px solid #e8e2d9;
@@ -674,84 +869,20 @@
   .try-ai-modal__share-icon--snapchat { color: #b9950a; }
   .try-ai-modal__share-icon--copy { color: #666; }
 
-  .try-ai-modal__status {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.8rem;
-    margin: 12px 0 0;
-    min-height: 1.2em;
-    color: #666;
-  }
-  .try-ai-modal__status.is-error {
-    color: #ce0570;
-  }
-  .try-ai-modal__status.is-success {
-    color: #2e7d32;
-  }
-
-  .try-ai-modal__footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
-    padding: 12px 20px;
-    border-top: 1px solid #e8e2d9;
-    flex-shrink: 0;
-    background: #faf8f4;
-  }
-  .try-ai-modal__footer[hidden] {
-    display: none;
-  }
-  .try-ai-modal__footer--upload {
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
-  .try-ai-modal__footer--result {
-    justify-content: space-between;
-  }
-  .try-ai-modal__footer-actions {
-    display: flex;
-    gap: 10px;
-    flex-shrink: 0;
-  }
-  .try-ai-modal__footer .try-ai-modal__privacy {
-    max-width: none;
-    margin: 0;
-    flex: 1;
-    min-width: 180px;
-  }
-  .try-ai-modal__upload-btn {
-    height: 44px;
-    padding: 0 28px;
-    background: var(--color-primary, #2e1f1f);
-    color: #fff;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
+  .try-ai-modal__retry-link {
+    align-self: center;
+    background: none;
     border: none;
-    border-radius: 5px;
+    padding: 2px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #666;
+    text-decoration: underline;
     cursor: pointer;
-    transition: opacity 0.2s;
   }
-  .try-ai-modal__upload-btn:hover {
-    opacity: 0.88;
-  }
-  .try-ai-modal__upload-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  .try-ai-modal__upload-btn--secondary {
-    background: transparent;
+  .try-ai-modal__retry-link:hover {
     color: #2e1f1f;
-    border: 1.5px solid #d4cdc4;
-  }
-  .try-ai-modal__upload-btn--secondary:hover {
-    opacity: 1;
-    border-color: #2e1f1f;
-  }
-  .try-ai-modal__upload-btn.is-loading {
-    opacity: 0.7;
-    cursor: wait;
   }
 
   @media screen and (max-width: 600px) {
@@ -769,7 +900,7 @@
       flex-direction: column;
       align-items: stretch;
     }
-    .try-ai-modal__footer--upload .try-ai-modal__upload-btn {
+    .try-ai-modal__footer--upload .try-ai-modal__btn {
       width: 100%;
     }
   }
@@ -789,6 +920,7 @@
     var CUSTOMER_ID             = modal.dataset.customerId || '';
     var POLL_INTERVAL_MS        = 2500;
     var POLL_TIMEOUT_MS         = 120000;
+    var ESTIMATED_DURATION_MS   = 45000;
     var DEBUG = /[?&]try_ai_debug=1/.test(window.location.search) || window.localStorage.getItem('tryAiDebug') === '1';
 
     function debugLog() {
@@ -806,13 +938,15 @@
       uploadError:   modal.dataset.i18nUploadError    || 'Something went wrong. Please try again.',
       stepUploading: modal.dataset.i18nStepUploading  || 'Uploading your photo…',
       stepStyling:   modal.dataset.i18nStepStyling    || 'AI is styling your saree…',
-      stepFinishing: modal.dataset.i18nStepFinishing  || 'Adding finishing touches…',
-      addToCart:     modal.dataset.i18nAddToCart      || 'Add to cart',
-      addedToCart:   modal.dataset.i18nAddedToCart    || 'Added!',
-      download:      modal.dataset.i18nDownload       || 'Download',
-      share:         modal.dataset.i18nShare          || 'Share',
+      stepDraping:   modal.dataset.i18nStepDraping    || 'Draping fabric…',
+      stepAdjusting: modal.dataset.i18nStepAdjusting  || 'Adjusting fit…',
+      stepFinishing: modal.dataset.i18nStepFinishing  || 'Finishing details…',
       stepAlmostDone: modal.dataset.i18nStepAlmostDone || 'Almost done…',
       stepLovingIt:   modal.dataset.i18nStepLovingIt   || 'Hope you\'ll love the output…',
+      addToCart:     modal.dataset.i18nAddToCart      || 'Add to bag',
+      addedToCart:   modal.dataset.i18nAddedToCart    || 'Added!',
+      download:      modal.dataset.i18nDownload       || 'Save',
+      share:         modal.dataset.i18nShare          || 'Share',
       privacyRequired: modal.dataset.i18nPrivacyRequired || 'Please agree to the Privacy Policy to continue.',
       shareText:       modal.dataset.i18nShareText        || 'Check out my AI saree try-on from ' + PRODUCT_TITLE + '!'
     };
@@ -836,6 +970,12 @@
     var compareHandle      = document.getElementById('try-ai-compare-handle');
     var loadingStepEl      = document.getElementById('try-ai-loading-step');
     var loadingImg         = document.getElementById('try-ai-loading-img');
+    var progressFillEl     = document.getElementById('try-ai-progress-fill');
+    var progressPctEl      = document.getElementById('try-ai-progress-pct');
+    var progressEtaEl      = document.getElementById('try-ai-progress-eta');
+    var productNameEl      = document.getElementById('try-ai-product-name');
+    var productPriceEl     = document.getElementById('try-ai-product-price');
+    var productSizeEl      = document.getElementById('try-ai-product-size');
 
     var stepUpload  = document.getElementById('try-ai-step-upload');
     var stepLoading = document.getElementById('try-ai-step-loading');
@@ -846,6 +986,8 @@
     var selectedFile = null;
     var pollTimer = null;
     var loadingStepTimer = null;
+    var progressTimer = null;
+    var progressStartedAt = 0;
 
     function setStatus(text, type) {
       statusEl.textContent = text || '';
@@ -871,6 +1013,8 @@
       var steps = [
         I18N.stepUploading,
         I18N.stepStyling,
+        I18N.stepDraping,
+        I18N.stepAdjusting,
         I18N.stepLovingIt,
         I18N.stepFinishing,
         I18N.stepAlmostDone
@@ -884,6 +1028,41 @@
       }, 4000);
     }
 
+    function stopProgress() {
+      if (progressTimer) {
+        clearInterval(progressTimer);
+        progressTimer = null;
+      }
+    }
+
+    function startProgress() {
+      stopProgress();
+      progressStartedAt = Date.now();
+      progressFillEl.style.width = '0%';
+      progressPctEl.textContent = '0%';
+      progressEtaEl.textContent = '';
+      progressTimer = setInterval(function () {
+        var elapsed = Date.now() - progressStartedAt;
+        var ratio = Math.min(elapsed / ESTIMATED_DURATION_MS, 0.95);
+        var pct = Math.round(ratio * 100);
+        progressFillEl.style.width = pct + '%';
+        progressPctEl.textContent = pct + '%';
+        var remainingMs = ESTIMATED_DURATION_MS - elapsed;
+        if (remainingMs > 0) {
+          progressEtaEl.textContent = '~' + Math.ceil(remainingMs / 1000) + 's left';
+        } else {
+          progressEtaEl.textContent = '';
+        }
+      }, 400);
+    }
+
+    function finishProgress() {
+      stopProgress();
+      progressFillEl.style.width = '100%';
+      progressPctEl.textContent = '100%';
+      progressEtaEl.textContent = '';
+    }
+
     function showUploadStep() {
       stepUpload.hidden = false;
       stepLoading.hidden = true;
@@ -891,6 +1070,7 @@
       footerUpload.hidden = false;
       footerResult.hidden = true;
       stopLoadingSteps();
+      stopProgress();
     }
 
     function showLoadingStep(photoUrl) {
@@ -901,6 +1081,18 @@
       footerResult.hidden = true;
       if (photoUrl) loadingImg.src = photoUrl;
       startLoadingSteps();
+      startProgress();
+    }
+
+    function updateProductSummary() {
+      productNameEl.textContent = PRODUCT_TITLE;
+      var priceDisplay = document.getElementById('product-price-display');
+      if (priceDisplay) {
+        var priceCurrent = priceDisplay.querySelector('.product-page__price-current');
+        productPriceEl.textContent = priceCurrent ? priceCurrent.textContent.trim() : '';
+      }
+      var selectedSizeBtn = document.querySelector('.product-page__option-btn.is-selected');
+      productSizeEl.textContent = selectedSizeBtn ? selectedSizeBtn.dataset.value : '';
     }
 
     function showResultStep(hasOriginal) {
@@ -910,6 +1102,8 @@
       footerUpload.hidden = true;
       footerResult.hidden = false;
       stopLoadingSteps();
+      finishProgress();
+      updateProductSummary();
       compareEl.classList.toggle('try-ai-modal__compare--no-original', !hasOriginal);
       if (hasOriginal) {
         requestAnimationFrame(function () { setCompareRatio(0.5); });
@@ -1062,7 +1256,6 @@
 
     /* ── Result actions: download / share / add to cart ── */
     downloadBtn.addEventListener('click', function () {
-      var originalLabel = downloadBtn.innerHTML;
       fetch(resultImg.src)
         .then(function (r) { return r.blob(); })
         .then(function (blob) {
