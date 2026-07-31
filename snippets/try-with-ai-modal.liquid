@@ -1196,7 +1196,8 @@
         customerId: CUSTOMER_ID,
         productId: PRODUCT_ID,
         sareeImageUrl: PRODUCT_IMAGE_URL,
-        userImageUrl: userImageUrl
+        userImageUrl: userImageUrl,
+        privacyPolicyAccepted: true
       };
       debugLog('creating try-on job', BACKEND_URL + '/api/try-on', payload);
       return fetch(BACKEND_URL + '/api/try-on', {
