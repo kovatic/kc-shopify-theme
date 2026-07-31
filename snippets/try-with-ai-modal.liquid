@@ -1434,17 +1434,14 @@
         body: JSON.stringify({ id: parseInt(variantId, 10), quantity: 1 })
       })
       .then(function (r) { return r.json(); })
-      .then(function () { return fetch('/cart.js').then(function (r) { return r.json(); }); })
-      .then(function (cart) {
-        var drawer = document.querySelector('cart-drawer');
-        if (drawer) { drawer.renderCart(cart); drawer.open(); }
+      .then(function () {
         atcBtn.textContent = I18N.addedToCart;
+        closeModal();
+        window.location.href = '/checkout';
       })
       .catch(function (err) {
         debugLog('add to cart failed', err);
         atcBtn.disabled = false;
-      })
-      .finally(function () {
         atcBtn.classList.remove('is-loading');
       });
     });
