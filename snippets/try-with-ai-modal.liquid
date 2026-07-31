@@ -1437,7 +1437,7 @@
         if (!r.ok) {
           return readErrorBody(r).then(function (message) {
             debugLog('upload failed', r.status, message);
-            throw new Error('Photo upload failed (' + r.status + ')' + (message ? ': ' + message : ''));
+            throw new Error(message || ('Photo upload failed (' + r.status + ')'));
           });
         }
         return r.json();
@@ -1466,7 +1466,7 @@
         if (!r.ok) {
           return readErrorBody(r).then(function (message) {
             debugLog('try-on job creation failed', r.status, message);
-            throw new Error('Failed to start AI try-on job (' + r.status + ')' + (message ? ': ' + message : ''));
+            throw new Error(message || ('Failed to start AI try-on job (' + r.status + ')'));
           });
         }
         return r.json();
@@ -1484,7 +1484,7 @@
         return fetch(BACKEND_URL + '/api/try-on/' + jobId).then(function (r) {
           if (!r.ok) {
             return readErrorBody(r).then(function (message) {
-              throw new Error('Failed to check AI try-on status (' + r.status + ')' + (message ? ': ' + message : ''));
+              throw new Error(message || ('Failed to check AI try-on status (' + r.status + ')'));
             });
           }
           return r.json();
@@ -1537,10 +1537,7 @@
         })
         .catch(function (err) {
           console.error('Try with AI error:', err);
-          var message = I18N.uploadError;
-          if (DEBUG && err && err.message) {
-            message = I18N.uploadError + ' [debug: ' + err.message + ']';
-          }
+          var message = (err && err.message) ? err.message : I18N.uploadError;
           showUploadStep();
           setStatus(message, 'error');
           uploadBtn.disabled = false;
