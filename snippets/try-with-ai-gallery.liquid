@@ -1,11 +1,8 @@
 {% doc %}
   Renders a strip of the customer's previous AI try-on results for this
-  product, fetched from the KC Wear AI backend. Always rendered (not just
-  when history exists): a leading "+" tile is the entry point into the
-  try-on flow, and previous results (if any) appear as thumbnails after it.
-  Clicking a thumbnail opens the try-with-ai modal directly on that result
-  (no re-generation). Clicking the "+" tile opens the modal fresh, or
-  redirects to login if the customer isn't signed in.
+  product, fetched from the KC Wear AI backend. Hidden entirely until the
+  history fetch returns at least one result. Clicking a thumbnail opens the
+  try-with-ai modal directly on that result (no re-generation).
 
   Requires `window.openTryWithAiModal` to be defined by
   `snippets/try-with-ai-modal.liquid`, rendered elsewhere on the page.
@@ -20,26 +17,15 @@
 <div
   class="try-ai-gallery"
   id="try-ai-gallery"
+  hidden
   data-backend-url="{{ backend_url }}"
   data-product-id="{{ product.id }}"
   data-customer-id="{{ customer.id }}"
-  data-login-url="{{ routes.account_login_url }}"
   data-i18n-label="{{ 'try_with_ai.previous_tryons' | t | escape }}"
   data-i18n-alt="{{ 'try_with_ai.previous_tryon_alt' | t | escape }}"
-  data-i18n-add="{{ 'try_with_ai.cta_label' | t | escape }}"
 >
   <p class="try-ai-gallery__label"></p>
-  <div class="try-ai-gallery__list" id="try-ai-gallery-list">
-    {%- if customer -%}
-      <button type="button" class="try-ai-gallery__item try-ai-gallery__item--add" id="try-ai-gallery-add" aria-label="{{ 'try_with_ai.cta_label' | t | escape }}">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-      </button>
-    {%- else -%}
-      <a href="{{ routes.account_login_url }}" class="try-ai-gallery__item try-ai-gallery__item--add" aria-label="{{ 'try_with_ai.login_required' | t | escape }}">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-      </a>
-    {%- endif -%}
-  </div>
+  <div class="try-ai-gallery__list" id="try-ai-gallery-list"></div>
 </div>
 
 {% stylesheet %}
@@ -84,22 +70,6 @@
     object-fit: cover;
     display: block;
   }
-  .try-ai-gallery__item--add {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-style: dashed;
-    border-color: #d4cdc4;
-    background: #fafafa;
-    color: #888;
-    text-decoration: none;
-  }
-  .try-ai-gallery__item--add:hover {
-    border-color: #2e1f1f;
-    color: #2e1f1f;
-    transform: translateY(-2px);
-  }
-
   @media screen and (max-width: 600px) {
     .try-ai-gallery__list {
       flex-wrap: nowrap;
@@ -120,15 +90,8 @@
 
     var labelEl = gallery.querySelector('.try-ai-gallery__label');
     var listEl  = document.getElementById('try-ai-gallery-list');
-    var addTile = document.getElementById('try-ai-gallery-add');
 
     labelEl.textContent = LABEL;
-
-    if (addTile) {
-      addTile.addEventListener('click', function () {
-        if (window.openTryWithAiModal) window.openTryWithAiModal();
-      });
-    }
 
     if (!BACKEND_URL || !CUSTOMER_ID || !PRODUCT_ID) return;
 
@@ -140,20 +103,20 @@
         var items = res && res.success ? res.data : null;
         if (!items || !items.length) return;
 
-        items.forEach(function (item) {
-          var btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'try-ai-gallery__item';
-          var img = document.createElement('img');
-          img.src = item.outputImageUrl;
-          img.alt = ALT;
-          img.loading = 'lazy';
-          btn.appendChild(img);
-          btn.addEventListener('click', function () {
-            if (window.openTryWithAiModal) window.openTryWithAiModal(item.outputImageUrl);
-          });
-          listEl.appendChild(btn);
+        var item = items[0];
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'try-ai-gallery__item';
+        var img = document.createElement('img');
+        img.src = item.outputImageUrl;
+        img.alt = ALT;
+        img.loading = 'lazy';
+        btn.appendChild(img);
+        btn.addEventListener('click', function () {
+          if (window.openTryWithAiModal) window.openTryWithAiModal(item.outputImageUrl);
         });
+        listEl.appendChild(btn);
+        gallery.hidden = false;
       })
       .catch(function () {});
   })();
