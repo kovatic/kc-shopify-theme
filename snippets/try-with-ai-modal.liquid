@@ -1149,7 +1149,7 @@
           modalStockAlert.removeAttribute('style');
         }
       }
-      var pageOptionBtns = document.querySelectorAll('.product-page__option-btn');
+      var pageOptionBtns = document.querySelectorAll('.product-page .product-page__option-btn');
       modalOptionBtns.forEach(function (btn) {
         var idx = btn.getAttribute('data-option-index');
         var value = btn.getAttribute('data-value');
@@ -1170,7 +1170,7 @@
         var idx = btn.getAttribute('data-option-index');
         var value = btn.getAttribute('data-value');
         var pageBtn = null;
-        document.querySelectorAll('.product-page__option-btn').forEach(function (candidate) {
+        document.querySelectorAll('.product-page .product-page__option-btn').forEach(function (candidate) {
           if (candidate.getAttribute('data-option-index') === idx && candidate.getAttribute('data-value') === value) {
             pageBtn = candidate;
           }
