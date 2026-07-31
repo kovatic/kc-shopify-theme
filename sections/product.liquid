@@ -1106,8 +1106,9 @@ window.addEventListener('pageshow', function(event) {
       var zoomSrc = item.getAttribute('data-zoom-src');
       var preloaded = false;
 
-      item.addEventListener('mouseenter', function() {
+      item.addEventListener('mouseenter', function(e) {
         if (window.innerWidth < 992) return;
+        if (e.target.closest('.try-ai-fab')) return;
         if (!preloaded) { preloaded = true; (new Image()).src = zoomSrc; }
         zoomResult.style.backgroundImage = 'url(' + zoomSrc + ')';
         zoomResult.classList.add('is-visible');
@@ -1118,6 +1119,10 @@ window.addEventListener('pageshow', function(event) {
       });
       item.addEventListener('mousemove', throttleRaf(function(e) {
         if (window.innerWidth < 992) return;
+        if (e.target.closest('.try-ai-fab')) {
+          zoomResult.classList.remove('is-visible');
+          return;
+        }
         var rect = item.getBoundingClientRect();
         var x = Math.max(0, Math.min(rect.width,  e.clientX - rect.left));
         var y = Math.max(0, Math.min(rect.height, e.clientY - rect.top));
@@ -1515,7 +1520,9 @@ window.addEventListener('pageshow', function(event) {
 
   /* ── Try with AI modal trigger ── */
   document.querySelectorAll('.js-try-ai-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
       if (window.openTryWithAiModal) window.openTryWithAiModal();
     });
   });
@@ -2373,7 +2380,7 @@ document.addEventListener('DOMContentLoaded', function() {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.92);
-    z-index: 99999;
+    z-index: 9000;
     align-items: center;
     justify-content: center;
   }
