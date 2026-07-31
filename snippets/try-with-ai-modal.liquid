@@ -130,7 +130,7 @@
         </div>
       </div>
 
-      <div class="try-ai-modal__step" id="try-ai-step-result" hidden>
+      <div class="try-ai-modal__step try-ai-modal__step--result" id="try-ai-step-result" hidden>
         <div class="try-ai-modal__compare" id="try-ai-compare">
           <img class="try-ai-modal__compare-img try-ai-modal__compare-img--after" id="try-ai-result-img" alt="{{ 'try_with_ai.result_alt' | t }}">
           <div class="try-ai-modal__compare-before-wrap" id="try-ai-compare-before-wrap">
@@ -147,12 +147,44 @@
           <span class="try-ai-modal__compare-label try-ai-modal__compare-label--after">{{ 'try_with_ai.view_result' | t }}</span>
         </div>
 
-        <div class="try-ai-modal__product-summary" id="try-ai-product-summary">
-          <p class="try-ai-modal__product-name" id="try-ai-product-name">{{ product.title | escape }}</p>
-          <div class="try-ai-modal__product-meta">
-            <span class="try-ai-modal__product-price" id="try-ai-product-price"></span>
-            <span class="try-ai-modal__product-size" id="try-ai-product-size"></span>
+        <div class="try-ai-modal__product-panel" id="try-ai-product-panel">
+          <h3 class="product-page__title try-ai-modal__product-title">{{ product.title }}</h3>
+
+          {%- if product.collections.first != blank -%}
+            <a href="{{ product.collections.first.url }}" class="product-page__vendor">{{ product.collections.first.title }}</a>
+          {%- endif -%}
+
+          <div class="product-page__price-row">
+            <span class="product-page__price" id="try-ai-price-display">
+              <span class="product-page__price-current{% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %} is-on-sale{% endif %}">{{ product.selected_or_first_available_variant.price | money }}</span>
+              <span class="product-page__price-compare" {% unless product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}style="display: none;"{% endunless %}>
+                {{ product.selected_or_first_available_variant.compare_at_price | money }}
+              </span>
+              <span class="product-page__price-discount-badge" {% unless product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}style="display: none !important;"{% endunless %}>
+                {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
+                  {%- assign try_ai_savings = product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | times: 100 | divided_by: product.selected_or_first_available_variant.compare_at_price -%}
+                  -{{ try_ai_savings }}%
+                {%- endif -%}
+              </span>
+            </span>
           </div>
+
+          <div class="product-page__stock-alert" id="try-ai-stock-alert" style="display:none"></div>
+
+          {%- if product.variants.size > 1 -%}
+            {%- for option in product.options_with_values -%}
+              {%- assign try_ai_option_index = forloop.index0 -%}
+              {%- assign try_ai_current_option_value = product.selected_or_first_available_variant.options[try_ai_option_index] -%}
+              <div class="try-ai-modal__option">
+                <label class="product-page__option-label">{{ option.name }}</label>
+                <div class="product-page__option-values try-ai-modal__option-values">
+                  {%- for value in option.values -%}
+                    <button type="button" class="product-page__option-btn try-ai-modal__option-btn{% if try_ai_current_option_value == value %} is-selected{% endif %}" data-option-index="{{ try_ai_option_index }}" data-value="{{ value }}">{{ value }}</button>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
         </div>
       </div>
 
@@ -272,8 +304,11 @@
     flex-direction: column;
     overflow: hidden;
     transform: translateY(10px);
-    transition: transform 0.25s ease;
+    transition: transform 0.25s ease, max-width 0.25s ease;
     box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  }
+  .try-ai-modal.is-result-active .try-ai-modal__panel {
+    max-width: 980px;
   }
   .try-ai-modal.is-open .try-ai-modal__panel {
     transform: translateY(0);
@@ -581,6 +616,28 @@
     color: rgba(255,255,255,0.75);
   }
 
+  /* ── Result step: image left, product panel right ── */
+  .try-ai-modal__step--result {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  @media screen and (min-width: 700px) {
+    .try-ai-modal__step--result {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+    .try-ai-modal__step--result .try-ai-modal__compare {
+      flex: 0 0 320px;
+      margin: 0;
+    }
+    .try-ai-modal__product-panel {
+      flex: 1;
+      min-width: 0;
+      padding-top: 4px;
+    }
+  }
+
   /* ── Result / before-after compare ── */
   .try-ai-modal__compare {
     position: relative;
@@ -672,38 +729,30 @@
     display: none;
   }
 
-  /* ── Result: product summary ── */
-  .try-ai-modal__product-summary {
-    max-width: 420px;
-    margin: 14px auto 0;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #e8e2d9;
-  }
-  .try-ai-modal__product-name {
-    margin: 0 0 4px;
-    font-family: 'Playfair Display', serif;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #2e1f1f;
-  }
-  .try-ai-modal__product-meta {
+  /* ── Result: product panel (mirrors product page style) ── */
+  .try-ai-modal__product-panel {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 10px;
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.82rem;
-    color: #55504a;
   }
-  .try-ai-modal__product-price {
-    font-weight: 700;
-    color: #993556;
+  .try-ai-modal__product-title.product-page__title {
+    font-size: 1.15rem !important;
+    margin: 0;
   }
-  .try-ai-modal__product-size {
-    color: #888;
+  .try-ai-modal__product-panel .product-page__vendor {
+    align-self: flex-start;
   }
-  .try-ai-modal__product-size:empty,
-  .try-ai-modal__product-price:empty {
-    display: none;
+  .try-ai-modal__product-panel .product-page__price-row {
+    margin: 2px 0 0;
+  }
+  .try-ai-modal__product-panel .product-page__stock-alert {
+    margin-bottom: 0;
+  }
+  .try-ai-modal__option {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
 
   .try-ai-modal__status {
@@ -972,9 +1021,9 @@
     var progressFillEl     = document.getElementById('try-ai-progress-fill');
     var progressPctEl      = document.getElementById('try-ai-progress-pct');
     var progressEtaEl      = document.getElementById('try-ai-progress-eta');
-    var productNameEl      = document.getElementById('try-ai-product-name');
-    var productPriceEl     = document.getElementById('try-ai-product-price');
-    var productSizeEl      = document.getElementById('try-ai-product-size');
+    var modalPriceDisplay  = document.getElementById('try-ai-price-display');
+    var modalStockAlert    = document.getElementById('try-ai-stock-alert');
+    var modalOptionBtns    = modal.querySelectorAll('.try-ai-modal__option-btn');
 
     var stepUpload  = document.getElementById('try-ai-step-upload');
     var stepLoading = document.getElementById('try-ai-step-loading');
@@ -1068,6 +1117,7 @@
       stepResult.hidden = true;
       footerUpload.hidden = false;
       footerResult.hidden = true;
+      modal.classList.remove('is-result-active');
       stopLoadingSteps();
       stopProgress();
     }
@@ -1078,21 +1128,57 @@
       stepResult.hidden = true;
       footerUpload.hidden = true;
       footerResult.hidden = true;
+      modal.classList.remove('is-result-active');
       if (photoUrl) loadingImg.src = photoUrl;
       startLoadingSteps();
       startProgress();
     }
 
-    function updateProductSummary() {
-      productNameEl.textContent = PRODUCT_TITLE;
-      var priceDisplay = document.getElementById('product-price-display');
-      if (priceDisplay) {
-        var priceCurrent = priceDisplay.querySelector('.product-page__price-current');
-        productPriceEl.textContent = priceCurrent ? priceCurrent.textContent.trim() : '';
+    function syncProductPanel() {
+      var pagePriceDisplay = document.getElementById('product-price-display');
+      if (pagePriceDisplay && modalPriceDisplay) {
+        modalPriceDisplay.innerHTML = pagePriceDisplay.innerHTML;
       }
-      var selectedSizeBtn = document.querySelector('.product-page__option-btn.is-selected');
-      productSizeEl.textContent = selectedSizeBtn ? selectedSizeBtn.dataset.value : '';
+      var pageStockAlert = document.getElementById('stock-alert');
+      if (pageStockAlert && modalStockAlert) {
+        modalStockAlert.className = pageStockAlert.className;
+        modalStockAlert.innerHTML = pageStockAlert.innerHTML;
+        if (pageStockAlert.style.display === 'none') {
+          modalStockAlert.style.display = 'none';
+        } else {
+          modalStockAlert.removeAttribute('style');
+        }
+      }
+      var pageOptionBtns = document.querySelectorAll('.product-page__option-btn');
+      modalOptionBtns.forEach(function (btn) {
+        var idx = btn.getAttribute('data-option-index');
+        var value = btn.getAttribute('data-value');
+        var isSelected = false;
+        pageOptionBtns.forEach(function (pageBtn) {
+          if (pageBtn.getAttribute('data-option-index') === idx &&
+              pageBtn.getAttribute('data-value') === value &&
+              pageBtn.classList.contains('is-selected')) {
+            isSelected = true;
+          }
+        });
+        btn.classList.toggle('is-selected', isSelected);
+      });
     }
+
+    modalOptionBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = btn.getAttribute('data-option-index');
+        var value = btn.getAttribute('data-value');
+        var pageBtn = null;
+        document.querySelectorAll('.product-page__option-btn').forEach(function (candidate) {
+          if (candidate.getAttribute('data-option-index') === idx && candidate.getAttribute('data-value') === value) {
+            pageBtn = candidate;
+          }
+        });
+        if (pageBtn) pageBtn.click();
+        syncProductPanel();
+      });
+    });
 
     function showResultStep(hasOriginal) {
       stepUpload.hidden = true;
@@ -1100,9 +1186,10 @@
       stepResult.hidden = false;
       footerUpload.hidden = true;
       footerResult.hidden = false;
+      modal.classList.add('is-result-active');
       stopLoadingSteps();
       finishProgress();
-      updateProductSummary();
+      syncProductPanel();
       compareEl.classList.toggle('try-ai-modal__compare--no-original', !hasOriginal);
       if (hasOriginal) {
         requestAnimationFrame(function () { setCompareRatio(0.5); });
