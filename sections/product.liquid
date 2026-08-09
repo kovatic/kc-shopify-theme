@@ -59,6 +59,9 @@
           {%- for image in product.images -%}
             <div class="product-page__carousel-slide js-lb-open" data-zoom-src="{{ image | image_url: width: 1800 }}" data-lb-index="{{ forloop.index0 }}">
               {{ image | image_url: width: 800 | image_tag: loading: 'lazy', alt: image.alt | default: product.title }}
+              {%- if forloop.first -%}
+                {%- render 'try-with-ai-fab', product: product -%}
+              {%- endif -%}
             </div>
           {%- else -%}
             <div class="product-page__carousel-slide">
@@ -73,7 +76,6 @@
             {%- endfor -%}
           </div>
         {%- endif -%}
-        {%- render 'try-with-ai-fab', product: product -%}
       </div>
 
     </div>
@@ -1205,6 +1207,7 @@ window.addEventListener('pageshow', function(event) {
     }
 
     document.addEventListener('click', function(e) {
+      if (e.target.closest('.try-ai-fab')) return;
       var opener = e.target.closest('.js-lb-open');
       if (opener) { e.preventDefault(); lbOpen(parseInt(opener.getAttribute('data-lb-index') || '0')); }
     });
@@ -2194,12 +2197,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     .product-page__carousel-track::-webkit-scrollbar { display: none; }
     .product-page__carousel-slide {
+      position: relative;
       flex: 0 0 100%;
       scroll-snap-align: start;
       aspect-ratio: 3 / 4;
     }
     .product-page__carousel-slide img,
-    .product-page__carousel-slide svg {
+    .product-page__carousel-slide > svg {
       width: 100%;
       object-fit: contain;
       display: block;
