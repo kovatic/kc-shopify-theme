@@ -39,7 +39,7 @@
   data-i18n-step-adjusting="{{ 'try_with_ai.step_adjusting' | t | escape }}"
   data-i18n-step-finishing="{{ 'try_with_ai.step_finishing' | t | escape }}"
   data-i18n-step-almost-done="{{ 'try_with_ai.step_almost_done' | t | escape }}"
-  data-i18n-step-loving-it="{{ 'try_with_ai.step_loving_it' | t | escape }}"
+  data-i18n-step-loving-it="{{ 'try_with_ai.step_loving_it' | t }}"
   data-i18n-view-original="{{ 'try_with_ai.view_original' | t | escape }}"
   data-i18n-view-result="{{ 'try_with_ai.view_result' | t | escape }}"
   data-i18n-add-to-cart="{{ 'try_with_ai.add_to_cart' | t | escape }}"
@@ -114,7 +114,6 @@
               </div>
               <div class="try-ai-modal__loading-progress-meta">
                 <span id="try-ai-progress-pct">0%</span>
-                <span id="try-ai-progress-eta"></span>
               </div>
             </div>
           </div>
@@ -575,7 +574,7 @@
   }
   .try-ai-modal__loading-progress-meta {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     margin-top: 6px;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.7rem;
@@ -992,7 +991,6 @@
     var loadingImg         = document.getElementById('try-ai-loading-img');
     var progressFillEl     = document.getElementById('try-ai-progress-fill');
     var progressPctEl      = document.getElementById('try-ai-progress-pct');
-    var progressEtaEl      = document.getElementById('try-ai-progress-eta');
     var modalPriceDisplay  = document.getElementById('try-ai-price-display');
     var modalStockAlert    = document.getElementById('try-ai-stock-alert');
     var modalOptionBtns    = modal.querySelectorAll('.try-ai-modal__option-btn');
@@ -1060,19 +1058,12 @@
       progressStartedAt = Date.now();
       progressFillEl.style.width = '0%';
       progressPctEl.textContent = '0%';
-      progressEtaEl.textContent = '';
       progressTimer = setInterval(function () {
         var elapsed = Date.now() - progressStartedAt;
         var ratio = Math.min(elapsed / ESTIMATED_DURATION_MS, 0.95);
         var pct = Math.round(ratio * 100);
         progressFillEl.style.width = pct + '%';
         progressPctEl.textContent = pct + '%';
-        var remainingMs = ESTIMATED_DURATION_MS - elapsed;
-        if (remainingMs > 0) {
-          progressEtaEl.textContent = '~' + Math.ceil(remainingMs / 1000) + 's left';
-        } else {
-          progressEtaEl.textContent = '';
-        }
       }, 400);
     }
 
@@ -1080,7 +1071,6 @@
       stopProgress();
       progressFillEl.style.width = '100%';
       progressPctEl.textContent = '100%';
-      progressEtaEl.textContent = '';
     }
 
     function showUploadStep() {

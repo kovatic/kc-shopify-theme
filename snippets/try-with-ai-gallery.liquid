@@ -103,19 +103,20 @@
         var items = res && res.success ? res.data : null;
         if (!items || !items.length) return;
 
-        var item = items[0];
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'try-ai-gallery__item';
-        var img = document.createElement('img');
-        img.src = item.outputImageUrl;
-        img.alt = ALT;
-        img.loading = 'lazy';
-        btn.appendChild(img);
-        btn.addEventListener('click', function () {
-          if (window.openTryWithAiModal) window.openTryWithAiModal(item.outputImageUrl);
+        items.forEach(function (item) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'try-ai-gallery__item';
+          var img = document.createElement('img');
+          img.src = item.outputImageUrl;
+          img.alt = ALT;
+          img.loading = 'lazy';
+          btn.appendChild(img);
+          btn.addEventListener('click', function () {
+            if (window.openTryWithAiModal) window.openTryWithAiModal(item.outputImageUrl);
+          });
+          listEl.appendChild(btn);
         });
-        listEl.appendChild(btn);
         gallery.hidden = false;
       })
       .catch(function () {});
