@@ -454,6 +454,9 @@
     "privacy_required": "Please agree to the Privacy Policy to continue.",
     "share_text": "Check out my AI saree try-on!",
     "credits_remaining": "{{ remaining }} of {{ limit }} try-ons left today",
-    "credits_exhausted": "You've used all your try-ons for today. Come back tomorrow!"
+    "credits_exhausted": "You've used all your try-ons for today. Come back tomorrow!",
+    "row_title": "See yourself in this saree",
+    "row_subtext": "Upload your photo and preview it on you instantly with AI",
+    "row_subtext_guest": "Log in to upload your photo and preview this saree on you"
   }
 }
