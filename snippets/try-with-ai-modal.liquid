@@ -48,6 +48,8 @@
   data-i18n-share="{{ 'try_with_ai.share' | t | escape }}"
   data-i18n-privacy-required="{{ 'try_with_ai.privacy_required' | t | escape }}"
   data-i18n-share-text="{{ 'try_with_ai.share_text' | t | escape }}"
+  data-i18n-credits-remaining="{{ 'try_with_ai.credits_remaining' | t | escape }}"
+  data-i18n-credits-exhausted="{{ 'try_with_ai.credits_exhausted' | t | escape }}"
 >
   <div class="try-ai-modal__backdrop"></div>
   <div class="try-ai-modal__panel">
@@ -182,6 +184,7 @@
     </div>
 
     <div class="try-ai-modal__footer try-ai-modal__footer--upload" id="try-ai-footer-upload">
+      <p class="try-ai-modal__credits" id="try-ai-credits" hidden></p>
       <label class="try-ai-modal__privacy" for="try-ai-privacy-checkbox">
         <input type="checkbox" id="try-ai-privacy-checkbox">
         <span>
@@ -433,6 +436,17 @@
   .try-ai-modal__tips svg {
     flex-shrink: 0;
     color: #2e7d32;
+  }
+
+  .try-ai-modal__credits {
+    margin: 0 0 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    color: #888;
+    text-align: center;
+  }
+  .try-ai-modal__credits--low {
+    color: #b3261e;
   }
 
   .try-ai-modal__privacy {
@@ -971,7 +985,9 @@
       download:      modal.dataset.i18nDownload       || 'Save',
       share:         modal.dataset.i18nShare          || 'Share',
       privacyRequired: modal.dataset.i18nPrivacyRequired || 'Please agree to the Privacy Policy to continue.',
-      shareText:       modal.dataset.i18nShareText        || 'Check out my AI saree try-on from ' + PRODUCT_TITLE + '!'
+      shareText:       modal.dataset.i18nShareText        || 'Check out my AI saree try-on from ' + PRODUCT_TITLE + '!',
+      creditsRemaining: modal.dataset.i18nCreditsRemaining || '{{ remaining }} of {{ limit }} try-ons left today',
+      creditsExhausted: modal.dataset.i18nCreditsExhausted || 'You\'ve used all your try-ons for today. Come back tomorrow!'
     };
 
     var dropzone           = document.getElementById('try-ai-dropzone');
@@ -980,6 +996,7 @@
     var placeholder        = document.getElementById('try-ai-dropzone-placeholder');
     var statusEl           = document.getElementById('try-ai-status');
     var uploadBtn          = document.getElementById('try-ai-upload-btn');
+    var creditsEl          = document.getElementById('try-ai-credits');
     var retryBtn           = document.getElementById('try-ai-retry-btn');
     var atcBtn             = document.getElementById('try-ai-atc-btn');
     var downloadBtn        = document.getElementById('try-ai-download-btn');
@@ -1181,6 +1198,7 @@
       originalImg.src = '';
       loadingImg.src = '';
       compareEl.classList.remove('try-ai-modal__compare--no-original');
+      creditsExhausted = false;
       uploadBtn.disabled = true;
       uploadBtn.textContent = I18N.uploadButton;
       uploadBtn.classList.remove('is-loading');
@@ -1197,6 +1215,7 @@
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
+      fetchCredits();
       if (presetResultUrl) {
         resultImg.src = presetResultUrl;
         originalImg.src = '';
@@ -1231,7 +1250,7 @@
       previewImg.src = URL.createObjectURL(file);
       previewImg.hidden = false;
       placeholder.hidden = true;
-      uploadBtn.disabled = false;
+      uploadBtn.disabled = creditsExhausted;
       setStatus('', null);
     }
 
@@ -1474,6 +1493,37 @@
       });
     }
 
+    var creditsLimit = null;
+    var creditsExhausted = false;
+
+    function renderCredits(remaining, limit) {
+      if (typeof limit === 'number') creditsLimit = limit;
+      if (!creditsEl) return;
+      if (typeof remaining !== 'number' || typeof creditsLimit !== 'number') {
+        creditsEl.hidden = true;
+        return;
+      }
+      creditsEl.hidden = false;
+      creditsExhausted = remaining <= 0;
+      creditsEl.classList.toggle('try-ai-modal__credits--low', creditsExhausted);
+      creditsEl.textContent = creditsExhausted
+        ? I18N.creditsExhausted
+        : I18N.creditsRemaining.replace('{{ remaining }}', remaining).replace('{{ limit }}', creditsLimit);
+      if (creditsExhausted) uploadBtn.disabled = true;
+    }
+
+    function fetchCredits() {
+      if (!BACKEND_URL || !CUSTOMER_ID) return;
+      fetch(BACKEND_URL + '/api/try-on/credits?customerId=' + encodeURIComponent(CUSTOMER_ID))
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          var body = data && data.data;
+          if (!body) return;
+          renderCredits(body.remaining, body.limit);
+        })
+        .catch(function () {});
+    }
+
     function createTryOnJob(userImageUrl) {
       var payload = {
         customerId: CUSTOMER_ID,
@@ -1499,6 +1549,9 @@
         debugLog('try-on job created', data);
         var jobId = data && data.data && data.data.jobId;
         if (!data || !data.success || !jobId) throw new Error('Backend did not return a job id');
+        if (typeof data.data.remainingCredits === 'number') {
+          renderCredits(data.data.remainingCredits);
+        }
         return jobId;
       });
     }
