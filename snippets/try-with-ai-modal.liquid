@@ -1618,7 +1618,8 @@
           var message = (err && err.message) ? err.message : I18N.uploadError;
           showUploadStep();
           setStatus(message, 'error');
-          uploadBtn.disabled = false;
+          fetchCredits();
+          uploadBtn.disabled = creditsExhausted;
           uploadBtn.textContent = I18N.uploadButton;
         });
     });
