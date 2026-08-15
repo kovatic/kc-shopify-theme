@@ -182,6 +182,22 @@
               </div>
             {%- endfor -%}
           {%- endif -%}
+
+          {%- if product.metafields.custom.is_customisable.value == true -%}
+            <button type="button" class="product-page__stitching-btn js-tailoring-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
+                <line x1="20" y1="4" x2="8.12" y2="15.88"/>
+                <line x1="14.47" y1="14.48" x2="20" y2="20"/>
+                <line x1="8.12" y1="8.12" x2="12" y2="12"/>
+              </svg>
+              <span class="product-page__stitching-btn-text">
+                <span class="product-page__stitching-btn-title">{{ 'tailoring.stitching_btn' | t }}</span>
+                <span class="product-page__stitching-btn-sub">Add tailoring</span>
+              </span>
+              <span class="product-page__stitching-btn-badge">Customise</span>
+            </button>
+          {%- endif -%}
         </div>
       </div>
 
@@ -742,6 +758,9 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+  }
+  .try-ai-modal__product-panel .product-page__stitching-btn {
+    margin-top: 4px;
   }
 
   .try-ai-modal__status {
