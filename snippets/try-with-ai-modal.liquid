@@ -14,6 +14,11 @@
   {% render 'try-with-ai-modal', product: product, backend_url: settings.try_with_ai_backend_url %}
 {% enddoc %}
 
+{%- liquid
+  assign try_ai_category = product.type | default: 'Saree'
+  assign try_ai_category_lower = try_ai_category | downcase
+-%}
+
 <div
   class="try-ai-modal"
   id="try-ai-modal"
@@ -22,7 +27,7 @@
   aria-modal="true"
   aria-label="{{ 'try_with_ai.modal_title' | t | escape }}"
   data-backend-url="{{ backend_url }}"
-  data-product-image="https:{{ product.featured_image | image_url: width: 1024 }}"
+  data-product-image="https:{{ product.images[1] | default: product.featured_image | image_url: width: 1024 }}"
   data-product-id="{{ product.id }}"
   data-product-url="{{ shop.url }}{{ product.url }}"
   data-product-title="{{ product.title | escape }}"
@@ -47,7 +52,7 @@
   data-i18n-download="{{ 'try_with_ai.download' | t | escape }}"
   data-i18n-share="{{ 'try_with_ai.share' | t | escape }}"
   data-i18n-privacy-required="{{ 'try_with_ai.privacy_required' | t | escape }}"
-  data-i18n-share-text="{{ 'try_with_ai.share_text' | t | escape }}"
+  data-i18n-share-text="{{ 'try_with_ai.share_text' | t: product_title: product.title, category: try_ai_category, category_lower: try_ai_category_lower | escape }}"
   data-i18n-credits-remaining="{{ 'try_with_ai.credits_remaining' | t | escape }}"
   data-i18n-credits-exhausted="{{ 'try_with_ai.credits_exhausted' | t | escape }}"
 >

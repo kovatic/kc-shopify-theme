@@ -452,7 +452,7 @@
     "privacy_text_prefix": "By continuing you agree to our",
     "privacy_link_text": "Privacy Policy.",
     "privacy_required": "Please agree to the Privacy Policy to continue.",
-    "share_text": "Check out my AI saree try-on!",
+    "share_text": "✨ Tried the {{ product_title }} using the AI {{ category }} Try-On!\n\nI was actually surprised by how good it looks 😍\n\nIf you're looking for a {{ category_lower }} for a function or special occasion, definitely check this one out! 👗\n\n👉 {{ product_title }}:",
     "credits_remaining": "{{ remaining }} of {{ limit }} try-ons left today",
     "credits_exhausted": "You've used all your try-ons for today. Come back tomorrow!",
     "row_title": "See yourself in this saree",

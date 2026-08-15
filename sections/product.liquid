@@ -193,7 +193,7 @@
             </button>
           {%- endif -%}
 
-          {%- if product.metafields.custom.try_with_ai.value == true -%}
+          {%- if product.metafields.custom.try_with_ai.value == true and product.images.size > 0 -%}
             {% render 'try-with-ai-gallery', product: product, backend_url: settings.try_with_ai_backend_url %}
           {%- endif -%}
 
@@ -250,7 +250,7 @@
           </div>
         </div>
 
-        {%- if product.metafields.custom.try_with_ai.value == true -%}
+        {%- if product.metafields.custom.try_with_ai.value == true and product.images.size > 0 -%}
           {%- if customer -%}
             <button type="button" class="product-page__try-ai-row js-try-ai-btn" aria-label="{{ 'try_with_ai.row_title' | t | escape }}">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="product-page__try-ai-row-icon">
@@ -509,7 +509,7 @@
   {% render 'tailoring-modal', product: product, tailoring_addon_variant_id: tailoring_addon_variant_id %}
 {%- endif -%}
 
-{%- if product.metafields.custom.try_with_ai.value == true and customer -%}
+{%- if product.metafields.custom.try_with_ai.value == true and customer and product.images.size > 0 -%}
   {%
     render 'try-with-ai-modal',
     product: product,
