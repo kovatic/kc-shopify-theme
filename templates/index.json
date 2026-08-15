@@ -12,6 +12,21 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
+        "slide_QNFNx4": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/website.jpg_1.jpg",
+            "mobile_image": "shopify://shop_images/mobile.jpg_1.jpg",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "shopify://pages/aadi-offer",
+            "text_position": "middle-left",
+            "show_overlay": true,
+            "overlay_opacity": 10
+          }
+        },
         "slide_48gw4q": {
           "type": "slide",
           "settings": {
@@ -56,28 +71,13 @@
             "show_overlay": false,
             "overlay_opacity": 30
           }
-        },
-        "slide_RHchTJ": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/kc_banner_for_website.png",
-            "mobile_image": "shopify://shop_images/kc_PNG.png",
-            "subheading": "",
-            "heading": "",
-            "text": "",
-            "button_label": "",
-            "button_url": "shopify://collections/lehenga",
-            "text_position": "middle-left",
-            "show_overlay": true,
-            "overlay_opacity": 0
-          }
         }
       },
       "block_order": [
+        "slide_QNFNx4",
         "slide_48gw4q",
         "slide_krfQVT",
-        "slide_VRUrm9",
-        "slide_RHchTJ"
+        "slide_VRUrm9"
       ],
       "name": "t:sections.banner.name",
       "settings": {
@@ -102,6 +102,21 @@
         "background_color": "#f1eee9",
         "padding_top": 40,
         "padding_bottom": 40
+      }
+    },
+    "product_list_MjPUFK": {
+      "type": "product-list",
+      "name": "t:sections.product_list.name",
+      "settings": {
+        "title": "Our Most Loved Styles",
+        "subtitle": "Your favourite styles, crafted with elegance.",
+        "collection": "our-most-loved-styles",
+        "layout_type_desktop": "wrap",
+        "layout_type_mobile": "scroll",
+        "products_count": 4,
+        "view_all_url": "shopify://collections/sarees",
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     },
     "product_list_hdgdex": {
@@ -248,17 +263,17 @@
       "name": "t:general.custom_section",
       "settings": {}
     },
-    "product_list_FYa6Kt": {
+    "product_list_x7DwQ3": {
       "type": "product-list",
       "name": "t:sections.product_list.name",
       "settings": {
-        "title": "Tissue Saree",
-        "subtitle": "Discover what's new this season.",
-        "collection": "tissue-saree",
+        "title": "Browse Our Half Saree Collection",
+        "subtitle": "Traditional Charm, Modern Elegance.",
+        "collection": "half-sarees",
         "layout_type_desktop": "wrap",
         "layout_type_mobile": "wrap",
         "products_count": 4,
-        "view_all_url": "shopify://collections/tissue-saree",
+        "view_all_url": "shopify://collections/half-sarees",
         "padding_top": 40,
         "padding_bottom": 60
       }
@@ -559,13 +574,14 @@
   "order": [
     "banner_C4FemU",
     "category_aE6ijQ",
+    "product_list_MjPUFK",
     "product_list_hdgdex",
     "product_list_JmtKph",
     "reel_G8fWym",
     "product_list_8L8wf6",
     "tab_product_list_PynKp9",
     "custom_section_FLDGhd",
-    "product_list_FYa6Kt",
+    "product_list_x7DwQ3",
     "promo_RGMMyX",
     "brand_marquee_aQFqpK",
     "product_carousel_zpTxYK",
