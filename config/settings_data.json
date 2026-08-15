@@ -13,6 +13,7 @@
     "headings_font": "playfair_display_n4",
     "body_font": "montserrat_n4",
     "max_page_width": "120rem",
+    "try_with_ai_backend_url": "https://kc-try-on.vercel.app",
     "primary_color": "#ce0570",
     "background_color": "#f1eee9",
     "foreground_color": "#2e1f1f",
@@ -30,16 +31,6 @@
       "14060646107696862457": {
         "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
         "disabled": false,
-        "settings": {}
-      },
-      "4015264832934714879": {
-        "type": "shopify://apps/sendwill-email-popups/blocks/app/a5670cf8-5705-4b01-ad9e-447033feae26",
-        "disabled": false,
-        "settings": {}
-      },
-      "13386407466480679122": {
-        "type": "shopify://apps/interakt-whatsapp-marketing/blocks/app_embed/8ae4eea6-7869-4909-8446-2f9389fe7a63",
-        "disabled": true,
         "settings": {}
       }
     }

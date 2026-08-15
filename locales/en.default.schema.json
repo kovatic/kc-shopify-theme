@@ -47,11 +47,14 @@
     "text": "Text",
     "theme": "Theme",
     "typography": "Typography",
-    "social": "Social media"
+    "social": "Social media",
+    "try_with_ai": "Try with AI"
   },
   "labels": {
     "alignment": "Alignment",
     "primary_color": "Primary color",
+    "try_with_ai_backend_url": "AI try-on backend URL",
+    "try_with_ai_backend_url_info": "Base URL of the KC Wear AI backend (e.g. https://kc-wear-ai.vercel.app). Used to generate the AI try-on image.",
     "background": "Background",
     "background_color": "Background color",
     "secondary_text_color": "Secondary Text Color",
