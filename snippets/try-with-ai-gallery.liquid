@@ -93,32 +93,41 @@
 
     labelEl.textContent = LABEL;
 
-    if (!BACKEND_URL || !CUSTOMER_ID || !PRODUCT_ID) return;
+    function loadGallery() {
+      if (!BACKEND_URL || !CUSTOMER_ID || !PRODUCT_ID) return;
 
-    var url = BACKEND_URL + '/api/try-on/history?customerId=' + encodeURIComponent(CUSTOMER_ID) + '&productId=' + encodeURIComponent(PRODUCT_ID);
+      var url = BACKEND_URL + '/api/try-on/history?customerId=' + encodeURIComponent(CUSTOMER_ID) + '&productId=' + encodeURIComponent(PRODUCT_ID);
 
-    fetch(url)
-      .then(function (r) { return r.json(); })
-      .then(function (res) {
-        var items = res && res.success ? res.data : null;
-        if (!items || !items.length) return;
+      fetch(url)
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          var items = res && res.success ? res.data : null;
+          listEl.innerHTML = '';
+          if (!items || !items.length) {
+            gallery.hidden = true;
+            return;
+          }
 
-        items.forEach(function (item) {
-          var btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'try-ai-gallery__item';
-          var img = document.createElement('img');
-          img.src = item.outputImageUrl;
-          img.alt = ALT;
-          img.loading = 'lazy';
-          btn.appendChild(img);
-          btn.addEventListener('click', function () {
-            if (window.openTryWithAiModal) window.openTryWithAiModal(item.outputImageUrl);
+          items.forEach(function (item) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'try-ai-gallery__item';
+            var img = document.createElement('img');
+            img.src = item.outputImageUrl;
+            img.alt = ALT;
+            img.loading = 'lazy';
+            btn.appendChild(img);
+            btn.addEventListener('click', function () {
+              if (window.openTryWithAiModal) window.openTryWithAiModal(item.outputImageUrl);
+            });
+            listEl.appendChild(btn);
           });
-          listEl.appendChild(btn);
-        });
-        gallery.hidden = false;
-      })
-      .catch(function () {});
+          gallery.hidden = false;
+        })
+        .catch(function () {});
+    }
+
+    window.refreshTryAiGallery = loadGallery;
+    loadGallery();
   })();
 {% endjavascript %}

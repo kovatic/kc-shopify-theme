@@ -184,7 +184,7 @@
           {%- endif -%}
 
           {%- if product.metafields.custom.is_customisable.value == true -%}
-            <button type="button" class="product-page__stitching-btn js-tailoring-btn">
+            <button type="button" class="product-page__stitching-btn" id="try-ai-tailoring-btn">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
                 <line x1="20" y1="4" x2="8.12" y2="15.88"/>
@@ -1023,6 +1023,7 @@
     var creditsEl          = document.getElementById('try-ai-credits');
     var retryBtn           = document.getElementById('try-ai-retry-btn');
     var atcBtn             = document.getElementById('try-ai-atc-btn');
+    var tailoringBtn       = document.getElementById('try-ai-tailoring-btn');
     var downloadBtn        = document.getElementById('try-ai-download-btn');
     var shareBtn           = document.getElementById('try-ai-share-btn');
     var shareMenu          = document.getElementById('try-ai-share-menu');
@@ -1263,6 +1264,13 @@
     });
 
     retryBtn.addEventListener('click', resetState);
+
+    if (tailoringBtn) {
+      tailoringBtn.addEventListener('click', function () {
+        closeModal();
+        if (window.openTailoringModal) window.openTailoringModal();
+      });
+    }
 
     function handleFile(file) {
       if (!file || file.type.indexOf('image/') !== 0) {
@@ -1636,6 +1644,7 @@
           resultImg.src = outputImageUrl;
           showResultStep(true);
           setStatus(I18N.uploadSuccess, 'success');
+          if (window.refreshTryAiGallery) window.refreshTryAiGallery();
         })
         .catch(function (err) {
           console.error('Try with AI error:', err);
