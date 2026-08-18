@@ -293,6 +293,7 @@
     },
     "brand_marquee_aQFqpK": {
       "type": "brand-marquee",
+      "disabled": true,
       "name": "t:sections.brand_marquee.name",
       "settings": {
         "heading": "Other Popular Brands Available",
@@ -454,6 +455,9 @@
             "show_sample_reviews": true,
             "reviews_selection": "store_reviews",
             "products": [],
+            "filter_pinned": false,
+            "filter_featured": false,
+            "filter_custom_tags": "",
             "star_rating": "4_to_5_star",
             "show_review_media": true,
             "display_order": "most_recent",
