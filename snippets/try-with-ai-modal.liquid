@@ -32,6 +32,8 @@
   data-product-url="{{ shop.url }}{{ product.url }}"
   data-product-title="{{ product.title | escape }}"
   data-customer-id="{{ customer.id }}"
+  data-customer-name="{{ customer.name | escape }}"
+  data-customer-email="{{ customer.email | escape }}"
   data-privacy-url="{{ pages.privacy-policy.url | default: '/pages/privacy-policy' }}"
   data-i18n-upload-button="{{ 'try_with_ai.upload_button' | t | escape }}"
   data-i18n-uploading="{{ 'try_with_ai.uploading' | t | escape }}"
@@ -979,6 +981,8 @@
     var PRODUCT_TITLE           = modal.dataset.productTitle || '';
     var PRIVACY_URL             = modal.dataset.privacyUrl || '/pages/privacy-policy';
     var CUSTOMER_ID             = modal.dataset.customerId || '';
+    var CUSTOMER_NAME           = modal.dataset.customerName || '';
+    var CUSTOMER_EMAIL          = modal.dataset.customerEmail || '';
     var POLL_INTERVAL_MS        = 2500;
     var POLL_TIMEOUT_MS         = 120000;
     var ESTIMATED_DURATION_MS   = 45000;
@@ -1564,6 +1568,9 @@
         userImageUrl: userImageUrl,
         privacyPolicyAccepted: true
       };
+      if (CUSTOMER_NAME) payload.customerName = CUSTOMER_NAME;
+      if (CUSTOMER_EMAIL) payload.customerEmail = CUSTOMER_EMAIL;
+      if (PRODUCT_TITLE) payload.productName = PRODUCT_TITLE;
       debugLog('creating try-on job', BACKEND_URL + '/api/try-on', payload);
       return fetch(BACKEND_URL + '/api/try-on', {
         method: 'POST',
