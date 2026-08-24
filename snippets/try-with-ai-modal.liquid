@@ -1,0 +1,1677 @@
+{% doc %}
+  Renders the "Try with AI" upload modal. Customer picks/uploads a photo of
+  themselves; the photo is uploaded directly to the KC Wear AI backend, which
+  generates an AI saree try-on image using the product image, and the result
+  is polled for and displayed.
+
+  Requires the KC Wear AI backend base URL, configured via the theme setting
+  `try_with_ai_backend_url`.
+
+  @param {product} product - The product being tried on
+  @param {string} [backend_url] - Base URL of the KC Wear AI backend (e.g. https://kc-wear-ai.vercel.app)
+
+  @example
+  {% render 'try-with-ai-modal', product: product, backend_url: settings.try_with_ai_backend_url %}
+{% enddoc %}
+
+{%- liquid
+  assign try_ai_category = product.type | default: 'Saree'
+  assign try_ai_category_lower = try_ai_category | downcase
+-%}
+
+<div
+  class="try-ai-modal"
+  id="try-ai-modal"
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+  aria-label="{{ 'try_with_ai.modal_title' | t | escape }}"
+  data-backend-url="{{ backend_url }}"
+  data-product-image="https:{{ product.images[1] | default: product.featured_image | image_url: width: 1024 }}"
+  data-product-id="{{ product.id }}"
+  data-product-url="{{ shop.url }}{{ product.url }}"
+  data-product-title="{{ product.title | escape }}"
+  data-customer-id="{{ customer.id }}"
+  data-customer-name="{{ customer.name | escape }}"
+  data-customer-email="{{ customer.email | escape }}"
+  data-privacy-url="{{ pages.privacy-policy.url | default: '/pages/privacy-policy' }}"
+  data-i18n-upload-button="{{ 'try_with_ai.upload_button' | t | escape }}"
+  data-i18n-uploading="{{ 'try_with_ai.uploading' | t | escape }}"
+  data-i18n-generating="{{ 'try_with_ai.generating' | t | escape }}"
+  data-i18n-upload-success="{{ 'try_with_ai.upload_success' | t | escape }}"
+  data-i18n-upload-error="{{ 'try_with_ai.upload_error' | t | escape }}"
+  data-i18n-step-uploading="{{ 'try_with_ai.step_uploading' | t | escape }}"
+  data-i18n-step-styling="{{ 'try_with_ai.step_styling' | t | escape }}"
+  data-i18n-step-draping="{{ 'try_with_ai.step_draping' | t | escape }}"
+  data-i18n-step-adjusting="{{ 'try_with_ai.step_adjusting' | t | escape }}"
+  data-i18n-step-finishing="{{ 'try_with_ai.step_finishing' | t | escape }}"
+  data-i18n-step-almost-done="{{ 'try_with_ai.step_almost_done' | t | escape }}"
+  data-i18n-step-loving-it="{{ 'try_with_ai.step_loving_it' | t }}"
+  data-i18n-view-original="{{ 'try_with_ai.view_original' | t | escape }}"
+  data-i18n-view-result="{{ 'try_with_ai.view_result' | t | escape }}"
+  data-i18n-add-to-cart="{{ 'try_with_ai.add_to_cart' | t | escape }}"
+  data-i18n-added-to-cart="{{ 'try_with_ai.added_to_cart' | t | escape }}"
+  data-i18n-download="{{ 'try_with_ai.download' | t | escape }}"
+  data-i18n-share="{{ 'try_with_ai.share' | t | escape }}"
+  data-i18n-privacy-required="{{ 'try_with_ai.privacy_required' | t | escape }}"
+  data-i18n-share-text="{{ 'try_with_ai.share_text' | t: product_title: product.title, category: try_ai_category, category_lower: try_ai_category_lower | escape }}"
+  data-i18n-credits-remaining="{{ 'try_with_ai.credits_remaining' | t | escape }}"
+  data-i18n-credits-exhausted="{{ 'try_with_ai.credits_exhausted' | t | escape }}"
+>
+  <div class="try-ai-modal__backdrop"></div>
+  <div class="try-ai-modal__panel">
+
+    <button type="button" class="try-ai-modal__close" aria-label="{{ 'try_with_ai.close' | t }}">
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <div class="try-ai-modal__body">
+
+      <div class="try-ai-modal__step" id="try-ai-step-upload">
+        <label class="try-ai-modal__dropzone" for="try-ai-file-input" id="try-ai-dropzone">
+          <img class="try-ai-modal__preview-img" id="try-ai-preview-img" alt="" hidden>
+          <span class="try-ai-modal__dropzone-placeholder" id="try-ai-dropzone-placeholder">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 16V4M12 4l-4 4M12 4l4 4"/>
+              <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
+            </svg>
+            <span class="try-ai-modal__dropzone-label">{{ 'try_with_ai.choose_photo' | t }}</span>
+            <span class="try-ai-modal__dropzone-helper">{{ 'try_with_ai.choose_photo_helper' | t }}</span>
+          </span>
+        </label>
+        <input type="file" accept="image/*" id="try-ai-file-input" class="try-ai-modal__file-input">
+
+        <ul class="try-ai-modal__tips">
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            {{ 'try_with_ai.tip_full_length' | t }}
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            {{ 'try_with_ai.tip_plain_background' | t }}
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            {{ 'try_with_ai.tip_even_lighting' | t }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="try-ai-modal__step" id="try-ai-step-loading" hidden>
+        <div class="try-ai-modal__loading">
+          <img class="try-ai-modal__loading-img" id="try-ai-loading-img" alt="" aria-hidden="true">
+          <div class="try-ai-modal__loading-mask" aria-hidden="true"></div>
+          <div class="try-ai-modal__loading-scan" aria-hidden="true">
+            <span class="try-ai-modal__loading-scan-line"></span>
+            <span class="try-ai-modal__loading-corner try-ai-modal__loading-corner--tl"></span>
+            <span class="try-ai-modal__loading-corner try-ai-modal__loading-corner--tr"></span>
+            <span class="try-ai-modal__loading-corner try-ai-modal__loading-corner--bl"></span>
+            <span class="try-ai-modal__loading-corner try-ai-modal__loading-corner--br"></span>
+          </div>
+          <div class="try-ai-modal__loading-overlay">
+            <div class="try-ai-modal__loading-sparkle" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2.5l1.8 4.9 4.9 1.8-4.9 1.8L12 15.9l-1.8-4.9-4.9-1.8 4.9-1.8L12 2.5z"/>
+              </svg>
+            </div>
+            <p class="try-ai-modal__loading-step" id="try-ai-loading-step"></p>
+            <div class="try-ai-modal__loading-progress">
+              <div class="try-ai-modal__loading-progress-track">
+                <div class="try-ai-modal__loading-progress-fill" id="try-ai-progress-fill"></div>
+              </div>
+              <div class="try-ai-modal__loading-progress-meta">
+                <span id="try-ai-progress-pct">0%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="try-ai-modal__step try-ai-modal__step--result" id="try-ai-step-result" hidden>
+        <div class="try-ai-modal__compare" id="try-ai-compare">
+          <img class="try-ai-modal__compare-img try-ai-modal__compare-img--after" id="try-ai-result-img" alt="{{ 'try_with_ai.result_alt' | t }}">
+          <div class="try-ai-modal__compare-before-wrap" id="try-ai-compare-before-wrap">
+            <img class="try-ai-modal__compare-img try-ai-modal__compare-img--before" id="try-ai-original-img" alt="{{ 'try_with_ai.original_alt' | t }}">
+          </div>
+          <div class="try-ai-modal__compare-handle" id="try-ai-compare-handle">
+            <span class="try-ai-modal__compare-handle-grip">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/>
+              </svg>
+            </span>
+          </div>
+          <span class="try-ai-modal__compare-label try-ai-modal__compare-label--before">{{ 'try_with_ai.view_original' | t }}</span>
+          <span class="try-ai-modal__compare-label try-ai-modal__compare-label--after">{{ 'try_with_ai.view_result' | t }}</span>
+        </div>
+
+        <div class="try-ai-modal__product-panel" id="try-ai-product-panel">
+          <h3 class="product-page__title try-ai-modal__product-title">{{ product.title }}</h3>
+
+          {%- if product.collections.first != blank -%}
+            <a href="{{ product.collections.first.url }}" class="product-page__vendor">{{ product.collections.first.title }}</a>
+          {%- endif -%}
+
+          <div class="product-page__price-row">
+            <span class="product-page__price" id="try-ai-price-display">
+              <span class="product-page__price-current{% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %} is-on-sale{% endif %}">{{ product.selected_or_first_available_variant.price | money }}</span>
+              <span class="product-page__price-compare" {% unless product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}style="display: none;"{% endunless %}>
+                {{ product.selected_or_first_available_variant.compare_at_price | money }}
+              </span>
+              <span class="product-page__price-discount-badge" {% unless product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}style="display: none !important;"{% endunless %}>
+                {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
+                  {%- assign try_ai_savings = product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | times: 100 | divided_by: product.selected_or_first_available_variant.compare_at_price -%}
+                  -{{ try_ai_savings }}%
+                {%- endif -%}
+              </span>
+            </span>
+          </div>
+
+          <div class="product-page__stock-alert" id="try-ai-stock-alert" style="display:none"></div>
+
+          {%- if product.variants.size > 1 -%}
+            {%- for option in product.options_with_values -%}
+              {%- assign try_ai_option_index = forloop.index0 -%}
+              {%- assign try_ai_current_option_value = product.selected_or_first_available_variant.options[try_ai_option_index] -%}
+              <div class="try-ai-modal__option">
+                <label class="product-page__option-label">{{ option.name }}</label>
+                <div class="product-page__option-values try-ai-modal__option-values">
+                  {%- for value in option.values -%}
+                    <button type="button" class="product-page__option-btn try-ai-modal__option-btn{% if try_ai_current_option_value == value %} is-selected{% endif %}" data-option-index="{{ try_ai_option_index }}" data-value="{{ value }}">{{ value }}</button>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+
+          {%- if product.metafields.custom.is_customisable.value == true -%}
+            <button type="button" class="product-page__stitching-btn" id="try-ai-tailoring-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
+                <line x1="20" y1="4" x2="8.12" y2="15.88"/>
+                <line x1="14.47" y1="14.48" x2="20" y2="20"/>
+                <line x1="8.12" y1="8.12" x2="12" y2="12"/>
+              </svg>
+              <span class="product-page__stitching-btn-text">
+                <span class="product-page__stitching-btn-title">{{ 'tailoring.stitching_btn' | t }}</span>
+                <span class="product-page__stitching-btn-sub">Add tailoring</span>
+              </span>
+              <span class="product-page__stitching-btn-badge">Customise</span>
+            </button>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <p class="try-ai-modal__status" id="try-ai-status" aria-live="polite"></p>
+    </div>
+
+    <div class="try-ai-modal__footer try-ai-modal__footer--upload" id="try-ai-footer-upload">
+      <p class="try-ai-modal__credits" id="try-ai-credits" hidden></p>
+      <label class="try-ai-modal__privacy" for="try-ai-privacy-checkbox">
+        <input type="checkbox" id="try-ai-privacy-checkbox">
+        <span>
+          {{ 'try_with_ai.privacy_text_prefix' | t }}
+          <a href="{{ pages.privacy-policy.url | default: '/pages/privacy-policy' }}" target="_blank" rel="noopener">{{ 'try_with_ai.privacy_link_text' | t }}</a>
+        </span>
+      </label>
+      <button type="button" class="try-ai-modal__btn try-ai-modal__btn--primary try-ai-modal__btn--block" id="try-ai-upload-btn" disabled>
+        {{ 'try_with_ai.upload_button' | t }}
+      </button>
+    </div>
+
+    <div class="try-ai-modal__footer try-ai-modal__footer--result" id="try-ai-footer-result" hidden>
+      <div class="try-ai-modal__footer-row">
+        <button type="button" class="try-ai-modal__ghost-btn" id="try-ai-download-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12M12 15l-4-4M12 15l4-4"/>
+            <path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
+          </svg>
+          <span>{{ 'try_with_ai.save' | t }}</span>
+        </button>
+        <div class="try-ai-modal__share-wrap">
+          <button type="button" class="try-ai-modal__ghost-btn" id="try-ai-share-btn" aria-haspopup="true" aria-expanded="false">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="18" cy="5" r="2.4"/><circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="19" r="2.4"/>
+              <path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/>
+            </svg>
+            <span>{{ 'try_with_ai.share' | t }}</span>
+          </button>
+          <div class="try-ai-modal__share-menu" id="try-ai-share-menu" hidden>
+            <button type="button" class="try-ai-modal__share-option" data-share="whatsapp">
+              <span class="try-ai-modal__share-icon try-ai-modal__share-icon--whatsapp">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1-.2.2-.6.9-.8 1.1-.1.2-.3.2-.5.1-1.4-.6-2.3-1.4-3.2-2.8-.1-.2-.1-.4.1-.5.2-.2.5-.5.6-.7.1-.2.1-.4 0-.6-.1-.2-.7-1.6-.9-2.1-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.2-.6.4-.7.8-1 1.7-1 2.7.1 1.5 1.1 3 2.5 4.2 1.7 1.5 3.1 2 5 2.3.5.1 1 0 1.4-.1.5-.2 1.4-1 1.6-1.5.2-.5.2-.9.1-1-.1-.1-.2-.1-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.5 5.2L2 22l4.9-1.4C8.3 21.5 10.1 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.7 0-3.4-.5-4.8-1.4l-.3-.2-3 .8.8-3-.2-.3C3.5 14.5 3 13.3 3 12c0-4.9 4.1-9 9-9s9 4.1 9 9-4.1 9.2-9 9.2z"/></svg>
+              </span>
+              <span>WhatsApp</span>
+            </button>
+            {% comment %}
+            <button type="button" class="try-ai-modal__share-option" data-share="pinterest">
+              <span class="try-ai-modal__share-icon try-ai-modal__share-icon--pinterest">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3-.1-.8-.2-2 0-2.8.2-.8 1.3-5.4 1.3-5.4s-.3-.7-.3-1.6c0-1.6.9-2.7 2-2.7 1 0 1.4.7 1.4 1.6 0 1-.6 2.4-.9 3.7-.3 1.1.5 2 1.6 2 1.9 0 3.2-2.4 3.2-5.3 0-2.2-1.5-3.8-4.2-3.8-3.1 0-5 2.3-5 4.8 0 .9.3 1.5.7 2 .2.2.2.3.1.5l-.3 1c-.1.3-.3.4-.6.3-1.6-.7-2.4-2.5-2.4-4.6 0-3.4 2.9-7.5 8.6-7.5 4.6 0 7.6 3.3 7.6 6.9 0 4.7-2.7 8.2-6.6 8.2-1.3 0-2.6-.7-3-1.6 0 0-.7 2.9-.9 3.6-.2.8-.6 1.6-1 2.2.9.3 1.9.4 2.9.4 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+              </span>
+              <span>Pinterest</span>
+            </button>
+            {% endcomment %}
+            <button type="button" class="try-ai-modal__share-option" data-share="instagram">
+              <span class="try-ai-modal__share-icon try-ai-modal__share-icon--instagram">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c-2.7 0-3.1 0-4.1.1-1.1 0-1.8.2-2.4.4-.7.3-1.2.6-1.7 1.1-.5.5-.9 1.1-1.1 1.7-.2.6-.4 1.4-.4 2.4C2.2 8.7 2.2 9.1 2.2 12s0 3.1.1 4.1c0 1.1.2 1.8.4 2.4.3.7.6 1.2 1.1 1.7.5.5 1.1.9 1.7 1.1.6.2 1.4.4 2.4.4 1 .1 1.4.1 4.1.1s3.1 0 4.1-.1c1.1 0 1.8-.2 2.4-.4.7-.3 1.2-.6 1.7-1.1.5-.5.9-1.1 1.1-1.7.2-.6.4-1.4.4-2.4.1-1 .1-1.4.1-4.1s0-3.1-.1-4.1c0-1.1-.2-1.8-.4-2.4-.3-.7-.6-1.2-1.1-1.7-.5-.5-1.1-.9-1.7-1.1-.6-.2-1.4-.4-2.4-.4C15.1 2.2 14.7 2.2 12 2.2zm0 1.8c2.6 0 3 0 4 .1.9 0 1.5.2 1.8.3.5.2.8.4 1.1.7.3.3.6.7.7 1.1.1.3.3.9.3 1.8.1 1 .1 1.4.1 4s0 3-.1 4c0 .9-.2 1.5-.3 1.8-.2.5-.4.8-.7 1.1-.3.3-.7.6-1.1.7-.3.1-.9.3-1.8.3-1 .1-1.4.1-4 .1s-3 0-4-.1c-.9 0-1.5-.2-1.8-.3-.5-.2-.8-.4-1.1-.7-.3-.3-.6-.7-.7-1.1-.1-.3-.3-.9-.3-1.8-.1-1-.1-1.4-.1-4s0-3 .1-4c0-.9.2-1.5.3-1.8.2-.5.4-.8.7-1.1.3-.3.7-.6 1.1-.7.3-.1.9-.3 1.8-.3 1-.1 1.4-.1 4-.1z"/><path d="M12 7a5 5 0 100 10 5 5 0 000-10zm0 8.2a3.2 3.2 0 110-6.4 3.2 3.2 0 010 6.4z"/><circle cx="17.4" cy="6.6" r="1.2"/></svg>
+              </span>
+              <span>Instagram</span>
+            </button>
+            {% comment %}
+            <button type="button" class="try-ai-modal__share-option" data-share="snapchat">
+              <span class="try-ai-modal__share-icon try-ai-modal__share-icon--snapchat">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5c3 0 5 2.2 5 5.4 0 1 0 2 .1 2.6.1.3.6.5 1 .6.5.1 1.1.4 1.1.9 0 .4-.4.7-.8.9.2.5-.1.9-.6 1.1-.4.1-.4.3-.3.6.1.3.3.7-.2.9-.4.2-1 .1-1.4.3-.3.2-.3.7-.9.9-.6.2-1.3-.2-2.2-.2-.8 0-1.3.6-2.4.6s-1.6-.6-2.4-.6c-.9 0-1.6.4-2.2.2-.6-.2-.6-.7-.9-.9-.4-.2-1-.1-1.4-.3-.5-.2-.3-.6-.2-.9.1-.3.1-.5-.3-.6-.5-.2-.8-.6-.6-1.1-.4-.2-.8-.5-.8-.9 0-.5.6-.8 1.1-.9.4-.1.9-.3 1-.6.1-.6.1-1.6.1-2.6 0-3.2 2-5.4 5-5.4z"/></svg>
+              </span>
+              <span>Snapchat</span>
+            </button>
+            <button type="button" class="try-ai-modal__share-option" data-share="copy">
+              <span class="try-ai-modal__share-icon try-ai-modal__share-icon--copy">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>
+              </span>
+              <span>{{ 'try_with_ai.copy_link' | t }}</span>
+            </button>
+            {% endcomment %}
+          </div>
+        </div>
+
+        <button type="button" class="try-ai-modal__btn try-ai-modal__btn--primary" id="try-ai-atc-btn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 7h12l-1 13H7L6 7z"/>
+            <path d="M9 7V6a3 3 0 016 0v1"/>
+          </svg>
+          <span>{{ 'try_with_ai.add_to_cart' | t }}</span>
+        </button>
+      </div>
+
+      <button type="button" class="try-ai-modal__retry-link" id="try-ai-retry-btn">
+        {{ 'try_with_ai.try_another_photo' | t }}
+      </button>
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .try-ai-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .try-ai-modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .try-ai-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+  }
+  .try-ai-modal__panel {
+    position: relative;
+    background: #faf8f4;
+    border-radius: 12px;
+    width: 94%;
+    max-width: 460px;
+    max-height: 96vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(10px);
+    transition: transform 0.25s ease, max-width 0.25s ease;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  }
+  .try-ai-modal.is-result-active .try-ai-modal__panel {
+    max-width: 980px;
+  }
+  .try-ai-modal.is-open .try-ai-modal__panel {
+    transform: translateY(0);
+  }
+
+  @keyframes try-ai-btn-icon-twinkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.75; transform: scale(0.9); }
+  }
+
+  .try-ai-modal__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    background: #fff;
+    border: none;
+    cursor: pointer;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    transition: color 0.15s;
+  }
+  .try-ai-modal__close:hover { color: #666; }
+
+  .try-ai-modal__body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 20px 20px;
+  }
+
+  .try-ai-modal__dropzone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 220px;
+    margin: 0 auto;
+    border: 1.5px dashed #d4cdc4;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .try-ai-modal__dropzone .try-ai-modal__preview-img {
+    height: 100%;
+  }
+  .try-ai-modal__dropzone:hover {
+    border-color: #2e1f1f;
+  }
+  .try-ai-modal__dropzone.is-dragover {
+    border-color: #9c2a8f;
+    background: #fbf3f9;
+  }
+  .try-ai-modal__dropzone-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 0 20px;
+    color: #888;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    text-align: center;
+  }
+  .try-ai-modal__dropzone-placeholder svg {
+    margin-bottom: 6px;
+  }
+  .try-ai-modal__dropzone-label {
+    color: #2e1f1f;
+    font-weight: 600;
+  }
+  .try-ai-modal__dropzone-helper {
+    color: #999;
+    font-size: 0.72rem;
+  }
+  .try-ai-modal__dropzone-placeholder[hidden] {
+    display: none;
+  }
+  .try-ai-modal__preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .try-ai-modal__preview-img[hidden] {
+    display: none;
+  }
+  .try-ai-modal__file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .try-ai-modal__step[hidden] {
+    display: none;
+  }
+
+  /* ── Photo tips checklist ── */
+  .try-ai-modal__tips {
+    list-style: none;
+    margin: 12px auto 0;
+    padding: 0;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .try-ai-modal__tips li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    color: #55504a;
+  }
+  .try-ai-modal__tips svg {
+    flex-shrink: 0;
+    color: #2e7d32;
+  }
+
+  .try-ai-modal__credits {
+    margin: 0 0 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    color: #888;
+    text-align: center;
+  }
+  .try-ai-modal__credits--low {
+    color: #b3261e;
+  }
+
+  .try-ai-modal__privacy {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    line-height: 1.4;
+    color: #666;
+    cursor: pointer;
+  }
+  .try-ai-modal__privacy input {
+    margin-top: 2px;
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+    accent-color: #993556;
+    cursor: pointer;
+  }
+  .try-ai-modal__privacy a {
+    color: #2e1f1f;
+    text-decoration: underline;
+  }
+
+  /* ── Loading state: AI scan effect over the uploaded photo ── */
+  .try-ai-modal__loading {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 2 / 3;
+    max-height: 520px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1a1420;
+    border: 1.5px solid #e8e2d9;
+  }
+  .try-ai-modal__loading-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.7) brightness(0.55) blur(6px);
+    transform: scale(1.05);
+  }
+  .try-ai-modal__loading-mask {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 14, 26, 0.35);
+  }
+  .try-ai-modal__loading-scan {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .try-ai-modal__loading-scan-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #d98a2b, #c3134e, #9c2a8f, transparent);
+    box-shadow: 0 0 16px 3px rgba(195, 19, 78, 0.7);
+    animation: try-ai-scan-move 2.6s ease-in-out infinite;
+  }
+  @keyframes try-ai-scan-move {
+    0%   { top: 4%; opacity: 0; }
+    8%   { opacity: 1; }
+    50%  { top: 92%; opacity: 1; }
+    92%  { opacity: 1; }
+    100% { top: 4%; opacity: 0; }
+  }
+  .try-ai-modal__loading-corner {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border: 2px solid rgba(255,255,255,0.85);
+    opacity: 0.9;
+  }
+  .try-ai-modal__loading-corner--tl {
+    top: 14px; left: 14px;
+    border-right: none; border-bottom: none;
+    border-radius: 4px 0 0 0;
+  }
+  .try-ai-modal__loading-corner--tr {
+    top: 14px; right: 14px;
+    border-left: none; border-bottom: none;
+    border-radius: 0 4px 0 0;
+  }
+  .try-ai-modal__loading-corner--bl {
+    bottom: 14px; left: 14px;
+    border-right: none; border-top: none;
+    border-radius: 0 0 0 4px;
+  }
+  .try-ai-modal__loading-corner--br {
+    bottom: 14px; right: 14px;
+    border-left: none; border-top: none;
+    border-radius: 0 0 4px 0;
+  }
+  .try-ai-modal__loading-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 28px 20px 24px;
+    background: linear-gradient(180deg, transparent, rgba(20, 14, 26, 0.9) 45%);
+  }
+  .try-ai-modal__loading-sparkle {
+    color: #fff;
+    filter: drop-shadow(0 0 8px rgba(195, 19, 78, 0.8));
+    animation: try-ai-btn-icon-twinkle 1.6s ease-in-out infinite;
+  }
+  .try-ai-modal__loading-step {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    color: #fff;
+    margin: 0;
+    text-align: center;
+    min-height: 1.4em;
+  }
+  .try-ai-modal__loading-progress {
+    width: 100%;
+    max-width: 260px;
+  }
+  .try-ai-modal__loading-progress-track {
+    width: 100%;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.2);
+    overflow: hidden;
+  }
+  .try-ai-modal__loading-progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #d98a2b, #c3134e, #9c2a8f);
+    transition: width 0.6s ease;
+  }
+  .try-ai-modal__loading-progress-meta {
+    display: flex;
+    justify-content: center;
+    margin-top: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.75);
+  }
+
+  /* ── Result step: image left, product panel right ── */
+  .try-ai-modal__step--result {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  @media screen and (min-width: 700px) {
+    .try-ai-modal__step--result {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+    .try-ai-modal__step--result .try-ai-modal__compare {
+      flex: 0 0 320px;
+      margin: 0;
+    }
+    .try-ai-modal__product-panel {
+      flex: 1;
+      min-width: 0;
+      padding-top: 4px;
+    }
+  }
+
+  /* ── Result / before-after compare ── */
+  .try-ai-modal__compare {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 2 / 3;
+    max-height: 520px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    border: 1.5px solid #e8e2d9;
+    user-select: none;
+    touch-action: pan-y;
+  }
+  .try-ai-modal__compare-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+  }
+  .try-ai-modal__compare-before-wrap {
+    position: absolute;
+    inset: 0;
+    width: 50%;
+    overflow: hidden;
+  }
+  .try-ai-modal__compare-before-wrap .try-ai-modal__compare-img {
+    width: var(--compare-width, 100vw);
+    max-width: none;
+  }
+  .try-ai-modal__compare-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 40px;
+    margin-left: -20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: ew-resize;
+  }
+  .try-ai-modal__compare-handle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    margin-left: -1px;
+    background: #fff;
+    box-shadow: 0 0 6px rgba(0,0,0,0.3);
+  }
+  .try-ai-modal__compare-handle-grip {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    color: #2e1f1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
+  .try-ai-modal__compare-label {
+    position: absolute;
+    bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    padding: 3px 10px;
+    border-radius: 20px;
+    pointer-events: none;
+  }
+  .try-ai-modal__compare-label--before { left: 10px; }
+  .try-ai-modal__compare-label--after { right: 10px; }
+
+  .try-ai-modal__compare--no-original .try-ai-modal__compare-before-wrap,
+  .try-ai-modal__compare--no-original .try-ai-modal__compare-handle,
+  .try-ai-modal__compare--no-original .try-ai-modal__compare-label {
+    display: none;
+  }
+
+  /* ── Result: product panel (mirrors product page style) ── */
+  .try-ai-modal__product-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .try-ai-modal__product-title.product-page__title {
+    font-size: 1.15rem !important;
+    margin: 0;
+  }
+  .try-ai-modal__product-panel .product-page__vendor {
+    align-self: flex-start;
+  }
+  .try-ai-modal__product-panel .product-page__price-row {
+    margin: 2px 0 0;
+  }
+  .try-ai-modal__product-panel .product-page__stock-alert {
+    margin-bottom: 0;
+  }
+  .try-ai-modal__option {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .try-ai-modal__product-panel .product-page__stitching-btn {
+    margin-top: 4px;
+  }
+
+  .try-ai-modal__status {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    margin: 12px 0 0;
+    min-height: 1.2em;
+    color: #666;
+  }
+  .try-ai-modal__status.is-error {
+    color: #ce0570;
+  }
+  .try-ai-modal__status.is-success {
+    color: #2e7d32;
+  }
+
+  .try-ai-modal__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 20px;
+    border-top: 1px solid #e8e2d9;
+    flex-shrink: 0;
+    background: #faf8f4;
+  }
+  .try-ai-modal__footer[hidden] {
+    display: none;
+  }
+  .try-ai-modal__footer--upload {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .try-ai-modal__footer .try-ai-modal__privacy {
+    flex: 1;
+    min-width: 180px;
+  }
+  .try-ai-modal__footer--upload .try-ai-modal__btn {
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  /* ── Buttons ── */
+  .try-ai-modal__btn {
+    height: 46px;
+    padding: 0 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s, background 0.15s, border-color 0.15s;
+    border: none;
+  }
+  .try-ai-modal__btn--block {
+    width: 100%;
+  }
+  .try-ai-modal__btn--primary {
+    background: #993556;
+    color: #fff;
+  }
+  .try-ai-modal__btn--primary:hover {
+    opacity: 0.9;
+  }
+  .try-ai-modal__btn--primary:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .try-ai-modal__btn.is-loading {
+    opacity: 0.7;
+    cursor: wait;
+  }
+
+  .try-ai-modal__footer-row {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .try-ai-modal__footer-row .try-ai-modal__btn {
+    flex: 1;
+    min-width: 0;
+  }
+  .try-ai-modal__ghost-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 46px;
+    padding: 0 16px;
+    background: transparent;
+    border: 1.5px solid #d4cdc4;
+    border-radius: 8px;
+    color: #2e1f1f;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .try-ai-modal__ghost-btn:hover {
+    border-color: #2e1f1f;
+    background: #fff;
+  }
+  .try-ai-modal__share-wrap {
+    position: relative;
+    flex-shrink: 0;
+  }
+  .try-ai-modal__share-menu {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    z-index: 10;
+    background: #fff;
+    border: 1px solid #e8e2d9;
+    border-radius: 8px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.16);
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    min-width: 180px;
+  }
+  .try-ai-modal__share-menu[hidden] {
+    display: none;
+  }
+  .try-ai-modal__share-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    color: #2e1f1f;
+    text-align: left;
+  }
+  .try-ai-modal__share-option:hover {
+    background: #f5f1eb;
+  }
+  .try-ai-modal__share-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  .try-ai-modal__share-icon--whatsapp { color: #25d366; }
+  .try-ai-modal__share-icon--pinterest { color: #e60023; }
+  .try-ai-modal__share-icon--instagram { color: #c3134e; }
+  .try-ai-modal__share-icon--snapchat { color: #b9950a; }
+  .try-ai-modal__share-icon--copy { color: #666; }
+
+  .try-ai-modal__retry-link {
+    align-self: center;
+    background: none;
+    border: none;
+    padding: 2px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #666;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .try-ai-modal__retry-link:hover {
+    color: #2e1f1f;
+  }
+
+  @media screen and (max-width: 600px) {
+    .try-ai-modal__panel {
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      max-height: 100%;
+      border-radius: 0;
+      position: fixed;
+      inset: 0;
+    }
+    .try-ai-modal__footer--upload {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .try-ai-modal__footer--upload .try-ai-modal__btn {
+      width: 100%;
+    }
+    .try-ai-modal__dropzone {
+      width: 100%;
+      max-width: 320px;
+      height: auto;
+      aspect-ratio: 3 / 4;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    var modal = document.getElementById('try-ai-modal');
+    if (!modal) return;
+
+    var BACKEND_URL             = (modal.dataset.backendUrl || '').replace(/\/+$/, '');
+    var PRODUCT_IMAGE_URL       = modal.dataset.productImage || '';
+    var PRODUCT_ID              = modal.dataset.productId || '';
+    var PRODUCT_URL             = modal.dataset.productUrl || '';
+    var PRODUCT_TITLE           = modal.dataset.productTitle || '';
+    var PRIVACY_URL             = modal.dataset.privacyUrl || '/pages/privacy-policy';
+    var CUSTOMER_ID             = modal.dataset.customerId || '';
+    var CUSTOMER_NAME           = modal.dataset.customerName || '';
+    var CUSTOMER_EMAIL          = modal.dataset.customerEmail || '';
+    var POLL_INTERVAL_MS        = 2500;
+    var POLL_TIMEOUT_MS         = 120000;
+    var ESTIMATED_DURATION_MS   = 45000;
+    var DEBUG = /[?&]try_ai_debug=1/.test(window.location.search) || window.localStorage.getItem('tryAiDebug') === '1';
+
+    function debugLog() {
+      if (!DEBUG) return;
+      var args = Array.prototype.slice.call(arguments);
+      args.unshift('[Try with AI]');
+      console.log.apply(console, args);
+    }
+
+    var I18N = {
+      uploadButton:  modal.dataset.i18nUploadButton  || 'Generate try-on',
+      uploading:     modal.dataset.i18nUploading      || 'Uploading…',
+      generating:    modal.dataset.i18nGenerating     || 'Generating your try-on…',
+      uploadSuccess: modal.dataset.i18nUploadSuccess  || 'Here is your AI try-on!',
+      uploadError:   modal.dataset.i18nUploadError    || 'Something went wrong. Please try again.',
+      stepUploading: modal.dataset.i18nStepUploading  || 'Uploading your photo…',
+      stepStyling:   modal.dataset.i18nStepStyling    || 'AI is styling your saree…',
+      stepDraping:   modal.dataset.i18nStepDraping    || 'Draping fabric…',
+      stepAdjusting: modal.dataset.i18nStepAdjusting  || 'Adjusting fit…',
+      stepFinishing: modal.dataset.i18nStepFinishing  || 'Finishing details…',
+      stepAlmostDone: modal.dataset.i18nStepAlmostDone || 'Almost done…',
+      stepLovingIt:   modal.dataset.i18nStepLovingIt   || 'Hope you\'ll love the output…',
+      addToCart:     modal.dataset.i18nAddToCart      || 'Add to bag',
+      addedToCart:   modal.dataset.i18nAddedToCart    || 'Added!',
+      download:      modal.dataset.i18nDownload       || 'Save',
+      share:         modal.dataset.i18nShare          || 'Share',
+      privacyRequired: modal.dataset.i18nPrivacyRequired || 'Please agree to the Privacy Policy to continue.',
+      shareText:       modal.dataset.i18nShareText        || 'Check out my AI saree try-on from ' + PRODUCT_TITLE + '!',
+      creditsRemaining: modal.dataset.i18nCreditsRemaining || '{{ remaining }} of {{ limit }} try-ons left today',
+      creditsExhausted: modal.dataset.i18nCreditsExhausted || 'You\'ve used all your try-ons for today. Come back tomorrow!'
+    };
+
+    var dropzone           = document.getElementById('try-ai-dropzone');
+    var fileInput          = document.getElementById('try-ai-file-input');
+    var previewImg         = document.getElementById('try-ai-preview-img');
+    var placeholder        = document.getElementById('try-ai-dropzone-placeholder');
+    var statusEl           = document.getElementById('try-ai-status');
+    var uploadBtn          = document.getElementById('try-ai-upload-btn');
+    var creditsEl          = document.getElementById('try-ai-credits');
+    var retryBtn           = document.getElementById('try-ai-retry-btn');
+    var atcBtn             = document.getElementById('try-ai-atc-btn');
+    var tailoringBtn       = document.getElementById('try-ai-tailoring-btn');
+    var downloadBtn        = document.getElementById('try-ai-download-btn');
+    var shareBtn           = document.getElementById('try-ai-share-btn');
+    var shareMenu          = document.getElementById('try-ai-share-menu');
+    var privacyCheckbox    = document.getElementById('try-ai-privacy-checkbox');
+    var resultImg          = document.getElementById('try-ai-result-img');
+    var originalImg        = document.getElementById('try-ai-original-img');
+    var compareEl          = document.getElementById('try-ai-compare');
+    var compareBeforeWrap  = document.getElementById('try-ai-compare-before-wrap');
+    var compareHandle      = document.getElementById('try-ai-compare-handle');
+    var loadingStepEl      = document.getElementById('try-ai-loading-step');
+    var loadingImg         = document.getElementById('try-ai-loading-img');
+    var progressFillEl     = document.getElementById('try-ai-progress-fill');
+    var progressPctEl      = document.getElementById('try-ai-progress-pct');
+    var modalPriceDisplay  = document.getElementById('try-ai-price-display');
+    var modalStockAlert    = document.getElementById('try-ai-stock-alert');
+    var modalOptionBtns    = modal.querySelectorAll('.try-ai-modal__option-btn');
+
+    var stepUpload  = document.getElementById('try-ai-step-upload');
+    var stepLoading = document.getElementById('try-ai-step-loading');
+    var stepResult  = document.getElementById('try-ai-step-result');
+    var footerUpload = document.getElementById('try-ai-footer-upload');
+    var footerResult = document.getElementById('try-ai-footer-result');
+
+    var selectedFile = null;
+    var pollTimer = null;
+    var loadingStepTimer = null;
+    var progressTimer = null;
+    var progressStartedAt = 0;
+
+    function setStatus(text, type) {
+      statusEl.textContent = text || '';
+      statusEl.classList.remove('is-error', 'is-success');
+      if (type) statusEl.classList.add('is-' + type);
+    }
+
+    function stopPolling() {
+      if (pollTimer) {
+        clearTimeout(pollTimer);
+        pollTimer = null;
+      }
+    }
+
+    function stopLoadingSteps() {
+      if (loadingStepTimer) {
+        clearInterval(loadingStepTimer);
+        loadingStepTimer = null;
+      }
+    }
+
+    function startLoadingSteps() {
+      var steps = [
+        I18N.stepUploading,
+        I18N.stepStyling,
+        I18N.stepDraping,
+        I18N.stepAdjusting,
+        I18N.stepLovingIt,
+        I18N.stepFinishing,
+        I18N.stepAlmostDone
+      ];
+      var i = 0;
+      loadingStepEl.textContent = steps[0];
+      stopLoadingSteps();
+      loadingStepTimer = setInterval(function () {
+        i = Math.min(i + 1, steps.length - 1);
+        loadingStepEl.textContent = steps[i];
+      }, 4000);
+    }
+
+    function stopProgress() {
+      if (progressTimer) {
+        clearInterval(progressTimer);
+        progressTimer = null;
+      }
+    }
+
+    function startProgress() {
+      stopProgress();
+      progressStartedAt = Date.now();
+      progressFillEl.style.width = '0%';
+      progressPctEl.textContent = '0%';
+      progressTimer = setInterval(function () {
+        var elapsed = Date.now() - progressStartedAt;
+        var ratio = Math.min(elapsed / ESTIMATED_DURATION_MS, 0.95);
+        var pct = Math.round(ratio * 100);
+        progressFillEl.style.width = pct + '%';
+        progressPctEl.textContent = pct + '%';
+      }, 400);
+    }
+
+    function finishProgress() {
+      stopProgress();
+      progressFillEl.style.width = '100%';
+      progressPctEl.textContent = '100%';
+    }
+
+    function showUploadStep() {
+      stepUpload.hidden = false;
+      stepLoading.hidden = true;
+      stepResult.hidden = true;
+      footerUpload.hidden = false;
+      footerResult.hidden = true;
+      modal.classList.remove('is-result-active');
+      stopLoadingSteps();
+      stopProgress();
+    }
+
+    function showLoadingStep(photoUrl) {
+      stepUpload.hidden = true;
+      stepLoading.hidden = false;
+      stepResult.hidden = true;
+      footerUpload.hidden = true;
+      footerResult.hidden = true;
+      modal.classList.remove('is-result-active');
+      if (photoUrl) loadingImg.src = photoUrl;
+      startLoadingSteps();
+      startProgress();
+    }
+
+    function syncProductPanel() {
+      var pagePriceDisplay = document.getElementById('product-price-display');
+      if (pagePriceDisplay && modalPriceDisplay) {
+        modalPriceDisplay.innerHTML = pagePriceDisplay.innerHTML;
+      }
+      var pageStockAlert = document.getElementById('stock-alert');
+      if (pageStockAlert && modalStockAlert) {
+        modalStockAlert.className = pageStockAlert.className;
+        modalStockAlert.innerHTML = pageStockAlert.innerHTML;
+        if (pageStockAlert.style.display === 'none') {
+          modalStockAlert.style.display = 'none';
+        } else {
+          modalStockAlert.removeAttribute('style');
+        }
+      }
+      var pageOptionBtns = document.querySelectorAll('.product-page .product-page__option-btn');
+      modalOptionBtns.forEach(function (btn) {
+        var idx = btn.getAttribute('data-option-index');
+        var value = btn.getAttribute('data-value');
+        var isSelected = false;
+        pageOptionBtns.forEach(function (pageBtn) {
+          if (pageBtn.getAttribute('data-option-index') === idx &&
+              pageBtn.getAttribute('data-value') === value &&
+              pageBtn.classList.contains('is-selected')) {
+            isSelected = true;
+          }
+        });
+        btn.classList.toggle('is-selected', isSelected);
+      });
+    }
+
+    modalOptionBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = btn.getAttribute('data-option-index');
+        var value = btn.getAttribute('data-value');
+        var pageBtn = null;
+        document.querySelectorAll('.product-page .product-page__option-btn').forEach(function (candidate) {
+          if (candidate.getAttribute('data-option-index') === idx && candidate.getAttribute('data-value') === value) {
+            pageBtn = candidate;
+          }
+        });
+        if (pageBtn) pageBtn.click();
+        syncProductPanel();
+      });
+    });
+
+    function showResultStep(hasOriginal) {
+      stepUpload.hidden = true;
+      stepLoading.hidden = true;
+      stepResult.hidden = false;
+      footerUpload.hidden = true;
+      footerResult.hidden = false;
+      modal.classList.add('is-result-active');
+      stopLoadingSteps();
+      finishProgress();
+      syncProductPanel();
+      compareEl.classList.toggle('try-ai-modal__compare--no-original', !hasOriginal);
+      if (hasOriginal) {
+        requestAnimationFrame(function () { setCompareRatio(0.5); });
+      }
+    }
+
+    function setCompareRatio(ratio) {
+      ratio = Math.max(0, Math.min(1, ratio));
+      var widthPx = compareEl.getBoundingClientRect().width;
+      compareBeforeWrap.style.width = (ratio * 100) + '%';
+      compareBeforeWrap.style.setProperty('--compare-width', widthPx + 'px');
+      compareHandle.style.left = (ratio * 100) + '%';
+    }
+
+    function resetState() {
+      stopPolling();
+      selectedFile = null;
+      fileInput.value = '';
+      previewImg.src = '';
+      previewImg.hidden = true;
+      placeholder.hidden = false;
+      resultImg.src = '';
+      originalImg.src = '';
+      loadingImg.src = '';
+      compareEl.classList.remove('try-ai-modal__compare--no-original');
+      creditsExhausted = false;
+      uploadBtn.disabled = true;
+      uploadBtn.textContent = I18N.uploadButton;
+      uploadBtn.classList.remove('is-loading');
+      atcBtn.textContent = I18N.addToCart;
+      atcBtn.disabled = false;
+      if (privacyCheckbox) privacyCheckbox.checked = false;
+      closeShareMenu();
+      setStatus('', null);
+      showUploadStep();
+    }
+
+    function openModal(presetResultUrl) {
+      resetState();
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      fetchCredits();
+      if (presetResultUrl) {
+        resultImg.src = presetResultUrl;
+        originalImg.src = '';
+        showResultStep(false);
+      }
+    }
+
+    function closeModal() {
+      stopPolling();
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    modal.querySelectorAll('.try-ai-modal__close').forEach(function (btn) {
+      btn.addEventListener('click', closeModal);
+    });
+    modal.querySelector('.try-ai-modal__backdrop').addEventListener('click', closeModal);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+    });
+
+    retryBtn.addEventListener('click', resetState);
+
+    if (tailoringBtn) {
+      tailoringBtn.addEventListener('click', function () {
+        closeModal();
+        if (window.openTailoringModal) window.openTailoringModal();
+      });
+    }
+
+    function handleFile(file) {
+      if (!file || file.type.indexOf('image/') !== 0) {
+        selectedFile = null;
+        uploadBtn.disabled = true;
+        return;
+      }
+      selectedFile = file;
+      previewImg.src = URL.createObjectURL(file);
+      previewImg.hidden = false;
+      placeholder.hidden = true;
+      uploadBtn.disabled = creditsExhausted;
+      setStatus('', null);
+    }
+
+    fileInput.addEventListener('change', function () {
+      handleFile(fileInput.files && fileInput.files[0]);
+    });
+
+    /* ── Drag & drop (desktop) ── */
+    ['dragenter', 'dragover'].forEach(function (evtName) {
+      dropzone.addEventListener(evtName, function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add('is-dragover');
+      });
+    });
+    ['dragleave', 'dragend'].forEach(function (evtName) {
+      dropzone.addEventListener(evtName, function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('is-dragover');
+      });
+    });
+    dropzone.addEventListener('drop', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.remove('is-dragover');
+      var file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (!file) return;
+      fileInput.value = '';
+      handleFile(file);
+    });
+
+    /* ── Before/after compare slider ── */
+    var dragging = false;
+
+    function ratioFromClientX(clientX) {
+      var rect = compareEl.getBoundingClientRect();
+      return (clientX - rect.left) / rect.width;
+    }
+
+    function onDragMove(clientX) {
+      setCompareRatio(ratioFromClientX(clientX));
+    }
+
+    compareHandle.addEventListener('mousedown', function (e) {
+      dragging = true;
+      e.preventDefault();
+    });
+    compareHandle.addEventListener('touchstart', function () {
+      dragging = true;
+    }, { passive: true });
+
+    document.addEventListener('mousemove', function (e) {
+      if (dragging) onDragMove(e.clientX);
+    });
+    document.addEventListener('touchmove', function (e) {
+      if (dragging && e.touches[0]) onDragMove(e.touches[0].clientX);
+    }, { passive: true });
+
+    document.addEventListener('mouseup', function () { dragging = false; });
+    document.addEventListener('touchend', function () { dragging = false; });
+
+    compareEl.addEventListener('click', function (e) {
+      if (e.target === compareHandle || compareHandle.contains(e.target)) return;
+      onDragMove(e.clientX);
+    });
+
+    window.addEventListener('resize', function () {
+      if (!stepResult.hidden) {
+        var current = compareBeforeWrap.getBoundingClientRect().width / compareEl.getBoundingClientRect().width;
+        setCompareRatio(current);
+      }
+    });
+
+    /* ── Result actions: download / share / add to cart ── */
+    downloadBtn.addEventListener('click', function () {
+      fetch(resultImg.src)
+        .then(function (r) { return r.blob(); })
+        .then(function (blob) {
+          var blobUrl = URL.createObjectURL(blob);
+          var link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = 'try-with-ai-result.jpg';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          setTimeout(function () { URL.revokeObjectURL(blobUrl); }, 1000);
+        })
+        .catch(function () {
+          var link = document.createElement('a');
+          link.href = resultImg.src;
+          link.download = 'try-with-ai-result.jpg';
+          link.target = '_blank';
+          link.rel = 'noopener';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        });
+    });
+
+    function closeShareMenu() {
+      shareMenu.hidden = true;
+      shareBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    function openShareMenu() {
+      shareMenu.hidden = false;
+      shareBtn.setAttribute('aria-expanded', 'true');
+    }
+
+    function canNativeShareFiles() {
+      return !!(navigator.canShare && window.File);
+    }
+
+    function nativeShareImage() {
+      return fetch(resultImg.src)
+        .then(function (r) { return r.blob(); })
+        .then(function (blob) {
+          var file = new File([blob], 'try-with-ai-result.jpg', { type: blob.type || 'image/jpeg' });
+          var shareUrl = PRODUCT_URL || window.location.href;
+          var shareText = I18N.shareText + ' ' + shareUrl;
+          var shareData = { files: [file], title: PRODUCT_TITLE, text: shareText };
+          if (!navigator.canShare(shareData)) {
+            return Promise.reject(new Error('cannot-share-files'));
+          }
+          return navigator.share(shareData);
+        });
+    }
+
+    shareBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (canNativeShareFiles()) {
+        nativeShareImage().catch(function (err) {
+          if (err && err.name === 'AbortError') return;
+          if (shareMenu.hidden) openShareMenu(); else closeShareMenu();
+        });
+        return;
+      }
+      if (shareMenu.hidden) openShareMenu(); else closeShareMenu();
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!shareMenu.hidden && !shareMenu.contains(e.target) && e.target !== shareBtn) {
+        closeShareMenu();
+      }
+    });
+
+    shareMenu.querySelectorAll('.try-ai-modal__share-option').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var network = btn.dataset.share;
+        var shareUrl = PRODUCT_URL || window.location.href;
+        var text = I18N.shareText;
+
+        switch (network) {
+          case 'whatsapp':
+            window.open('https://wa.me/?text=' + encodeURIComponent(text + ' ' + shareUrl), '_blank', 'noopener');
+            break;
+          case 'pinterest':
+            window.open('https://pinterest.com/pin/create/button/?url=' + encodeURIComponent(shareUrl) + '&media=' + encodeURIComponent(resultImg.src) + '&description=' + encodeURIComponent(text), '_blank', 'noopener');
+            break;
+          case 'instagram':
+          case 'snapchat':
+            if (navigator.share) {
+              navigator.share({ title: PRODUCT_TITLE, text: text, url: shareUrl }).catch(function () {});
+            } else if (navigator.clipboard) {
+              navigator.clipboard.writeText(text + ' ' + shareUrl).then(function () {
+                setStatus(I18N.uploadSuccess, 'success');
+              }).catch(function () {});
+            }
+            break;
+          case 'copy':
+            if (navigator.clipboard) {
+              navigator.clipboard.writeText(text + ' ' + shareUrl).catch(function () {});
+            }
+            break;
+        }
+        closeShareMenu();
+      });
+    });
+
+    atcBtn.addEventListener('click', function () {
+      var variantInput = document.getElementById('variant-id-input');
+      var variantId = variantInput && variantInput.value;
+      if (!variantId) return;
+
+      atcBtn.disabled = true;
+      atcBtn.classList.add('is-loading');
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: parseInt(variantId, 10), quantity: 1 })
+      })
+      .then(function (r) { return r.json(); })
+      .then(function () {
+        atcBtn.textContent = I18N.addedToCart;
+        closeModal();
+        window.location.href = '/checkout';
+      })
+      .catch(function (err) {
+        debugLog('add to cart failed', err);
+        atcBtn.disabled = false;
+        atcBtn.classList.remove('is-loading');
+      });
+    });
+
+    function readErrorBody(r) {
+      return r.text().then(function (text) {
+        var message = text;
+        try {
+          var json = JSON.parse(text);
+          message = json.error || (json.errors && json.errors.join(', ')) || json.message || text;
+        } catch (e) {}
+        return message;
+      }).catch(function () { return ''; });
+    }
+
+    function uploadCustomerPhoto(file) {
+      debugLog('uploading photo to', BACKEND_URL + '/api/upload', file);
+      return fetch(BACKEND_URL + '/api/upload', {
+        method: 'POST',
+        body: (function () {
+          var formData = new FormData();
+          formData.append('file', file);
+          return formData;
+        })()
+      }).then(function (r) {
+        if (!r.ok) {
+          return readErrorBody(r).then(function (message) {
+            debugLog('upload failed', r.status, message);
+            throw new Error(message || ('Photo upload failed (' + r.status + ')'));
+          });
+        }
+        return r.json();
+      }).then(function (data) {
+        debugLog('upload response', data);
+        var url = data && data.data && data.data.url;
+        if (!data || !data.success || !url) throw new Error('Backend did not return an uploaded photo URL');
+        return url;
+      });
+    }
+
+    var creditsLimit = null;
+    var creditsExhausted = false;
+
+    function renderCredits(remaining, limit) {
+      if (typeof limit === 'number') creditsLimit = limit;
+      if (!creditsEl) return;
+      if (typeof remaining !== 'number' || typeof creditsLimit !== 'number') {
+        creditsEl.hidden = true;
+        return;
+      }
+      creditsEl.hidden = false;
+      creditsExhausted = remaining <= 0;
+      creditsEl.classList.toggle('try-ai-modal__credits--low', creditsExhausted);
+      creditsEl.textContent = creditsExhausted
+        ? I18N.creditsExhausted
+        : I18N.creditsRemaining.replace('{{ remaining }}', remaining).replace('{{ limit }}', creditsLimit);
+      if (creditsExhausted) uploadBtn.disabled = true;
+    }
+
+    function fetchCredits() {
+      if (!BACKEND_URL || !CUSTOMER_ID) return;
+      fetch(BACKEND_URL + '/api/try-on/credits?customerId=' + encodeURIComponent(CUSTOMER_ID))
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          var body = data && data.data;
+          if (!body) return;
+          renderCredits(body.remaining, body.limit);
+        })
+        .catch(function () {});
+    }
+
+    function createTryOnJob(userImageUrl) {
+      var payload = {
+        customerId: CUSTOMER_ID,
+        productId: PRODUCT_ID,
+        sareeImageUrl: PRODUCT_IMAGE_URL,
+        userImageUrl: userImageUrl,
+        privacyPolicyAccepted: true
+      };
+      if (CUSTOMER_NAME) payload.customerName = CUSTOMER_NAME;
+      if (CUSTOMER_EMAIL) payload.customerEmail = CUSTOMER_EMAIL;
+      if (PRODUCT_TITLE) payload.productName = PRODUCT_TITLE;
+      debugLog('creating try-on job', BACKEND_URL + '/api/try-on', payload);
+      return fetch(BACKEND_URL + '/api/try-on', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(function (r) {
+        if (!r.ok) {
+          return readErrorBody(r).then(function (message) {
+            debugLog('try-on job creation failed', r.status, message);
+            throw new Error(message || ('Failed to start AI try-on job (' + r.status + ')'));
+          });
+        }
+        return r.json();
+      }).then(function (data) {
+        debugLog('try-on job created', data);
+        var jobId = data && data.data && data.data.jobId;
+        if (!data || !data.success || !jobId) throw new Error('Backend did not return a job id');
+        if (typeof data.data.remainingCredits === 'number') {
+          renderCredits(data.data.remainingCredits);
+        }
+        return jobId;
+      });
+    }
+
+    function waitForTryOnJob(jobId) {
+      var startedAt = Date.now();
+      function poll() {
+        return fetch(BACKEND_URL + '/api/try-on/' + jobId).then(function (r) {
+          if (!r.ok) {
+            return readErrorBody(r).then(function (message) {
+              throw new Error(message || ('Failed to check AI try-on status (' + r.status + ')'));
+            });
+          }
+          return r.json();
+        }).then(function (res) {
+          debugLog('poll job', jobId, res);
+          var job = res && res.data;
+          if (!job) throw new Error((res && res.error) || 'Failed to check AI try-on status');
+          if (job.status === 'completed' && job.outputImageUrl) {
+            return job.outputImageUrl;
+          }
+          if (job.status === 'failed') {
+            throw new Error(job.errorMessage || 'AI try-on generation failed');
+          }
+          if (Date.now() - startedAt > POLL_TIMEOUT_MS) {
+            throw new Error('Timed out waiting for AI try-on result');
+          }
+          return new Promise(function (resolve) {
+            pollTimer = setTimeout(resolve, POLL_INTERVAL_MS);
+          }).then(poll);
+        });
+      }
+      return poll();
+    }
+
+    uploadBtn.addEventListener('click', function () {
+      if (!selectedFile) return;
+      if (privacyCheckbox && !privacyCheckbox.checked) {
+        setStatus(I18N.privacyRequired, 'error');
+        privacyCheckbox.focus();
+        return;
+      }
+      if (!BACKEND_URL) {
+        setStatus(I18N.uploadError, 'error');
+        return;
+      }
+      var originalObjectUrl = previewImg.src;
+      showLoadingStep(originalObjectUrl);
+      setStatus('', null);
+
+      uploadCustomerPhoto(selectedFile)
+        .then(function (customerImageUrl) {
+          return createTryOnJob(customerImageUrl);
+        })
+        .then(function (jobId) { return waitForTryOnJob(jobId); })
+        .then(function (outputImageUrl) {
+          originalImg.src = originalObjectUrl;
+          resultImg.src = outputImageUrl;
+          showResultStep(true);
+          setStatus(I18N.uploadSuccess, 'success');
+          if (window.refreshTryAiGallery) window.refreshTryAiGallery();
+        })
+        .catch(function (err) {
+          console.error('Try with AI error:', err);
+          var message = (err && err.message) ? err.message : I18N.uploadError;
+          showUploadStep();
+          setStatus(message, 'error');
+          fetchCredits();
+          uploadBtn.disabled = creditsExhausted;
+          uploadBtn.textContent = I18N.uploadButton;
+        });
+    });
+
+    window.openTryWithAiModal = openModal;
+
+    window.tryAiDebug = {
+      enable: function () { window.localStorage.setItem('tryAiDebug', '1'); location.reload(); },
+      disable: function () { window.localStorage.removeItem('tryAiDebug'); location.reload(); },
+      config: function () {
+        return { backendUrl: BACKEND_URL, productImageUrl: PRODUCT_IMAGE_URL, productId: PRODUCT_ID };
+      }
+    };
+  })();
+{% endjavascript %}

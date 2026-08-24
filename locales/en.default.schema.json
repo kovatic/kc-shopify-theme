@@ -47,11 +47,14 @@
     "text": "Text",
     "theme": "Theme",
     "typography": "Typography",
-    "social": "Social media"
+    "social": "Social media",
+    "try_with_ai": "Try with AI"
   },
   "labels": {
     "alignment": "Alignment",
     "primary_color": "Primary color",
+    "try_with_ai_backend_url": "AI try-on backend URL",
+    "try_with_ai_backend_url_info": "Base URL of the KC Wear AI backend (e.g. https://kc-wear-ai.vercel.app). Used to generate the AI try-on image.",
     "background": "Background",
     "background_color": "Background color",
     "secondary_text_color": "Secondary Text Color",
@@ -164,6 +167,17 @@
     "promo": {
       "name": "Promo",
       "button_label": "Button label"
+    },
+    "offer_grid": {
+      "name": "Offer grid"
+    },
+    "countdown_banner": {
+      "name": "Countdown banner",
+      "end_date": "End date & time",
+      "end_date_info": "Format: YYYY-MM-DDTHH:MM:SS (24-hour, store local time)"
+    },
+    "offer_editorial": {
+      "name": "Offer editorial"
     },
     "brand_marquee": {
       "name": "Brand marquee",
@@ -285,6 +299,21 @@
   "blocks": {
     "category_item": {
       "name": "Category item"
+    },
+    "offer_category": {
+      "name": "Offer category",
+      "icon": "Icon (emoji)",
+      "icon_info": "Paste an emoji, e.g. 🥻 for sarees, 👕 for shirts, 🧒 for kids"
+    },
+    "offer_item": {
+      "name": "Offer item",
+      "pcs": "Pieces label",
+      "price": "Price",
+      "featured": "Featured (spotlight)",
+      "featured_info": "Renders a larger, glowing card to highlight this offer"
+    },
+    "offer_row": {
+      "name": "Offer row"
     }
   },
   "options": {

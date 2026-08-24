@@ -47,6 +47,7 @@
         "faq_item_QjCPjL",
         "faq_item_jVi6qX"
       ],
+      "disabled": true,
       "name": "t:sections.faq.name",
       "settings": {
         "show_page_content": false,

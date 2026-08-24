@@ -38,27 +38,91 @@
         "milestone_iN9eCn": {
           "type": "milestone",
           "settings": {
-            "year": "1968",
-            "title": "The beginning",
-            "description": "K. Chinnadurai & Co. was founded with a single store in Thoothukudi, dedicated to bringing the finest handloom sarees to discerning customers."
+            "year": "1970",
+            "title": "Eral – Where the Journey Began",
+            "description": "<p>The prosperous town of <strong>Eral</strong>, enriched by the Tamirabarani River and known for its vibrant trade, became the birthplace of this remarkable success story.</p><p>In <strong>1970</strong>, <strong>K. Chinnadurai Textiles</strong> started its journey as a small textile store in Eral.</p><p>With limited capital but immense dedication, the store grew steadily through honest pricing, quality products, and a customer-first approach that treated every shopper like family.</p><p>Whether it was for weddings, festivals, or special occasions, <strong>K. Chinnadurai Textiles</strong> became the preferred destination for generations of customers.</p><p>So strong was the trust that customers often said:</p><p><em>“Purchases made from this store bring good fortune.”</em></p>"
           }
         },
         "milestone_rfqqkq": {
           "type": "milestone",
           "settings": {
-            "year": "1979",
-            "title": "Next beginning",
-            "description": "K. Chinnadurai & Co. was founded with a single store in Thoothukudi, dedicated to bringing the finest handloom sarees to discerning customers."
+            "year": "2011",
+            "title": "Eral Gold House – A New Form of Trust",
+            "description": "<p>After earning the trust of customers in the textile industry for more than four decades, a new vision emerged:</p><p><em>“The people who trust us for textiles will trust us for jewellery too.”</em></p><p>With this confidence, <strong>K. Chinnadurai Gold House – Eral</strong> was inaugurated on <strong>21 April 2011</strong>.</p><p>The overwhelming love and support from customers quickly transformed Gold House into a successful and trusted jewellery destination.</p>"
+          }
+        },
+        "milestone_3Hnqr4": {
+          "type": "milestone",
+          "settings": {
+            "year": "2016",
+            "title": "Tiruchendur Textile Store – A New Branch",
+            "description": "<p>The next milestone came in the world-famous temple town of <strong>Tiruchendur</strong>, renowned for the Arulmigu Subramaniya Swamy Temple.</p><p><strong>K. Chinnadurai Textiles – Tiruchendur</strong> was inaugurated on <strong>11 April 2016</strong>.</p><p>The branch received a warm welcome from both local residents and devotees visiting the temple.</p>"
+          }
+        },
+        "milestone_LFtqwJ": {
+          "type": "milestone",
+          "settings": {
+            "year": "2018",
+            "title": "Tiruchendur Gold House",
+            "description": "<p>Following the success of the textile store in Tiruchendur, the company expanded its jewellery business with the launch of:</p><p><strong>K. Chinnadurai Gold House – Tiruchendur<br/>Opening Date:</strong> 26 March 2018</p><p>The trust earned through textiles seamlessly extended into jewellery, making this venture another success story.</p>"
+          }
+        },
+        "milestone_qgwRHG": {
+          "type": "milestone",
+          "settings": {
+            "year": "2020",
+            "title": "Thoothukudi – A New Chapter of Growth",
+            "description": "<p>Thoothukudi, one of Tamil Nadu’s most important port cities and commercial hubs, became the next destination in the company’s growth journey.</p><p><strong>K. Chinnadurai Gold House – Thoothukudi</strong> was inaugurated on <strong>04 September 2020</strong>.</p><p>The enthusiastic support of the people of Thoothukudi helped the branch achieve rapid growth.</p>"
+          }
+        },
+        "milestone_q6eAzi": {
+          "type": "milestone",
+          "settings": {
+            "year": "2020",
+            "title": "K. Chinnadurai Mens Wear – Thoothukudi",
+            "description": "<p>Building on the success of Gold House, the company launched a dedicated showroom for men's fashion.</p><p><strong>Opening Date:</strong> 08 November 2020</p><p><strong>Showroom Area:</strong> 9,000 Sq. Ft.</p><p>Designed as a one-stop destination, the showroom offers everything from wedding attire to contemporary fashion collections.</p>"
+          }
+        },
+        "milestone_FUV696": {
+          "type": "milestone",
+          "settings": {
+            "year": "2024",
+            "title": "Eral Grand New Showroom",
+            "description": "<p>The journey that began as a small textile store in 1970 reached another significant milestone in 2024.</p><p>Thanks to the continued support and affection of the people of Eral, a larger and more modern showroom was established.</p><p><strong>K. Chinnadurai New Showroom – Eral<br/>Opening Date:</strong> 23 August 2024</p><p>This magnificent showroom stands as a symbol of how a small seed planted in 1970 has grown into a mighty tree of success.</p>"
+          }
+        },
+        "milestone_wpRRwW": {
+          "type": "milestone",
+          "settings": {
+            "year": "2024",
+            "title": "Chennai – A Landmark Achievement in the Metropolitan City",
+            "description": "<p>In Tamil Nadu’s capital city and commercial hub, Chennai, the company launched its largest showroom to date.</p><p><strong>K. Chinnadurai Textiles – Chennai<br/></strong> <strong>Opening Date:</strong> 15 September 2024</p><p><strong>Showroom Area:</strong> 17,000 Sq. Ft.</p><p>This became one of the most significant milestones in the company’s history and growth journey.</p>"
+          }
+        },
+        "milestone_MHEyB7": {
+          "type": "milestone",
+          "settings": {
+            "year": "2025",
+            "title": "Tirunelveli – A New Chapter",
+            "description": "<p>The next phase of expansion took the company to <strong>Tirunelveli</strong>, a city renowned for the Nellaiappar Temple, its famous halwa, and thriving business culture.</p><p><strong>K. Chinnadurai Gold House – Tirunelveli<br/></strong> <strong>Opening Date:</strong> 04 September 2025</p><p>As one of South Tamil Nadu’s major commercial centers, Tirunelveli further strengthened the company’s growing presence.</p>"
           }
         }
       },
       "block_order": [
         "milestone_iN9eCn",
-        "milestone_rfqqkq"
+        "milestone_rfqqkq",
+        "milestone_3Hnqr4",
+        "milestone_LFtqwJ",
+        "milestone_qgwRHG",
+        "milestone_q6eAzi",
+        "milestone_FUV696",
+        "milestone_wpRRwW",
+        "milestone_MHEyB7"
       ],
       "settings": {
-        "heading": "Our story",
-        "subheading": "Five decades of craftsmanship, heritage, and community.",
+        "heading": "A Journey That Began with One Man’s Dream and Grew Through the Trust of the People",
+        "subheading": "Behind every success story lies a struggle.",
+        "description": "<p>The journey of <strong>K. Chinnadurai Gold House & Textiles</strong> is a true story that began with the dream of an ordinary man and blossomed into a trusted brand.</p><p>Mr. <strong>K. Chinnadurai</strong> gained valuable business experience during his youth while working in a textile store. Through daily interactions with customers and by learning the intricacies of retail business, a dream began to take shape in his mind:</p><p><em>“One day, we too should establish our own store and provide quality products to people.”</em></p><p>What started as a small dream gradually became the foundation of a successful enterprise that now operates across multiple cities.</p>",
         "padding_top": 60,
         "padding_bottom": 60
       }

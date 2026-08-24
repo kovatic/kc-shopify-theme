@@ -35,7 +35,25 @@
     "comment_form_email": "Email",
     "comment_form_name": "Name",
     "comment_form_submit": "Post",
-    "comment_form_title": "Add a comment"
+    "comment_form_title": "Add a comment",
+    "listing": {
+      "eyebrow": "Our blog",
+      "empty": "No posts yet. Check back soon.",
+      "read_more": "Read more",
+      "comments": "comments",
+      "articles_per_page": "Articles per page"
+    },
+    "article": {
+      "back_to_blog": "Back to {{ blog_title }}",
+      "tagged": "Tagged:",
+      "share": "Share:",
+      "show_author": "Show author",
+      "show_share": "Show share buttons",
+      "previous": "Previous post",
+      "next": "Next post",
+      "all_posts": "All posts",
+      "nav_label": "Post navigation"
+    }
   },
   "cart": {
     "checkout": "Checkout",
@@ -130,6 +148,20 @@
       "name": "Promo",
       "button_label": "Button label"
     },
+    "offer_grid": {
+      "name": "Offer grid"
+    },
+    "countdown_banner": {
+      "name": "Countdown banner",
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds",
+      "expired": "This offer has ended"
+    },
+    "offer_editorial": {
+      "name": "Offer editorial"
+    },
     "brand_marquee": {
       "name": "Brand marquee"
     },
@@ -192,13 +224,19 @@
       "description": "More about this Product",
       "product_details": "Product details",
       "delivery": "Delivery",
-      "delivery_info": "Free shipping on orders above ₹2000. Estimated delivery in 5-7 business days.",
+      "delivery_info": "Free shipping on orders above ₹1000. Estimated delivery in 5-7 business days.",
       "returns": "Return & exchange",
       "returns_info": "Easy returns within 7 days of delivery. Item must be unused and in original packaging.",
       "mrp": "Maximum retail price",
       "manufacturer": "Manufactured & marketed by",
       "contact": "Contact us",
       "contact_us": "Get in touch",
+      "contact_heading": "Need assistance? We're here to help.",
+      "contact_timing": "Mon - Sun - 10:00 AM TO 8:00 PM (IST)",
+      "contact_whatsapp_label": "Connect with us on WhatsApp",
+      "contact_phone_label": "Have a query? Let's connect.",
+      "contact_email_label": "Reach Out via Email",
+      "vendor_name": "K.Chinnadurai and co",
       "pincode_placeholder": "Enter Pincode to Check",
       "pincode_check": "Check",
       "pincode_label": "Check delivery availability",
@@ -221,7 +259,7 @@
     "social_media": "Social media",
     "store_location": "Store location",
     "all_rights_reserved": "All rights reserved.",
-    "copyright": "Copyrights \u00a9\ufe0f 2026 All Rights Reserved by K.Chinnadurai & Co. Established in 1970",
+    "copyright": "Copyrights ©️ 2026 All Rights Reserved by K.Chinnadurai & Co. Established in 1970",
     "social_facebook": "Facebook",
     "social_youtube": "YouTube",
     "social_instagram": "Instagram",
@@ -263,6 +301,21 @@
   "blocks": {
     "category_item": {
       "name": "Category item"
+    },
+    "offer_category": {
+      "name": "Offer category"
+    },
+    "offer_item": {
+      "name": "Offer item",
+      "pcs": "Pieces label",
+      "price": "Price",
+      "only": "Only",
+      "featured": "Featured (spotlight)"
+    },
+    "offer_row": {
+      "name": "Offer row",
+      "eyebrow": "Eyebrow label",
+      "offer_line": "Offer line"
     }
   },
   "careers": {
@@ -285,6 +338,12 @@
     "resume_upload_hint": "Accepted formats: PDF, DOC, DOCX. Maximum file size: 5 MB.",
     "submit_label": "Submit application",
     "success_message": "Thank you for your application! We'll review it and get back to you soon."
+  },
+  "product": {
+    "stock": {
+      "low": "Only {{ count }} left in stock — order soon",
+      "critical": "Only {{ count }} left — selling fast!"
+    }
   },
   "tailoring": {
     "stitching_btn": "Zip &amp; Go / Blouse",
@@ -340,5 +399,64 @@
     "front_neck_depth": "Front Neck Depth",
     "back_neck_depth": "Back Neck Depth",
     "shoulder_to_point": "Shoulder to Point"
+  },
+  "shopify": {
+    "checkout": {
+      "order_summary": {
+        "vat_label_html": "&nbsp;"
+      }
+    }
+  },
+  "customer_accounts": {
+    "order_details": {
+      "taxes_included": "&nbsp;"
+    }
+  },
+  "try_with_ai": {
+    "cta_label": "Try with AI",
+    "login_required": "Log in to try on",
+    "modal_title": "Try with AI",
+    "close": "Close",
+    "upload_prompt": "Upload a photo of yourself",
+    "choose_photo": "Drag and drop or choose a photo",
+    "choose_photo_helper": "JPG or PNG, up to 10MB.",
+    "tip_full_length": "Full-length, front-facing photo",
+    "tip_plain_background": "Plain background works best",
+    "tip_even_lighting": "Even, natural lighting",
+    "upload_button": "Generate try-on",
+    "uploading": "Uploading…",
+    "generating": "Generating your try-on…",
+    "upload_success": "Here is your AI try-on!",
+    "upload_error": "Something went wrong. Please try again.",
+    "result_alt": "AI-generated saree try-on preview",
+    "original_alt": "Your original uploaded photo",
+    "try_another_photo": "Try another photo",
+    "step_uploading": "Getting your saree look ready…",
+    "step_styling": "AI is styling your saree…",
+    "step_draping": "Draping fabric…",
+    "step_adjusting": "Adjusting fit…",
+    "step_loving_it": "Hope you'll love the output…",
+    "step_finishing": "Finishing details…",
+    "step_almost_done": "Almost done…",
+    "time_remaining": "~{{ seconds }}s left",
+    "view_original": "Original",
+    "view_result": "AI try-on",
+    "add_to_cart": "Buy now",
+    "added_to_cart": "Redirecting…",
+    "save": "Save",
+    "download": "Download",
+    "share": "Share",
+    "copy_link": "Copy link",
+    "previous_tryons": "Your previous try-ons",
+    "previous_tryon_alt": "Previous AI try-on result",
+    "privacy_text_prefix": "By continuing you agree to our",
+    "privacy_link_text": "Privacy Policy.",
+    "privacy_required": "Please agree to the Privacy Policy to continue.",
+    "share_text": "✨ Tried the {{ product_title }} using the AI {{ category }} Try-On!\n\nI was actually surprised by how good it looks 😍\n\nIf you're looking for a {{ category_lower }} for a function or special occasion, definitely check this one out! 👗\n\n👉 {{ product_title }}:",
+    "credits_remaining": "{{ remaining }} of {{ limit }} try-ons left today",
+    "credits_exhausted": "You've used all your try-ons for today. Come back tomorrow!",
+    "row_title": "See yourself in this saree",
+    "row_subtext": "Upload your photo and preview it on you instantly with AI",
+    "row_subtext_guest": "Log in to upload your photo and preview this saree on you"
   }
 }
