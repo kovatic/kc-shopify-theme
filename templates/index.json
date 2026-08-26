@@ -140,11 +140,11 @@
       "settings": {
         "title": "Raksha Bandhan Collection",
         "subtitle": "Explore our exquisite jewellery & accessories collection",
-        "collection": "imitation-jewellerys",
+        "collection": "jewellery-accessories",
         "layout_type_desktop": "wrap",
         "layout_type_mobile": "scroll",
         "products_count": 4,
-        "view_all_url": "shopify://collections/imitation-jewellerys",
+        "view_all_url": "shopify://collections/jewellery-accessories",
         "padding_top": 60,
         "padding_bottom": 60
       }
