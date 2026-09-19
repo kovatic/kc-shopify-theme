@@ -14,6 +14,24 @@
     "header": {
       "type": "header",
       "blocks": {
+        "mega_menu_HyFDiY": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_link": "Diwali Collections",
+            "col1_heading": "Diwali Collections",
+            "col1_menu": "diwali-collections",
+            "col2_heading": "",
+            "col2_menu": "",
+            "col3_heading": "",
+            "col3_menu": "",
+            "card1_label": "",
+            "card1_url": "",
+            "card2_label": "",
+            "card2_url": "",
+            "card3_label": "",
+            "card3_url": ""
+          }
+        },
         "mega_menu_QT8rfQ": {
           "type": "mega_menu",
           "settings": {
@@ -193,6 +211,7 @@
         }
       },
       "block_order": [
+        "mega_menu_HyFDiY",
         "mega_menu_QT8rfQ",
         "mega_menu_Q9tbyx",
         "mega_menu_qDQRgG",
