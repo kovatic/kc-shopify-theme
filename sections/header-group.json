@@ -56,8 +56,8 @@
         "mega_menu_rgyCtx": {
           "type": "mega_menu",
           "settings": {
-            "nav_link": "Kids Wear",
-            "col1_heading": "Kids Wear",
+            "nav_link": "Kids",
+            "col1_heading": "Kids",
             "col1_menu": "kids-wear",
             "col2_heading": "",
             "col2_menu": "",
