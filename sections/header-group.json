@@ -137,27 +137,6 @@
             "card3_url": "shopify://products/cyan-silk-saree"
           }
         },
-        "mega_menu_794wpC": {
-          "type": "mega_menu",
-          "settings": {
-            "nav_link": "Soft Silk Sarees",
-            "col1_heading": "Soft Silk Sarees",
-            "col1_menu": "",
-            "col2_heading": "",
-            "col2_menu": "",
-            "col3_heading": "",
-            "col3_menu": "",
-            "card1_image": "shopify://shop_images/DSC08119.webp",
-            "card1_label": "Gopuram Silk Saree",
-            "card1_url": "shopify://products/gopuram-silk-saree",
-            "card2_image": "shopify://shop_images/DSC08173.jpg",
-            "card2_label": "Aurelin Silk Saree",
-            "card2_url": "shopify://products/aurelin-silk-saree",
-            "card3_image": "shopify://shop_images/DSC08214.jpg",
-            "card3_label": "Varnika Silk Saree",
-            "card3_url": "shopify://products/varnika-silk-saree"
-          }
-        },
         "mega_menu_UxxNjG": {
           "type": "mega_menu",
           "settings": {
@@ -184,7 +163,6 @@
         "mega_menu_RnnEVD",
         "mega_menu_MzfM6K",
         "mega_menu_BtrgXR",
-        "mega_menu_794wpC",
         "mega_menu_UxxNjG"
       ],
       "settings": {
