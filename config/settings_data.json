@@ -32,6 +32,11 @@
         "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
         "disabled": false,
         "settings": {}
+      },
+      "2965712708760319418": {
+        "type": "shopify://apps/proof-bear-sales-popup/blocks/widget/6e90b7fd-96ea-488b-9571-34f0c382838a",
+        "disabled": false,
+        "settings": {}
       }
     }
   }
