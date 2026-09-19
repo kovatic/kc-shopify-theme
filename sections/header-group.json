@@ -14,25 +14,22 @@
     "header": {
       "type": "header",
       "blocks": {
-        "mega_menu_iHrVEQ": {
+        "mega_menu_qDQRgG": {
           "type": "mega_menu",
           "settings": {
-            "nav_link": "Onam Collections",
-            "col1_heading": "Onam Collections",
-            "col1_menu": "traditional-onam-sarees",
+            "nav_link": "Silk Sarees",
+            "col1_heading": "Silk Sarees",
+            "col1_menu": "",
             "col2_heading": "",
             "col2_menu": "",
             "col3_heading": "",
             "col3_menu": "",
-            "card1_image": "shopify://shop_images/saree_2.jpg",
-            "card1_label": "White Cotton Kasavu Saree",
-            "card1_url": "shopify://products/white-cotton-kasavu-saree-dancing-krishna-embroidery-with-gold-zari-border-onam-special-saree",
-            "card2_image": "shopify://shop_images/saree4.jpg",
-            "card2_label": "White Kerala Kasavu Cotton Saree",
-            "card2_url": "shopify://products/off-white-kerala-kasavu-cotton-saree-gold-zari-peacock-border-traditional-festive-wear",
-            "card3_image": "shopify://shop_images/Tissue_saree.jpg",
-            "card3_label": "Half White Tissue Cotton Saree ",
-            "card3_url": "shopify://products/off-white-tissue-cotton-saree-floral-rose-print-with-gold-zari-border-kerala-style-wedding-festive-wear"
+            "card1_label": "",
+            "card1_url": "",
+            "card2_label": "",
+            "card2_url": "",
+            "card3_label": "",
+            "card3_url": ""
           }
         },
         "mega_menu_UY4wKJ": {
@@ -166,7 +163,7 @@
           "settings": {
             "nav_link": "Soft Silk Sarees",
             "col1_heading": "Soft Silk Sarees",
-            "col1_menu": "soft-silk-sarees",
+            "col1_menu": "",
             "col2_heading": "",
             "col2_menu": "",
             "col3_heading": "",
@@ -202,7 +199,7 @@
         }
       },
       "block_order": [
-        "mega_menu_iHrVEQ",
+        "mega_menu_qDQRgG",
         "mega_menu_UY4wKJ",
         "mega_menu_rgyCtx",
         "mega_menu_RnnEVD",
