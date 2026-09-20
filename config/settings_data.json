@@ -33,10 +33,13 @@
         "disabled": false,
         "settings": {}
       },
-      "2965712708760319418": {
-        "type": "shopify://apps/proof-bear-sales-popup/blocks/widget/6e90b7fd-96ea-488b-9571-34f0c382838a",
+      "4015264832934714879": {
+        "type": "shopify://apps/cwillsendwill-popup-email/blocks/app/a5670cf8-5705-4b01-ad9e-447033feae26",
         "disabled": false,
-        "settings": {}
+        "settings": {
+          "enable_gdpr_mode": false,
+          "enable_cwtracks_listener": false
+        }
       }
     }
   }
