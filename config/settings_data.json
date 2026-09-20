@@ -40,6 +40,11 @@
           "enable_gdpr_mode": false,
           "enable_cwtracks_listener": false
         }
+      },
+      "1021294435227364904": {
+        "type": "shopify://apps/fomoify-sales-popup/blocks/fomo-embed/01992942-b62d-7480-b716-f89c5117505a",
+        "disabled": false,
+        "settings": {}
       }
     }
   }
