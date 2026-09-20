@@ -35,7 +35,7 @@
       },
       "2965712708760319418": {
         "type": "shopify://apps/proof-bear-sales-popup/blocks/widget/6e90b7fd-96ea-488b-9571-34f0c382838a",
-        "disabled": true,
+        "disabled": false,
         "settings": {}
       }
     }
