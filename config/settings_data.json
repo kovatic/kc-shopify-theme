@@ -50,6 +50,11 @@
         "type": "shopify://apps/ez-notify-me-back-in-stock/blocks/notify_me/019df3e0-2dd3-74dc-a782-b1d33d157136",
         "disabled": false,
         "settings": {}
+      },
+      "1409715032340194113": {
+        "type": "shopify://apps/gokwik-cart-slide-cart-drawer/blocks/app-embed/531cd8ff-cc36-43b1-9a44-c16d44927215",
+        "disabled": false,
+        "settings": {}
       }
     }
   }
