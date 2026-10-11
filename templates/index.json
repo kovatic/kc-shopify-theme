@@ -12,6 +12,20 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
+        "slide_C3NtPn": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Web.png",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "shopify://collections/diwali-collections",
+            "text_position": "middle-left",
+            "show_overlay": true,
+            "overlay_opacity": 10
+          }
+        },
         "slide_48gw4q": {
           "type": "slide",
           "settings": {
@@ -59,6 +73,7 @@
         }
       },
       "block_order": [
+        "slide_C3NtPn",
         "slide_48gw4q",
         "slide_krfQVT",
         "slide_VRUrm9"
