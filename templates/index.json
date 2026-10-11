@@ -16,6 +16,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Web.png",
+            "mobile_image": "shopify://shop_images/Royal_Diwali_Celebration_in_Silk_copy.png",
             "subheading": "",
             "heading": "",
             "text": "",
