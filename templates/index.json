@@ -17,14 +17,14 @@
           "settings": {
             "image": "shopify://shop_images/Web.png",
             "mobile_image": "shopify://shop_images/Royal_Diwali_Celebration_in_Silk_copy.png",
-            "subheading": "Diwali Collections",
-            "heading": "Diwali Collections",
+            "subheading": "",
+            "heading": "",
             "text": "",
-            "button_label": "Shop Now",
+            "button_label": "",
             "button_url": "shopify://collections/diwali-collections",
             "text_position": "middle-left",
             "show_overlay": true,
-            "overlay_opacity": 30
+            "overlay_opacity": 10
           }
         },
         "slide_48gw4q": {
