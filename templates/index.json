@@ -12,20 +12,19 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
-        "slide_QNFNx4": {
+        "slide_gMFGry": {
           "type": "slide",
-          "disabled": true,
           "settings": {
-            "image": "shopify://shop_images/website.jpg_1.jpg",
-            "mobile_image": "shopify://shop_images/mobile.jpg_1.jpg",
-            "subheading": "",
-            "heading": "",
+            "image": "shopify://shop_images/Web.png",
+            "mobile_image": "shopify://shop_images/Royal_Diwali_Celebration_in_Silk_copy.png",
+            "subheading": "Diwali Collections",
+            "heading": "Diwali Collections",
             "text": "",
-            "button_label": "",
-            "button_url": "shopify://pages/aadi-offer",
+            "button_label": "Shop Now",
+            "button_url": "shopify://collections/diwali-collections",
             "text_position": "middle-left",
             "show_overlay": true,
-            "overlay_opacity": 10
+            "overlay_opacity": 30
           }
         },
         "slide_48gw4q": {
@@ -75,7 +74,7 @@
         }
       },
       "block_order": [
-        "slide_QNFNx4",
+        "slide_gMFGry",
         "slide_48gw4q",
         "slide_krfQVT",
         "slide_VRUrm9"
