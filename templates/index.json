@@ -12,6 +12,21 @@
     "banner_C4FemU": {
       "type": "banner",
       "blocks": {
+        "slide_rHiPag": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/dindigul-website_jpg.jpg",
+            "mobile_image": "shopify://shop_images/dindigul-website_mobile_jpg.jpg",
+            "subheading": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_url": "shopify://collections/diwali-collections",
+            "text_position": "middle-left",
+            "show_overlay": true,
+            "overlay_opacity": 10
+          }
+        },
         "slide_C3NtPn": {
           "type": "slide",
           "settings": {
@@ -74,6 +89,7 @@
         }
       },
       "block_order": [
+        "slide_rHiPag",
         "slide_C3NtPn",
         "slide_48gw4q",
         "slide_krfQVT",
