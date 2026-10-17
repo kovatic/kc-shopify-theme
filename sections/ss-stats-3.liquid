@@ -1,0 +1,1880 @@
+{% comment %}
+  ---------------------------------------------------------
+  Copyright © 2026 Section Store. All rights reserved.
+  Unauthorized copying, modification, distribution, or use
+  of this code or any portion of it, is strictly prohibited.
+  Violators will be prosecuted to the fullest extent of the law.
+  For inquiries or permissions, contact daniel@section.store
+  ---------------------------------------------------------
+{% endcomment %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+{%- liquid
+  assign padding_horizontal = section.settings.padding_horizontal
+  assign padding_horizontal_mobile = section.settings.padding_horizontal_mobile
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign border_color = section.settings.border_color
+  assign border_thickness = section.settings.border_thickness
+  assign margin_top = section.settings.margin_top
+  assign margin_bottom = section.settings.margin_bottom
+  assign margin_horizontal_mobile = section.settings.margin_horizontal_mobile
+  assign margin_horizontal = section.settings.margin_horizontal
+  assign background_color = section.settings.background_color
+  assign background_gradient = section.settings.background_gradient
+  assign width = section.settings.width
+  assign content_width = section.settings.content_width
+  assign section_radius = section.settings.section_radius
+  assign background_style = section.settings.background_style
+
+  assign cards_mt = section.settings.cards_mt
+  assign cards_mt_mobile = section.settings.cards_mt_mobile
+  assign cards_gap = section.settings.cards_gap
+  assign cards_gap_mobile = section.settings.cards_gap_mobile
+  assign cards_per_row = section.settings.cards_per_row
+  assign cards_per_row_mobile = section.settings.cards_per_row_mobile
+
+  assign card_padding_horizontal = section.settings.card_padding_horizontal
+  assign card_padding_vertical = section.settings.card_padding_vertical
+  assign card_padding_horizontal_mobile = section.settings.card_padding_horizontal_mobile
+  assign card_padding_vertical_mobile = section.settings.card_padding_vertical_mobile
+  assign card_radius = section.settings.card_radius
+  assign card_border_thickness = section.settings.card_border_thickness
+  assign card_glass_effect = section.settings.card_glass_effect
+  assign card_background_style = section.settings.card_background_style
+  assign card_background_color = section.settings.card_background_color
+  assign card_background_gradient = section.settings.card_background_gradient
+  assign card_border_opacity = section.settings.card_border_opacity | divided_by: 100.0
+  assign card_border_color = section.settings.card_border_color | color_modify: 'alpha', card_border_opacity
+  assign card_inner_radius = card_radius
+  unless card_glass_effect
+    assign card_inner_radius = card_radius | minus: card_border_thickness
+    if card_inner_radius < 0
+      assign card_inner_radius = 0
+    endif
+  endunless
+
+  assign card_image_radius = section.settings.card_image_radius
+  assign card_image_border_thickness = section.settings.card_image_border_thickness
+  assign card_image_border_color = section.settings.card_image_border_color
+  assign card_image_ratio = section.settings.card_image_ratio
+  assign card_image_ratio_mobile = section.settings.card_image_ratio_mobile
+
+  assign card_heading_custom = section.settings.card_heading_custom
+  assign card_heading_font = section.settings.card_heading_font
+  assign card_heading_mt = section.settings.card_heading_mt
+  assign card_heading_mt_mobile = section.settings.card_heading_mt_mobile
+  assign card_heading_size_mobile = section.settings.card_heading_size_mobile
+  assign card_heading_size = section.settings.card_heading_size
+  assign card_heading_height = section.settings.card_heading_height
+  assign card_heading_color = section.settings.card_heading_color
+
+  assign card_percent_custom = section.settings.card_percent_custom
+  assign card_percent_font = section.settings.card_percent_font
+  assign card_percent_size_mobile = section.settings.card_percent_size_mobile
+  assign card_percent_size = section.settings.card_percent_size
+  assign card_percent_height = section.settings.card_percent_height
+  assign card_percent_color = section.settings.card_percent_color
+
+  assign card_text_custom = section.settings.card_text_custom
+  assign card_text_font = section.settings.card_text_font
+  assign card_text_size_mobile = section.settings.card_text_size_mobile
+  assign card_text_size = section.settings.card_text_size
+  assign card_text_height = section.settings.card_text_height
+  assign card_text_color = section.settings.card_text_color
+
+  assign card_stat_padding_horizontal = section.settings.card_stat_padding_horizontal
+  assign card_stat_padding_vertical = section.settings.card_stat_padding_vertical
+  assign card_stat_padding_horizontal_mobile = section.settings.card_stat_padding_horizontal_mobile
+  assign card_stat_padding_vertical_mobile = section.settings.card_stat_padding_vertical_mobile
+  assign card_stat_radius = section.settings.card_stat_radius
+  assign card_stat_border_thickness = section.settings.card_stat_border_thickness
+  assign card_stat_mt = section.settings.card_stat_mt
+  assign card_stat_mt_mobile = section.settings.card_stat_mt_mobile
+  assign card_stat_gap = section.settings.card_stat_gap
+  assign card_stat_gap_mobile = section.settings.card_stat_gap_mobile
+
+  assign card_image_sizes = '(min-width: 1024px) calc(100vw / '
+  assign card_image_sizes = card_image_sizes | append: cards_per_row | append: '), calc(100vw / '
+  assign card_image_sizes = card_image_sizes | append: cards_per_row_mobile | append: ')'
+  assign card_background_glass_color = card_background_color | color_modify: 'alpha', 0.58
+-%}
+
+{%- style -%}
+  .section-{{ section.id }} {
+    border-top: solid {{ border_color }} {{ border_thickness }}px;
+    border-bottom: solid {{ border_color }} {{ border_thickness }}px;
+    margin-top: {{ margin_top | times: 0.75 | round: 0 }}px;
+    margin-bottom: {{ margin_bottom | times: 0.75 | round: 0 }}px;
+    margin-left: {{ margin_horizontal_mobile }}rem;
+    margin-right: {{ margin_horizontal_mobile }}rem;
+    border-radius: {{ section_radius | times: 0.6 | round: 0 }}px;
+    overflow: hidden;
+  }
+
+  .section-{{ section.id }}-settings {
+    margin: 0 auto;
+    padding-top: {{ padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ padding_bottom | times: 0.75 | round: 0 }}px;
+    padding-left: {{ padding_horizontal_mobile }}rem;
+    padding-right: {{ padding_horizontal_mobile }}rem;
+  }
+
+  .stats-cards-outer-{{ section.id }} {
+    margin-top: {{ cards_mt_mobile }}px;
+  }
+
+  .stats-slider-{{ section.id }} {
+    overflow: hidden;
+    margin-left: -{{ padding_horizontal_mobile }}rem !important;
+    margin-right: -{{ padding_horizontal_mobile }}rem !important;
+    padding-left: {{ padding_horizontal_mobile }}rem !important;
+    padding-right: {{ padding_horizontal_mobile }}rem !important;
+    padding-bottom: 30px !important;
+  }
+
+  .stats-grid-{{ section.id }} {
+    display: none;
+  }
+
+  .stats-card-{{ section.id }} {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: visible;
+    border-radius: {{ card_radius }}px;
+    isolation: isolate;
+    box-sizing: border-box !important;
+
+    {% if card_glass_effect %}
+      border: 0;
+      box-shadow:
+        inset 0 0.125rem 0.125rem rgba(0, 0, 0, 0.05),
+        inset 0 -0.125rem 0.125rem rgba(255, 255, 255, 0.45),
+        0 0 0.1rem 0.22rem inset rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(clamp(10px, 1.4vw, 20px));
+      -webkit-backdrop-filter: blur(clamp(10px, 1.4vw, 20px));
+      background-color: rgba(255, 255, 255, 0.08);
+      background-image: linear-gradient(
+        -75deg,
+        rgba(255, 255, 255, 0.06),
+        rgba(255, 255, 255, 0.24),
+        rgba(255, 255, 255, 0.06)
+      );
+    {% else %}
+      border: {{ card_border_thickness }}px solid {{ card_border_color }};
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background: transparent;
+    {% endif %}
+  }
+
+  .stats-card-{{ section.id }}::before {
+    {% if card_glass_effect %}
+      content: "";
+      position: absolute;
+      left: 0.95rem;
+      right: 1.15rem;
+      top: 1.05rem;
+      bottom: -0.7rem;
+      border-radius: {{ card_radius }}px;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.08));
+      filter: blur(clamp(10px, 1.2vw, 18px));
+      -webkit-filter: blur(clamp(10px, 1.2vw, 18px));
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.95;
+    {% else %}
+      content: none;
+    {% endif %}
+  }
+
+  .stats-card-{{ section.id }}::after {
+    {% if card_glass_effect %}
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.14) 36%, rgba(255, 255, 255, 0.03) 64%),
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.24), transparent 42%);
+      pointer-events: none;
+      z-index: 1;
+    {% else %}
+      content: none;
+    {% endif %}
+  }
+
+  .stats-card-{{ section.id }} > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  .stats-card-inner-{{ section.id }} {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    position: relative;
+    overflow: hidden;
+    padding: {{ card_padding_vertical_mobile }}px {{ card_padding_horizontal_mobile }}px;
+    border-radius: {{ card_inner_radius }}px;
+    {% if card_glass_effect %}
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      background-clip: padding-box;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.55),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(clamp(16px, 2vw, 24px));
+      -webkit-backdrop-filter: blur(clamp(16px, 2vw, 24px));
+
+      {% if card_background_style == 'solid' %}
+        background-color: {{ card_background_glass_color }};
+      {% else %}
+        background-image: {{ card_background_gradient }};
+        background-color: rgba(255, 255, 255, 0.16);
+      {% endif %}
+    {% else %}
+      border: 0;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+
+      {% if card_background_style == 'solid' %}
+        background-color: {{ card_background_color }};
+      {% else %}
+        background: {{ card_background_gradient }};
+      {% endif %}
+    {% endif %}
+  }
+
+  .stats-card-inner-{{ section.id }}::before {
+    {% if card_glass_effect %}
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.14) 36%, rgba(255, 255, 255, 0) 62%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 34%);
+      pointer-events: none;
+      z-index: 0;
+    {% else %}
+      content: none;
+    {% endif %}
+  }
+
+  .stats-card-inner-{{ section.id }}::after {
+    {% if card_glass_effect %}
+      content: "";
+      position: absolute;
+      left: -12%;
+      right: -12%;
+      top: -8%;
+      height: 50%;
+      background: radial-gradient(circle at top, rgba(255, 255, 255, 0.3), transparent 68%);
+      pointer-events: none;
+      z-index: 0;
+    {% else %}
+      content: none;
+    {% endif %}
+  }
+
+  .stats-card-inner-{{ section.id }} > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .stats-card-image-{{ section.id }} {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    border-radius: {{ card_image_radius }}px;
+    border: {{ card_image_border_thickness }}px solid {{ card_image_border_color }};
+  }
+
+  .stats-card-image-{{ section.id }} img,
+  .stats-card-image-{{ section.id }} svg {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .stats-card-image-{{ section.id }} svg {
+    background-color: #AFAFAF;
+  }
+
+  .stats-card-heading-{{ section.id }} {
+    flex: 1;
+    margin-top: {{ card_heading_mt_mobile }}px;
+  }
+
+  .stats-card-heading-{{ section.id }} * {
+    margin: 0;
+    font-size: {{ card_heading_size_mobile }}px;
+    color: {{ card_heading_color }};
+    line-height: {{ card_heading_height }}%;
+    text-decoration: none;
+    word-break: break-word;
+  }
+
+  .stats-card-stat-wrap-{{ section.id }} {
+    position: relative;
+    z-index: 2;
+    background: transparent;
+    border-radius: {{ card_stat_radius }}px;
+    margin-top: {{ card_stat_mt_mobile }}px;
+  }
+
+  .stats-card-stat-{{ section.id }} {
+    all: unset;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    align-items: center;
+    position: relative;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    pointer-events: auto;
+    z-index: 3;
+    {% if card_glass_effect %}
+      background: linear-gradient(
+        -75deg,
+        rgba(255, 255, 255, 0.18),
+        rgba(255, 255, 255, 0.5),
+        rgba(255, 255, 255, 0.14)
+      );
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.65),
+        0 0.75rem 1.75rem rgba(18, 18, 18, 0.08);
+      backdrop-filter: blur(clamp(8px, 1vw, 14px));
+      -webkit-backdrop-filter: blur(clamp(8px, 1vw, 14px));
+    {% else %}
+      {% if card_background_style == 'solid' %}
+        background-color: {{ card_background_color }};
+      {% else %}
+        background: {{ card_background_gradient }};
+      {% endif %}
+      border: {{ card_stat_border_thickness }}px solid {{ card_border_color }};
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    {% endif %}
+    transition: opacity 400ms cubic-bezier(0.25, 1, 0.5, 1), transform 400ms cubic-bezier(0.25, 1, 0.5, 1);
+    padding: {{ card_stat_padding_vertical_mobile }}px {{ card_stat_padding_horizontal_mobile }}px;
+    border-radius: {{ card_stat_radius }}px;
+    gap: {{ card_stat_gap_mobile }}px;
+  }
+
+  .stats-card-percent-wrap-{{ section.id }} {
+    font-size: {{ card_percent_size_mobile }}px;
+    line-height: {{ card_percent_height }}%;
+    text-decoration: none;
+    word-break: break-word;
+    font-weight: 600;
+    color: {{ card_percent_color }};
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stats-card-text-{{ section.id }} * {
+    margin: 0;
+    font-size: {{ card_text_size_mobile }}px;
+    line-height: {{ card_text_height }}%;
+    text-decoration: none;
+    word-break: break-word;
+    color: {{ card_text_color }};
+  }
+
+  @media(min-width: 1024px) {
+
+    .section-{{ section.id }} {
+      margin-top: {{ margin_top }}px;
+      margin-bottom: {{ margin_bottom }}px;
+      margin-left: {{ margin_horizontal }}rem;
+      margin-right: {{ margin_horizontal }}rem;
+      border-radius: {{ section_radius }}px;
+    }
+
+    .section-{{ section.id }}-settings {
+      padding: 0 5rem;
+      padding-top: {{ padding_top }}px;
+      padding-bottom: {{ padding_bottom }}px;
+      padding-left: {{ padding_horizontal }}rem;
+      padding-right: {{ padding_horizontal }}rem;
+    }
+
+    .stats-cards-outer-{{ section.id }} {
+      margin-top: {{ cards_mt }}px;
+    }
+
+    .stats-slider-{{ section.id }} {
+      display: none !important;
+    }
+
+    .stats-grid-{{ section.id }} {
+      display: grid;
+      grid-template-columns: repeat({{ cards_per_row }}, 1fr);
+      gap: {{ cards_gap }}px;
+    }
+
+    .stats-card-inner-{{ section.id }} {
+      padding: {{ card_padding_vertical }}px {{ card_padding_horizontal }}px;
+    }
+
+    .stats-card-heading-{{ section.id }} {
+      margin-top: {{ card_heading_mt }}px;
+    }
+
+    .stats-card-heading-{{ section.id }} * {
+      font-size: {{ card_heading_size }}px;
+    }
+
+    .stats-card-stat-wrap-{{ section.id }} {
+      margin-top: {{ card_stat_mt }}px;
+    }
+
+    .stats-card-stat-{{ section.id }} {
+      padding: {{ card_stat_padding_vertical }}px {{ card_stat_padding_horizontal }}px;
+      gap: {{ card_stat_gap }}px;
+    }
+
+    .stats-card-percent-wrap-{{ section.id }} {
+      font-size: {{ card_percent_size }}px;
+    }
+
+    .stats-card-text-{{ section.id }} * {
+      font-size: {{ card_text_size }}px;
+    }
+  }
+{%- endstyle -%}
+
+{% if width == 'custom' %}
+  <style>
+    .section-{{ section.id }}-settings {
+      max-width: {{ content_width }}px;
+    }
+  </style>
+{% elsif width == 'page' %}
+  <style>
+    .section-{{ section.id }}-settings {
+      max-width: clamp(100px, var(--page-content-width, var(--page-width)), 100%);
+    }
+  </style>
+{% endif %}
+
+{% if margin_horizontal_mobile > 0 %}
+  <style>
+    .section-{{ section.id }} {
+      border-left: solid {{ border_color }} {{ border_thickness }}px;
+      border-right: solid {{ border_color }} {{ border_thickness }}px;
+    }
+
+    @media(min-width: 1024px) {
+      .section-{{ section.id }} {
+        border-left: 0px;
+        border-right: 0px;
+      }
+    }
+  </style>
+{% endif %}
+
+{% if margin_horizontal > 0 %}
+  <style>
+    @media(min-width: 1024px) {
+      .section-{{ section.id }} {
+        border-left: solid {{ border_color }} {{ border_thickness }}px;
+        border-right: solid {{ border_color }} {{ border_thickness }}px;
+      }
+    }
+  </style>
+{% endif %}
+
+{% if card_heading_custom %}
+  <style>
+    {{ card_heading_font | font_face: font_display: 'swap' }}
+
+    .stats-card-heading-{{ section.id }} * {
+      font-family: {{ card_heading_font.family }}, {{ card_heading_font.fallback_families }};
+      font-weight: {{ card_heading_font.weight }};
+      font-style: {{ card_heading_font.style }};
+    }
+  </style>
+{% endif %}
+
+{% if card_percent_custom %}
+  <style>
+    {{ card_percent_font | font_face: font_display: 'swap' }}
+
+    .stats-card-percent-wrap-{{ section.id }} {
+      font-family: {{ card_percent_font.family }}, {{ card_percent_font.fallback_families }};
+      font-weight: {{ card_percent_font.weight }};
+      font-style: {{ card_percent_font.style }};
+    }
+  </style>
+{% endif %}
+
+{% if card_text_custom %}
+  <style>
+    {{ card_text_font | font_face: font_display: 'swap' }}
+
+    .stats-card-text-{{ section.id }} * {
+      font-family: {{ card_text_font.family }}, {{ card_text_font.fallback_families }};
+      font-weight: {{ card_text_font.weight }};
+      font-style: {{ card_text_font.style }};
+    }
+  </style>
+{% endif %}
+
+{% if card_image_ratio_mobile == 'portrait' %}
+  <style>
+    .stats-card-image-{{ section.id }} { aspect-ratio: 9.6/12; }
+  </style>
+{% elsif card_image_ratio_mobile == 'landscape' %}
+  <style>
+    .stats-card-image-{{ section.id }} { aspect-ratio: 12/9; }
+  </style>
+{% elsif card_image_ratio_mobile == 'square' %}
+  <style>
+    .stats-card-image-{{ section.id }} { aspect-ratio: 12/12; }
+  </style>
+{% else %}
+  <style>
+    .stats-card-image-{{ section.id }} { aspect-ratio: auto; }
+  </style>
+{% endif %}
+
+{% if card_image_ratio == 'portrait' %}
+  <style>
+    @media(min-width: 1024px) { .stats-card-image-{{ section.id }} { aspect-ratio: 9.6/12; } }
+  </style>
+{% elsif card_image_ratio == 'landscape' %}
+  <style>
+    @media(min-width: 1024px) { .stats-card-image-{{ section.id }} { aspect-ratio: 12/9; } }
+  </style>
+{% elsif card_image_ratio == 'square' %}
+  <style>
+    @media(min-width: 1024px) { .stats-card-image-{{ section.id }} { aspect-ratio: 12/12; } }
+  </style>
+{% else %}
+  <style>
+    @media(min-width: 1024px) { .stats-card-image-{{ section.id }} { aspect-ratio: auto; } }
+  </style>
+{% endif %}
+
+{% for block in section.blocks %}
+  {% case block.type %}
+    {% when 'heading' %}
+      <style>
+        .stats-heading-{{ block.id }} {
+          width: 100%;
+          max-width: min(100%, {{ block.settings.heading_max_width_mobile }}px);
+          margin-top: {{ block.settings.heading_mt_mobile }}px;
+          text-align: {{ block.settings.content_align_mobile }};
+          {% if block.settings.content_align_mobile == 'center' %}
+            margin-left: auto;
+            margin-right: auto;
+          {% elsif block.settings.content_align_mobile == 'right' %}
+            margin-left: auto;
+            margin-right: 0;
+          {% else %}
+            margin-left: 0;
+            margin-right: auto;
+          {% endif %}
+        }
+
+        .stats-heading-{{ block.id }} * {
+          margin: 0;
+          font-size: {{ block.settings.heading_size_mobile }}px;
+          color: {{ block.settings.heading_color }};
+          line-height: {{ block.settings.heading_height }}%;
+          text-decoration: none;
+          word-break: break-word;
+          text-transform: unset;
+        }
+        @media(min-width: 1024px) {
+          .stats-heading-{{ block.id }} {
+            max-width: min(100%, {{ block.settings.heading_max_width }}px);
+            margin-top: {{ block.settings.heading_mt }}px;
+            text-align: {{ block.settings.content_align }};
+            {% if block.settings.content_align == 'center' %}
+              margin-left: auto;
+              margin-right: auto;
+            {% elsif block.settings.content_align == 'right' %}
+              margin-left: auto;
+              margin-right: 0;
+            {% else %}
+              margin-left: 0;
+              margin-right: auto;
+            {% endif %}
+          }
+          .stats-heading-{{ block.id }} * {
+            font-size: {{ block.settings.heading_size }}px;
+          }
+        }
+      </style>
+      {% if block.settings.heading_custom %}
+        <style>
+          {{ block.settings.heading_font | font_face: font_display: 'swap' }}
+          .stats-heading-{{ block.id }} * {
+            font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
+            font-weight: {{ block.settings.heading_font.weight }};
+            font-style: {{ block.settings.heading_font.style }};
+          }
+        </style>
+      {% endif %}
+  {% endcase %}
+{% endfor %}
+
+<div
+  class="section-{{ section.id }} stats-{{ section.id }}"
+  {% if background_style == 'solid' %}
+    style="background-color:{{ background_color }};"
+  {% else %}
+    style="background-image: {{ background_gradient }};"
+  {% endif %}
+>
+  <div class="section-{{ section.id }}-settings">
+    <div class="stats-top-{{ section.id }}">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'heading' %}
+            {% if block.settings.heading != blank %}
+              <div class="stats-heading-{{ block.id }}" {{ block.shopify_attributes }}>
+                {{ block.settings.heading }}
+              </div>
+            {% endif %}
+        {% endcase %}
+      {% endfor %}
+    </div>
+    <div class="stats-cards-outer-{{ section.id }}">
+      {%- comment -%} Mobile: Swiper slider {%- endcomment -%}
+      <div class="stats-slider-{{ section.id }} swiper">
+        <div class="swiper-wrapper">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'card' %}
+                <div class="stats-card-{{ section.id }} swiper-slide" {{ block.shopify_attributes }}>
+                  <div class="stats-card-inner-{{ section.id }}">
+                    <div class="stats-card-image-{{ section.id }}">
+                      {% if block.settings.image != blank %}
+                        {%- assign image_alt = block.settings.image.alt
+                          | default: block.settings.heading
+                          | strip_html
+                          | escape
+                        -%}
+                        {{
+                          block.settings.image
+                          | image_url: width: 800
+                          | image_tag:
+                            width: block.settings.image.width,
+                            height: block.settings.image.height,
+                            alt: image_alt,
+                            widths: '200, 400, 600, 800',
+                            sizes: card_image_sizes
+                        }}
+                      {% else %}
+                        <span aria-hidden="true">{{ 'image' | placeholder_svg_tag }}</span>
+                      {% endif %}
+                    </div>
+                    {% if block.settings.heading != blank %}
+                      <div class="stats-card-heading-{{ section.id }}">{{ block.settings.heading }}</div>
+                    {% endif %}
+                    <div class="stats-card-stat-wrap-{{ section.id }}">
+                      <div class="stats-card-stat-{{ section.id }}">
+                        <div class="stats-card-percent-wrap-{{ section.id }}">
+                          <span
+                            class="stats-card-percent-{{ section.id }}"
+                            data-target="{{ block.settings.percent | default: 0 }}"
+                            >0</span
+                          >%
+                        </div>
+                        {% if block.settings.text != blank %}
+                          <div class="stats-card-text-{{ section.id }}">{{ block.settings.text }}</div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      </div>
+
+      {%- comment -%} Desktop: Grid {%- endcomment -%}
+      <div class="stats-grid-{{ section.id }}">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'card' %}
+              <div class="stats-card-{{ section.id }}" {{ block.shopify_attributes }}>
+                <div class="stats-card-inner-{{ section.id }}">
+                  <div class="stats-card-image-{{ section.id }}">
+                    {% if block.settings.image != blank %}
+                      {%- assign image_alt = block.settings.image.alt
+                        | default: block.settings.heading
+                        | strip_html
+                        | escape
+                      -%}
+                      {{
+                        block.settings.image
+                        | image_url: width: 800
+                        | image_tag:
+                          width: block.settings.image.width,
+                          height: block.settings.image.height,
+                          alt: image_alt,
+                          widths: '200, 400, 600, 800',
+                          sizes: card_image_sizes
+                      }}
+                    {% else %}
+                      <span aria-hidden="true">{{ 'image' | placeholder_svg_tag }}</span>
+                    {% endif %}
+                  </div>
+                  {% if block.settings.heading != blank %}
+                    <div class="stats-card-heading-{{ section.id }}">{{ block.settings.heading }}</div>
+                  {% endif %}
+                  <div class="stats-card-stat-wrap-{{ section.id }}">
+                    <div class="stats-card-stat-{{ section.id }}">
+                      <div class="stats-card-percent-wrap-{{ section.id }}">
+                        <span
+                          class="stats-card-percent-{{ section.id }}"
+                          data-target="{{ block.settings.percent | default: 0 }}"
+                          >0</span
+                        >%
+                      </div>
+                      {% if block.settings.text != blank %}
+                        <div class="stats-card-text-{{ section.id }}">{{ block.settings.text }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const sectionId = '{{ section.id }}';
+    const sectionSelector = '.section-{{ section.id }}';
+    const percentSelector = '.stats-card-percent-{{ section.id }}';
+    const animationDuration = {{ section.settings.animation_duration | default: 5 }} * 1000;
+    const globalHandlerKey = 'ssStats3Handlers';
+
+    function cleanupStats(sectionElement) {
+      if (!sectionElement) return;
+
+      if (sectionElement._statsFrame) {
+        cancelAnimationFrame(sectionElement._statsFrame);
+        sectionElement._statsFrame = null;
+      }
+
+      if (sectionElement._statsObserver) {
+        sectionElement._statsObserver.disconnect();
+        sectionElement._statsObserver = null;
+      }
+    }
+
+    function prepareSpans(spans) {
+      spans.forEach((span) => {
+        const target = Math.max(parseInt(span.dataset.target, 10) || 0, 0);
+        span.style.display = 'inline-block';
+        span.style.minWidth = 'calc(' + String(target).length + 'ch + 0.35ch)';
+        span.textContent = '0';
+      });
+    }
+
+    function animateSpans(sectionElement, spans) {
+      const targets = Array.from(spans).map((span) => ({
+        el: span,
+        target: Math.max(parseInt(span.dataset.target, 10) || 0, 0),
+      }));
+      const maxTarget = Math.max(...targets.map((target) => target.target), 0);
+
+      if (!maxTarget) {
+        targets.forEach(({ el }) => {
+          el.textContent = '0';
+        });
+        return;
+      }
+
+      const startTime = performance.now();
+
+      const animateFrame = (currentTime) => {
+        const progress = Math.min((currentTime - startTime) / animationDuration, 1);
+
+        targets.forEach(({ el, target }) => {
+          el.textContent = Math.round(target * progress);
+        });
+
+        if (progress < 1) {
+          sectionElement._statsFrame = requestAnimationFrame(animateFrame);
+        } else {
+          sectionElement._statsFrame = null;
+        }
+      };
+
+      sectionElement._statsFrame = requestAnimationFrame(animateFrame);
+    }
+
+    function initStats() {
+      const sectionElement = document.querySelector(sectionSelector);
+      if (!sectionElement) return;
+
+      cleanupStats(sectionElement);
+
+      const spans = sectionElement.querySelectorAll(percentSelector);
+      if (!spans.length) return;
+
+      prepareSpans(spans);
+
+      if (typeof IntersectionObserver !== 'function') {
+        animateSpans(sectionElement, spans);
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          observer.disconnect();
+          sectionElement._statsObserver = null;
+          animateSpans(sectionElement, spans);
+        });
+      }, { threshold: 0.3 });
+
+      observer.observe(sectionElement);
+      sectionElement._statsObserver = observer;
+    }
+
+    function getEventSectionElement(event) {
+      if (!event || !event.target) return document.querySelector(sectionSelector);
+
+      if (event.target.matches && event.target.matches(sectionSelector)) {
+        return event.target;
+      }
+
+      if (event.target.querySelector) {
+        const nestedSection = event.target.querySelector(sectionSelector);
+        if (nestedSection) return nestedSection;
+      }
+
+      return document.querySelector(sectionSelector);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initStats, { once: true });
+    } else {
+      initStats();
+    }
+
+    if (window.Shopify && Shopify.designMode) {
+      window[globalHandlerKey] = window[globalHandlerKey] || {};
+
+      const existingHandlers = window[globalHandlerKey][sectionId];
+      if (existingHandlers) {
+        document.removeEventListener('shopify:section:load', existingHandlers.load);
+        document.removeEventListener('shopify:section:unload', existingHandlers.unload);
+      }
+
+      const handleSectionLoad = (event) => {
+        if (!event.detail || event.detail.sectionId !== sectionId) return;
+        initStats();
+      };
+
+      const handleSectionUnload = (event) => {
+        if (!event.detail || event.detail.sectionId !== sectionId) return;
+
+        cleanupStats(getEventSectionElement(event));
+        document.removeEventListener('shopify:section:load', handleSectionLoad);
+        document.removeEventListener('shopify:section:unload', handleSectionUnload);
+        delete window[globalHandlerKey][sectionId];
+      };
+
+      document.addEventListener('shopify:section:load', handleSectionLoad);
+      document.addEventListener('shopify:section:unload', handleSectionUnload);
+
+      window[globalHandlerKey][sectionId] = {
+        load: handleSectionLoad,
+        unload: handleSectionUnload,
+      };
+    }
+  })();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+  (() => {
+    const sectionId = '{{ section.id }}';
+    const sliderSelector = '.stats-slider-{{ section.id }}';
+    const MOBILE_BP = 1024;
+    let statsSwiper = null;
+
+    function initStatsSwiper() {
+      const sliderEl = document.querySelector(sliderSelector);
+      if (!sliderEl) return;
+
+      const isMobile = window.innerWidth < MOBILE_BP;
+
+      if (isMobile && !statsSwiper) {
+        statsSwiper = new Swiper(sliderEl, {
+          slidesPerView: {{ cards_per_row_mobile }},
+          spaceBetween: {{ cards_gap_mobile }},
+          grabCursor: true,
+          speed: 300,
+        });
+      } else if (!isMobile && statsSwiper) {
+        statsSwiper.destroy(true, true);
+        statsSwiper = null;
+      }
+    }
+
+    function setupStatsSwiper() {
+      if (typeof Swiper === 'undefined') return;
+      initStatsSwiper();
+
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(initStatsSwiper, 150);
+      });
+
+      if (window.Shopify && Shopify.designMode) {
+        document.addEventListener('shopify:section:load', (e) => {
+          if (e.detail.sectionId !== sectionId) return;
+          if (statsSwiper) { statsSwiper.destroy(true, true); statsSwiper = null; }
+          setTimeout(initStatsSwiper, 50);
+        });
+        document.addEventListener('shopify:section:unload', (e) => {
+          if (e.detail.sectionId !== sectionId) return;
+          if (statsSwiper) { statsSwiper.destroy(true, true); statsSwiper = null; }
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupStatsSwiper, { once: true });
+    } else {
+      setupStatsSwiper();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "SS - Stats #3",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "⚠️ Save to display section correctly"
+    },
+    {
+      "type": "header",
+      "content": "Cards"
+    },
+    {
+      "type": "range",
+      "id": "cards_per_row",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Cards per row",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "cards_per_row_mobile",
+      "label": "Cards per row - mobile",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.1
+    },
+    {
+      "type": "checkbox",
+      "id": "cards_advanced",
+      "label": "Show advanced settings",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "cards_mt",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin top",
+      "default": 24,
+      "visible_if": "{{ section.settings.cards_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "cards_mt_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin top - mobile",
+      "default": 16,
+      "visible_if": "{{ section.settings.cards_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "cards_gap",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap",
+      "default": 12,
+      "visible_if": "{{ section.settings.cards_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "cards_gap_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap - mobile",
+      "default": 12,
+      "visible_if": "{{ section.settings.cards_advanced }}"
+    },
+    {
+      "type": "header",
+      "content": "Card"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Roundness",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "card_glass_effect",
+      "label": "Enable glass effect",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "card_border_thickness",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Border thickness",
+      "default": 1,
+      "visible_if": "{{ section.settings.card_glass_effect == false }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_advanced",
+      "label": "Show advanced settings",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "card_padding_vertical",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding vertical",
+      "default": 10,
+      "visible_if": "{{ section.settings.card_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "card_padding_vertical_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding vertical - mobile",
+      "default": 10,
+      "visible_if": "{{ section.settings.card_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "card_padding_horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding horizontal",
+      "default": 10,
+      "visible_if": "{{ section.settings.card_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "card_padding_horizontal_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding horizontal - mobile",
+      "default": 10,
+      "visible_if": "{{ section.settings.card_advanced }}"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "select",
+      "id": "card_image_ratio",
+      "label": "Aspect ratio",
+      "default": "square",
+      "options": [
+        { "label": "Portrait", "value": "portrait" },
+        { "label": "Square", "value": "square" },
+        { "label": "Landscape", "value": "landscape" },
+        { "label": "Auto", "value": "auto" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "card_image_ratio_mobile",
+      "label": "Aspect ratio - mobile",
+      "default": "square",
+      "options": [
+        { "label": "Portrait", "value": "portrait" },
+        { "label": "Square", "value": "square" },
+        { "label": "Landscape", "value": "landscape" },
+        { "label": "Auto", "value": "auto" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "card_image_radius",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Roundness",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_image_border_thickness",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Border thickness",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Stats"
+    },
+    {
+      "type": "range",
+      "id": "card_stat_radius",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Roundness",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "card_stat_border_thickness",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Border thickness",
+      "default": 1,
+      "visible_if": "{{ section.settings.card_glass_effect == false }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_stat_advanced",
+      "label": "Show advanced settings",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "card_stat_padding_vertical",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding vertical",
+      "default": 16,
+      "visible_if": "{{ section.settings.card_stat_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "card_stat_padding_vertical_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding vertical - mobile",
+      "default": 16,
+      "visible_if": "{{ section.settings.card_stat_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "card_stat_padding_horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding horizontal",
+      "default": 16,
+      "visible_if": "{{ section.settings.card_stat_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "card_stat_padding_horizontal_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding horizontal - mobile",
+      "default": 16,
+      "visible_if": "{{ section.settings.card_stat_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "card_stat_mt",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin top",
+      "default": 14,
+      "visible_if": "{{ section.settings.card_stat_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "card_stat_mt_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin top - mobile",
+      "default": 14,
+      "visible_if": "{{ section.settings.card_stat_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "card_stat_gap",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap",
+      "default": 12,
+      "visible_if": "{{ section.settings.card_stat_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "card_stat_gap_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap - mobile",
+      "default": 12,
+      "visible_if": "{{ section.settings.card_stat_advanced }}"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_heading_custom",
+      "label": "Use custom font",
+      "default": false
+    },
+    {
+      "type": "font_picker",
+      "id": "card_heading_font",
+      "label": "Font family",
+      "default": "josefin_sans_n4",
+      "visible_if": "{{ section.settings.card_heading_custom }}"
+    },
+    {
+      "type": "range",
+      "id": "card_heading_size",
+      "min": 0,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "card_heading_size_mobile",
+      "min": 0,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size - mobile",
+      "default": 28
+    },
+    {
+      "type": "checkbox",
+      "id": "card_heading_advanced",
+      "label": "Show advanced settings",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "card_heading_height",
+      "min": 50,
+      "max": 200,
+      "step": 10,
+      "unit": "%",
+      "label": "Line height",
+      "default": 130,
+      "visible_if": "{{ section.settings.card_heading_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "card_heading_mt",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin top",
+      "default": 16,
+      "visible_if": "{{ section.settings.card_heading_advanced }}"
+    },
+    {
+      "type": "range",
+      "id": "card_heading_mt_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin top - mobile",
+      "default": 16,
+      "visible_if": "{{ section.settings.card_heading_advanced }}"
+    },
+    {
+      "type": "header",
+      "content": "Percent"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_percent_custom",
+      "label": "Use custom font",
+      "default": false
+    },
+    {
+      "type": "font_picker",
+      "id": "card_percent_font",
+      "label": "Font family",
+      "default": "josefin_sans_n4",
+      "visible_if": "{{ section.settings.card_percent_custom }}"
+    },
+    {
+      "type": "range",
+      "id": "card_percent_size",
+      "min": 0,
+      "max": 52,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "card_percent_size_mobile",
+      "min": 0,
+      "max": 52,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size - mobile",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "card_percent_height",
+      "min": 50,
+      "max": 200,
+      "step": 10,
+      "unit": "%",
+      "label": "Line height",
+      "default": 130
+    },
+    {
+      "type": "range",
+      "id": "animation_duration",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "unit": "s",
+      "label": "Animation duration",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_text_custom",
+      "label": "Use custom font",
+      "default": false
+    },
+    {
+      "type": "font_picker",
+      "id": "card_text_font",
+      "label": "Font family",
+      "default": "josefin_sans_n4",
+      "visible_if": "{{ section.settings.card_text_custom }}"
+    },
+    {
+      "type": "range",
+      "id": "card_text_size",
+      "min": 0,
+      "max": 42,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "card_text_size_mobile",
+      "min": 0,
+      "max": 42,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size - mobile",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "card_text_height",
+      "min": 50,
+      "max": 200,
+      "step": 10,
+      "unit": "%",
+      "label": "Line height",
+      "default": 150
+    },
+    {
+      "type": "header",
+      "content": "Card colors"
+    },
+    {
+      "type": "select",
+      "id": "card_background_style",
+      "label": "Background style",
+      "default": "solid",
+      "options": [
+        { "label": "Solid", "value": "solid" },
+        { "label": "Gradient", "value": "gradient" }
+      ]
+    },
+    {
+      "type": "color",
+      "label": "Background",
+      "id": "card_background_color",
+      "default": "#FFFFFF",
+      "visible_if": "{{ section.settings.card_background_style == 'solid' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "card_background_gradient",
+      "label": "Gradient",
+      "default": "linear-gradient(180deg, #FFFFFF 0%, #F2F2F2 100%)",
+      "visible_if": "{{ section.settings.card_background_style == 'gradient' }}"
+    },
+    {
+      "type": "color",
+      "label": "Border",
+      "id": "card_border_color",
+      "default": "#121212",
+      "visible_if": "{{ section.settings.card_glass_effect == false }}"
+    },
+    {
+      "type": "range",
+      "id": "card_border_opacity",
+      "label": "Border opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 10,
+      "visible_if": "{{ section.settings.card_glass_effect == false }}"
+    },
+    {
+      "type": "color",
+      "label": "Image border",
+      "id": "card_image_border_color",
+      "default": "#121212",
+      "visible_if": "{{ section.settings.card_image_border_thickness > 0 }}"
+    },
+    {
+      "type": "color",
+      "label": "Heading",
+      "id": "card_heading_color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "label": "Percent",
+      "id": "card_percent_color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "label": "Text",
+      "id": "card_text_color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Section colors"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background style",
+      "default": "solid",
+      "options": [
+        { "label": "Solid", "value": "solid" },
+        { "label": "Gradient", "value": "gradient" }
+      ]
+    },
+    {
+      "type": "color",
+      "label": "Background",
+      "id": "background_color",
+      "default": "#FFFFFF",
+      "visible_if": "{{ section.settings.background_style == 'solid' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient",
+      "label": "Gradient",
+      "default": "linear-gradient(180deg, #FFFFFF 0%, #F2F2F2 100%)",
+      "visible_if": "{{ section.settings.background_style == 'gradient' }}"
+    },
+    {
+      "type": "color",
+      "label": "Border",
+      "id": "border_color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Section margin (outside)"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_horizontal",
+      "min": 0,
+      "max": 30,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Sides",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_horizontal_mobile",
+      "min": 0,
+      "max": 15,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Sides - mobile",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section padding (inside)"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 0,
+      "max": 30,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Sides",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal_mobile",
+      "min": 0,
+      "max": 15,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Sides - mobile",
+      "default": 1.5
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "page",
+      "options": [
+        { "label": "Page", "value": "page" },
+        { "label": "Full", "value": "full" },
+        { "label": "Custom", "value": "custom" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "min": 800,
+      "max": 2000,
+      "step": 100,
+      "unit": "px",
+      "label": "Content width",
+      "default": 1200,
+      "visible_if": "{{ section.settings.width == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "border_thickness",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Border thickness",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_radius",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Roundness",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "<h2>Why customers choose us</h2>"
+        },
+        {
+          "type": "checkbox",
+          "id": "heading_custom",
+          "label": "Use custom font",
+          "default": false
+        },
+        {
+          "type": "font_picker",
+          "id": "heading_font",
+          "label": "Font family",
+          "default": "josefin_sans_n4",
+          "visible_if": "{{ block.settings.heading_custom }}"
+        },
+        {
+          "type": "range",
+          "id": "heading_size",
+          "min": 0,
+          "max": 72,
+          "step": 2,
+          "unit": "px",
+          "label": "Font size",
+          "default": 34
+        },
+        {
+          "type": "range",
+          "id": "heading_size_mobile",
+          "min": 0,
+          "max": 72,
+          "step": 2,
+          "unit": "px",
+          "label": "Font size - mobile",
+          "default": 24
+        },
+        {
+          "type": "checkbox",
+          "id": "heading_advanced",
+          "label": "Show advanced settings",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "heading_height",
+          "min": 50,
+          "max": 200,
+          "step": 10,
+          "unit": "%",
+          "label": "Line height",
+          "default": 130,
+          "visible_if": "{{ block.settings.heading_advanced }}"
+        },
+        {
+          "type": "range",
+          "id": "heading_max_width",
+          "min": 200,
+          "max": 2000,
+          "step": 20,
+          "unit": "px",
+          "label": "Max width",
+          "default": 600,
+          "visible_if": "{{ block.settings.heading_advanced }}"
+        },
+        {
+          "type": "range",
+          "id": "heading_max_width_mobile",
+          "min": 120,
+          "max": 1200,
+          "step": 20,
+          "unit": "px",
+          "label": "Max width - mobile",
+          "default": 600,
+          "visible_if": "{{ block.settings.heading_advanced }}"
+        },
+        {
+          "type": "range",
+          "id": "heading_mt",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Margin top",
+          "default": 0,
+          "visible_if": "{{ block.settings.heading_advanced }}"
+        },
+        {
+          "type": "range",
+          "id": "heading_mt_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Margin top - mobile",
+          "default": 0,
+          "visible_if": "{{ block.settings.heading_advanced }}"
+        },
+        {
+          "type": "text_alignment",
+          "id": "content_align",
+          "label": "Alignment"
+        },
+        {
+          "type": "text_alignment",
+          "id": "content_align_mobile",
+          "label": "Alignment - mobile"
+        },
+        {
+          "type": "color",
+          "label": "Color",
+          "id": "heading_color",
+          "default": "#121212"
+        }
+      ]
+    },
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "<h3>Add your best stat</h3>"
+        },
+        {
+          "type": "range",
+          "id": "percent",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Percent",
+          "default": 95
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Share a result, review stat, or proof point that helps shoppers buy with confidence.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SS - Stats #3",
+      "blocks": [{ "type": "heading" }, { "type": "card" }, { "type": "card" }, { "type": "card" }, { "type": "card" }]
+    }
+  ]
+}
+{% endschema %}
