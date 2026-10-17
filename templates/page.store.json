@@ -11,7 +11,6 @@
   "sections": {
     "main": {
       "type": "page",
-      "disabled": true,
       "settings": {}
     },
     "store_detail_T7FjwG": {
@@ -96,7 +95,7 @@
       "name": "t:sections.stores.name",
       "settings": {
         "title": "Visit Our Stores",
-        "subtitle": "4 locations across Tamil Nadu & Chennai",
+        "subtitle": "5 locations across Tamil Nadu & Chennai",
         "padding_top": 60,
         "padding_bottom": 60
       }
