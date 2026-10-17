@@ -125,15 +125,36 @@
         "accordion_row_PVT9Ef": {
           "type": "accordion_row",
           "settings": {
-            "question": "Accordion row heading",
-            "answer": "<p>Tell your story</p>"
+            "question": "How long does shipping take?",
+            "answer": "<p>Standard shipping takes 5–7 business days</p>"
           }
         },
         "accordion_row_HgF9ke": {
           "type": "accordion_row",
           "settings": {
-            "question": "Accordion row heading",
-            "answer": "<p>Tell your story</p>"
+            "question": "How do I contact support?",
+            "answer": "<p>You can reach us via the contact form on our website.</p>"
+          }
+        },
+        "accordion_row_MRarNL": {
+          "type": "accordion_row",
+          "settings": {
+            "question": "Do you sell bridal and wedding sarees?",
+            "answer": "<p>Yes! Explore our bridal and wedding collections, featuring elegant sarees for brides, family members, and wedding guests.</p>"
+          }
+        },
+        "accordion_row_PB9CGJ": {
+          "type": "accordion_row",
+          "settings": {
+            "question": "What products can I shop for at K. Chinnadurai&Co?",
+            "answer": "<p>We offer a wide range of traditional and contemporary fashion, including silk sarees, semi-silk sarees, cotton sarees, Banarasi sarees, half sarees, designer wear, and imitation jewellery. Explore our collections to find styles for weddings, festivals, celebrations, and everyday wear.</p>"
+          }
+        },
+        "accordion_row_WNhtXN": {
+          "type": "accordion_row",
+          "settings": {
+            "question": "What should I do if my order is delayed?",
+            "answer": "<p>If your order has not arrived within the expected delivery period, contact our support team with your order number so we can help you check its status.</p>"
           }
         },
         "button_DAmy9J": {
@@ -174,6 +195,9 @@
         "accordion_row_aXRDGM",
         "accordion_row_PVT9Ef",
         "accordion_row_HgF9ke",
+        "accordion_row_MRarNL",
+        "accordion_row_PB9CGJ",
+        "accordion_row_WNhtXN",
         "button_DAmy9J"
       ],
       "name": "SS - How it works",
