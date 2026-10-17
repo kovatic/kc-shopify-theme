@@ -16,15 +16,95 @@
     },
     "store_detail_T7FjwG": {
       "type": "store-detail",
+      "disabled": true,
       "name": "t:sections.store_detail.name",
       "settings": {
         "padding_top": 0,
         "padding_bottom": 80
       }
+    },
+    "stores_UGmUtg": {
+      "type": "stores",
+      "blocks": {
+        "store_rzTyHt": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/RKL_1940_JPG.jpg",
+            "store_type": "Silk Sarees & Traditional Wear",
+            "store_name": "K. Chinnadurai and Co – Tirunelveli Branch",
+            "address": "9, Triuvanandapuram Road, Vannarpettai,Tirunelveli,Tamil Nadu,627003.",
+            "phone": "0462 2111 111",
+            "map_url": "https://maps.app.goo.gl/VAyBUErqziqbGkco8",
+            "store_url": ""
+          }
+        },
+        "store_byGtxG": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/k-chinnadurai-and-co-toovipuram-thoothukudi-readymade-garment-retailers-3kFT9z2k40.avif",
+            "store_type": "Silk Sarees & Traditional Wear",
+            "store_name": "K. Chinnadurai and Co – Thoothukudi Branch",
+            "address": "Toovipuram Main Road,Thoothukudi,Tamil Nadu,628001",
+            "phone": "0461-2111111",
+            "map_url": "https://maps.app.goo.gl/tsepVHA9uqwAitgi8",
+            "store_url": ""
+          }
+        },
+        "store_fFeznM": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/DSC02226.jpg",
+            "store_type": "Silk Sarees & Traditional Wear",
+            "store_name": "K. Chinnadurai and Co – Thiruchendur Branch",
+            "address": "130, 1, N Car Street,Thiruchendur,Tamil Nadu,628215",
+            "phone": "04639-242777",
+            "map_url": "https://maps.app.goo.gl/bcszthsdTKhTYw447",
+            "store_url": ""
+          }
+        },
+        "store_wWFDFc": {
+          "type": "store",
+          "settings": {
+            "image": "shopify://shop_images/kc-erall.jpg",
+            "store_type": "Silk Sarees & Traditional Wear",
+            "store_name": "K. Chinnadurai and Co – Eral Branch",
+            "address": "5/1, SIVAN KOVIL KEEZHA THERU,Eral,Tamil Nadu,628801",
+            "phone": "04630-271254",
+            "map_url": "https://maps.app.goo.gl/aY592Ps1HU7UwYjx8",
+            "store_url": ""
+          }
+        },
+        "store_E96wYb": {
+          "type": "store",
+          "settings": {
+            "store_type": "Silk Sarees & Traditional Wear",
+            "store_name": "K. Chinnadurai and Co – Chennai Branch",
+            "address": "Velachery Main Rd, Kamarajapuram, Palaniappa Nagar, Sembakkam,Chennai,Tamilnadu,600073",
+            "phone": "044 2111 1111",
+            "map_url": "https://maps.app.goo.gl/woH55uJdaRm7Y87i6",
+            "store_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "store_rzTyHt",
+        "store_byGtxG",
+        "store_fFeznM",
+        "store_wWFDFc",
+        "store_E96wYb"
+      ],
+      "name": "t:sections.stores.name",
+      "settings": {
+        "title": "Visit Our Stores",
+        "subtitle": "4 locations across Tamil Nadu & Chennai",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
     }
   },
   "order": [
     "main",
-    "store_detail_T7FjwG"
+    "store_detail_T7FjwG",
+    "stores_UGmUtg"
   ]
 }
