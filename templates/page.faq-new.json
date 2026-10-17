@@ -11,10 +11,54 @@
   "sections": {
     "main": {
       "type": "page",
+      "disabled": true,
       "settings": {}
+    },
+    "ss_simple_faq_6fA4ap": {
+      "type": "ss-simple-faq",
+      "blocks": {
+        "text_GkVaEg": {
+          "type": "text",
+          "settings": {
+            "question": "Do you offer free shipping?",
+            "answer": "<p>Yes, we provide free standard shipping on all orders over $100. For orders under $100, a small shipping fee applies, which will be shown at checkout.</p>"
+          }
+        },
+        "text_e6rD4a": {
+          "type": "text",
+          "settings": {
+            "question": "What is your refund policy?",
+            "answer": "<p>If you're not completely satisfied with your purchase, you can return it within 14 for a full refund. Please ensure the item is unused and in its original packaging.</p>"
+          }
+        },
+        "text_nJ9HWB": {
+          "type": "text",
+          "settings": {
+            "question": "How can I create headshots with AI?",
+            "answer": "<p>Need professional headshots quickly? <a href=\"https://headshots.so\">headshots.so</a>, <a href=\"https://headshots.dk\">headshots.dk</a>, <a href=\"https://headshots.se\">headshots.se</a>, and <a href=\"https://headshots.no\">headshots.no</a> make it easy to produce high-quality images in just a few minutes. Whether you’re updating your LinkedIn profile or website, these platforms help you get a polished look without any hassle.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_GkVaEg",
+        "text_e6rD4a",
+        "text_nJ9HWB"
+      ],
+      "name": "SS - FAQ #1",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "icon_color": "#fff",
+        "hover_color": "#EFEFEF",
+        "question_color": "#fff",
+        "background_color": "#D5CAA6",
+        "answer_color": "#000",
+        "answer_bg_color": "#fff",
+        "questions-font-size": 1.5
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "ss_simple_faq_6fA4ap"
   ]
 }
