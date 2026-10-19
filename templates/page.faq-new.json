@@ -119,7 +119,7 @@
           "type": "accordion_row",
           "settings": {
             "question": "What is your return policy?",
-            "answer": "<p>We accept returns within 30 days of purchase.</p>"
+            "answer": "<p>We have a 7-day window to initiate a return or exchange.</p>"
           }
         },
         "accordion_row_PVT9Ef": {
@@ -133,7 +133,7 @@
           "type": "accordion_row",
           "settings": {
             "question": "How do I contact support?",
-            "answer": "<p>You can reach us via the contact form on our website.</p>"
+            "answer": "<p>You can reach us via the Email or WhatsApp<br/>Email @ <a href=\"mailto:help@kchinniaduraiandco.com\">help@kchinniaduraiandco.com</a></p><p>WhatsApp @ <a href=\"https://wa.me/919488202320\" target=\"_blank\">+91 94882 02320</a></p>"
           }
         },
         "accordion_row_MRarNL": {
