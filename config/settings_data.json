@@ -46,19 +46,14 @@
         "disabled": false,
         "settings": {}
       },
-      "1409715032340194113": {
-        "type": "shopify://apps/gokwik-cart-slide-cart-drawer/blocks/app-embed/531cd8ff-cc36-43b1-9a44-c16d44927215",
-        "disabled": true,
-        "settings": {}
-      },
       "2965712708760319418": {
         "type": "shopify://apps/proof-bear-sales-popup/blocks/widget/6e90b7fd-96ea-488b-9571-34f0c382838a",
         "disabled": false,
         "settings": {}
       },
-      "8698817763995941236": {
-        "type": "shopify://apps/fordeer-sales-popup/blocks/popup/10ad4a26-87fb-43fd-8aa9-dd53e003ed28",
-        "disabled": true,
+      "1409715032340194113": {
+        "type": "shopify://apps/gokwik-cart-slide-cart-drawer/blocks/app-embed/531cd8ff-cc36-43b1-9a44-c16d44927215",
+        "disabled": false,
         "settings": {}
       }
     }
