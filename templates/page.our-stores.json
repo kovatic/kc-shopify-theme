@@ -11,10 +11,123 @@
   "sections": {
     "main": {
       "type": "page",
+      "disabled": true,
+      "settings": {}
+    },
+    "17925731769074f09f": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_478f54f_rEcTnW": {
+          "type": "ai_gen_block_478f54f",
+          "settings": {
+            "desktop_width_percent": 100,
+            "eyebrow": "Visit us",
+            "heading": "Find a store near you",
+            "subtitle": "Discover our stores and experience our collection in person.",
+            "accent_color": "#CE0570",
+            "background_color": "#FBF7F5",
+            "text_color": "#33252C",
+            "muted_color": "#655B61",
+            "border_color": "#EEE5E8",
+            "store_1_enabled": true,
+            "store_1_name": "K.Chinnadurai and Co – Chennai Branch",
+            "store_1_city": "Chennai",
+            "store_1_address": "Velachery Main Road, Ramnagar, Palaniappa Nagar, Chennai – 600073",
+            "store_1_image": "shopify://shop_images/kc_chennai.jpg",
+            "store_1_rating": "4.0",
+            "store_1_reviews": "Google Reviews",
+            "store_1_directions": "https://maps.app.goo.gl/woH55uJdaRm7Y87i6",
+            "store_1_phone": "044 2111 1111",
+            "store_2_enabled": true,
+            "store_2_name": "K. Chinnadurai and Co – Eral Branch",
+            "store_2_city": "Eral",
+            "store_2_address": "5/1, Sivan Kovil Keezha Theru, Opposite Eral Bus Stand, Eral, Tamil Nadu – 628801",
+            "store_2_image": "shopify://shop_images/kc-erall.jpg",
+            "store_2_rating": "4.1",
+            "store_2_reviews": "Google Reviews",
+            "store_2_directions": "https://maps.app.goo.gl/aY592Ps1HU7UwYjx8",
+            "store_2_phone": "04630-271254",
+            "store_3_enabled": true,
+            "store_3_name": "K. Chinnadurai and Co – Thiruchendur Branch",
+            "store_3_city": "Thiruchendur",
+            "store_3_address": "130, North Car Street (N Car St), Thiruchendur, Tamil Nadu – 628215",
+            "store_3_image": "shopify://shop_images/DSC02226.jpg",
+            "store_3_rating": "4.1",
+            "store_3_reviews": "Google Reviews",
+            "store_3_directions": "https://maps.app.goo.gl/bcszthsdTKhTYw447",
+            "store_3_phone": "04639-242777"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_478f54f_rEcTnW"
+      ],
+      "custom_css": [
+        "& {margin-bottom: 0 !important; padding-bottom: 0 !important;}",
+        "& > div,& > div > div {margin-bottom: 0 !important; padding-bottom: 0 !important;}"
+      ],
+      "settings": {}
+    },
+    "blocks_wrUJRP": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_478f54f_e4yQJ8": {
+          "type": "ai_gen_block_478f54f",
+          "settings": {
+            "desktop_width_percent": 100,
+            "eyebrow": "",
+            "heading": "",
+            "subtitle": "",
+            "accent_color": "#CE0570",
+            "background_color": "#FBF7F5",
+            "text_color": "#33252C",
+            "muted_color": "#655B61",
+            "border_color": "#EEE5E8",
+            "store_1_enabled": true,
+            "store_1_name": "K. Chinnadurai and Co – Thoothukudi Branch",
+            "store_1_city": "Thoothukudi",
+            "store_1_address": "Toovipuram Main Road, Tamil Nadu – 628001",
+            "store_1_image": "shopify://shop_images/k-chinnadurai-and-co-toovipuram-thoothukudi-readymade-garment-retailers-3kFT9z2k40.avif",
+            "store_1_rating": "4.0",
+            "store_1_reviews": "Google Reviews",
+            "store_1_directions": "https://maps.app.goo.gl/tsepVHA9uqwAitgi8",
+            "store_1_phone": "0461-2111111",
+            "store_2_enabled": true,
+            "store_2_name": "K. Chinnadurai and Co – Tirunelveli Branch",
+            "store_2_city": "Tirunelveli",
+            "store_2_address": "9, Thiruvananthapuram Road, Vannarpettai, Tirunelveli, Tamil Nadu – 627003",
+            "store_2_image": "shopify://shop_images/RKL_1940_JPG.jpg",
+            "store_2_rating": "4.1",
+            "store_2_reviews": "Google Reviews",
+            "store_2_directions": "https://maps.app.goo.gl/VAyBUErqziqbGkco8",
+            "store_2_phone": "0462 2111 111",
+            "store_3_enabled": false,
+            "store_3_name": "K. Chinnadurai and Co – Thiruchendur Branch",
+            "store_3_city": "Thiruchendur",
+            "store_3_address": "130, North Car Street (N Car St), Thiruchendur, Tamil Nadu – 628215",
+            "store_3_image": "shopify://shop_images/DSC02226.jpg",
+            "store_3_rating": "4.1",
+            "store_3_reviews": "Google Reviews",
+            "store_3_directions": "https://maps.app.goo.gl/bcszthsdTKhTYw447",
+            "store_3_phone": "04639-242777"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_478f54f_e4yQJ8"
+      ],
+      "custom_css": [
+        "& {margin-top: 0 !important; padding-top: 0 !important;}",
+        "/* inner wrappers usually hold the extra top space */& > div,& > div > div,& > div > div > div {margin-top: 0 !important; padding-top: 0 !important;}"
+      ],
       "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "17925731769074f09f",
+    "blocks_wrUJRP"
   ]
 }
