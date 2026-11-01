@@ -628,7 +628,8 @@
         "image_rkWxyt": {
           "type": "image",
           "settings": {
-            "url": "",
+            "image": "shopify://shop_images/Cotton_Maxi_Set_Collection_Available_Colors-_Green_Dark_Grey_Dark_Beige_OrangeFeatu.jpg",
+            "url": "https://www.instagram.com/p/DZaKZJ5CHm3/?utm_source=ig_web_copy_link",
             "hide_mobile": false
           }
         },
