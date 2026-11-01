@@ -589,6 +589,115 @@
         "padding_top": 60,
         "padding_bottom": 60
       }
+    },
+    "ss_gallery_1_Jp48Li": {
+      "type": "ss-gallery-1",
+      "blocks": {
+        "image_A9BRUK": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Lehenga_Collection_Made_to_Make_Every_Moment_Magical_Available_at_K._Chinnadurai_Co..webp",
+            "url": "https://www.instagram.com/p/DeMXrYoms-q/?utm_source=ig_web_copy_link&cplk=MzRlODBiNWFlZA==&srtk=MzRlODBiNWFlZA==",
+            "hide_mobile": false
+          }
+        },
+        "image_GHB6Cc": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Thanks_for_your_interest_in_our_Lotus_Flower_Drop_Necklace_Premium_Imitation_Jeweller.jpg",
+            "url": "https://www.instagram.com/p/Dbzp7lfz3er/?utm_source=ig_web_copy_link&obrf=MzRlODBiNWFlZA==&srtk=MzRlODBiNWFlZA==",
+            "hide_mobile": false
+          }
+        },
+        "image_C4eQQe": {
+          "type": "image",
+          "settings": {
+            "url": "",
+            "hide_mobile": false
+          }
+        },
+        "image_Q7mgUD": {
+          "type": "image",
+          "settings": {
+            "url": "",
+            "hide_mobile": false
+          }
+        },
+        "image_rkWxyt": {
+          "type": "image",
+          "settings": {
+            "url": "",
+            "hide_mobile": false
+          }
+        },
+        "image_KUWVqd": {
+          "type": "image",
+          "settings": {
+            "url": "",
+            "hide_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "image_A9BRUK",
+        "image_GHB6Cc",
+        "image_C4eQQe",
+        "image_Q7mgUD",
+        "image_rkWxyt",
+        "image_KUWVqd"
+      ],
+      "name": "SS - Gallery #1",
+      "settings": {
+        "heading": "<h2>Follow Us On Instagram</h2>",
+        "heading_custom": false,
+        "heading_font": "josefin_sans_n4",
+        "heading_size": 32,
+        "heading_size_mobile": 28,
+        "heading_height": 130,
+        "heading_align": "center",
+        "heading_align_mobile": "center",
+        "sub_heading": "<p>#k.chinnadurai_co</p>",
+        "sub_heading_custom": false,
+        "sub_heading_font": "josefin_sans_n4",
+        "sub_heading_size": 16,
+        "sub_heading_size_mobile": 16,
+        "sub_heading_height": 130,
+        "sub_heading_mt": 16,
+        "sub_heading_mt_mobile": 16,
+        "sub_heading_align": "center",
+        "sub_heading_align_mobile": "center",
+        "images_gap": 10,
+        "images_gap_mobile": 10,
+        "images_radius": 4,
+        "images_position": "row",
+        "images_position_mobile": "column",
+        "images_mt": 32,
+        "images_mt_mobile": 24,
+        "main_image": "shopify://shop_images/Organza_Cream_Lotus_Silk_Saree_Graceful_in_every_detail._A_soft_cream_elegance_with_a_beautif.jpg",
+        "main_image_url": "https://www.instagram.com/p/DeWAOduCf9v/?utm_source=ig_web_copy_link&xtok=MzRlODBiNWFlZA==&srtk=MzRlODBiNWFlZA==",
+        "main_image_width": 40,
+        "small_images_row": 3,
+        "small_images_row_mobile": 2,
+        "heading_color": "#000000",
+        "sub_heading_color": "#000000",
+        "image_overlay": "#000000",
+        "background_color": "#FFFFFF",
+        "background_gradient": "",
+        "border_color": "#000000",
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "margin_horizontal": 0,
+        "margin_horizontal_mobile": 0,
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_horizontal": 5,
+        "padding_horizontal_mobile": 1.5,
+        "full_width": false,
+        "content_width": 1200,
+        "border_thickness": 0,
+        "section_radius": 0,
+        "lazy": true
+      }
     }
   },
   "order": [
@@ -608,6 +717,7 @@
     "about_ANVEQm",
     "testimonials_dKBhcg",
     "17753772276ca8c352",
-    "stores_NYzLxX"
+    "stores_NYzLxX",
+    "ss_gallery_1_Jp48Li"
   ]
 }
