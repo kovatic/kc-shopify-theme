@@ -27,21 +27,6 @@
             "overlay_opacity": 10
           }
         },
-        "slide_C3NtPn": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/Web.png",
-            "mobile_image": "shopify://shop_images/Royal_Diwali_Celebration_in_Silk_copy.png",
-            "subheading": "",
-            "heading": "",
-            "text": "",
-            "button_label": "",
-            "button_url": "shopify://collections/diwali-collections",
-            "text_position": "middle-left",
-            "show_overlay": true,
-            "overlay_opacity": 10
-          }
-        },
         "slide_48gw4q": {
           "type": "slide",
           "settings": {
@@ -90,7 +75,6 @@
       },
       "block_order": [
         "slide_rHiPag",
-        "slide_C3NtPn",
         "slide_48gw4q",
         "slide_krfQVT",
         "slide_VRUrm9"
@@ -517,11 +501,11 @@
             "eyebrow": "Visit us",
             "heading": "Find a store near you",
             "subtitle": "Discover our stores and experience our collection in person.",
-            "accent_color": "#CE0570",
-            "background_color": "#FBF7F5",
-            "text_color": "#33252C",
-            "muted_color": "#655B61",
-            "border_color": "#EEE5E8",
+            "accent_color": "#ce0570",
+            "background_color": "#fbf7f5",
+            "text_color": "#33252c",
+            "muted_color": "#655b61",
+            "border_color": "#eee5e8",
             "store_1_enabled": true,
             "store_1_name": "K.Chinnadurai and Co – Chennai Branch",
             "store_1_city": "Chennai",
@@ -574,11 +558,11 @@
             "eyebrow": "",
             "heading": "",
             "subtitle": "",
-            "accent_color": "#CE0570",
-            "background_color": "#FBF7F5",
-            "text_color": "#33252C",
-            "muted_color": "#655B61",
-            "border_color": "#EEE5E8",
+            "accent_color": "#ce0570",
+            "background_color": "#fbf7f5",
+            "text_color": "#33252c",
+            "muted_color": "#655b61",
+            "border_color": "#eee5e8",
             "store_1_enabled": true,
             "store_1_name": "K. Chinnadurai and Co – Thoothukudi Branch",
             "store_1_city": "Thoothukudi",
@@ -800,7 +784,7 @@
         "heading_color": "#000000",
         "sub_heading_color": "#000000",
         "image_overlay": "#000000",
-        "background_color": "#FFFFFF",
+        "background_color": "#ffffff",
         "background_gradient": "",
         "border_color": "#000000",
         "margin_top": 0,
