@@ -21,7 +21,7 @@
             "heading": "",
             "text": "",
             "button_label": "",
-            "button_url": "shopify://collections/diwali-collections",
+            "button_url": "shopify://collections",
             "text_position": "middle-left",
             "show_overlay": true,
             "overlay_opacity": 10
